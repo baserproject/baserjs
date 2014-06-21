@@ -1,0 +1,6 @@
+baserjs
+=======
+
+**コーポレートサイトにちょうどいいJavaScript**
+
+comming soon...
