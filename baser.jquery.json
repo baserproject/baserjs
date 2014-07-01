@@ -1,0 +1,29 @@
+{
+    "name": "baserjs",
+    "title": "baser",
+    "version": "0.0.1",
+    "author": {
+        "name": "Yusuke Hirao",
+        "url": "http://yusukehirao.com"
+    },
+    "dependencies": {
+        "jquery": ">=1.11"
+    },
+    "licenses": [
+        {
+            "url": "https://github.com/YusukeHirao/baserjs/LICENSE"
+        }
+    ],
+    "files": [
+        "baser.js",
+        "baser.min.js"
+    ],
+    "description": "Client side JavaScript libraries for baserCMS",
+    "keywords": [
+        "DOM",
+        "Form",
+        "Validation"
+    ],
+    "homepage": "http://github.com/YusukeHirao/baserjs",
+    "docs": "http://github.com/YusukeHirao/baserjs/wiki/"
+}

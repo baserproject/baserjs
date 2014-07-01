@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test - Form</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="../baser.js"></script>
+	<script>
+	$(function() {
+
+		$(':radio').bcRadio();
+		$(':checkbox').bcCheckbox();
+		$('select').bcSelect();
+
+	});
+	</script>
+	<style>
+
+	label {
+		background: #ddd;
+	}
+
+	.-bc-form-element {
+		outline: 1px solid red;
+	}
+
+	select {
+		/*-webkit-appearance: none;*/
+		/*width: 0;*/
+		/*height: 0;*/
+		/*border: none;*/
+		opacity: 0.2;
+	}
+
+	.-bc-form-element-select-pseudo-option-list {
+		display: none;
+	}
+
+	.-bc-form-element-focus .-bc-form-element-select-pseudo-option-list {
+		display: block;
+	}
+
+	</style>
+</head>
+<body>
+
+	<div class="container">
+
+		<h1>Form</h1>
+
+		<h2>Radio</h2>
+
+		<input type="radio" name="radio-g00">
+		<input type="radio" name="radio-g00">
+
+		<hr>
+
+		<input type="radio" name="radio-g01" value="男">
+		<input type="radio" name="radio-g01" value="女">
+
+		<hr>
+
+		<input type="radio" name="radio-g02" value="男">
+		<input type="radio" name="radio-g02" value="女">
+
+		<hr>
+
+		<input type="radio" name="radio-g03" title="男">
+		<input type="radio" name="radio-g03" title="女">
+
+		<hr>
+
+		<input type="radio" name="radio-g04" id="radio01-1" title="男">
+		<input type="radio" name="radio-g04" id="radio01-2" title="女">
+
+		<hr>
+
+		<input type="radio" name="radio-g05" id="radio02-1"><label for="radio02-1">男</label>
+		<input type="radio" name="radio-g05" id="radio02-2"><label for="radio02-2">女</label>
+
+		<hr>
+
+		<label><input type="radio" name="radio-g03" id="radio03-1">男</label>
+		<label><input type="radio" name="radio-g03" id="radio03-2">女</label>
+
+		<h2>Checkbox</h2>
+
+		<input type="checkbox" name="checkbox-g00">
+		<input type="checkbox" name="checkbox-g00">
+		<input type="checkbox" name="checkbox-g00">
+
+		<hr>
+
+		<input type="checkbox" name="checkbox-g01" value="りんご">
+		<input type="checkbox" name="checkbox-g01" value="みかん">
+		<input type="checkbox" name="checkbox-g01" value="バナナ">
+
+		<hr>
+
+		<input type="checkbox" name="checkbox-g02" title="りんご">
+		<input type="checkbox" name="checkbox-g02" title="みかん">
+		<input type="checkbox" name="checkbox-g02" title="バナナ">
+
+		<hr>
+
+		<input type="checkbox" name="checkbox-g03" id="checkbox01-1" title="りんご">
+		<input type="checkbox" name="checkbox-g03" id="checkbox01-2" title="みかん">
+		<input type="checkbox" name="checkbox-g03" id="checkbox01-3" title="バナナ">
+
+		<hr>
+
+		<input type="checkbox" name="checkbox-g04" id="checkbox02-1"><label for="checkbox02-1">りんご</label>
+		<input type="checkbox" name="checkbox-g04" id="checkbox02-2"><label for="checkbox02-2">みかん</label>
+		<input type="checkbox" name="checkbox-g04" id="checkbox02-3"><label for="checkbox02-3">バナナ</label>
+
+		<hr>
+
+		<label><input type="checkbox" name="checkbox-g05" id="checkbox03-1">りんご</label>
+		<label><input type="checkbox" name="checkbox-g05" id="checkbox03-2">みかん</label>
+		<label><input type="checkbox" name="checkbox-g05" id="checkbox03-3">バナナ</label>
+
+		<h2>Select</h2>
+
+		<select name="select01" id="select01"></select>
+
+		<hr>
+
+		<select name="select02" id="select02">
+			<option value="りんご">-</option>
+			<option value="みかん">-</option>
+			<option value="バナナ">-</option>
+		</select>
+
+		<hr>
+
+		<select name="select03" id="select03">
+			<option value="apple">りんご</option>
+			<option value="orange">みかん</option>
+			<option value="banana">バナナ</option>
+		</select>
+		<label for="select03">らべる</label>
+
+		<hr>
+
+		<label>
+			<select name="select04" id="select04">
+				<option value="apple">りんご</option>
+				<option value="orange">みかん</option>
+				<option value="banana">バナナ</option>
+			</select>
+		</label>
+
+	</div>
+
+
+</body>
+</html>
