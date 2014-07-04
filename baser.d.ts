@@ -437,7 +437,7 @@ declare module baser {
             /**
             * ラジオボタンとチェックボックスの抽象クラス
             *
-            * @version 0.0.2
+            * @version 0.0.3
             * @since 0.0.1
             *
             */
@@ -500,7 +500,7 @@ declare module baser {
                 /**
                 * 要素の状態を更新する
                 *
-                * @version 0.0.1
+                * @version 0.0.3
                 * @since 0.0.1
                 *
                 */

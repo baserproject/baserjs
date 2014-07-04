@@ -29,7 +29,7 @@ module baser {
 			/**
 			 * ラジオボタンとチェックボックスの抽象クラス
 			 *
-			 * @version 0.0.2
+			 * @version 0.0.3
 			 * @since 0.0.1
 			 *
 			 */
@@ -130,7 +130,7 @@ module baser {
 				/**
 				 * 要素の状態を更新する
 				 *
-				 * @version 0.0.1
+				 * @version 0.0.3
 				 * @since 0.0.1
 				 *
 				 */
@@ -148,10 +148,16 @@ module baser {
 						this.$el.removeClass(uncheckedClass);
 						this.$el.addClass(checkedClass);
 						this.$el.addClass(this._checkedClass);
+						this.$label.removeClass(uncheckedClass);
+						this.$label.addClass(checkedClass);
+						this.$label.addClass(this._checkedClass);
 					} else {
 						this.$el.addClass(uncheckedClass);
 						this.$el.removeClass(checkedClass);
 						this.$el.removeClass(this._checkedClass);
+						this.$label.addClass(uncheckedClass);
+						this.$label.removeClass(checkedClass);
+						this.$label.removeClass(this._checkedClass);
 					}
 
 					this.checked = checked;

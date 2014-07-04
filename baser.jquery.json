@@ -1,17 +1,17 @@
 {
     "name": "baserjs",
     "title": "baser",
-    "version": "0.0.1",
+    "version": "0.0.3-alpha",
     "author": {
-        "name": "Yusuke Hirao",
-        "url": "http://yusukehirao.com"
+        "name": "baserCMS Users Community",
+        "url": "https://github.com/baserproject/baserjs"
     },
     "dependencies": {
         "jquery": ">=1.11"
     },
     "licenses": [
         {
-            "url": "https://github.com/YusukeHirao/baserjs/LICENSE"
+            "url": "https://github.com/baserproject/baserjs/LICENSE"
         }
     ],
     "files": [
@@ -20,10 +20,17 @@
     ],
     "description": "Client side JavaScript libraries for baserCMS",
     "keywords": [
+        "jQuery",
+        "baser",
+        "baserCMS",
+        "baserJS",
+        "JavaScript",
         "DOM",
         "Form",
-        "Validation"
+        "Validation",
+        "WAI-ARIA",
+        "Accessibility"
     ],
-    "homepage": "http://github.com/YusukeHirao/baserjs",
-    "docs": "http://github.com/YusukeHirao/baserjs/wiki/"
+    "homepage": "https://github.com/baserproject/baserjs",
+    "docs": "https://github.com/baserproject/baserjs/wiki/"
 }
