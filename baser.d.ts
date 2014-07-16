@@ -296,9 +296,23 @@ declare module baser {
                 */
                 public $label: JQuery;
                 /**
+                * ラベル要素にラップされているかどうか
+                *
+                * @since 0.0.4
+                *
+                */
+                public isWrappedByLabel: boolean;
+                /**
+                * ラッパー要素のjQueryオブジェクト
+                *
+                * @since 0.0.4
+                *
+                */
+                public $wrapper: JQuery;
+                /**
                 * コンストラクタ
                 *
-                * @version 0.0.1
+                * @version 0.0.4
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
@@ -362,7 +376,7 @@ declare module baser {
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.1
+                * @version 0.0.4
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
@@ -523,7 +537,7 @@ declare module baser {
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.1
+                * @version 0.0.4
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
@@ -556,7 +570,7 @@ declare module baser {
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.1
+                * @version 0.0.4
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション

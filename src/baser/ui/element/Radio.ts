@@ -18,7 +18,7 @@ module baser {
 				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.1
+				 * @version 0.0.4
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
@@ -29,6 +29,7 @@ module baser {
 					super($el, options);
 
 					this.$el.addClass(Form.className + CLASS_RADIO);
+					this.$wrapper.addClass(Form.className + CLASS_RADIO + '-wrapper');
 					this.$label.addClass(Form.className + CLASS_RADIO + '-label');
 
 					// ラジオボタングループに登録

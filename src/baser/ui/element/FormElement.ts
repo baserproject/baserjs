@@ -4,6 +4,7 @@ module baser {
 
 		export module element {
 
+			var CLASS_WRAPPER: string = '-wrapper';
 			var CLASS_LABEL: string = '-label';
 			var CLASS_FOCUS: string = '-focus';
 			var CLASS_BLUR: string = '-blur';
@@ -89,9 +90,25 @@ module baser {
 				public $label: JQuery;
 
 				/**
+				 * ラベル要素にラップされているかどうか
+				 *
+				 * @since 0.0.4
+				 *
+				 */
+				public isWrappedByLabel: boolean;
+
+				/**
+				 * ラッパー要素のjQueryオブジェクト
+				 *
+				 * @since 0.0.4
+				 *
+				 */
+				public $wrapper: JQuery;
+
+				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.1
+				 * @version 0.0.4
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
@@ -104,10 +121,14 @@ module baser {
 
 					var config: FormElementOption = $.extend(FormElement.defaultOption, options);
 
+
 					// label要素の検索 & 生成
 					var $label: JQuery;
 					// 祖先のlabel要素を検索
 					$label = this.$el.closest('label');
+
+					this.isWrappedByLabel = !!$label.length;
+
 					if (!$label.length) {
 						// for属性に関連づいたlabel要素を検索
 						$label = $('[for="' + this.id + '"]');
@@ -132,6 +153,16 @@ module baser {
 
 					$label.addClass(Form.className);
 					$label.addClass(Form.className + CLASS_LABEL);
+
+					var wrapperHtml: string = '<span />';
+					var $wrapper = $(wrapperHtml);
+					$wrapper.addClass(Form.className + CLASS_WRAPPER);
+					if (this.isWrappedByLabel) {
+						this.$label.wrapAll($wrapper);
+					} else {
+						this.$el.add(this.$label).wrapAll($wrapper);
+					}
+					this.$wrapper = this.$el.closest('.' + Form.className + CLASS_WRAPPER);
 
 					this.$el.on('focus.bcFormElement', (): void => {
 						this._onfocus();

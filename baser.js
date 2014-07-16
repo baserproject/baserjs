@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.3-alpha r65
- * update: 2014-07-05
+ * baserjs - v0.0.4-alpha r76
+ * update: 2014-07-16
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -299,6 +299,7 @@ var baser;
 (function (baser) {
     (function (ui) {
         (function (element) {
+            var CLASS_WRAPPER = '-wrapper';
             var CLASS_LABEL = '-label';
             var CLASS_FOCUS = '-focus';
             var CLASS_BLUR = '-blur';
@@ -317,7 +318,7 @@ var baser;
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.1
+                * @version 0.0.4
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
@@ -343,6 +344,9 @@ var baser;
 
                     // 祖先のlabel要素を検索
                     $label = this.$el.closest('label');
+
+                    this.isWrappedByLabel = !!$label.length;
+
                     if (!$label.length) {
                         // for属性に関連づいたlabel要素を検索
                         $label = $('[for="' + this.id + '"]');
@@ -367,6 +371,16 @@ var baser;
 
                     $label.addClass(element.Form.className);
                     $label.addClass(element.Form.className + CLASS_LABEL);
+
+                    var wrapperHtml = '<span />';
+                    var $wrapper = $(wrapperHtml);
+                    $wrapper.addClass(element.Form.className + CLASS_WRAPPER);
+                    if (this.isWrappedByLabel) {
+                        this.$label.wrapAll($wrapper);
+                    } else {
+                        this.$el.add(this.$label).wrapAll($wrapper);
+                    }
+                    this.$wrapper = this.$el.closest('.' + element.Form.className + CLASS_WRAPPER);
 
                     this.$el.on('focus.bcFormElement', function () {
                         _this._onfocus();
@@ -449,7 +463,7 @@ var baser;
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.1
+                * @version 0.0.4
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
@@ -460,6 +474,7 @@ var baser;
                     _super.call(this, $el, options);
 
                     this.$el.addClass(element.Form.className + CLASS_SELECT);
+                    this.$wrapper.addClass(element.Form.className + CLASS_SELECT + '-wrapper');
 
                     var $elements = this.$label.children().detach();
                     this.$label.empty();
@@ -778,7 +793,7 @@ var baser;
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.1
+                * @version 0.0.4
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
@@ -788,6 +803,7 @@ var baser;
                     _super.call(this, $el, options);
 
                     this.$el.addClass(element.Form.className + CLASS_RADIO);
+                    this.$wrapper.addClass(element.Form.className + CLASS_RADIO + '-wrapper');
                     this.$label.addClass(element.Form.className + CLASS_RADIO + '-label');
 
                     // ラジオボタングループに登録
@@ -834,7 +850,7 @@ var baser;
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.1
+                * @version 0.0.4
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
@@ -844,7 +860,7 @@ var baser;
                     _super.call(this, $el, options);
 
                     this.$el.addClass(element.Form.className + CLASS_CHECKBOX);
-
+                    this.$wrapper.addClass(element.Form.className + CLASS_CHECKBOX + '-wrapper');
                     if (this.$label) {
                         this.$label.addClass(element.Form.className + CLASS_CHECKBOX + '-label');
                     }
