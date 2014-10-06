@@ -42,12 +42,21 @@ module baser {
 				 *
 				 */
 				labelClass?: string;
+
+				/**
+				 * 自動でラベルを生成するかどうか
+				 *
+				 * @since 0.0.5
+				 * @default true
+				 *
+				 */
+				autoLabeling?: boolean;
 			}
 
 			/**
 			 * フォーム要素の抽象クラス
 			 *
-			 * @version 0.0.1
+			 * @version 0.0.5
 			 * @since 0.0.1
 			 *
 			 */
@@ -56,6 +65,7 @@ module baser {
 				/**
 				 * オプションのデフォルト値
 				 *
+				 * @version 0.0.5
 				 * @since 0.0.1
 				 *
 				 */
@@ -63,6 +73,7 @@ module baser {
 					label: '',
 					labelTag: 'label',
 					labelClass: '',
+					autoLabeling: true
 				};
 
 				/**
@@ -108,7 +119,7 @@ module baser {
 				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.4
+				 * @version 0.0.5
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
@@ -133,7 +144,7 @@ module baser {
 						// for属性に関連づいたlabel要素を検索
 						$label = $('[for="' + this.id + '"]');
 					}
-					if (!$label.length) {
+					if (config.autoLabeling && !$label.length) {
 						// label(もしくは別の)要素の生成
 						this.label = this.$el.attr('title') || config.label || this.$el.attr('name');
 						$label = $('<' + config.labelTag.toLowerCase() + ' />');

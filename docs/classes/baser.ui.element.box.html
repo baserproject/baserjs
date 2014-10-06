@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>RadioGroup | baserjs</title>
+    <title>Box | baserjs</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -49,11 +49,11 @@
     </li>
 
     <li>
-        <a href="baser.ui.element.radiogroup.html">RadioGroup</a>
+        <a href="baser.ui.element.box.html">Box</a>
     </li>
 
             </ul>
-            <h1>Class RadioGroup</h1>
+            <h1>Class Box</h1>
         </div>
     </div>
 </header>
@@ -63,7 +63,7 @@
         <div class="col-8">
             
     
-    <p>ラジオボタンのname属性値で紐付いたブループを管理するクラス</p>
+    <p>ボックス要素の抽象クラス</p>
 
 
 
@@ -72,14 +72,49 @@
 
     <dl class="tsd-comment-tags">
         
+            <dt>version</dt>
+            <dd><p>0.0.5</p>
+</dd>
+        
             <dt>since</dt>
-            <dd><p>0.0.1</p>
+            <dd><p>0.0.5</p>
 </dd>
         
     </dl>
 
 
 
+
+    <section class="tsd-hierarchy">
+        <h2>Hierarchy</h2>
+        <ul>
+            
+                <li >
+    
+        
+    
+        <a href="baser.ui.element.element.html" class="tsd-signature-type">Element</a>
+    
+
+    
+
+    
+        <ul>
+            
+                <li class="target">
+    
+        Box
+    
+
+    
+</li>
+            
+        </ul>
+    
+</li>
+            
+        </ul>
+    </section>
 
 
 
@@ -90,7 +125,7 @@
             <h3>Constructor methods</h3>
             <ul class="tsd-member-index">
                 
-                    <li class="tsd-kind-constructor-method tsd-parent-kind-class"><a href="baser.ui.element.radiogroup.html#constructor" class="tsd-kind-icon">constructor</a></li>
+                    <li class="tsd-kind-constructor-method tsd-parent-kind-class tsd-is-overwrite"><a href="baser.ui.element.box.html#constructor" class="tsd-kind-icon">constructor</a></li>
                 
             </ul>
         </section>
@@ -99,9 +134,15 @@
             <h3>Properties</h3>
             <ul class="tsd-member-index">
                 
-                    <li class="tsd-kind-property tsd-parent-kind-class"><a href="baser.ui.element.radiogroup.html#name" class="tsd-kind-icon">name</a></li>
+                    <li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="baser.ui.element.box.html#$el" class="tsd-kind-icon">$el</a></li>
                 
-                    <li class="tsd-kind-property tsd-parent-kind-class"><a href="baser.ui.element.radiogroup.html#radiobuttons" class="tsd-kind-icon">radioButtons</a></li>
+                    <li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="baser.ui.element.box.html#boxes" class="tsd-kind-icon">boxes</a></li>
+                
+                    <li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="baser.ui.element.box.html#classname" class="tsd-kind-icon">className</a></li>
+                
+                    <li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="baser.ui.element.box.html#id" class="tsd-kind-icon">id</a></li>
+                
+                    <li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="baser.ui.element.box.html#name" class="tsd-kind-icon">name</a></li>
                 
             </ul>
         </section>
@@ -110,9 +151,7 @@
             <h3>Methods</h3>
             <ul class="tsd-member-index">
                 
-                    <li class="tsd-kind-method tsd-parent-kind-class"><a href="baser.ui.element.radiogroup.html#add" class="tsd-kind-icon">add</a></li>
-                
-                    <li class="tsd-kind-method tsd-parent-kind-class"><a href="baser.ui.element.radiogroup.html#update" class="tsd-kind-icon">update</a></li>
+                    <li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="baser.ui.element.box.html#alignheight" class="tsd-kind-icon">alignHeight</a></li>
                 
             </ul>
         </section>
@@ -124,19 +163,25 @@
     <h2>Constructor methods</h2>
     
         
-            <section class="tsd-member tsd-kind-constructor-method tsd-parent-kind-class">
+            <section class="tsd-member tsd-kind-constructor-method tsd-parent-kind-class tsd-is-overwrite">
     <a name="constructor"></a>
     
         
-            <h3 class="tsd-kind-icon">constructor<span class="tsd-signature-symbols">(</span>name<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="baser.ui.element.radiogroup.html" class="tsd-signature-type">RadioGroup</a></h3>
+            <h3 class="tsd-kind-icon">constructor<span class="tsd-signature-symbols">(</span>$el<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">JQuery</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="baser.ui.element.box.html" class="tsd-signature-type">Box</a></h3>
 
 <aside class="tsd-sources">
     
     
+        <p>Overwrites 
+    
+        <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#constructor">constructor</a>
+    
+</p>
+    
     
         <ul>
             
-                <li>Defined in baser/ui/element/RadioGroup.ts:37</li>
+                <li>Defined in baser/ui/element/Box.ts:59</li>
             
         </ul>
     
@@ -151,8 +196,12 @@
 
     <dl class="tsd-comment-tags">
         
+            <dt>version</dt>
+            <dd><p>0.0.5</p>
+</dd>
+        
             <dt>since</dt>
-            <dd><p>0.0.1</p>
+            <dd><p>0.0.5</p>
 </dd>
         
     </dl>
@@ -163,9 +212,9 @@
     <ul>
         
             <li>
-                <h5>name: <span class="tsd-signature-type">string</span></h5>
+                <h5>$el: <span class="tsd-signature-type">JQuery</span></h5>
                 
-    <p>紐づくname属性値</p>
+    <p>管理するDOM要素のjQueryオブジェクト</p>
 
 
 
@@ -181,7 +230,7 @@
     <h4>Returns</h4>
     <p>
     
-        <a href="baser.ui.element.radiogroup.html" class="tsd-signature-type">RadioGroup</a>
+        <a href="baser.ui.element.box.html" class="tsd-signature-type">Box</a>
     
 </p>
     
@@ -202,24 +251,30 @@
     <h2>Properties</h2>
     
         
-            <section class="tsd-member tsd-kind-property tsd-parent-kind-class">
-    <a name="name"></a>
+            <section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+    <a name="$el"></a>
     
-        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> name<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">string</span></h3>
+        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> $el<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">JQuery</span></h3>
 
 <aside class="tsd-sources">
+    
+        <p>Inherited from 
+    
+        <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#$el">$el</a>
+    
+</p>
     
     
     
         <ul>
             
-                <li>Defined in baser/ui/element/RadioGroup.ts:28</li>
+                <li>Defined in baser/ui/element/Element.ts:21</li>
             
         </ul>
     
 </aside>
 
-    <p>紐づくname属性値</p>
+    <p>管理するDOM要素のjQueryオブジェクト</p>
 
 
 
@@ -241,10 +296,10 @@
         
     
         
-            <section class="tsd-member tsd-kind-property tsd-parent-kind-class">
-    <a name="radiobuttons"></a>
+            <section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+    <a name="boxes"></a>
     
-        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> radioButtons<span class="tsd-signature-symbols">:</span> <a href="baser.ui.element.radio.html" class="tsd-signature-type">Radio</a><span class="tsd-signature-symbols">[]</span></h3>
+        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> <span class="tsd-flag ts-flagstatic">static</span> boxes<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Array&lt;string&gt;</span></h3>
 
 <aside class="tsd-sources">
     
@@ -252,13 +307,150 @@
     
         <ul>
             
-                <li>Defined in baser/ui/element/RadioGroup.ts:20</li>
+                <li>Defined in baser/ui/element/Box.ts:31</li>
             
         </ul>
     
 </aside>
 
-    <p>ラジオボタンのリスト</p>
+    <p>管理対象の要素</p>
+
+
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>version</dt>
+            <dd><p>0.0.5</p>
+</dd>
+        
+            <dt>since</dt>
+            <dd><p>0.0.5</p>
+</dd>
+        
+    </dl>
+
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+    <a name="classname"></a>
+    
+        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> <span class="tsd-flag ts-flagstatic">static</span> className<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">string</span></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/element/Box.ts:22</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>管理対象の要素に付加するclass属性値のプレフィックス</p>
+
+
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>version</dt>
+            <dd><p>0.0.5</p>
+</dd>
+        
+            <dt>since</dt>
+            <dd><p>0.0.5</p>
+</dd>
+        
+    </dl>
+
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+    <a name="id"></a>
+    
+        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> id<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">string</span></h3>
+
+<aside class="tsd-sources">
+    
+        <p>Inherited from 
+    
+        <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#id">id</a>
+    
+</p>
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/element/Element.ts:29</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>管理するDOM要素のid属性値</p>
+
+
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>since</dt>
+            <dd><p>0.0.1</p>
+</dd>
+        
+    </dl>
+
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+    <a name="name"></a>
+    
+        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> name<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">string</span></h3>
+
+<aside class="tsd-sources">
+    
+        <p>Inherited from 
+    
+        <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#name">name</a>
+    
+</p>
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/element/Element.ts:37</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>管理するDOM要素のname属性値</p>
 
 
 
@@ -287,11 +479,11 @@
     <h2>Methods</h2>
     
         
-            <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
-    <a name="add"></a>
+            <section class="tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+    <a name="alignheight"></a>
     
         
-            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> add<span class="tsd-signature-symbols">(</span>radio<span class="tsd-signature-symbols">: </span><a href="baser.ui.element.radio.html" class="tsd-signature-type">Radio</a><span class="tsd-signature-symbols">)</span></h3>
+            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> <span class="tsd-flag ts-flagstatic">static</span> alignHeight<span class="tsd-signature-symbols">(</span>$elem<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">JQuery</span>, options<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">JQuery</span></h3>
 
 <aside class="tsd-sources">
     
@@ -299,13 +491,13 @@
     
         <ul>
             
-                <li>Defined in baser/ui/element/RadioGroup.ts:51</li>
+                <li>Defined in baser/ui/element/Box.ts:42</li>
             
         </ul>
     
 </aside>
 
-    <p>紐づくラジオボタンを追加する</p>
+    <p>ラジオボタンを拡張する</p>
 
 
 
@@ -315,11 +507,11 @@
     <dl class="tsd-comment-tags">
         
             <dt>version</dt>
-            <dd><p>0.0.1</p>
+            <dd><p>0.0.5</p>
 </dd>
         
             <dt>since</dt>
-            <dd><p>0.0.1</p>
+            <dd><p>0.0.5</p>
 </dd>
         
     </dl>
@@ -330,9 +522,21 @@
     <ul>
         
             <li>
-                <h5>radio: <a href="baser.ui.element.radio.html" class="tsd-signature-type">Radio</a></h5>
+                <h5>$elem: <span class="tsd-signature-type">JQuery</span></h5>
                 
-    <p>拡張ラジオボタン</p>
+    <p>管理するDOM要素のjQueryオブジェクト</p>
+
+
+
+
+
+
+            </li>
+        
+            <li>
+                <h5>options?: <span class="tsd-signature-type">Object</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+                
+    <p>オプション</p>
 
 
 
@@ -345,72 +549,13 @@
 
 
 
-
-        
+    <h4>Returns</h4>
+    <p>
     
-
+        <span class="tsd-signature-type">JQuery</span>
     
-</section>
-        
+</p>
     
-        
-            <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
-    <a name="update"></a>
-    
-        
-            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> update<span class="tsd-signature-symbols">(</span>ignoreRadio<span class="tsd-signature-symbols">: </span><a href="baser.ui.element.radio.html" class="tsd-signature-type">Radio</a><span class="tsd-signature-symbols">)</span></h3>
-
-<aside class="tsd-sources">
-    
-    
-    
-        <ul>
-            
-                <li>Defined in baser/ui/element/RadioGroup.ts:74</li>
-            
-        </ul>
-    
-</aside>
-
-    <p>管理するラジオボタンの状態を更新する</p>
-
-
-
-
-
-
-    <dl class="tsd-comment-tags">
-        
-            <dt>version</dt>
-            <dd><p>0.0.1</p>
-</dd>
-        
-            <dt>since</dt>
-            <dd><p>0.0.1</p>
-</dd>
-        
-    </dl>
-
-
-
-    <h4>Parameters</h4>
-    <ul>
-        
-            <li>
-                <h5>ignoreRadio: <a href="baser.ui.element.radio.html" class="tsd-signature-type">Radio</a></h5>
-                
-    <p>対象外のラジオボタン</p>
-
-
-
-
-
-
-            </li>
-        
-    </ul>
-
-
 
 
         
@@ -614,9 +759,64 @@
             
         
             
-                <li class=" tsd-kind-class tsd-parent-kind-container">
+                <li class="current tsd-kind-class tsd-parent-kind-container">
                     <a href="baser.ui.element.box.html" class="tsd-kind-icon">Box</a>
                     
+
+    <ul>
+        
+            
+                <li class=" tsd-kind-constructor-method tsd-parent-kind-class tsd-is-overwrite">
+                    <a href="baser.ui.element.box.html#constructor" class="tsd-kind-icon">constructor</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+                    <a href="baser.ui.element.box.html#$el" class="tsd-kind-icon">$el</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+                    <a href="baser.ui.element.box.html#boxes" class="tsd-kind-icon">boxes</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+                    <a href="baser.ui.element.box.html#classname" class="tsd-kind-icon">className</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+                    <a href="baser.ui.element.box.html#id" class="tsd-kind-icon">id</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+                    <a href="baser.ui.element.box.html#name" class="tsd-kind-icon">name</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+                    <a href="baser.ui.element.box.html#alignheight" class="tsd-kind-icon">alignHeight</a>
+                    
+                </li>
+            
+        
+    </ul>
+
+
                 </li>
             
         
@@ -663,50 +863,9 @@
             
         
             
-                <li class="current tsd-kind-class tsd-parent-kind-container">
+                <li class=" tsd-kind-class tsd-parent-kind-container">
                     <a href="baser.ui.element.radiogroup.html" class="tsd-kind-icon">RadioGroup</a>
                     
-
-    <ul>
-        
-            
-                <li class=" tsd-kind-constructor-method tsd-parent-kind-class">
-                    <a href="baser.ui.element.radiogroup.html#constructor" class="tsd-kind-icon">constructor</a>
-                    
-                </li>
-            
-        
-            
-                <li class=" tsd-kind-property tsd-parent-kind-class">
-                    <a href="baser.ui.element.radiogroup.html#name" class="tsd-kind-icon">name</a>
-                    
-                </li>
-            
-        
-            
-                <li class=" tsd-kind-property tsd-parent-kind-class">
-                    <a href="baser.ui.element.radiogroup.html#radiobuttons" class="tsd-kind-icon">radioButtons</a>
-                    
-                </li>
-            
-        
-            
-                <li class=" tsd-kind-method tsd-parent-kind-class">
-                    <a href="baser.ui.element.radiogroup.html#add" class="tsd-kind-icon">add</a>
-                    
-                </li>
-            
-        
-            
-                <li class=" tsd-kind-method tsd-parent-kind-class">
-                    <a href="baser.ui.element.radiogroup.html#update" class="tsd-kind-icon">update</a>
-                    
-                </li>
-            
-        
-    </ul>
-
-
                 </li>
             
         

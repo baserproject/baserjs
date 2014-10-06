@@ -258,11 +258,19 @@ declare module baser {
                 *
                 */
                 labelClass?: string;
+                /**
+                * 自動でラベルを生成するかどうか
+                *
+                * @since 0.0.5
+                * @default true
+                *
+                */
+                autoLabeling?: boolean;
             }
             /**
             * フォーム要素の抽象クラス
             *
-            * @version 0.0.1
+            * @version 0.0.5
             * @since 0.0.1
             *
             */
@@ -270,6 +278,7 @@ declare module baser {
                 /**
                 * オプションのデフォルト値
                 *
+                * @version 0.0.5
                 * @since 0.0.1
                 *
                 */
@@ -312,7 +321,7 @@ declare module baser {
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.4
+                * @version 0.0.5
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
@@ -631,6 +640,66 @@ declare module baser {
                 *
                 */
                 public update(ignoreRadio: Radio): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
+            /**
+            * ボックス要素の抽象クラス
+            *
+            * @version 0.0.5
+            * @since 0.0.5
+            *
+            */
+            class Box extends Element {
+                /**
+                * 管理対象の要素に付加するclass属性値のプレフィックス
+                *
+                * @version 0.0.5
+                * @since 0.0.5
+                *
+                */
+                static className: string;
+                /**
+                * 管理対象の要素
+                *
+                * @version 0.0.5
+                * @since 0.0.5
+                *
+                */
+                static boxes: string[];
+                /**
+                * ラジオボタンを拡張する
+                *
+                * @version 0.0.5
+                * @since 0.0.5
+                * @param $elem 管理するDOM要素のjQueryオブジェクト
+                * @param options オプション
+                *
+                */
+                static alignHeight($elem: JQuery, options?: Object): JQuery;
+                /**
+                * コンストラクタ
+                *
+                * @version 0.0.5
+                * @since 0.0.5
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                *
+                */
+                constructor($el: JQuery);
+                /**
+                * 高さをそろえる
+                *
+                * @version 0.0.5
+                * @since 0.0.5
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                * @param options オプション
+                *
+                */
+                public alignHeight(options?: Object): Box;
             }
         }
     }

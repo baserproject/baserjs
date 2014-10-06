@@ -34,7 +34,6 @@ module baser {
 						this.$label.addClass(Form.className + CLASS_CHECKBOX + '-label');
 					}
 
-
 				}
 
 			}

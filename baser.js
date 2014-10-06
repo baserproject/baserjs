@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.4-alpha r76
- * update: 2014-07-16
+ * baserjs - v0.0.5-alpha r83
+ * update: 2014-08-27
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -309,7 +309,7 @@ var baser;
             /**
             * フォーム要素の抽象クラス
             *
-            * @version 0.0.1
+            * @version 0.0.5
             * @since 0.0.1
             *
             */
@@ -318,7 +318,7 @@ var baser;
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.4
+                * @version 0.0.5
                 * @since 0.0.1
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
@@ -337,7 +337,10 @@ var baser;
 
                     this.$el.addClass(element.Form.className);
 
-                    var config = $.extend(FormElement.defaultOption, options);
+                    var config = $.extend(true, {}, FormElement.defaultOption);
+                    config = $.extend(config, options);
+
+                    console.log(FormElement.defaultOption.autoLabeling);
 
                     // label要素の検索 & 生成
                     var $label;
@@ -351,7 +354,7 @@ var baser;
                         // for属性に関連づいたlabel要素を検索
                         $label = $('[for="' + this.id + '"]');
                     }
-                    if (!$label.length) {
+                    if (config.autoLabeling && !$label.length) {
                         // label(もしくは別の)要素の生成
                         this.label = this.$el.attr('title') || config.label || this.$el.attr('name');
                         $label = $('<' + config.labelTag.toLowerCase() + ' />');
@@ -429,7 +432,8 @@ var baser;
                 FormElement.defaultOption = {
                     label: '',
                     labelTag: 'label',
-                    labelClass: ''
+                    labelClass: '',
+                    autoLabeling: true
                 };
                 return FormElement;
             })(element.Element);
@@ -951,6 +955,72 @@ var baser;
 var baser;
 (function (baser) {
     (function (ui) {
+        (function (element) {
+            /**
+            * ボックス要素の抽象クラス
+            *
+            * @version 0.0.5
+            * @since 0.0.5
+            *
+            */
+            var Box = (function (_super) {
+                __extends(Box, _super);
+                /**
+                * コンストラクタ
+                *
+                * @version 0.0.5
+                * @since 0.0.5
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                *
+                */
+                function Box($el) {
+                    _super.call(this, $el);
+
+                    this.$el.addClass(Box.className);
+                }
+                /**
+                * ラジオボタンを拡張する
+                *
+                * @version 0.0.5
+                * @since 0.0.5
+                * @param $elem 管理するDOM要素のjQueryオブジェクト
+                * @param options オプション
+                *
+                */
+                Box.alignHeight = function ($elem, options) {
+                    var box = new Box($elem);
+
+                    box.alignHeight(options);
+
+                    return $elem;
+                };
+
+                /**
+                * 高さをそろえる
+                *
+                * @version 0.0.5
+                * @since 0.0.5
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                * @param options オプション
+                *
+                */
+                Box.prototype.alignHeight = function (options) {
+                    return this;
+                };
+                Box.className = '-bc-box-element';
+
+                Box.boxes = [];
+                return Box;
+            })(element.Element);
+            element.Box = Box;
+        })(ui.element || (ui.element = {}));
+        var element = ui.element;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
         /**
         * フォームのバリデーションを担うクラス
         *
@@ -991,6 +1061,12 @@ $.fn.bcSelect = function (options) {
         baser.ui.element.Form.select($elem, options);
     });
 };
+
+$.fn.bcBoxAlignHeight = function () {
+    baser.ui.element.Box.alignHeight(this);
+
+    return this;
+};
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="baser/utility/String.ts" />
 /// <reference path="baser/ui/Browser.ts" />
@@ -1003,6 +1079,7 @@ $.fn.bcSelect = function (options) {
 /// <reference path="baser/ui/element/Radio.ts" />
 /// <reference path="baser/ui/element/Checkbox.ts" />
 /// <reference path="baser/ui/element/RadioGroup.ts" />
+/// <reference path="baser/ui/element/Box.ts" />
 /// <reference path="baser/ui/Validation.ts" />
 /// <reference path="baser.ts" />
 /// <reference path="jquery.baser.ts" />

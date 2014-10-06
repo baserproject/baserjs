@@ -33,3 +33,11 @@ $.fn.bcSelect = function (options: baser.ui.element.FormElementOption): JQuery {
 	});
 
 };
+
+$.fn.bcBoxAlignHeight = function (): JQuery {
+
+	baser.ui.element.Box.alignHeight(this);
+
+	return this;
+
+};
