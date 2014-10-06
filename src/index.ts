@@ -11,6 +11,7 @@
 /// <reference path="baser/ui/element/Checkbox.ts" />
 /// <reference path="baser/ui/element/RadioGroup.ts" />
 /// <reference path="baser/ui/element/Box.ts" />
+/// <reference path="baser/ui/element/Map.ts" />
 /// <reference path="baser/ui/Validation.ts" />
 /// <reference path="baser.ts" />
 /// <reference path="jquery.baser.ts" />

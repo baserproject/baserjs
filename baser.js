@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.5-alpha r83
- * update: 2014-08-27
+ * baserjs - v0.0.6-alpha r84
+ * update: 2014-10-06
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -337,10 +337,7 @@ var baser;
 
                     this.$el.addClass(element.Form.className);
 
-                    var config = $.extend(true, {}, FormElement.defaultOption);
-                    config = $.extend(config, options);
-
-                    console.log(FormElement.defaultOption.autoLabeling);
+                    var config = $.extend(FormElement.defaultOption, options);
 
                     // label要素の検索 & 生成
                     var $label;
@@ -1021,6 +1018,124 @@ var baser;
 var baser;
 (function (baser) {
     (function (ui) {
+        (function (element) {
+            /**
+            * マップ要素
+            *
+            * @version 0.0.6
+            * @since 0.0.6
+            *
+            */
+            var Map = (function (_super) {
+                __extends(Map, _super);
+                /**
+                * コンストラクタ
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                *
+                */
+                function Map($el, options) {
+                    _super.call(this, $el);
+
+                    this.$el.addClass(Map.className);
+
+                    if ('google' in window && google.maps) {
+                        this._init(options);
+                    } else {
+                        if (console && console.warn) {
+                            console.warn('ReferenceError: google.maps, Must load script "//maps.google.com/maps/api/js"');
+                        }
+                    }
+
+                    Map.maps.push(this);
+
+                    $el.data(Map.className, this);
+                }
+                Map.prototype._init = function (options) {
+                    var _this = this;
+                    var mapCenterLat = this.$el.data('lat') || Map.lat;
+                    var mapCenterLng = this.$el.data('lng') || Map.lng;
+
+                    this.$coordinates = this.$coordinates || this.$el.find('[data-lat][data-lng]').detach();
+
+                    var coordinates = [];
+
+                    this.$coordinates.each(function (i, el) {
+                        var $this = $(el);
+                        coordinates.push(new Coordinate($this));
+                    });
+
+                    this.mapOption = this.mapOption || $.extend({
+                        zoom: 14,
+                        mapTypeControlOptions: {
+                            mapTypeIds: [
+                                google.maps.MapTypeId.HYBRID,
+                                google.maps.MapTypeId.ROADMAP
+                            ]
+                        },
+                        scrollwheel: false,
+                        center: new google.maps.LatLng(mapCenterLat, mapCenterLng)
+                    }, options);
+
+                    this.info = new google.maps.InfoWindow({
+                        disableAutoPan: false
+                    });
+
+                    this.gmap = new google.maps.Map(this.$el[0], this.mapOption);
+
+                    $.each(coordinates, function (i, coordinate) {
+                        coordinate.markTo(_this);
+                    });
+                };
+
+                Map.prototype.reload = function () {
+                    this._init();
+                };
+                Map.lat = 35.681382;
+
+                Map.lng = 139.766084;
+
+                Map.className = '-bc-map-element';
+
+                Map.maps = [];
+                return Map;
+            })(element.Element);
+            element.Map = Map;
+
+            var Coordinate = (function () {
+                function Coordinate($el) {
+                    this.$el = $el;
+                    this.lat = $el.data('lat');
+                    this.lng = $el.data('lng');
+                    this.title = $el.attr('title') || $el.data('title') || $el.find('h1,h2,h3,h4,h5,h6').text() || null;
+                    this.icon = $el.data('icon') || null;
+                }
+                Coordinate.prototype.markTo = function (map) {
+                    var _this = this;
+                    this.marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(this.lat, this.lng),
+                        title: this.title,
+                        icon: this.icon,
+                        map: map.gmap
+                    });
+                    google.maps.event.addListener(this.marker, 'click', function () {
+                        map.info.setContent(_this.$el[0]);
+                        map.info.open(map.gmap, _this.marker);
+                        _this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
+                    });
+                };
+                return Coordinate;
+            })();
+        })(ui.element || (ui.element = {}));
+        var element = ui.element;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
         /**
         * フォームのバリデーションを担うクラス
         *
@@ -1041,7 +1156,6 @@ this.baser = baser;
 $.fn.bcRadio = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
-
         baser.ui.element.Form.radio($elem, options);
     });
 };
@@ -1049,7 +1163,6 @@ $.fn.bcRadio = function (options) {
 $.fn.bcCheckbox = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
-
         baser.ui.element.Form.checkbox($elem, options);
     });
 };
@@ -1057,15 +1170,25 @@ $.fn.bcCheckbox = function (options) {
 $.fn.bcSelect = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
-
         baser.ui.element.Form.select($elem, options);
     });
 };
 
 $.fn.bcBoxAlignHeight = function () {
     baser.ui.element.Box.alignHeight(this);
-
     return this;
+};
+
+$.fn.bcMaps = function () {
+    return this.each(function (i, elem) {
+        var $elem = $(elem);
+        var data = $elem.data(baser.ui.element.Map.className);
+        if (data) {
+            data.reload();
+        } else {
+            new baser.ui.element.Map($elem);
+        }
+    });
 };
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="baser/utility/String.ts" />
@@ -1080,6 +1203,7 @@ $.fn.bcBoxAlignHeight = function () {
 /// <reference path="baser/ui/element/Checkbox.ts" />
 /// <reference path="baser/ui/element/RadioGroup.ts" />
 /// <reference path="baser/ui/element/Box.ts" />
+/// <reference path="baser/ui/element/Map.ts" />
 /// <reference path="baser/ui/Validation.ts" />
 /// <reference path="baser.ts" />
 /// <reference path="jquery.baser.ts" />

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test - Form</title>
+	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+	<script src="../baser.js"></script>
+	<script>
+	$(function() {
+
+		$('.map').bcMaps();
+
+		$('.map2_trigger').on('click', function() {
+			$('.map2').slideToggle(600, function() {
+				$('.map2').bcMaps();
+			});
+		});
+
+	});
+	</script>
+	<style>
+	.map {
+		width: 500px;
+		height: 250px;
+	}
+	.map2 {
+		display: none;
+	}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+
+		<h1>Map</h1>
+
+		<h2>sample1</h2>
+
+		<div class="map1 map" data-lat="33.606785" data-lng="130.418314">
+			<div class="pin" data-lat="33.606785" data-lng="130.418314">
+				<h1>座標1</h1>
+				<p>テキストテキスト</p>
+			</div>
+			<div class="pin2" data-lat="33.606515" data-lng="130.417414">
+				<h1>座標2</h1>
+				<p>テキストテキスト</p>
+			</div>
+		</div>
+
+		<hr>
+
+		<h2 class="map2_trigger">sample1</h2>
+
+		<div class="map2 map" data-lat="33.606785" data-lng="130.418314">
+			<div class="pin" data-lat="33.606785" data-lng="130.418314">
+				<h1>座標1</h1>
+				<p>テキストテキスト</p>
+			</div>
+			<div class="pin2" data-lat="33.606515" data-lng="130.417414">
+				<h1>座標2</h1>
+				<p>テキストテキスト</p>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>

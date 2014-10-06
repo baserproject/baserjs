@@ -706,6 +706,77 @@ declare module baser {
 }
 declare module baser {
     module ui {
+        module element {
+            /**
+            * マップ要素
+            *
+            * @version 0.0.6
+            * @since 0.0.6
+            *
+            */
+            class Map extends Element {
+                /**
+                * 初期設定用の緯度
+                * 東京都庁
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                *
+                */
+                static lat: number;
+                /**
+                * 初期設定用の経度
+                * 東京都庁
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                *
+                */
+                static lng: number;
+                /**
+                * 管理対象の要素に付加するclass属性値のプレフィックス
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                *
+                */
+                static className: string;
+                /**
+                * 管理対象の要素
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                *
+                */
+                static maps: Map[];
+                /**
+                * 管理対象の要素
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                *
+                */
+                public gmap: google.maps.Map;
+                public info: google.maps.InfoWindow;
+                public $coordinates: JQuery;
+                public mapOption: any;
+                /**
+                * コンストラクタ
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                *
+                */
+                constructor($el: JQuery, options?: any);
+                private _init(options?);
+                public reload(): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
         /**
         * フォームのバリデーションを担うクラス
         *
