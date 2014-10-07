@@ -97,12 +97,16 @@ module baser {
 					var mapCenterLng: number = <number>this.$el.data('lng') || Map.lng;
 
 					this.$coordinates = this.$coordinates || this.$el.find('[data-lat][data-lng]').detach();
+					if (this.$coordinates.length <= 0) {
+						this.$coordinates = this.$el;
+					}
 
 					var coordinates: Coordinate[] = [];
 
 					this.$coordinates.each( (i: number, el: HTMLElement): void => {
 						var $this: JQuery = $(el);
-						coordinates.push(new Coordinate($this));
+						var coordinate: Coordinate = new Coordinate($this);
+						coordinates.push(coordinate);
 					});
 
 					this.mapOption = this.mapOption || $.extend({
@@ -118,7 +122,7 @@ module baser {
 					}, options);
 
 					this.info = new google.maps.InfoWindow({
-						disableAutoPan: <boolean> false
+						disableAutoPan: <boolean> true
 					});
 
 					this.gmap = new google.maps.Map(this.$el[0], this.mapOption);
@@ -160,11 +164,13 @@ module baser {
 						icon: this.icon,
 						map: map.gmap
 					});
-					google.maps.event.addListener(this.marker, 'click', (): void => {
-						map.info.setContent(this.$el[0]);
-						map.info.open(map.gmap, this.marker);
-						this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
-					});
+					if (map.$coordinates !== map.$el) {
+						google.maps.event.addListener(this.marker, 'click', (): void => {
+							map.info.setContent(this.$el[0]);
+							map.info.open(map.gmap, this.marker);
+							this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
+						});
+					}
 				}
 
 			}

@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.6-alpha r84
- * update: 2014-10-06
+ * baserjs - v0.0.6-alpha r97
+ * update: 2014-10-08
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1059,12 +1059,16 @@ var baser;
                     var mapCenterLng = this.$el.data('lng') || Map.lng;
 
                     this.$coordinates = this.$coordinates || this.$el.find('[data-lat][data-lng]').detach();
+                    if (this.$coordinates.length <= 0) {
+                        this.$coordinates = this.$el;
+                    }
 
                     var coordinates = [];
 
                     this.$coordinates.each(function (i, el) {
                         var $this = $(el);
-                        coordinates.push(new Coordinate($this));
+                        var coordinate = new Coordinate($this);
+                        coordinates.push(coordinate);
                     });
 
                     this.mapOption = this.mapOption || $.extend({
@@ -1080,7 +1084,7 @@ var baser;
                     }, options);
 
                     this.info = new google.maps.InfoWindow({
-                        disableAutoPan: false
+                        disableAutoPan: true
                     });
 
                     this.gmap = new google.maps.Map(this.$el[0], this.mapOption);
@@ -1120,11 +1124,13 @@ var baser;
                         icon: this.icon,
                         map: map.gmap
                     });
-                    google.maps.event.addListener(this.marker, 'click', function () {
-                        map.info.setContent(_this.$el[0]);
-                        map.info.open(map.gmap, _this.marker);
-                        _this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
-                    });
+                    if (map.$coordinates !== map.$el) {
+                        google.maps.event.addListener(this.marker, 'click', function () {
+                            map.info.setContent(_this.$el[0]);
+                            map.info.open(map.gmap, _this.marker);
+                            _this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
+                        });
+                    }
                 };
                 return Coordinate;
             })();

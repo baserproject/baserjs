@@ -6,13 +6,13 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "jquery/jquery.d.ts": {
-      "commit": "65a465cdec4884a55f0911d5501a6aaa6b919e8a"
+      "commit": "64677fc78d4d406e12fdbe2e2d0fb845e47e4b05"
     },
     "node/node.d.ts": {
-      "commit": "65a465cdec4884a55f0911d5501a6aaa6b919e8a"
+      "commit": "64677fc78d4d406e12fdbe2e2d0fb845e47e4b05"
     },
     "googlemaps/google.maps.d.ts": {
-      "commit": "65a465cdec4884a55f0911d5501a6aaa6b919e8a"
+      "commit": "64677fc78d4d406e12fdbe2e2d0fb845e47e4b05"
     }
   }
 }
