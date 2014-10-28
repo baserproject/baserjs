@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.6-alpha r97
- * update: 2014-10-08
+ * baserjs - v0.0.7-alpha r100
+ * update: 2014-10-24
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1142,6 +1142,134 @@ var baser;
 var baser;
 (function (baser) {
     (function (ui) {
+        (function (element) {
+            /**
+            * マップ要素
+            *
+            * @version 0.0.7
+            * @since 0.0.7
+            *
+            */
+            var Youtube = (function (_super) {
+                __extends(Youtube, _super);
+                /**
+                * コンストラクタ
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                *
+                */
+                function Youtube($el, options) {
+                    _super.call(this, $el);
+
+                    if (this._init(options)) {
+                        Youtube.movies.push(this);
+                        this.$el.addClass(Youtube.className);
+                        $el.data(Youtube.className, this);
+                    }
+                }
+                /**
+                * 初期化
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                * @return {booelan} 初期化が成功したかどうか
+                *
+                */
+                Youtube.prototype._init = function (options) {
+                    var id = this.$el.data('id');
+                    var width = +(this.$el.data('width') || this.$el.attr('width') || NaN);
+                    var height = +(this.$el.data('height') || this.$el.attr('height') || NaN);
+
+                    var protocol = location.protocol === 'file:' ? 'http:' : '';
+
+                    this.$el.empty();
+
+                    var $mov = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
+                    var param = $.param({
+                        version: 3,
+                        playlist: id,
+                        rel: 0,
+                        autoplay: 1,
+                        controls: 0,
+                        disablekb: 1,
+                        iv_load_policy: 3,
+                        loop: 1,
+                        modestbranding: 1,
+                        showinfo: 0,
+                        wmode: 'transparent',
+                        enablejsapi: 1
+                    });
+                    var src = protocol + Youtube.PLAYER_URL + id + '?' + param;
+
+                    this.movieId = id;
+
+                    $mov.prop('src', src);
+
+                    var playerID = this.id + '-Player';
+                    $mov.prop('id', playerID);
+
+                    $mov.css({
+                        position: 'relative',
+                        display: 'block',
+                        width: '100%',
+                        height: '100%'
+                    });
+
+                    $mov.appendTo(this.$el);
+
+                    if (width) {
+                        $mov.width(width);
+                    }
+
+                    if (height) {
+                        $mov.height(height);
+                    }
+
+                    $.getScript(protocol + Youtube.API_URL);
+
+                    var y;
+
+                    var i = setInterval(function () {
+                        if (!y && 'YT' in window && YT.Player) {
+                            y = new YT.Player(playerID, null);
+                        }
+                        if (y && y.pauseVideo && y.playVideo) {
+                            clearInterval(i);
+                            $(window).on('blur', function () {
+                                y.pauseVideo();
+                            }).on('focus', function () {
+                                y.playVideo();
+                            });
+                        }
+                    }, 300);
+
+                    return true;
+                };
+
+                Youtube.prototype.reload = function () {
+                    this._init();
+                };
+                Youtube.className = '-bc-youtube-element';
+
+                Youtube.PLAYER_URL = '//www.youtube.com/embed/';
+
+                Youtube.API_URL = '//www.youtube.com/player_api';
+
+                Youtube.movies = [];
+                return Youtube;
+            })(element.Element);
+            element.Youtube = Youtube;
+        })(ui.element || (ui.element = {}));
+        var element = ui.element;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
         /**
         * フォームのバリデーションを担うクラス
         *
@@ -1196,6 +1324,143 @@ $.fn.bcMaps = function () {
         }
     });
 };
+
+$.fn.bcYoutube = function () {
+    return this.each(function (i, elem) {
+        var $elem = $(elem);
+        var data = $elem.data(baser.ui.element.Youtube.className);
+        if (data) {
+            data.reload();
+        } else {
+            new baser.ui.element.Youtube($elem);
+        }
+    });
+};
+
+// クラスAPI化予定
+// since 0.0.7
+$.fn.bcBackground = function (options) {
+    return this.each(function (i, elem) {
+        var config = $.extend({
+            align: 'center',
+            valign: 'center',
+            size: 'contain',
+            child: '>*:first'
+        }, options);
+
+        var $elem = $(elem);
+        var $child = $elem.find(config.child);
+
+        var objectWidth = +($elem.data('width') || $child.data('width') || $child.attr('width') || $child.width()) || 400;
+        var objectHeight = +($elem.data('height') || $child.data('height') || $child.attr('height') || $child.height()) || 300;
+        var objectAspectRatio = objectWidth / objectHeight;
+
+        var currentCSSPosition = $elem.css('position');
+        if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
+            $elem.css('position', 'relative');
+        }
+
+        $child.css({
+            position: 'absolute',
+            top: 0,
+            left: 0
+        });
+
+        var exec = function () {
+            var containerWidth = $elem.width();
+            var containerHeight = $elem.height();
+            var containerAspectRatio = containerWidth / containerHeight;
+
+            var scale;
+
+            switch (config.size) {
+                case 'contain':
+                    if (1 < containerAspectRatio) {
+                        // 画像が横長 もしくは コンテナのアス比の方が大きい
+                        if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
+                            scale = containerWidth / objectWidth;
+                        } else {
+                            scale = containerHeight / objectHeight;
+                        }
+                        // コンテナが縦長
+                    } else {
+                        // 画像が横長 もしくは 画像のアス比の方が大きい
+                        if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
+                            scale = containerHeight / objectHeight;
+                        } else {
+                            scale = containerWidth / objectWidth;
+                        }
+                    }
+                    break;
+                case 'cover':
+                    if (1 < containerAspectRatio) {
+                        // 画像が横長 もしくは コンテナのアス比の方が大きい
+                        if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
+                            scale = containerHeight / objectHeight;
+                        } else {
+                            scale = containerWidth / objectWidth;
+                        }
+                        // コンテナが縦長
+                    } else {
+                        // 画像が横長 もしくは 画像のアス比の方が大きい
+                        if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
+                            scale = containerWidth / objectWidth;
+                        } else {
+                            scale = containerHeight / objectHeight;
+                        }
+                    }
+                    break;
+                default:
+                    return;
+            }
+
+            // 画像の幅と高さ
+            var newWidth = objectWidth * scale;
+            var newHeight = objectHeight * scale;
+
+            var top;
+            switch (config.align) {
+                case 'top':
+                    top = 0;
+                    break;
+                case 'bottom':
+                    top = containerHeight - newHeight;
+                    break;
+                case 'center':
+                default: {
+                    top = (containerHeight / 2) - (newHeight / 2);
+                }
+            }
+
+            var left;
+            switch (config.valign) {
+                case 'left':
+                    left = 0;
+                    break;
+                case 'right':
+                    left = containerWidth - newWidth;
+                    break;
+                case 'center':
+                default: {
+                    left = (containerWidth / 2) - (newWidth / 2);
+                }
+            }
+
+            $child.css({
+                width: newWidth,
+                height: newHeight,
+                top: top,
+                left: left
+            });
+        };
+        exec();
+
+        // リサイズ時に動画サイズを変更
+        $(window).on('resize', function () {
+            exec();
+        });
+    });
+};
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="baser/utility/String.ts" />
 /// <reference path="baser/ui/Browser.ts" />
@@ -1210,6 +1475,7 @@ $.fn.bcMaps = function () {
 /// <reference path="baser/ui/element/RadioGroup.ts" />
 /// <reference path="baser/ui/element/Box.ts" />
 /// <reference path="baser/ui/element/Map.ts" />
+/// <reference path="baser/ui/element/Youtube.ts" />
 /// <reference path="baser/ui/Validation.ts" />
 /// <reference path="baser.ts" />
 /// <reference path="jquery.baser.ts" />

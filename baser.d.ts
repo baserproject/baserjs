@@ -777,6 +777,82 @@ declare module baser {
 }
 declare module baser {
     module ui {
+        module element {
+            /**
+            * マップ要素
+            *
+            * @version 0.0.7
+            * @since 0.0.7
+            *
+            */
+            class Youtube extends Element {
+                /**
+                * 管理対象の要素に付加するclass属性値のプレフィックス
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                *
+                */
+                static className: string;
+                /**
+                * Player URL
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                *
+                */
+                static PLAYER_URL: string;
+                /**
+                * API URL
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                *
+                */
+                static API_URL: string;
+                /**
+                * 管理対象の要素
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                *
+                */
+                static movies: Youtube[];
+                /**
+                * 管理対象の要素
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                *
+                */
+                public movieId: string;
+                public movieOption: any;
+                /**
+                * コンストラクタ
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                *
+                */
+                constructor($el: JQuery, options?: any);
+                /**
+                * 初期化
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                * @param $el 管理するDOM要素のjQueryオブジェクト
+                * @return {booelan} 初期化が成功したかどうか
+                *
+                */
+                private _init(options?);
+                public reload(): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
         /**
         * フォームのバリデーションを担うクラス
         *
