@@ -987,9 +987,8 @@ declare module baser {
     }
 }
 interface JQueryStatic {
-    bcScroll: baser.ui.Scroll;
-    bcScrollTo(selector: string, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
-    bcScrollTo(selector: HTMLElement, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
-    bcScrollTo(selector: JQuery, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
-    bcScrollTo(selector: number, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
+    bcScrollTo(selector: string, options?: baser.ui.ScrollOptions): void;
+    bcScrollTo(selector: HTMLElement, options?: baser.ui.ScrollOptions): void;
+    bcScrollTo(selector: JQuery, options?: baser.ui.ScrollOptions): void;
+    bcScrollTo(selector: number, options?: baser.ui.ScrollOptions): void;
 }

@@ -228,15 +228,14 @@ $.fn.bcScrollTo = function (options?: baser.ui.ScrollOptions): JQuery {
 
 interface JQueryStatic {
 	// since 0.0.8
-	bcScroll: baser.ui.Scroll;
-	// since 0.0.8
-	bcScrollTo(selector: string, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
-	bcScrollTo(selector: HTMLElement, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
-	bcScrollTo(selector: JQuery, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
-	bcScrollTo(selector: number, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
+	bcScrollTo(selector: string, options?: baser.ui.ScrollOptions): void;
+	bcScrollTo(selector: HTMLElement, options?: baser.ui.ScrollOptions): void;
+	bcScrollTo(selector: JQuery, options?: baser.ui.ScrollOptions): void;
+	bcScrollTo(selector: number, options?: baser.ui.ScrollOptions): void;
 }
 
 // since 0.0.8
-$.bcScroll = new baser.ui.Scroll();
-// since 0.0.8
-$.bcScrollTo = $.bcScroll.to;
+$.bcScrollTo = function (selector: any, options?: baser.ui.ScrollOptions): void {
+	var scroll: baser.ui.Scroll = new baser.ui.Scroll();
+	scroll.to(selector, options);
+};

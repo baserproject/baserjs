@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.0.8-alpha r106
+ * baserjs - v0.0.8-beta r108
  * update: 2014-10-29
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1773,10 +1773,10 @@ $.fn.bcScrollTo = function (options) {
 };
 
 // since 0.0.8
-$.bcScroll = new baser.ui.Scroll();
-
-// since 0.0.8
-$.bcScrollTo = $.bcScroll.to;
+$.bcScrollTo = function (selector, options) {
+    var scroll = new baser.ui.Scroll();
+    scroll.to(selector, options);
+};
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="baser/utility/String.ts" />
 /// <reference path="baser/ui/Browser.ts" />
