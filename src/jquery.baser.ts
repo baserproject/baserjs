@@ -222,7 +222,6 @@ $.fn.bcScrollTo = function (options?: baser.ui.ScrollOptions): JQuery {
 				}
 			} catch (err) {}
 		}
-		e.preventDefault();
 		return;
 	});
 };

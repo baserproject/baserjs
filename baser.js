@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.0.8-alpha r104
+ * baserjs - v0.0.8-alpha r105
  * update: 2014-10-28
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1808,7 +1808,6 @@ $.fn.bcScrollTo = function (options) {
             } catch (err) {
             }
         }
-        e.preventDefault();
         return;
     });
 };
