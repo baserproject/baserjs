@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.8-alpha r105
- * update: 2014-10-28
+ * baserjs - v0.0.8-alpha r106
+ * update: 2014-10-29
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -403,46 +403,6 @@ var baser;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
 })(baser || (baser = {}));
-/*
-$.scrollTo = _scrollTo
-$.fn.scrollTo = (opt) ->
-o = $.extend
-offset: 0
-keywords: {}
-wheelCancel: on
-onScrollEnd: null
-onScrollCancel: null
-onScrollStart: null
-onScrollProgress: null
-, opt
-return @on 'click', ->
-$this = $ @
-if @href
-href = $this.attr('href')
-# キーワードを一番に優先する
-for key, target of o.keywords
-if key is href
-$.scrollTo target, o.offset, o
-return false
-# 「/pathname/#hash」のリンクパターンの場合
-# 「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
-hrefAbs = $this.prop('href')
-currentRef = location.origin + location.pathname
-href = hrefAbs.replace currentRef, ''
-# セレクタとして要素が存在する場合はその要素に移動
-# 「/」で始まるなどセレクターとして不正な場合、例外を投げることがあるので無視する
-try
-$target = $(href)
-if $target.length
-$.scrollTo $target, o.offset, o
-return false
-return
-# 旧形式
-# if location.href.replace(location.hash, '') is @href.replace(@hash, '') and @hash
-# 	$.scrollTo @hash, o.offset
-# 	return false
-return
-*/
 var baser;
 (function (baser) {
     (function (ui) {
@@ -1788,7 +1748,7 @@ $.fn.bcScrollTo = function (options) {
             // 「/pathname/#hash」のリンクパターンの場合
             //「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
             absPath = $this.prop('href');
-            currentReferer = location.protocol + '//' + location.host + location.pathname;
+            currentReferer = location.protocol + '//' + location.host + location.pathname + location.search;
             href = absPath.replace(currentReferer, '');
 
             // #top はHTML5ではページトップを意味する

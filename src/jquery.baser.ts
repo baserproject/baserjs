@@ -203,7 +203,7 @@ $.fn.bcScrollTo = function (options?: baser.ui.ScrollOptions): JQuery {
 			// 「/pathname/#hash」のリンクパターンの場合
 			//「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
 			absPath = $this.prop('href');
-			currentReferer = location.protocol + '//' + location.host + location.pathname;
+			currentReferer = location.protocol + '//' + location.host + location.pathname + location.search;
 			href = absPath.replace(currentReferer, '');
 			// #top はHTML5ではページトップを意味する
 			if (href === '#top') {
