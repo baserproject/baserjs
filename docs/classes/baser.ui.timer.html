@@ -68,7 +68,7 @@
     <dl class="tsd-comment-tags">
         
             <dt>version</dt>
-            <dd><p>0.0.2</p>
+            <dd><p>0.0.8</p>
 </dd>
         
             <dt>since</dt>
@@ -98,7 +98,13 @@
             <h3>Properties</h3>
             <ul class="tsd-member-index">
                 
+                    <li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="baser.ui.timer.html#_onprogress" class="tsd-kind-icon">_onProgress</a></li>
+                
                     <li class="tsd-kind-property tsd-parent-kind-class"><a href="baser.ui.timer.html#datetime" class="tsd-kind-icon">datetime</a></li>
+                
+                    <li class="tsd-kind-property tsd-parent-kind-class"><a href="baser.ui.timer.html#interval" class="tsd-kind-icon">interval</a></li>
+                
+                    <li class="tsd-kind-property tsd-parent-kind-class"><a href="baser.ui.timer.html#timerid" class="tsd-kind-icon">timerId</a></li>
                 
             </ul>
         </section>
@@ -109,7 +115,15 @@
                 
                     <li class="tsd-kind-method tsd-parent-kind-class"><a href="baser.ui.timer.html#now" class="tsd-kind-icon">now</a></li>
                 
+                    <li class="tsd-kind-method tsd-parent-kind-class"><a href="baser.ui.timer.html#progress" class="tsd-kind-icon">progress</a></li>
+                
+                    <li class="tsd-kind-method tsd-parent-kind-class"><a href="baser.ui.timer.html#start" class="tsd-kind-icon">start</a></li>
+                
+                    <li class="tsd-kind-method tsd-parent-kind-class"><a href="baser.ui.timer.html#stop" class="tsd-kind-icon">stop</a></li>
+                
                     <li class="tsd-kind-method tsd-parent-kind-class"><a href="baser.ui.timer.html#valueof" class="tsd-kind-icon">valueOf</a></li>
+                
+                    <li class="tsd-kind-method tsd-parent-kind-class"><a href="baser.ui.timer.html#wait" class="tsd-kind-icon">wait</a></li>
                 
             </ul>
         </section>
@@ -133,7 +147,7 @@
     
         <ul>
             
-                <li>Defined in baser/ui/Timer.ts:28</li>
+                <li>Defined in baser/ui/Timer.ts:58</li>
             
         </ul>
     
@@ -149,7 +163,7 @@
     <dl class="tsd-comment-tags">
         
             <dt>version</dt>
-            <dd><p>0.0.1</p>
+            <dd><p>0.0.8</p>
 </dd>
         
             <dt>since</dt>
@@ -186,6 +200,49 @@
     <h2>Properties</h2>
     
         
+            <section class="tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+    <a name="_onprogress"></a>
+    
+        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagprivate">private</span> _onProgress<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">Function</span></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/Timer.ts:49</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>プログレスイベントのコールバック</p>
+
+
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>version</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+            <dt>since</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+    </dl>
+
+    
+
+    
+</section>
+        
+    
+        
             <section class="tsd-member tsd-kind-property tsd-parent-kind-class">
     <a name="datetime"></a>
     
@@ -197,7 +254,7 @@
     
         <ul>
             
-                <li>Defined in baser/ui/Timer.ts:19</li>
+                <li>Defined in baser/ui/Timer.ts:20</li>
             
         </ul>
     
@@ -212,8 +269,101 @@
 
     <dl class="tsd-comment-tags">
         
+            <dt>version</dt>
+            <dd><p>0.0.1</p>
+</dd>
+        
             <dt>since</dt>
             <dd><p>0.0.1</p>
+</dd>
+        
+    </dl>
+
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+    <a name="interval"></a>
+    
+        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> interval<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/Timer.ts:40</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>インターバル</p>
+
+
+
+
+    <p><code>13</code>は<a href="http://jquery.com/">jQuery</a>を参考</p>
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>version</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+            <dt>since</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+    </dl>
+
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-property tsd-parent-kind-class">
+    <a name="timerid"></a>
+    
+        <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> timerId<span class="tsd-signature-symbols">:</span> <span class="tsd-signature-type">number</span></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/Timer.ts:29</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>タイマーID</p>
+
+
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>version</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+            <dt>since</dt>
+            <dd><p>0.0.8</p>
 </dd>
         
     </dl>
@@ -244,7 +394,7 @@
     
         <ul>
             
-                <li>Defined in baser/ui/Timer.ts:50</li>
+                <li>Defined in baser/ui/Timer.ts:80</li>
             
         </ul>
     
@@ -291,6 +441,208 @@
     
         
             <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+    <a name="progress"></a>
+    
+        
+            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> progress<span class="tsd-signature-symbols">(</span>callback<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="baser.ui.timer.html" class="tsd-signature-type">Timer</a></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/Timer.ts:150</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>プログレスイベントを登録</p>
+
+
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>version</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+            <dt>since</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+    </dl>
+
+
+
+    <h4>Parameters</h4>
+    <ul>
+        
+            <li>
+                <h5>callback: <span class="tsd-signature-type">Function</span></h5>
+                
+
+
+
+
+            </li>
+        
+    </ul>
+
+
+
+    <h4>Returns</h4>
+    <p>
+    
+        <a href="baser.ui.timer.html" class="tsd-signature-type">Timer</a>
+    
+</p>
+    
+
+
+        
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+    <a name="start"></a>
+    
+        
+            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> start<span class="tsd-signature-symbols">(</span>time<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="baser.ui.timer.html" class="tsd-signature-type">Timer</a></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/Timer.ts:92</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>タイマーをスタートする</p>
+
+
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>version</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+            <dt>since</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+    </dl>
+
+
+
+    <h4>Parameters</h4>
+    <ul>
+        
+            <li>
+                <h5>time: <span class="tsd-signature-type">number</span></h5>
+                
+
+
+
+
+            </li>
+        
+    </ul>
+
+
+
+    <h4>Returns</h4>
+    <p>
+    
+        <a href="baser.ui.timer.html" class="tsd-signature-type">Timer</a>
+    
+</p>
+    
+
+
+        
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+    <a name="stop"></a>
+    
+        
+            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> stop<span class="tsd-signature-symbols">(</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="baser.ui.timer.html" class="tsd-signature-type">Timer</a></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/Timer.ts:118</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>タイマーをストップする</p>
+
+
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>version</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+            <dt>since</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+    </dl>
+
+
+
+
+
+    <h4>Returns</h4>
+    <p>
+    
+        <a href="baser.ui.timer.html" class="tsd-signature-type">Timer</a>
+    
+</p>
+    
+
+
+        
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
     <a name="valueof"></a>
     
         
@@ -302,7 +654,7 @@
     
         <ul>
             
-                <li>Defined in baser/ui/Timer.ts:39</li>
+                <li>Defined in baser/ui/Timer.ts:69</li>
             
         </ul>
     
@@ -335,6 +687,96 @@
     <p>
     
         <span class="tsd-signature-type">number</span>
+    
+</p>
+    
+
+
+        
+    
+
+    
+</section>
+        
+    
+        
+            <section class="tsd-member tsd-kind-method tsd-parent-kind-class">
+    <a name="wait"></a>
+    
+        
+            <h3 class="tsd-kind-icon"><span class="tsd-flag ts-flagpublic">public</span> wait<span class="tsd-signature-symbols">(</span>time<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">number</span>, callback<span class="tsd-signature-symbols">: </span><span class="tsd-signature-type">Function</span>, context<span class="tsd-signature-symbols">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbols">)</span><span class="tsd-signature-symbols">: </span><a href="baser.ui.timer.html" class="tsd-signature-type">Timer</a></h3>
+
+<aside class="tsd-sources">
+    
+    
+    
+        <ul>
+            
+                <li>Defined in baser/ui/Timer.ts:131</li>
+            
+        </ul>
+    
+</aside>
+
+    <p>遅延処理</p>
+
+
+
+
+
+
+    <dl class="tsd-comment-tags">
+        
+            <dt>version</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+            <dt>since</dt>
+            <dd><p>0.0.8</p>
+</dd>
+        
+    </dl>
+
+
+
+    <h4>Parameters</h4>
+    <ul>
+        
+            <li>
+                <h5>time: <span class="tsd-signature-type">number</span></h5>
+                
+
+
+
+
+            </li>
+        
+            <li>
+                <h5>callback: <span class="tsd-signature-type">Function</span></h5>
+                
+
+
+
+
+            </li>
+        
+            <li>
+                <h5>context?: <span class="tsd-signature-type">any</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+                
+
+
+
+
+            </li>
+        
+    </ul>
+
+
+
+    <h4>Returns</h4>
+    <p>
+    
+        <a href="baser.ui.timer.html" class="tsd-signature-type">Timer</a>
     
 </p>
     
@@ -385,6 +827,10 @@
                 
                     
                 
+                    
+                
+                    
+                
             </ul>
         
     
@@ -412,8 +858,22 @@
             
         
             
+                <li class=" tsd-kind-interface tsd-parent-kind-container">
+                    <a href="../interfaces/baser.ui.scrolloptions.html" class="tsd-kind-icon">ScrollOptions</a>
+                    
+                </li>
+            
+        
+            
                 <li class=" tsd-kind-class tsd-parent-kind-container">
                     <a href="baser.ui.browser.html" class="tsd-kind-icon">Browser</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-class tsd-parent-kind-container">
+                    <a href="baser.ui.scroll.html" class="tsd-kind-icon">Scroll</a>
                     
                 </li>
             
@@ -433,8 +893,29 @@
             
         
             
+                <li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+                    <a href="baser.ui.timer.html#_onprogress" class="tsd-kind-icon">_onProgress</a>
+                    
+                </li>
+            
+        
+            
                 <li class=" tsd-kind-property tsd-parent-kind-class">
                     <a href="baser.ui.timer.html#datetime" class="tsd-kind-icon">datetime</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-property tsd-parent-kind-class">
+                    <a href="baser.ui.timer.html#interval" class="tsd-kind-icon">interval</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-property tsd-parent-kind-class">
+                    <a href="baser.ui.timer.html#timerid" class="tsd-kind-icon">timerId</a>
                     
                 </li>
             
@@ -448,7 +929,35 @@
         
             
                 <li class=" tsd-kind-method tsd-parent-kind-class">
+                    <a href="baser.ui.timer.html#progress" class="tsd-kind-icon">progress</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-method tsd-parent-kind-class">
+                    <a href="baser.ui.timer.html#start" class="tsd-kind-icon">start</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-method tsd-parent-kind-class">
+                    <a href="baser.ui.timer.html#stop" class="tsd-kind-icon">stop</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-method tsd-parent-kind-class">
                     <a href="baser.ui.timer.html#valueof" class="tsd-kind-icon">valueOf</a>
+                    
+                </li>
+            
+        
+            
+                <li class=" tsd-kind-method tsd-parent-kind-class">
+                    <a href="baser.ui.timer.html#wait" class="tsd-kind-icon">wait</a>
                     
                 </li>
             

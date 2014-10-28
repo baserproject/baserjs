@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.7-alpha r100
- * update: 2014-10-24
+ * baserjs - v0.0.8-alpha r104
+ * update: 2014-10-28
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -103,7 +103,7 @@ var baser;
         /**
         * 時間管理クラス
         *
-        * @version 0.0.2
+        * @version 0.0.8
         * @since 0.0.1
         *
         */
@@ -111,12 +111,38 @@ var baser;
             /**
             * コンストラクタ
             *
-            * @version 0.0.1
+            * @version 0.0.8
             * @since 0.0.1
             *
             */
             function Timer() {
-                this.datetime = new Date();
+                /**
+                * タイマーID
+                *
+                * @version 0.0.8
+                * @since 0.0.8
+                *
+                */
+                this.timerId = null;
+                /**
+                * インターバル
+                *
+                * `13`は[jQuery](http://jquery.com/)を参考
+                *
+                * @version 0.0.8
+                * @since 0.0.8
+                *
+                */
+                this.interval = 13;
+                /**
+                * プログレスイベントのコールバック
+                *
+                * @version 0.0.8
+                * @since 0.0.8
+                *
+                */
+                this._onProgress = null;
+                this.now();
             }
             /**
             * 暗黙の型変換時の振る舞い
@@ -140,12 +166,283 @@ var baser;
                 this.datetime = new Date();
                 return this.valueOf();
             };
+
+            /**
+            * タイマーをスタートする
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.prototype.start = function (time) {
+                var _this = this;
+                var startTimestamp = this.now();
+                this.stop();
+                var tick = function () {
+                    _this.timerId = setTimeout(function () {
+                        var period = _this.now() - startTimestamp;
+                        if (period < time) {
+                            if (_this._onProgress) {
+                                _this._onProgress.call(_this);
+                            }
+                            tick();
+                        } else {
+                            _this.stop();
+                        }
+                    }, _this.interval);
+                };
+                return this;
+            };
+
+            /**
+            * タイマーをストップする
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.prototype.stop = function () {
+                clearTimeout(this.timerId);
+                this.timerId = null;
+                return this;
+            };
+
+            /**
+            * 遅延処理
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.prototype.wait = function (time, callback, context) {
+                var _this = this;
+                if (context == null) {
+                    context = this;
+                }
+                this.stop();
+                this.timerId = setTimeout(function () {
+                    _this.stop();
+                    callback.call(context);
+                }, time);
+                return this;
+            };
+
+            /**
+            * プログレスイベントを登録
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.prototype.progress = function (callback) {
+                if ($.isFunction(callback)) {
+                    this._onProgress = callback;
+                }
+                return this;
+            };
+
+            /**
+            * 遅延処理
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.wait = function (time, callback, context) {
+                return new Timer().wait(time, callback, context);
+            };
             return Timer;
         })();
         ui.Timer = Timer;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
 })(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
+        
+
+        /**
+        * スクロールを管理するクラス
+        *
+        * @version 0.0.8
+        * @since 0.0.8
+        *
+        */
+        var Scroll = (function () {
+            function Scroll() {
+                this.timer = new ui.Timer();
+            }
+            Scroll.prototype.to = function (selector, options) {
+                var _this = this;
+                var ele;
+                var x;
+                var y;
+                var docWidth;
+                var docHeight;
+                var winWidth;
+                var winHeight;
+                var maxScrollX;
+                var maxScrollY;
+                var $target;
+                var offset = 0;
+
+                this.options = options || {};
+                offset += this.options.offset || 0;
+
+                if (this.options.wheelCancel) {
+                    $(document).on('mousewheel', function () {
+                        if (_this.isScroll) {
+                            _this._finish();
+                            if ($.isFunction(_this.options.onScrollCancel)) {
+                                _this.options.onScrollCancel.call(_this, new $.Event('scrollcancel'));
+                            }
+                        }
+                        return;
+                    });
+                }
+
+                // 第一引数が数値だった場合はその値のy軸へスクロール
+                if ($.isNumeric(selector)) {
+                    offset += (parseFloat(selector) || 0);
+                    this.targetX = 0;
+                    this.targetY = offset;
+                } else if (selector) {
+                    $target = $(selector);
+                    if (!$target.length) {
+                        return this;
+                    }
+                    ele = $target[0];
+
+                    // スクロール先座標をセットする
+                    x = 0;
+                    y = 0;
+
+                    while (ele) {
+                        x += ele.offsetLeft;
+                        y += ele.offsetTop;
+                        ele = ele.offsetParent;
+                    }
+                    winWidth = document.documentElement.clientWidth;
+                    winHeight = document.documentElement.clientHeight;
+                    docWidth = document.documentElement.scrollWidth;
+                    docHeight = document.documentElement.scrollHeight;
+                    maxScrollX = Math.max(winWidth, docWidth);
+                    maxScrollY = Math.max(winHeight, docHeight);
+                    this.targetX = Math.min(x, maxScrollX) + offset;
+                    this.targetY = Math.min(y, maxScrollY) + offset;
+                } else {
+                    $target = $(window.location.hash);
+                    if ($target.length) {
+                        ui.Timer.wait(Scroll.delayWhenURLHashTarget, function () {
+                            window.scrollTo(0, 0);
+                            _this.to($target, offset);
+                            return;
+                        });
+                    }
+                    return this;
+                }
+
+                // スクロール停止中ならスクロール開始
+                if (!this.isScroll) {
+                    this.isScroll = true;
+                    if ($.isFunction(this.options.onScrollStart)) {
+                        this.options.onScrollStart.call(this, new $.Event('scrollstart'));
+                    }
+                    this._scroll();
+                }
+                return this;
+            };
+
+            Scroll.prototype._scroll = function () {
+                var currentX = this._getX();
+                var currentY = this._getY();
+                var vx = (this.targetX - currentX) / Scroll.speed;
+                var vy = (this.targetY - currentY) / Scroll.speed;
+                var nextX = Math.floor(currentX + vx);
+                var nextY = Math.floor(currentY + vy);
+                if ((Math.abs(vx) < 1 && Math.abs(vy) < 1) || (this.prevX === currentX && this.prevY === currentY)) {
+                    // 目標座標付近に到達していたら終了
+                    window.scrollTo(this.targetX, this.targetY);
+                    this._finish();
+                    if ($.isFunction(this.options.onScrollEnd)) {
+                        this.options.onScrollEnd.call(this, new $.Event('scrollend'));
+                    }
+                } else {
+                    // 繰り返し
+                    window.scrollTo(nextX, nextY);
+                    this.prevX = currentX;
+                    this.prevY = currentY;
+                    if ($.isFunction(this.options.onScrollProgress)) {
+                        this.options.onScrollProgress.call(this, new $.Event('scrollprogress'));
+                    }
+                    this.timer.wait(Scroll.interval, this._scroll, this);
+                }
+            };
+
+            Scroll.prototype._getX = function () {
+                return (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement.scrollLeft || document.body.scrollLeft);
+            };
+
+            Scroll.prototype._getY = function () {
+                return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement.scrollTop || document.body.scrollTop);
+            };
+
+            Scroll.prototype._finish = function () {
+                this.isScroll = false;
+                this.prevX = null;
+                this.prevY = null;
+                this.timer.stop();
+            };
+            Scroll.speed = 4;
+            Scroll.interval = 20;
+            Scroll.delayWhenURLHashTarget = 30;
+            return Scroll;
+        })();
+        ui.Scroll = Scroll;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+/*
+$.scrollTo = _scrollTo
+$.fn.scrollTo = (opt) ->
+o = $.extend
+offset: 0
+keywords: {}
+wheelCancel: on
+onScrollEnd: null
+onScrollCancel: null
+onScrollStart: null
+onScrollProgress: null
+, opt
+return @on 'click', ->
+$this = $ @
+if @href
+href = $this.attr('href')
+# キーワードを一番に優先する
+for key, target of o.keywords
+if key is href
+$.scrollTo target, o.offset, o
+return false
+# 「/pathname/#hash」のリンクパターンの場合
+# 「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
+hrefAbs = $this.prop('href')
+currentRef = location.origin + location.pathname
+href = hrefAbs.replace currentRef, ''
+# セレクタとして要素が存在する場合はその要素に移動
+# 「/」で始まるなどセレクターとして不正な場合、例外を投げることがあるので無視する
+try
+$target = $(href)
+if $target.length
+$.scrollTo $target, o.offset, o
+return false
+return
+# 旧形式
+# if location.href.replace(location.hash, '') is @href.replace(@hash, '') and @hash
+# 	$.scrollTo @hash, o.offset
+# 	return false
+return
+*/
 var baser;
 (function (baser) {
     (function (ui) {
@@ -1461,10 +1758,71 @@ $.fn.bcBackground = function (options) {
         });
     });
 };
+
+// since 0.0.8
+$.fn.bcScrollTo = function (options) {
+    return this.on('click', function (e) {
+        var $this = $(this);
+        var href = $this.attr('href');
+        var keyword;
+        var target;
+        var scroll = new baser.ui.Scroll();
+        var absPath;
+        var currentReferer;
+        if (href) {
+            // キーワードを一番に優先する
+            if (options && $.isPlainObject(options.keywords)) {
+                for (keyword in options.keywords) {
+                    if (options.keywords.hasOwnProperty(keyword)) {
+                        target = options.keywords[keyword];
+                        if (keyword === href) {
+                            scroll.to(target, this.options);
+                            e.preventDefault();
+                            console.log(href);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // 「/pathname/#hash」のリンクパターンの場合
+            //「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
+            absPath = $this.prop('href');
+            currentReferer = location.protocol + '//' + location.host + location.pathname;
+            href = absPath.replace(currentReferer, '');
+
+            // #top はHTML5ではページトップを意味する
+            if (href === '#top') {
+                scroll.to(0, options);
+                e.preventDefault();
+                return;
+            }
+
+            try  {
+                target = $(href);
+                if (target.length) {
+                    scroll.to(target, this.options);
+                    e.preventDefault();
+                    return;
+                }
+            } catch (err) {
+            }
+        }
+        e.preventDefault();
+        return;
+    });
+};
+
+// since 0.0.8
+$.bcScroll = new baser.ui.Scroll();
+
+// since 0.0.8
+$.bcScrollTo = $.bcScroll.to;
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="baser/utility/String.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
+/// <reference path="baser/ui/Scroll.ts" />
 /// <reference path="baser/ui/element/Element.ts" />
 /// <reference path="baser/ui/element/Form.ts" />
 /// <reference path="baser/ui/element/FormElement.ts" />

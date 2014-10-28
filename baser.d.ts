@@ -57,7 +57,7 @@ declare module baser {
         /**
         * 時間管理クラス
         *
-        * @version 0.0.2
+        * @version 0.0.8
         * @since 0.0.1
         *
         */
@@ -65,14 +65,41 @@ declare module baser {
             /**
             * コアとなるDateオブジェクト
             *
+            * @version 0.0.1
             * @since 0.0.1
             *
             */
             public datetime: Date;
             /**
+            * タイマーID
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public timerId: number;
+            /**
+            * インターバル
+            *
+            * `13`は[jQuery](http://jquery.com/)を参考
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public interval: number;
+            /**
+            * プログレスイベントのコールバック
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            private _onProgress;
+            /**
             * コンストラクタ
             *
-            * @version 0.0.1
+            * @version 0.0.8
             * @since 0.0.1
             *
             */
@@ -93,6 +120,101 @@ declare module baser {
             *
             */
             public now(): number;
+            /**
+            * タイマーをスタートする
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public start(time: number): Timer;
+            /**
+            * タイマーをストップする
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public stop(): Timer;
+            /**
+            * 遅延処理
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public wait(time: number, callback: Function, context?: any): Timer;
+            /**
+            * プログレスイベントを登録
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public progress(callback: Function): Timer;
+            /**
+            * 遅延処理
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            static wait(time: number, callback: Function, context?: any): Timer;
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
+        * Scrollクラスのオプションハッシュのインターフェイス
+        *
+        * @version 0.0.8
+        * @since 0.0.8
+        *
+        */
+        interface ScrollOptions {
+            offset?: number;
+            keywords?: {
+                [index: string]: any;
+            };
+            wheelCancel?: boolean;
+            onScrollEnd?: Function;
+            onScrollCancel?: Function;
+            onScrollStart?: Function;
+            onScrollProgress?: Function;
+        }
+        /**
+        * スクロールを管理するクラス
+        *
+        * @version 0.0.8
+        * @since 0.0.8
+        *
+        */
+        class Scroll {
+            static speed: number;
+            static interval: number;
+            static delayWhenURLHashTarget: number;
+            public targetX: number;
+            public targetY: number;
+            public prevX: number;
+            public prevY: number;
+            public isScroll: boolean;
+            public timer: Timer;
+            public options: ScrollOptions;
+            /**
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public to(selector: string, options?: ScrollOptions): Scroll;
+            public to(selector: HTMLElement, options?: ScrollOptions): Scroll;
+            public to(selector: JQuery, options?: ScrollOptions): Scroll;
+            public to(selector: number, options?: ScrollOptions): Scroll;
+            private _scroll();
+            private _getX();
+            private _getY();
+            private _finish();
         }
     }
 }
@@ -863,4 +985,11 @@ declare module baser {
         class Validation {
         }
     }
+}
+interface JQueryStatic {
+    bcScroll: baser.ui.Scroll;
+    bcScrollTo(selector: string, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
+    bcScrollTo(selector: HTMLElement, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
+    bcScrollTo(selector: JQuery, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
+    bcScrollTo(selector: number, options?: baser.ui.ScrollOptions): baser.ui.Scroll;
 }

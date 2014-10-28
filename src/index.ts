@@ -2,6 +2,7 @@
 /// <reference path="baser/utility/String.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
+/// <reference path="baser/ui/Scroll.ts" />
 /// <reference path="baser/ui/element/Element.ts" />
 /// <reference path="baser/ui/element/Form.ts" />
 /// <reference path="baser/ui/element/FormElement.ts" />
