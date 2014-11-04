@@ -5,6 +5,30 @@ module baser {
 		export module element {
 
 			/**
+			 * MapOptionクラスのオプションハッシュのインターフェイス
+			 *
+			 * @version 0.0.9
+			 * @since 0.0.9
+			 *
+			 */
+			export interface MapOption {
+
+				/**
+				 * チェック状態の時に付加されるclass属性値
+				 *
+				 * @version 0.0.9
+				 * @since 0.0.9
+				 *
+				 */
+				zoom?: number;
+				mapTypeControlOptions?: google.maps.MapTypeControlOptions;
+				scrollwheel?: boolean;
+				center?: google.maps.LatLng;
+				styles?: google.maps.MapTypeStyle[];
+
+			}
+
+			/**
 			 * マップ要素
 			 *
 			 * @version 0.0.6
@@ -71,7 +95,7 @@ module baser {
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 *
 				 */
-				constructor ($el: JQuery, options?: any) {
+				constructor ($el: JQuery, options?: MapOption) {
 
 					super($el);
 
@@ -91,7 +115,7 @@ module baser {
 
 				}
 
-				private _init (options?: any): void {
+				private _init (options?: MapOption): void {
 
 					var mapCenterLat: number = <number>this.$el.data('lat') || Map.lat;
 					var mapCenterLng: number = <number>this.$el.data('lng') || Map.lng;
@@ -118,7 +142,8 @@ module baser {
 							]
 						},
 						scrollwheel: <boolean> false,
-						center: <google.maps.LatLng> new google.maps.LatLng(mapCenterLat, mapCenterLng)
+						center: <google.maps.LatLng> new google.maps.LatLng(mapCenterLat, mapCenterLng),
+						styles: null
 					}, options);
 
 					this.info = new google.maps.InfoWindow({
