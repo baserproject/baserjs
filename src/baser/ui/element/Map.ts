@@ -81,7 +81,7 @@ module baser {
 						this._init(options);
 					} else {
 						if (console && console.warn) {
-							console.warn('ReferenceError: google.maps, Must load script "//maps.google.com/maps/api/js"');
+							console.warn('ReferenceError: "//maps.google.com/maps/api/js" を先に読み込む必要があります。');
 						}
 					}
 
