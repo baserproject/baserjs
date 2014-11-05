@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.0.9-beta r111
+ * baserjs - v0.0.9-beta r114
  * update: 2014-11-05
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1828,6 +1828,33 @@ $.fn.bcBackground = function (options) {
         });
     });
 };
+$.fn.bcImageLoaded = function (callback) {
+    return this.each(function (i, elem) {
+        var $elem = $(elem);
+        var manifest = [];
+        var $imgs = $elem.find('img');
+        if ($imgs.length) {
+            $imgs.hide();
+            $imgs.each(function () {
+                var loaded = $.Deferred();
+                var img = new Image();
+                img.onload = function () {
+                    loaded.resolve();
+                    img.onload = null; // GC
+                    img = null; // GC
+                };
+                img.src = this.src;
+                manifest.push(loaded.promise());
+            });
+            $.when.apply($, manifest).done(function () {
+                $imgs.show();
+                callback.call(elem);
+            });
+        } else {
+            callback.call(elem);
+        }
+    });
+};
 /* 外部ライブラリ d.ts
 ================================================================= */
 /// <reference path="../typings/tsd.d.ts" />
@@ -1868,5 +1895,6 @@ $.fn.bcBackground = function (options) {
 /// <reference path="jquery/bcMaps.ts" />
 /// <reference path="jquery/bcYoutube.ts" />
 /// <reference path="jquery/bcBackground.ts" />
+/// <reference path="jquery/bcImageLoaded.ts" />
 
 }).call(this);

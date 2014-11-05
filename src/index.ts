@@ -43,3 +43,4 @@
 /// <reference path="jquery/bcMaps.ts" />
 /// <reference path="jquery/bcYoutube.ts" />
 /// <reference path="jquery/bcBackground.ts" />
+/// <reference path="jquery/bcImageLoaded.ts" />
