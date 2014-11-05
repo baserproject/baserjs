@@ -32,10 +32,10 @@ module baser {
 				static boxes: string[] = [];
 
 				/**
-				 * ラジオボタンを拡張する
+				 * ボックスの高さを揃える
 				 *
-				 * @version 0.0.5
-				 * @since 0.0.5
+				 * @version 0.0.x
+				 * @since 0.0.x
 				 * @param $elem 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
 				 *
@@ -66,10 +66,10 @@ module baser {
 				}
 
 				/**
-				 * 高さをそろえる
+				 * ボックスの高さを揃える
 				 *
-				 * @version 0.0.5
-				 * @since 0.0.5
+				 * @version 0.0.x
+				 * @since 0.0.x
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
 				 *

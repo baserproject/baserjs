@@ -1,7 +1,7 @@
 {
   "name": "baserjs",
   "version": "0.0.9-beta",
-  "revision": 114,
+  "revision": 116,
   "description": "Client side JavaScript libraries for baserCMS",
   "main": "baser.js",
   "scripts": {
@@ -19,6 +19,8 @@
     "JavaScript",
     "DOM",
     "Form",
+    "YouTube",
+    "Google Maps",
     "Validation",
     "WAI-ARIA",
     "Accessibility"
@@ -34,8 +36,5 @@
     "grunt-tsd": "^0.1.0",
     "grunt-typedoc": "^0.2.1",
     "grunt-typescript": "^0.3.6"
-  },
-  "dependencies": {
-    "jaco": "^0.3.0"
   }
 }

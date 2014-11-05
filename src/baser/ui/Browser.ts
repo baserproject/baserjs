@@ -14,7 +14,7 @@ module baser {
 		export class Browser {
 
 			/**
-			 * デバイス・OS・ブラウザを管理する
+			 * デバイス・OS・ブラウザの情報
 			 *
 			 * @version 0.0.1
 			 * @since 0.0.1
@@ -29,7 +29,7 @@ module baser {
 			};
 
 			/**
-			 * デバイス・OS・ブラウザを管理する
+			 * ユーザーエージェント情報を取得する
 			 *
 			 * @version 0.0.2
 			 * @since 0.0.1

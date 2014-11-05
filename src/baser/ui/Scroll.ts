@@ -39,10 +39,15 @@ module baser {
 			public isScroll: boolean;
 			public timer: Timer = new Timer();
 			public options: ScrollOptions;
+
 			/**
+			 * 対象の要素もしくは位置にスクロールを移動させる
 			 *
 			 * @version 0.0.8
 			 * @since 0.0.8
+			 * @param {string|HTMLElement|JQuery|number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
+			 * @param {ScrollOptions} オプション
+			 * @return {Scroll} 自信のスクロールオブジェクト
 			 *
 			 */
 			public to (selector: string, options?: ScrollOptions): Scroll;

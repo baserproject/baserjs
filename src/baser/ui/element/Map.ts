@@ -14,16 +14,48 @@ module baser {
 			export interface MapOption {
 
 				/**
-				 * チェック状態の時に付加されるclass属性値
+				 * ズーム率
 				 *
 				 * @version 0.0.9
 				 * @since 0.0.9
 				 *
 				 */
 				zoom?: number;
+
+				/**
+				 * マップのコントロールオプション
+				 *
+				 * @version 0.0.9
+				 * @since 0.0.9
+				 *
+				 */
 				mapTypeControlOptions?: google.maps.MapTypeControlOptions;
+
+				/**
+				 * スクロールホイールが有効かどうか
+				 *
+				 * @version 0.0.9
+				 * @since 0.0.9
+				 *
+				 */
 				scrollwheel?: boolean;
+
+				/**
+				 * 地図の中央の座標
+				 *
+				 * @version 0.0.9
+				 * @since 0.0.9
+				 *
+				 */
 				center?: google.maps.LatLng;
+
+				/**
+				 * 地図のスタイル
+				 *
+				 * @version 0.0.9
+				 * @since 0.0.9
+				 *
+				 */
 				styles?: google.maps.MapTypeStyle[];
 
 			}
@@ -67,7 +99,7 @@ module baser {
 				static className: string = '-bc-map-element';
 
 				/**
-				 * 管理対象の要素
+				 * 管理するマップ要素リスト
 				 *
 				 * @version 0.0.6
 				 * @since 0.0.6
@@ -76,21 +108,45 @@ module baser {
 				static maps: Map[] = [];
 
 				/**
-				 * 管理対象の要素
+				 * Google Mapsのインスタンス
 				 *
 				 * @version 0.0.6
 				 * @since 0.0.6
 				 *
 				 */
 				public gmap: google.maps.Map;
+
+				/**
+				 * インフォウィンドウ
+				 *
+				 * @version 0.0.6
+				 * @since 0.0.6
+				 *
+				 */
 				public info: google.maps.InfoWindow;
+
+				/**
+				 * ピンを置いた座標の要素
+				 *
+				 * @version 0.0.6
+				 * @since 0.0.6
+				 *
+				 */
 				public $coordinates: JQuery;
-				public mapOption: any;
+
+				/**
+				 * マップオプション
+				 *
+				 * @version 0.0.9
+				 * @since 0.0.9
+				 *
+				 */
+				public mapOption: MapOption;
 
 				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.6
+				 * @version 0.0.9
 				 * @since 0.0.6
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 *
@@ -133,7 +189,7 @@ module baser {
 						coordinates.push(coordinate);
 					});
 
-					this.mapOption = this.mapOption || $.extend({
+					this.mapOption = <MapOption> this.mapOption || $.extend({
 						zoom: 14,
 						mapTypeControlOptions: <google.maps.MapTypeControlOptions> {
 							mapTypeIds: <google.maps.MapTypeId[]> [
@@ -163,6 +219,13 @@ module baser {
 
 			}
 
+			/**
+			 * 座標要素
+			 *
+			 * @version 0.0.6
+			 * @since 0.0.6
+			 *
+			 */
 			class Coordinate {
 
 				public title: string;

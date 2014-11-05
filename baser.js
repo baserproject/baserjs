@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.0.9-beta r114
+ * baserjs - v0.0.9-beta r116
  * update: 2014-11-05
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -70,7 +70,7 @@ var baser;
             function Browser() {
             }
             /**
-            * デバイス・OS・ブラウザを管理する
+            * ユーザーエージェント情報を取得する
             *
             * @version 0.0.2
             * @since 0.0.1
@@ -438,8 +438,8 @@ var baser;
         /**
         * フォームのバリデーションを担うクラス
         *
-        * @version 0.0.2
-        * @since 0.0.1
+        * @version 0.0.x
+        * @since 0.0.x
         *
         */
         var Validation = (function () {
@@ -1128,6 +1128,7 @@ var baser;
                 Radio.prototype._onchenge = function () {
                     _super.prototype._onchenge.call(this);
 
+                    // 同じname属性のラジオボタン要素も同時に変更をする
                     element.Form.radioGroups[this.name].update(this);
                 };
                 return Radio;
@@ -1281,10 +1282,10 @@ var baser;
                     this.$el.addClass(Box.className);
                 }
                 /**
-                * ラジオボタンを拡張する
+                * ボックスの高さを揃える
                 *
-                * @version 0.0.5
-                * @since 0.0.5
+                * @version 0.0.x
+                * @since 0.0.x
                 * @param $elem 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
                 *
@@ -1298,10 +1299,10 @@ var baser;
                 };
 
                 /**
-                * 高さをそろえる
+                * ボックスの高さを揃える
                 *
-                * @version 0.0.5
-                * @since 0.0.5
+                * @version 0.0.x
+                * @since 0.0.x
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
                 *
@@ -1338,7 +1339,7 @@ var baser;
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.6
+                * @version 0.0.9
                 * @since 0.0.6
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 *
@@ -1416,6 +1417,13 @@ var baser;
             })(element.Element);
             element.Map = Map;
 
+            /**
+            * 座標要素
+            *
+            * @version 0.0.6
+            * @since 0.0.6
+            *
+            */
             var Coordinate = (function () {
                 function Coordinate($el) {
                     this.$el = $el;

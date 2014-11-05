@@ -50,13 +50,21 @@ module baser {
 				static movies: Youtube[] = [];
 
 				/**
-				 * 管理対象の要素
+				 * ムービーのID
 				 *
 				 * @version 0.0.7
 				 * @since 0.0.7
 				 *
 				 */
 				public movieId: string;
+
+				/**
+				 * ムービーのオプション
+				 *
+				 * @version 0.0.7
+				 * @since 0.0.7
+				 *
+				 */
 				public movieOption: any;
 
 				/**

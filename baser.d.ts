@@ -31,7 +31,7 @@ declare module baser {
         */
         class Browser {
             /**
-            * デバイス・OS・ブラウザを管理する
+            * デバイス・OS・ブラウザの情報
             *
             * @version 0.0.1
             * @since 0.0.1
@@ -42,7 +42,7 @@ declare module baser {
                 ua: any;
             };
             /**
-            * デバイス・OS・ブラウザを管理する
+            * ユーザーエージェント情報を取得する
             *
             * @version 0.0.2
             * @since 0.0.1
@@ -202,9 +202,13 @@ declare module baser {
             public timer: Timer;
             public options: ScrollOptions;
             /**
+            * 対象の要素もしくは位置にスクロールを移動させる
             *
             * @version 0.0.8
             * @since 0.0.8
+            * @param {string|HTMLElement|JQuery|number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
+            * @param {ScrollOptions} オプション
+            * @return {Scroll} 自信のスクロールオブジェクト
             *
             */
             public to(selector: string, options?: ScrollOptions): Scroll;
@@ -268,8 +272,8 @@ declare module baser {
         /**
         * フォームのバリデーションを担うクラス
         *
-        * @version 0.0.2
-        * @since 0.0.1
+        * @version 0.0.x
+        * @since 0.0.x
         *
         */
         class Validation {
@@ -852,10 +856,10 @@ declare module baser {
                 */
                 static boxes: string[];
                 /**
-                * ラジオボタンを拡張する
+                * ボックスの高さを揃える
                 *
-                * @version 0.0.5
-                * @since 0.0.5
+                * @version 0.0.x
+                * @since 0.0.x
                 * @param $elem 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
                 *
@@ -871,10 +875,10 @@ declare module baser {
                 */
                 constructor($el: JQuery);
                 /**
-                * 高さをそろえる
+                * ボックスの高さを揃える
                 *
-                * @version 0.0.5
-                * @since 0.0.5
+                * @version 0.0.x
+                * @since 0.0.x
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
                 *
@@ -896,16 +900,44 @@ declare module baser {
             */
             interface MapOption {
                 /**
-                * チェック状態の時に付加されるclass属性値
+                * ズーム率
                 *
                 * @version 0.0.9
                 * @since 0.0.9
                 *
                 */
                 zoom?: number;
+                /**
+                * マップのコントロールオプション
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
                 mapTypeControlOptions?: google.maps.MapTypeControlOptions;
+                /**
+                * スクロールホイールが有効かどうか
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
                 scrollwheel?: boolean;
+                /**
+                * 地図の中央の座標
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
                 center?: google.maps.LatLng;
+                /**
+                * 地図のスタイル
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
                 styles?: google.maps.MapTypeStyle[];
             }
             /**
@@ -943,7 +975,7 @@ declare module baser {
                 */
                 static className: string;
                 /**
-                * 管理対象の要素
+                * 管理するマップ要素リスト
                 *
                 * @version 0.0.6
                 * @since 0.0.6
@@ -951,20 +983,41 @@ declare module baser {
                 */
                 static maps: Map[];
                 /**
-                * 管理対象の要素
+                * Google Mapsのインスタンス
                 *
                 * @version 0.0.6
                 * @since 0.0.6
                 *
                 */
                 public gmap: google.maps.Map;
+                /**
+                * インフォウィンドウ
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                *
+                */
                 public info: google.maps.InfoWindow;
+                /**
+                * ピンを置いた座標の要素
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                *
+                */
                 public $coordinates: JQuery;
-                public mapOption: any;
+                /**
+                * マップオプション
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
+                public mapOption: MapOption;
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.6
+                * @version 0.0.9
                 * @since 0.0.6
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 *
@@ -1020,13 +1073,20 @@ declare module baser {
                 */
                 static movies: Youtube[];
                 /**
-                * 管理対象の要素
+                * ムービーのID
                 *
                 * @version 0.0.7
                 * @since 0.0.7
                 *
                 */
                 public movieId: string;
+                /**
+                * ムービーのオプション
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                *
+                */
                 public movieOption: any;
                 /**
                 * コンストラクタ
