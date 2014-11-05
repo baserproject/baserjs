@@ -133,10 +133,12 @@ module baser {
 
 					if (width) {
 						$mov.width(width);
+						$mov.data('width', width);
 					}
 
 					if (height) {
 						$mov.height(height);
+						$mov.data('height', height);
 					}
 
 					$.getScript(protocol + Youtube.API_URL);

@@ -1,7 +1,7 @@
 {
   "name": "baserjs",
-  "version": "0.0.8-beta",
-  "revision": 108,
+  "version": "0.0.9-beta",
+  "revision": 111,
   "description": "Client side JavaScript libraries for baserCMS",
   "main": "baser.js",
   "scripts": {
@@ -32,7 +32,7 @@
     "grunt-contrib-uglify": "^0.4.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-tsd": "^0.1.0",
-    "grunt-typedoc": "^0.1.1",
+    "grunt-typedoc": "^0.2.1",
     "grunt-typescript": "^0.3.6"
   },
   "dependencies": {

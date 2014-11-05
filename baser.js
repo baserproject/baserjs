@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.8-beta r108
- * update: 2014-10-29
+ * baserjs - v0.0.9-beta r111
+ * update: 2014-11-05
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -400,6 +400,54 @@ var baser;
             return Scroll;
         })();
         ui.Scroll = Scroll;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
+        /**
+        * 要素の寸法(幅・高さ)を管理するクラス
+        *
+        * @version 0.0.9
+        * @since 0.0.9
+        *
+        */
+        var Dimension = (function () {
+            /**
+            * コンストラクタ
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            function Dimension(el) {
+                if (el) {
+                    this.el = el;
+                }
+            }
+            return Dimension;
+        })();
+        ui.Dimension = Dimension;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
+        /**
+        * フォームのバリデーションを担うクラス
+        *
+        * @version 0.0.2
+        * @since 0.0.1
+        *
+        */
+        var Validation = (function () {
+            function Validation() {
+            }
+            return Validation;
+        })();
+        ui.Validation = Validation;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
 })(baser || (baser = {}));
@@ -1276,6 +1324,8 @@ var baser;
 (function (baser) {
     (function (ui) {
         (function (element) {
+            
+
             /**
             * マップ要素
             *
@@ -1302,7 +1352,7 @@ var baser;
                         this._init(options);
                     } else {
                         if (console && console.warn) {
-                            console.warn('ReferenceError: google.maps, Must load script "//maps.google.com/maps/api/js"');
+                            console.warn('ReferenceError: "//maps.google.com/maps/api/js" を先に読み込む必要があります。');
                         }
                     }
 
@@ -1337,7 +1387,8 @@ var baser;
                             ]
                         },
                         scrollwheel: false,
-                        center: new google.maps.LatLng(mapCenterLat, mapCenterLng)
+                        center: new google.maps.LatLng(mapCenterLat, mapCenterLng),
+                        styles: null
                     }, options);
 
                     this.info = new google.maps.InfoWindow({
@@ -1479,10 +1530,12 @@ var baser;
 
                     if (width) {
                         $mov.width(width);
+                        $mov.data('width', width);
                     }
 
                     if (height) {
                         $mov.height(height);
+                        $mov.data('height', height);
                     }
 
                     $.getScript(protocol + Youtube.API_URL);
@@ -1524,64 +1577,122 @@ var baser;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
 })(baser || (baser = {}));
-var baser;
-(function (baser) {
-    (function (ui) {
-        /**
-        * フォームのバリデーションを担うクラス
-        *
-        * @version 0.0.2
-        * @since 0.0.1
-        *
-        */
-        var Validation = (function () {
-            function Validation() {
-            }
-            return Validation;
-        })();
-        ui.Validation = Validation;
-    })(baser.ui || (baser.ui = {}));
-    var ui = baser.ui;
-})(baser || (baser = {}));
 this.baser = baser;
+// since 0.0.8
+$.fn.bcScrollTo = function (options) {
+    return this.on('click', function (e) {
+        var $this = $(this);
+        var href = $this.attr('href');
+        var keyword;
+        var target;
+        var scroll = new baser.ui.Scroll();
+        var absPath;
+        var currentReferer;
+        if (href) {
+            // キーワードを一番に優先する
+            if (options && $.isPlainObject(options.keywords)) {
+                for (keyword in options.keywords) {
+                    if (options.keywords.hasOwnProperty(keyword)) {
+                        target = options.keywords[keyword];
+                        if (keyword === href) {
+                            scroll.to(target, this.options);
+                            e.preventDefault();
+                            console.log(href);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // 「/pathname/#hash」のリンクパターンの場合
+            //「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
+            absPath = $this.prop('href');
+            currentReferer = location.protocol + '//' + location.host + location.pathname + location.search;
+            href = absPath.replace(currentReferer, '');
+
+            // #top はHTML5ではページトップを意味する
+            if (href === '#top') {
+                scroll.to(0, options);
+                e.preventDefault();
+                return;
+            }
+
+            try  {
+                target = $(href);
+                if (target.length) {
+                    scroll.to(target, this.options);
+                    e.preventDefault();
+                    return;
+                }
+            } catch (err) {
+            }
+        }
+        return;
+    });
+};
+
+// since 0.0.8
+$.bcScrollTo = function (selector, options) {
+    var scroll = new baser.ui.Scroll();
+    scroll.to(selector, options);
+};
 $.fn.bcRadio = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
         baser.ui.element.Form.radio($elem, options);
     });
 };
-
 $.fn.bcCheckbox = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
         baser.ui.element.Form.checkbox($elem, options);
     });
 };
-
 $.fn.bcSelect = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
         baser.ui.element.Form.select($elem, options);
     });
 };
+// クラスAPI化予定
+// since 0.0.9
+$.fn.bcKeepAspectRatio = function () {
+    var $w = $(window);
 
+    this.each(function (i, elem) {
+        var $elem = $(elem);
+        var baseWidth = +$elem.data('width');
+        var baseHeight = +$elem.data('height');
+        var aspectRatio = baseWidth / baseHeight;
+        $w.on('resize', function () {
+            var width = $elem.width();
+            $elem.css({
+                width: '100%',
+                height: width / aspectRatio
+            });
+        }).trigger('resize');
+    });
+
+    baser.ui.Timer.wait(30, function () {
+        $w.trigger('resize');
+    });
+    return this;
+};
 $.fn.bcBoxAlignHeight = function () {
     baser.ui.element.Box.alignHeight(this);
     return this;
 };
-
-$.fn.bcMaps = function () {
+$.fn.bcMaps = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
         var data = $elem.data(baser.ui.element.Map.className);
         if (data) {
             data.reload();
         } else {
-            new baser.ui.element.Map($elem);
+            new baser.ui.element.Map($elem, options);
         }
     });
 };
-
 $.fn.bcYoutube = function () {
     return this.each(function (i, elem) {
         var $elem = $(elem);
@@ -1593,7 +1704,6 @@ $.fn.bcYoutube = function () {
         }
     });
 };
-
 // クラスAPI化予定
 // since 0.0.7
 $.fn.bcBackground = function (options) {
@@ -1718,70 +1828,21 @@ $.fn.bcBackground = function (options) {
         });
     });
 };
-
-// since 0.0.8
-$.fn.bcScrollTo = function (options) {
-    return this.on('click', function (e) {
-        var $this = $(this);
-        var href = $this.attr('href');
-        var keyword;
-        var target;
-        var scroll = new baser.ui.Scroll();
-        var absPath;
-        var currentReferer;
-        if (href) {
-            // キーワードを一番に優先する
-            if (options && $.isPlainObject(options.keywords)) {
-                for (keyword in options.keywords) {
-                    if (options.keywords.hasOwnProperty(keyword)) {
-                        target = options.keywords[keyword];
-                        if (keyword === href) {
-                            scroll.to(target, this.options);
-                            e.preventDefault();
-                            console.log(href);
-                            return;
-                        }
-                    }
-                }
-            }
-
-            // 「/pathname/#hash」のリンクパターンの場合
-            //「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
-            absPath = $this.prop('href');
-            currentReferer = location.protocol + '//' + location.host + location.pathname + location.search;
-            href = absPath.replace(currentReferer, '');
-
-            // #top はHTML5ではページトップを意味する
-            if (href === '#top') {
-                scroll.to(0, options);
-                e.preventDefault();
-                return;
-            }
-
-            try  {
-                target = $(href);
-                if (target.length) {
-                    scroll.to(target, this.options);
-                    e.preventDefault();
-                    return;
-                }
-            } catch (err) {
-            }
-        }
-        return;
-    });
-};
-
-// since 0.0.8
-$.bcScrollTo = function (selector, options) {
-    var scroll = new baser.ui.Scroll();
-    scroll.to(selector, options);
-};
+/* 外部ライブラリ d.ts
+================================================================= */
 /// <reference path="../typings/tsd.d.ts" />
+/* ユーティリティ
+================================================================= */
 /// <reference path="baser/utility/String.ts" />
+/* UI
+================================================================= */
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/Scroll.ts" />
+/// <reference path="baser/ui/Dimension.ts" />
+/// <reference path="baser/ui/Validation.ts" />
+/* UI/エレメント
+================================================================= */
 /// <reference path="baser/ui/element/Element.ts" />
 /// <reference path="baser/ui/element/Form.ts" />
 /// <reference path="baser/ui/element/FormElement.ts" />
@@ -1793,8 +1854,19 @@ $.bcScrollTo = function (selector, options) {
 /// <reference path="baser/ui/element/Box.ts" />
 /// <reference path="baser/ui/element/Map.ts" />
 /// <reference path="baser/ui/element/Youtube.ts" />
-/// <reference path="baser/ui/Validation.ts" />
+/* baserJSコア
+================================================================= */
 /// <reference path="baser.ts" />
-/// <reference path="jquery.baser.ts" />
+/* jQueryプラグイン
+================================================================= */
+/// <reference path="jquery/bcScrollTo.ts" />
+/// <reference path="jquery/bcRadio.ts" />
+/// <reference path="jquery/bcCheckbox.ts" />
+/// <reference path="jquery/bcSelect.ts" />
+/// <reference path="jquery/bcKeepAspectRatio.ts" />
+/// <reference path="jquery/bcBoxAlignHeight.ts" />
+/// <reference path="jquery/bcMaps.ts" />
+/// <reference path="jquery/bcYoutube.ts" />
+/// <reference path="jquery/bcBackground.ts" />
 
 }).call(this);

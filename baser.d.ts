@@ -220,6 +220,64 @@ declare module baser {
 }
 declare module baser {
     module ui {
+        /**
+        * 要素の寸法(幅・高さ)を管理するクラス
+        *
+        * @version 0.0.9
+        * @since 0.0.9
+        *
+        */
+        class Dimension {
+            /**
+            * 幅
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            private _width;
+            /**
+            * 高さ
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            private _height;
+            /**
+            * 管理する要素
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            public el: Element;
+            /**
+            * コンストラクタ
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            constructor(el?: Element);
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
+        * フォームのバリデーションを担うクラス
+        *
+        * @version 0.0.2
+        * @since 0.0.1
+        *
+        */
+        class Validation {
+        }
+    }
+}
+declare module baser {
+    module ui {
         module element {
             /**
             * DOM要素の抽象クラス
@@ -830,6 +888,27 @@ declare module baser {
     module ui {
         module element {
             /**
+            * MapOptionクラスのオプションハッシュのインターフェイス
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            interface MapOption {
+                /**
+                * チェック状態の時に付加されるclass属性値
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
+                zoom?: number;
+                mapTypeControlOptions?: google.maps.MapTypeControlOptions;
+                scrollwheel?: boolean;
+                center?: google.maps.LatLng;
+                styles?: google.maps.MapTypeStyle[];
+            }
+            /**
             * マップ要素
             *
             * @version 0.0.6
@@ -890,7 +969,7 @@ declare module baser {
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 *
                 */
-                constructor($el: JQuery, options?: any);
+                constructor($el: JQuery, options?: MapOption);
                 private _init(options?);
                 public reload(): void;
             }
@@ -970,19 +1049,6 @@ declare module baser {
                 private _init(options?);
                 public reload(): void;
             }
-        }
-    }
-}
-declare module baser {
-    module ui {
-        /**
-        * フォームのバリデーションを担うクラス
-        *
-        * @version 0.0.2
-        * @since 0.0.1
-        *
-        */
-        class Validation {
         }
     }
 }
