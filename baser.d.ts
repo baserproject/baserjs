@@ -23,13 +23,51 @@ declare module baser {
 declare module baser {
     module ui {
         /**
+        * イベント駆動できるクラス
+        *
+        * @version 0.0.10
+        * @since 0.0.10
+        *
+        */
+        class EventDispacher {
+            constructor();
+            public on(type: string, handler: Function): EventDispacher;
+            public off(): EventDispacher;
+            public trigger(type: string, context?: any): EventDispacher;
+        }
+        class EventHandler {
+            public id: string;
+            public context: EventDispacher;
+            public type: string;
+            public handler: Function;
+            constructor(context: EventDispacher, type: string, handler: Function);
+        }
+        class DispacheEvent {
+            private _isImmediatePropagationStopped;
+            constructor(type: string);
+            public isImmediatePropagationStopped(): boolean;
+            public stopImmediatePropagation(): void;
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
         * ブラウザの情報を管理するクラス
         *
         * @version 0.0.2
         * @since 0.0.2
         *
         */
-        class Browser {
+        class Browser extends EventDispacher {
+            /**
+            * ブラウザ
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            *
+            */
+            static browser: Browser;
             /**
             * デバイス・OS・ブラウザの情報
             *
@@ -49,6 +87,11 @@ declare module baser {
             *
             */
             static getUA(): any;
+            public resizeEndInterval: number;
+            public scrollEndInterval: number;
+            public isResize: boolean;
+            public isScroll: boolean;
+            constructor();
         }
     }
 }
@@ -166,7 +209,49 @@ declare module baser {
 declare module baser {
     module ui {
         /**
-        * Scrollクラスのオプションハッシュのインターフェイス
+        * アニメーションフレームを管理するクラス
+        *
+        * @version 0.0.10
+        * @since 0.0.10
+        *
+        */
+        class AnimationFrames {
+            /**
+            * フレームレート
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            *
+            */
+            static FRAME_RATE: number;
+            public callback: Function;
+            public requestId: number;
+            /**
+            * フレーム毎のに実行するコールバックを登録する
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            * @return {number} リクエストIDを返す
+            *
+            */
+            constructor(callback: Function);
+            public start(context?: any): void;
+            /**
+            * リクエストしたコールバックを停止する
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            * @return {number} リクエストIDを返す
+            *
+            */
+            public stop(): void;
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
+        * Scrollクラスのオプションのインターフェイス
         *
         * @version 0.0.8
         * @since 0.0.8
@@ -1117,4 +1202,10 @@ interface JQueryStatic {
     bcScrollTo(selector: HTMLElement, options?: baser.ui.ScrollOptions): void;
     bcScrollTo(selector: JQuery, options?: baser.ui.ScrollOptions): void;
     bcScrollTo(selector: number, options?: baser.ui.ScrollOptions): void;
+}
+declare module baser {
+}
+declare module baser {
+}
+declare module baser {
 }

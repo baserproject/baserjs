@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Dimension | baserjs</title>
+	<title>EventDispacher | baserjs</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../modules/baser.ui.html">ui</a>
 				</li>
 				<li>
-					<a href="baser.ui.dimension.html">Dimension</a>
+					<a href="baser.ui.eventdispacher.html">EventDispacher</a>
 				</li>
 			</ul>
-			<h1>Class Dimension</h1>
+			<h1>Class EventDispacher</h1>
 		</div>
 	</div>
 </header>
@@ -70,17 +70,30 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>要素の寸法(幅・高さ)を管理するクラス</p>
+						<p>イベント駆動できるクラス</p>
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>version</dt>
-						<dd><p>0.0.9</p>
+						<dd><p>0.0.10</p>
 						</dd>
 						<dt>since</dt>
-						<dd><p>0.0.9</p>
+						<dd><p>0.0.10</p>
 						</dd>
 					</dl>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">EventDispacher</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="baser.ui.browser.html" class="tsd-signature-type">Browser</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
@@ -89,15 +102,15 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Constructor methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.dimension.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.eventdispacher.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Properties</h3>
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.dimension.html#_height" class="tsd-kind-icon">_height</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.dimension.html#_width" class="tsd-kind-icon">_width</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.dimension.html#el" class="tsd-kind-icon">el</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.eventdispacher.html#off" class="tsd-kind-icon">off</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.eventdispacher.html#on" class="tsd-kind-icon">on</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.eventdispacher.html#trigger" class="tsd-kind-icon">trigger</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,101 +121,86 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>el<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Element</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.dimension.html" class="tsd-signature-type">Dimension</a></li>
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/dev/src/baser/ui/Dimension.ts#L48">ui/Dimension.ts:48</a></li>
+									<li>Defined in ui/EventDispacher.ts:17</li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>コンストラクタ</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>version</dt>
-									<dd><p>0.0.9</p>
-									</dd>
-									<dt>since</dt>
-									<dd><p>0.0.9</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>el?:         <span class="tsd-signature-type">Element</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.dimension.html" class="tsd-signature-type">Dimension</a>
+							</aside>
+							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
 							</h4>
 						</li>
 					</ul>
 				</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-					<a name="_height" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _height</h3>
-					<div class="tsd-signature tsd-kind-icon">_height<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/dev/src/baser/ui/Dimension.ts#L30">ui/Dimension.ts:30</a></li>
-						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>高さ</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>version</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-							<dt>since</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-						</dl>
-					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-					<a name="_width" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _width</h3>
-					<div class="tsd-signature tsd-kind-icon">_width<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/dev/src/baser/ui/Dimension.ts#L21">ui/Dimension.ts:21</a></li>
-						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>幅</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>version</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-							<dt>since</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-						</dl>
-					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
-					<a name="el" class="tsd-anchor"></a>
-					<h3>el</h3>
-					<div class="tsd-signature tsd-kind-icon">el<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">Element</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/dev/src/baser/ui/Dimension.ts#L39">ui/Dimension.ts:39</a></li>
-						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>管理する要素</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>version</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-							<dt>since</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-						</dl>
-					</div>
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="off" class="tsd-anchor"></a>
+					<h3>off</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">off<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in ui/EventDispacher.ts:34</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
+							</h4>
+						</li>
+					</ul>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="on" class="tsd-anchor"></a>
+					<h3>on</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in ui/EventDispacher.ts:22</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type:         <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>handler:         <span class="tsd-signature-type">Function</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
+							</h4>
+						</li>
+					</ul>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="trigger" class="tsd-anchor"></a>
+					<h3>trigger</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in ui/EventDispacher.ts:38</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type:         <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>context?:         <span class="tsd-signature-type">any</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
+							</h4>
+						</li>
+					</ul>
 			</section></section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -239,33 +237,33 @@
 					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
 						<a href="baser.ui.browser.html" class="tsd-kind-icon">Browser</a>
 					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+						<a href="baser.ui.dimension.html" class="tsd-kind-icon">Dimension</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+						<a href="baser.ui.dispacheevent.html" class="tsd-kind-icon">Dispache<wbr>Event</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.dimension.html" class="tsd-kind-icon">Dimension</a>
+						<a href="baser.ui.eventdispacher.html" class="tsd-kind-icon">Event<wbr>Dispacher</a>
 						<ul>
 							<li class=" tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
-								<a href="baser.ui.dimension.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="baser.ui.eventdispacher.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-								<a href="baser.ui.dimension.html#_height" class="tsd-kind-icon">_height</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.eventdispacher.html#off" class="tsd-kind-icon">off</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-								<a href="baser.ui.dimension.html#_width" class="tsd-kind-icon">_width</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.eventdispacher.html#on" class="tsd-kind-icon">on</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
-								<a href="baser.ui.dimension.html#el" class="tsd-kind-icon">el</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.eventdispacher.html#trigger" class="tsd-kind-icon">trigger</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.dispacheevent.html" class="tsd-kind-icon">Dispache<wbr>Event</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.eventdispacher.html" class="tsd-kind-icon">Event<wbr>Dispacher</a>
-					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
 						<a href="baser.ui.eventhandler.html" class="tsd-kind-icon">Event<wbr>Handler</a>
 					</li>

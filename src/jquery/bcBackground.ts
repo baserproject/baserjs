@@ -1,126 +1,174 @@
-// クラスAPI化予定
-// since 0.0.7
-$.fn.bcBackground = function (options: any): JQuery {
-	return this.each( (i: number, elem: HTMLElement): void => {
-		var config: any = $.extend({
-			align: 'center',
-			valign: 'center',
-			size: 'contain',
-			child: '>*:first'
-		}, options);
+module baser {
 
-		var $elem: JQuery = $(elem);
-		var $child: JQuery = $elem.find(config.child);
+	/**
+	 * 親のコンテナ要素の幅に合わせて、自信の縦横比を保ったまま幅の変更に対応する
+	 *
+	 * @version 0.0.10
+	 * @since 0.0.9
+	 * @param {Object} options オプション
+	 *
+	 * * * *
+	 *
+	 * ## Sample
+	 *
+	 * ### Target HTML
+	 *
+	 * ```html
+	 * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+	 * ```
+	 *
+	 * ### Execute
+	 *
+	 * ```js
+	 * $('.sample').bcYoutube().find('iframe').bcKeepAspectRatio();
+	 * ```
+	 *
+	 * ### Result
+	 *
+	 * comming soon...
+	 *
+	 */
+	function bcBackground (options: any): JQuery {
+		return this.each( (i: number, elem: HTMLElement): void => {
+			var config: any = $.extend({
+				align: 'center',
+				valign: 'center',
+				size: 'contain',
+				child: '>*:first'
+			}, options);
 
-		var objectWidth: number = +($elem.data('width') || $child.data('width') || $child.attr('width') || $child.width()) || 400;
-		var objectHeight: number = +($elem.data('height') || $child.data('height') || $child.attr('height') || $child.height()) || 300;
-		var objectAspectRatio: number = objectWidth / objectHeight;
+			var $elem: JQuery = $(elem);
+			var $child: JQuery = $elem.find(config.child);
 
-		var currentCSSPosition: string = $elem.css('position');
-		if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
-			$elem.css('position', 'relative');
-		}
+			var objectWidth: number = +($elem.data('width') || $child.data('width') || $child.attr('width') || $child.width()) || 400;
+			var objectHeight: number = +($elem.data('height') || $child.data('height') || $child.attr('height') || $child.height()) || 300;
+			var objectAspectRatio: number = objectWidth / objectHeight;
 
-		$child.css({
-			position: 'absolute',
-			top: 0,
-			left: 0
-		});
-
-		var exec: Function = function (): void {
-			var containerWidth: number = $elem.width();
-			var containerHeight: number = $elem.height();
-			var containerAspectRatio: number = containerWidth / containerHeight;
-
-			var scale: number;
-			// 画像の拡縮率の算出
-			// アス比が1以上なら横長/1以下なら縦長
-			// コンテナが横長
-			switch (config.size) {
-				case 'contain':
-					if (1 < containerAspectRatio) {
-						// 画像が横長 もしくは コンテナのアス比の方が大きい
-						if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
-							scale = containerWidth / objectWidth;
-						} else {
-							scale = containerHeight / objectHeight;
-						}
-					// コンテナが縦長
-					} else {
-						// 画像が横長 もしくは 画像のアス比の方が大きい
-						if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
-							scale = containerHeight / objectHeight;
-						} else {
-							scale = containerWidth / objectWidth;
-						}
-					}
-					break;
-				case 'cover':
-					if (1 < containerAspectRatio) {
-						// 画像が横長 もしくは コンテナのアス比の方が大きい
-						if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
-							scale = containerHeight / objectHeight;
-						} else {
-							scale = containerWidth / objectWidth;
-						}
-					// コンテナが縦長
-					} else {
-						// 画像が横長 もしくは 画像のアス比の方が大きい
-						if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
-							scale = containerWidth / objectWidth;
-						} else {
-							scale = containerHeight / objectHeight;
-						}
-					}
-					break;
-				default:
-					return;
-			}
-			// 画像の幅と高さ
-			var newWidth: number = objectWidth * scale;
-			var newHeight: number = objectHeight * scale;
-
-			var top: number;
-			switch (config.align) {
-				case 'top':
-					top = 0;
-					break;
-				case 'bottom':
-					top = containerHeight - newHeight;
-					break;
-				case 'center':
-				default: {
-					top = (containerHeight / 2) - (newHeight / 2);
-				}
-			}
-
-			var left: number;
-			switch (config.valign) {
-				case 'left':
-					left = 0;
-					break;
-				case 'right':
-					left = containerWidth - newWidth;
-					break;
-				case 'center':
-				default: {
-					left = (containerWidth / 2) - (newWidth / 2);
-				}
+			var currentCSSPosition: string = $elem.css('position');
+			if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
+				$elem.css('position', 'relative');
 			}
 
 			$child.css({
-				width: newWidth,
-				height: newHeight,
-				top: top,
-				left: left
+				position: 'absolute',
+				top: 0,
+				left: 0
 			});
-		};
-		exec();
 
-		// リサイズ時に動画サイズを変更
-		$(window).on('resize', function () {
-			exec();
+			var css: any = {};
+
+			var calc: Function = function (): void {
+				var containerWidth: number = $elem.width();
+				var containerHeight: number = $elem.height();
+				var containerAspectRatio: number = containerWidth / containerHeight;
+
+				var scale: number;
+				// 画像の拡縮率の算出
+				// アス比が1以上なら横長/1以下なら縦長
+				// コンテナが横長
+				switch (config.size) {
+					case 'contain':
+						if (1 < containerAspectRatio) {
+							// 画像が横長 もしくは コンテナのアス比の方が大きい
+							if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
+								scale = containerWidth / objectWidth;
+							} else {
+								scale = containerHeight / objectHeight;
+							}
+						// コンテナが縦長
+						} else {
+							// 画像が横長 もしくは 画像のアス比の方が大きい
+							if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
+								scale = containerHeight / objectHeight;
+							} else {
+								scale = containerWidth / objectWidth;
+							}
+						}
+						break;
+					case 'cover':
+						if (1 < containerAspectRatio) {
+							// 画像が横長 もしくは コンテナのアス比の方が大きい
+							if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
+								scale = containerHeight / objectHeight;
+							} else {
+								scale = containerWidth / objectWidth;
+							}
+						// コンテナが縦長
+						} else {
+							// 画像が横長 もしくは 画像のアス比の方が大きい
+							if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
+								scale = containerWidth / objectWidth;
+							} else {
+								scale = containerHeight / objectHeight;
+							}
+						}
+						break;
+					default:
+						return;
+				}
+				// 画像の幅と高さ
+				var newWidth: number = objectWidth * scale;
+				var newHeight: number = objectHeight * scale;
+
+				var top: number;
+				switch (config.align) {
+					case 'top':
+						top = 0;
+						break;
+					case 'bottom':
+						top = containerHeight - newHeight;
+						break;
+					case 'center':
+					default: {
+						top = (containerHeight / 2) - (newHeight / 2);
+					}
+				}
+
+				var left: number;
+				switch (config.valign) {
+					case 'left':
+						left = 0;
+						break;
+					case 'right':
+						left = containerWidth - newWidth;
+						break;
+					case 'center':
+					default: {
+						left = (containerWidth / 2) - (newWidth / 2);
+					}
+				}
+
+				css = {
+					width: newWidth,
+					height: newHeight,
+					top: top,
+					left: left
+				};
+			};
+			calc();
+
+			// 計算結果をアニメーションフレーム毎にDOMに反映
+			var animation: baser.ui.AnimationFrames = new baser.ui.AnimationFrames( (): void => {
+				$child.css(css);
+			});
+
+			baser.ui.Browser.browser.on('resizestart', function () {
+				animation.start();
+			}).on('resize', function () {
+				// リサイズ時にサイズを計算
+				calc();
+			}).on('resizeend', function () {
+				animation.stop();
+			});
+
+			animation.start();
+			baser.ui.Timer.wait(300, (): void => {
+				animation.stop();
+			});
+
 		});
+	};
 
-	});
-};
+	$.fn.bcBackground = bcBackground;
+
+}

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Dimension | baserjs</title>
+	<title>AnimationFrames | baserjs</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../modules/baser.ui.html">ui</a>
 				</li>
 				<li>
-					<a href="baser.ui.dimension.html">Dimension</a>
+					<a href="baser.ui.animationframes.html">AnimationFrames</a>
 				</li>
 			</ul>
-			<h1>Class Dimension</h1>
+			<h1>Class AnimationFrames</h1>
 		</div>
 	</div>
 </header>
@@ -70,14 +70,14 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>要素の寸法(幅・高さ)を管理するクラス</p>
+						<p>アニメーションフレームを管理するクラス</p>
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>version</dt>
-						<dd><p>0.0.9</p>
+						<dd><p>0.0.10</p>
 						</dd>
 						<dt>since</dt>
-						<dd><p>0.0.9</p>
+						<dd><p>0.0.10</p>
 						</dd>
 					</dl>
 				</div>
@@ -89,15 +89,22 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Constructor methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.dimension.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.animationframes.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.dimension.html#_height" class="tsd-kind-icon">_height</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.dimension.html#_width" class="tsd-kind-icon">_width</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.dimension.html#el" class="tsd-kind-icon">el</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.animationframes.html#static-frame_rate" class="tsd-kind-icon">FRAME_<wbr>RATE</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.animationframes.html#callback" class="tsd-kind-icon">callback</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.animationframes.html#requestid" class="tsd-kind-icon">request<wbr>Id</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.animationframes.html#start" class="tsd-kind-icon">start</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.animationframes.html#stop" class="tsd-kind-icon">stop</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,101 +115,126 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>el<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Element</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.dimension.html" class="tsd-signature-type">Dimension</a></li>
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.animationframes.html" class="tsd-signature-type">AnimationFrames</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/dev/src/baser/ui/Dimension.ts#L48">ui/Dimension.ts:48</a></li>
+									<li>Defined in ui/AnimationFrames.ts:34</li>
 								</ul>
 								</aside>        <div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>コンストラクタ</p>
+									<p>フレーム毎のに実行するコールバックを登録する</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.0.9</p>
+									<dd><p>0.0.10</p>
 									</dd>
 									<dt>since</dt>
-									<dd><p>0.0.9</p>
+									<dd><p>0.0.10</p>
 									</dd>
 								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>el?:         <span class="tsd-signature-type">Element</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5>callback:         <span class="tsd-signature-type">Function</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.dimension.html" class="tsd-signature-type">Dimension</a>
+							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.animationframes.html" class="tsd-signature-type">AnimationFrames</a>
 							</h4>
+							<p>リクエストIDを返す</p>
 						</li>
 					</ul>
 				</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-					<a name="_height" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _height</h3>
-					<div class="tsd-signature tsd-kind-icon">_height<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="static-frame_rate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> FRAME_<wbr>RATE</h3>
+					<div class="tsd-signature tsd-kind-icon">FRAME_<wbr>RATE<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/dev/src/baser/ui/Dimension.ts#L30">ui/Dimension.ts:30</a></li>
+							<li>Defined in ui/AnimationFrames.ts:21</li>
 						</ul>
 						</aside>        <div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>高さ</p>
+							<p>フレームレート</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>version</dt>
-							<dd><p>0.0.9</p>
+							<dd><p>0.0.10</p>
 							</dd>
 							<dt>since</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-						</dl>
-					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-					<a name="_width" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _width</h3>
-					<div class="tsd-signature tsd-kind-icon">_width<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/dev/src/baser/ui/Dimension.ts#L21">ui/Dimension.ts:21</a></li>
-						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>幅</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>version</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-							<dt>since</dt>
-							<dd><p>0.0.9</p>
+							<dd><p>0.0.10</p>
 							</dd>
 						</dl>
 					</div>
 					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
-					<a name="el" class="tsd-anchor"></a>
-					<h3>el</h3>
-					<div class="tsd-signature tsd-kind-icon">el<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">Element</span></div>
+					<a name="callback" class="tsd-anchor"></a>
+					<h3>callback</h3>
+					<div class="tsd-signature tsd-kind-icon">callback<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">Function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/dev/src/baser/ui/Dimension.ts#L39">ui/Dimension.ts:39</a></li>
+							<li>Defined in ui/AnimationFrames.ts:23</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>管理する要素</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>version</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-							<dt>since</dt>
-							<dd><p>0.0.9</p>
-							</dd>
-						</dl>
-					</div>
+					</aside>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+					<a name="requestid" class="tsd-anchor"></a>
+					<h3>request<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">request<wbr>Id<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in ui/AnimationFrames.ts:24</li>
+						</ul>
+					</aside>
+				</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="start" class="tsd-anchor"></a>
+					<h3>start</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in ui/AnimationFrames.ts:38</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>context?:         <span class="tsd-signature-type">any</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="stop" class="tsd-anchor"></a>
+					<h3>stop</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">stop<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in ui/AnimationFrames.ts:65</li>
+								</ul>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>リクエストしたコールバックを停止する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.0.10</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.0.10</p>
+									</dd>
+								</dl>
+							</div>
+						</li>
+					</ul>
 			</section></section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -233,33 +265,39 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-container tsd-is-external">
 						<a href="../interfaces/baser.ui.scrolloptions.html" class="tsd-kind-icon">Scroll<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.animationframes.html" class="tsd-kind-icon">Animation<wbr>Frames</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.browser.html" class="tsd-kind-icon">Browser</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.dimension.html" class="tsd-kind-icon">Dimension</a>
+						<a href="baser.ui.animationframes.html" class="tsd-kind-icon">Animation<wbr>Frames</a>
 						<ul>
 							<li class=" tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
-								<a href="baser.ui.dimension.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="baser.ui.animationframes.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-								<a href="baser.ui.dimension.html#_height" class="tsd-kind-icon">_height</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-								<a href="baser.ui.dimension.html#_width" class="tsd-kind-icon">_width</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.animationframes.html#static-frame_rate" class="tsd-kind-icon">FRAME_<wbr>RATE</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
-								<a href="baser.ui.dimension.html#el" class="tsd-kind-icon">el</a>
+								<a href="baser.ui.animationframes.html#callback" class="tsd-kind-icon">callback</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.animationframes.html#requestid" class="tsd-kind-icon">request<wbr>Id</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.animationframes.html#start" class="tsd-kind-icon">start</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.animationframes.html#stop" class="tsd-kind-icon">stop</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+						<a href="baser.ui.browser.html" class="tsd-kind-icon">Browser</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+						<a href="baser.ui.dimension.html" class="tsd-kind-icon">Dimension</a>
+					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
 						<a href="baser.ui.dispacheevent.html" class="tsd-kind-icon">Dispache<wbr>Event</a>
 					</li>

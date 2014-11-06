@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.9-beta r116
- * update: 2014-11-05
+ * baserjs - v0.0.9-beta r139
+ * update: 2014-11-06
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -56,6 +56,101 @@ var baser;
 })(baser || (baser = {}));
 var baser;
 (function (baser) {
+    var eventHandlers = {};
+    var types = {};
+
+    (function (ui) {
+        /**
+        * イベント駆動できるクラス
+        *
+        * @version 0.0.10
+        * @since 0.0.10
+        *
+        */
+        var EventDispacher = (function () {
+            function EventDispacher() {
+            }
+            EventDispacher.prototype.on = function (type, handler) {
+                var eventHandler = new EventHandler(this, type, handler);
+                eventHandlers[eventHandler.id] = eventHandler;
+                if (!types[type]) {
+                    types[type] = [];
+                }
+                types[type].push(eventHandler);
+
+                return this;
+            };
+
+            EventDispacher.prototype.off = function () {
+                return this;
+            };
+
+            EventDispacher.prototype.trigger = function (type, context) {
+                var eventHandler;
+                var e;
+
+                context = context || this;
+
+                var i = 0;
+                var l;
+
+                if (types[type]) {
+                    l = types[type].length;
+
+                    for (; i < l; i++) {
+                        eventHandler = types[type][i];
+                        if (eventHandler.context === this) {
+                            e = new DispacheEvent(type);
+                            eventHandler.handler.call(context, e);
+                            if (e.isImmediatePropagationStopped()) {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return this;
+            };
+            return EventDispacher;
+        })();
+        ui.EventDispacher = EventDispacher;
+
+        var EventHandler = (function () {
+            function EventHandler(context, type, handler) {
+                this.context = context;
+                this.id = baser.utility.String.UID();
+                this.type = type;
+                this.handler = handler;
+            }
+            return EventHandler;
+        })();
+        ui.EventHandler = EventHandler;
+
+        var DispacheEvent = (function () {
+            function DispacheEvent(type) {
+                this._isImmediatePropagationStopped = false;
+            }
+            DispacheEvent.prototype.isImmediatePropagationStopped = function () {
+                return this._isImmediatePropagationStopped;
+            };
+
+            DispacheEvent.prototype.stopImmediatePropagation = function () {
+                this._isImmediatePropagationStopped = true;
+            };
+            return DispacheEvent;
+        })();
+        ui.DispacheEvent = DispacheEvent;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var baser;
+(function (baser) {
     (function (ui) {
         var flexibleWindowObject = window;
 
@@ -66,8 +161,49 @@ var baser;
         * @since 0.0.2
         *
         */
-        var Browser = (function () {
+        var Browser = (function (_super) {
+            __extends(Browser, _super);
             function Browser() {
+                var _this = this;
+                _super.call(this);
+                this.resizeEndInterval = 100;
+                this.scrollEndInterval = 100;
+                this.isResize = false;
+                this.isScroll = false;
+
+                var $window = $(window);
+
+                // リサイズイベント
+                var resizeEndTimer;
+                $window.on('resize', function (e) {
+                    if (!_this.isResize) {
+                        _this.trigger('resizestart');
+                    }
+                    _this.isResize = true;
+                    _this.trigger('resize');
+                    clearTimeout(resizeEndTimer);
+                    resizeEndTimer = setTimeout(function () {
+                        _this.isResize = false;
+                        _this.trigger('resize');
+                        _this.trigger('resizeend');
+                    }, _this.resizeEndInterval);
+                });
+
+                // スクロールイベント
+                var scrollEndTimer;
+                $window.on('scroll', function (e) {
+                    if (!_this.isScroll) {
+                        _this.trigger('scrollstart');
+                    }
+                    _this.isScroll = true;
+                    _this.trigger('scroll');
+                    clearTimeout(scrollEndTimer);
+                    scrollEndTimer = setTimeout(function () {
+                        _this.isScroll = false;
+                        _this.trigger('scroll');
+                        _this.trigger('scrollend');
+                    }, _this.resizeEndInterval);
+                });
             }
             /**
             * ユーザーエージェント情報を取得する
@@ -87,12 +223,14 @@ var baser;
                 };
                 return result;
             };
+            Browser.browser = new Browser();
+
             Browser.spec = {
                 isTouchable: flexibleWindowObject.ontouchstart !== undefined,
                 ua: Browser.getUA()
             };
             return Browser;
-        })();
+        })(ui.EventDispacher);
         ui.Browser = Browser;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
@@ -254,6 +392,70 @@ var baser;
             return Timer;
         })();
         ui.Timer = Timer;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
+        /**
+        * アニメーションフレームを管理するクラス
+        *
+        * @version 0.0.10
+        * @since 0.0.10
+        *
+        */
+        var AnimationFrames = (function () {
+            /**
+            * フレーム毎のに実行するコールバックを登録する
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            * @return {number} リクエストIDを返す
+            *
+            */
+            function AnimationFrames(callback) {
+                this.callback = callback;
+            }
+            AnimationFrames.prototype.start = function (context) {
+                var _this = this;
+                var interval;
+                context = context || this;
+                if ('requestAnimationFrame' in window) {
+                    this.requestId = requestAnimationFrame(function () {
+                        cancelAnimationFrame(_this.requestId);
+                        _this.callback.call(context);
+                        _this.start(context);
+                    });
+                } else {
+                    interval = 1000 / AnimationFrames.FRAME_RATE;
+                    this.requestId = setTimeout(function () {
+                        clearTimeout(_this.requestId);
+                        _this.callback.call(context);
+                        _this.start(context);
+                    }, interval);
+                }
+            };
+
+            /**
+            * リクエストしたコールバックを停止する
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            * @return {number} リクエストIDを返す
+            *
+            */
+            AnimationFrames.prototype.stop = function () {
+                if ('cancelAnimationFrame' in window) {
+                    cancelAnimationFrame(this.requestId);
+                } else {
+                    clearTimeout(this.requestId);
+                }
+            };
+            AnimationFrames.FRAME_RATE = 60;
+            return AnimationFrames;
+        })();
+        ui.AnimationFrames = AnimationFrames;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
 })(baser || (baser = {}));
@@ -594,12 +796,6 @@ var baser;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
 })(baser || (baser = {}));
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var baser;
 (function (baser) {
     (function (ui) {
@@ -1662,30 +1858,60 @@ $.fn.bcSelect = function (options) {
         baser.ui.element.Form.select($elem, options);
     });
 };
-// クラスAPI化予定
-// since 0.0.9
-$.fn.bcKeepAspectRatio = function () {
-    var $w = $(window);
+var baser;
+(function (baser) {
+    /**
+    * 親のコンテナ要素の幅に合わせて、自信の縦横比を保ったまま幅の変更に対応する
+    *
+    * @version 0.0.9
+    * @since 0.0.9
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * ### Target HTML
+    *
+    * ```html
+    * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+    * ```
+    *
+    * ### Execute
+    *
+    * ```js
+    * $('.sample').bcYoutube().find('iframe').bcKeepAspectRatio();
+    * ```
+    *
+    * ### Result
+    *
+    * comming soon...
+    *
+    */
+    function bcKeepAspectRatio() {
+        var $w = $(window);
 
-    this.each(function (i, elem) {
-        var $elem = $(elem);
-        var baseWidth = +$elem.data('width');
-        var baseHeight = +$elem.data('height');
-        var aspectRatio = baseWidth / baseHeight;
-        $w.on('resize', function () {
-            var width = $elem.width();
-            $elem.css({
-                width: '100%',
-                height: width / aspectRatio
-            });
-        }).trigger('resize');
-    });
+        this.each(function (i, elem) {
+            var $elem = $(elem);
+            var baseWidth = +$elem.data('width');
+            var baseHeight = +$elem.data('height');
+            var aspectRatio = baseWidth / baseHeight;
+            $w.on('resize', function () {
+                var width = $elem.width();
+                $elem.css({
+                    width: '100%',
+                    height: width / aspectRatio
+                });
+            }).trigger('resize');
+        });
 
-    baser.ui.Timer.wait(30, function () {
-        $w.trigger('resize');
-    });
-    return this;
-};
+        baser.ui.Timer.wait(30, function () {
+            $w.trigger('resize');
+        });
+        return this;
+    }
+
+    $.fn.bcKeepAspectRatio = bcKeepAspectRatio;
+})(baser || (baser = {}));
 $.fn.bcBoxAlignHeight = function () {
     baser.ui.element.Box.alignHeight(this);
     return this;
@@ -1701,141 +1927,223 @@ $.fn.bcMaps = function (options) {
         }
     });
 };
-$.fn.bcYoutube = function () {
-    return this.each(function (i, elem) {
-        var $elem = $(elem);
-        var data = $elem.data(baser.ui.element.Youtube.className);
-        if (data) {
-            data.reload();
-        } else {
-            new baser.ui.element.Youtube($elem);
-        }
-    });
-};
-// クラスAPI化予定
-// since 0.0.7
-$.fn.bcBackground = function (options) {
-    return this.each(function (i, elem) {
-        var config = $.extend({
-            align: 'center',
-            valign: 'center',
-            size: 'contain',
-            child: '>*:first'
-        }, options);
-
-        var $elem = $(elem);
-        var $child = $elem.find(config.child);
-
-        var objectWidth = +($elem.data('width') || $child.data('width') || $child.attr('width') || $child.width()) || 400;
-        var objectHeight = +($elem.data('height') || $child.data('height') || $child.attr('height') || $child.height()) || 300;
-        var objectAspectRatio = objectWidth / objectHeight;
-
-        var currentCSSPosition = $elem.css('position');
-        if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
-            $elem.css('position', 'relative');
-        }
-
-        $child.css({
-            position: 'absolute',
-            top: 0,
-            left: 0
+var baser;
+(function (baser) {
+    /**
+    * YouTubeを埋め込む
+    *
+    * @version 0.0.8
+    * @since 0.0.8
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * ### Target HTML
+    *
+    * ```html
+    * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+    * ```
+    *
+    * ### Execute
+    *
+    * ```js
+    * $('.sample').bcYoutube();
+    * ```
+    *
+    * ### Result
+    *
+    * <div data-height="400" data-theme-id="9760" data-slug-hash="pboIt" data-default-tab="result" data-user="YusukeHirao" class='codepen'><pre><code>$(&#39;.sample&#39;).bcYoutube();</code></pre>
+    <p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a> by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+    </div><script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+    *
+    */
+    function bcYoutube() {
+        return this.each(function (i, elem) {
+            var $elem = $(elem);
+            var data = $elem.data(baser.ui.element.Youtube.className);
+            if (data) {
+                data.reload();
+            } else {
+                new baser.ui.element.Youtube($elem);
+            }
         });
+    }
 
-        var exec = function () {
-            var containerWidth = $elem.width();
-            var containerHeight = $elem.height();
-            var containerAspectRatio = containerWidth / containerHeight;
+    // jQueryのインスタンスメソッドとしてprototypeに登録
+    $.fn.bcYoutube = bcYoutube;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    /**
+    * 親のコンテナ要素の幅に合わせて、自信の縦横比を保ったまま幅の変更に対応する
+    *
+    * @version 0.0.9
+    * @since 0.0.9
+    * @param {Object} options オプション
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * ### Target HTML
+    *
+    * ```html
+    * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+    * ```
+    *
+    * ### Execute
+    *
+    * ```js
+    * $('.sample').bcYoutube().find('iframe').bcKeepAspectRatio();
+    * ```
+    *
+    * ### Result
+    *
+    * comming soon...
+    *
+    */
+    function bcBackground(options) {
+        return this.each(function (i, elem) {
+            var config = $.extend({
+                align: 'center',
+                valign: 'center',
+                size: 'contain',
+                child: '>*:first'
+            }, options);
 
-            var scale;
+            var $elem = $(elem);
+            var $child = $elem.find(config.child);
 
-            switch (config.size) {
-                case 'contain':
-                    if (1 < containerAspectRatio) {
-                        // 画像が横長 もしくは コンテナのアス比の方が大きい
-                        if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
-                            scale = containerWidth / objectWidth;
-                        } else {
-                            scale = containerHeight / objectHeight;
-                        }
-                        // コンテナが縦長
-                    } else {
-                        // 画像が横長 もしくは 画像のアス比の方が大きい
-                        if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
-                            scale = containerHeight / objectHeight;
-                        } else {
-                            scale = containerWidth / objectWidth;
-                        }
-                    }
-                    break;
-                case 'cover':
-                    if (1 < containerAspectRatio) {
-                        // 画像が横長 もしくは コンテナのアス比の方が大きい
-                        if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
-                            scale = containerHeight / objectHeight;
-                        } else {
-                            scale = containerWidth / objectWidth;
-                        }
-                        // コンテナが縦長
-                    } else {
-                        // 画像が横長 もしくは 画像のアス比の方が大きい
-                        if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
-                            scale = containerWidth / objectWidth;
-                        } else {
-                            scale = containerHeight / objectHeight;
-                        }
-                    }
-                    break;
-                default:
-                    return;
-            }
+            var objectWidth = +($elem.data('width') || $child.data('width') || $child.attr('width') || $child.width()) || 400;
+            var objectHeight = +($elem.data('height') || $child.data('height') || $child.attr('height') || $child.height()) || 300;
+            var objectAspectRatio = objectWidth / objectHeight;
 
-            // 画像の幅と高さ
-            var newWidth = objectWidth * scale;
-            var newHeight = objectHeight * scale;
-
-            var top;
-            switch (config.align) {
-                case 'top':
-                    top = 0;
-                    break;
-                case 'bottom':
-                    top = containerHeight - newHeight;
-                    break;
-                case 'center':
-                default: {
-                    top = (containerHeight / 2) - (newHeight / 2);
-                }
-            }
-
-            var left;
-            switch (config.valign) {
-                case 'left':
-                    left = 0;
-                    break;
-                case 'right':
-                    left = containerWidth - newWidth;
-                    break;
-                case 'center':
-                default: {
-                    left = (containerWidth / 2) - (newWidth / 2);
-                }
+            var currentCSSPosition = $elem.css('position');
+            if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
+                $elem.css('position', 'relative');
             }
 
             $child.css({
-                width: newWidth,
-                height: newHeight,
-                top: top,
-                left: left
+                position: 'absolute',
+                top: 0,
+                left: 0
             });
-        };
-        exec();
 
-        // リサイズ時に動画サイズを変更
-        $(window).on('resize', function () {
-            exec();
+            var css = {};
+
+            var calc = function () {
+                var containerWidth = $elem.width();
+                var containerHeight = $elem.height();
+                var containerAspectRatio = containerWidth / containerHeight;
+
+                var scale;
+
+                switch (config.size) {
+                    case 'contain':
+                        if (1 < containerAspectRatio) {
+                            // 画像が横長 もしくは コンテナのアス比の方が大きい
+                            if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
+                                scale = containerWidth / objectWidth;
+                            } else {
+                                scale = containerHeight / objectHeight;
+                            }
+                            // コンテナが縦長
+                        } else {
+                            // 画像が横長 もしくは 画像のアス比の方が大きい
+                            if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
+                                scale = containerHeight / objectHeight;
+                            } else {
+                                scale = containerWidth / objectWidth;
+                            }
+                        }
+                        break;
+                    case 'cover':
+                        if (1 < containerAspectRatio) {
+                            // 画像が横長 もしくは コンテナのアス比の方が大きい
+                            if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
+                                scale = containerHeight / objectHeight;
+                            } else {
+                                scale = containerWidth / objectWidth;
+                            }
+                            // コンテナが縦長
+                        } else {
+                            // 画像が横長 もしくは 画像のアス比の方が大きい
+                            if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
+                                scale = containerWidth / objectWidth;
+                            } else {
+                                scale = containerHeight / objectHeight;
+                            }
+                        }
+                        break;
+                    default:
+                        return;
+                }
+
+                // 画像の幅と高さ
+                var newWidth = objectWidth * scale;
+                var newHeight = objectHeight * scale;
+
+                var top;
+                switch (config.align) {
+                    case 'top':
+                        top = 0;
+                        break;
+                    case 'bottom':
+                        top = containerHeight - newHeight;
+                        break;
+                    case 'center':
+                    default: {
+                        top = (containerHeight / 2) - (newHeight / 2);
+                    }
+                }
+
+                var left;
+                switch (config.valign) {
+                    case 'left':
+                        left = 0;
+                        break;
+                    case 'right':
+                        left = containerWidth - newWidth;
+                        break;
+                    case 'center':
+                    default: {
+                        left = (containerWidth / 2) - (newWidth / 2);
+                    }
+                }
+
+                css = {
+                    width: newWidth,
+                    height: newHeight,
+                    top: top,
+                    left: left
+                };
+            };
+            calc();
+
+            var animation = new baser.ui.AnimationFrames(function () {
+                $child.css(css);
+            });
+
+            // リサイズ時にサイズを計算
+            baser.ui.Browser.browser.on('resizestart', function () {
+                animation.start();
+            }).on('resize', function () {
+                calc();
+            }).on('resizeend', function () {
+                animation.stop();
+            });
+
+            animation.start();
+            baser.ui.Timer.wait(300, function () {
+                animation.stop();
+            });
         });
-    });
-};
+    }
+    ;
+
+    $.fn.bcBackground = bcBackground;
+})(baser || (baser = {}));
 $.fn.bcImageLoaded = function (callback) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
@@ -1871,8 +2179,10 @@ $.fn.bcImageLoaded = function (callback) {
 /// <reference path="baser/utility/String.ts" />
 /* UI
 ================================================================= */
+/// <reference path="baser/ui/EventDispacher.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
+/// <reference path="baser/ui/AnimationFrames.ts" />
 /// <reference path="baser/ui/Scroll.ts" />
 /// <reference path="baser/ui/Dimension.ts" />
 /// <reference path="baser/ui/Validation.ts" />
