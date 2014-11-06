@@ -51,6 +51,7 @@ module baser {
 
 					super._onchenge();
 
+					// 同じname属性のラジオボタン要素も同時に変更をする
 					Form.radioGroups[this.name].update(this);
 
 				}

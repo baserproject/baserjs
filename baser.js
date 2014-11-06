@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.7-rc.1 r101
- * update: 2014-10-28
+ * baserjs - v0.0.10-rc.1 r141
+ * update: 2014-11-06
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -56,6 +56,101 @@ var baser;
 })(baser || (baser = {}));
 var baser;
 (function (baser) {
+    var eventHandlers = {};
+    var types = {};
+
+    (function (ui) {
+        /**
+        * イベント駆動できるクラス
+        *
+        * @version 0.0.10
+        * @since 0.0.10
+        *
+        */
+        var EventDispacher = (function () {
+            function EventDispacher() {
+            }
+            EventDispacher.prototype.on = function (type, handler) {
+                var eventHandler = new EventHandler(this, type, handler);
+                eventHandlers[eventHandler.id] = eventHandler;
+                if (!types[type]) {
+                    types[type] = [];
+                }
+                types[type].push(eventHandler);
+
+                return this;
+            };
+
+            EventDispacher.prototype.off = function () {
+                return this;
+            };
+
+            EventDispacher.prototype.trigger = function (type, context) {
+                var eventHandler;
+                var e;
+
+                context = context || this;
+
+                var i = 0;
+                var l;
+
+                if (types[type]) {
+                    l = types[type].length;
+
+                    for (; i < l; i++) {
+                        eventHandler = types[type][i];
+                        if (eventHandler.context === this) {
+                            e = new DispacheEvent(type);
+                            eventHandler.handler.call(context, e);
+                            if (e.isImmediatePropagationStopped()) {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return this;
+            };
+            return EventDispacher;
+        })();
+        ui.EventDispacher = EventDispacher;
+
+        var EventHandler = (function () {
+            function EventHandler(context, type, handler) {
+                this.context = context;
+                this.id = baser.utility.String.UID();
+                this.type = type;
+                this.handler = handler;
+            }
+            return EventHandler;
+        })();
+        ui.EventHandler = EventHandler;
+
+        var DispacheEvent = (function () {
+            function DispacheEvent(type) {
+                this._isImmediatePropagationStopped = false;
+            }
+            DispacheEvent.prototype.isImmediatePropagationStopped = function () {
+                return this._isImmediatePropagationStopped;
+            };
+
+            DispacheEvent.prototype.stopImmediatePropagation = function () {
+                this._isImmediatePropagationStopped = true;
+            };
+            return DispacheEvent;
+        })();
+        ui.DispacheEvent = DispacheEvent;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var baser;
+(function (baser) {
     (function (ui) {
         var flexibleWindowObject = window;
 
@@ -66,11 +161,52 @@ var baser;
         * @since 0.0.2
         *
         */
-        var Browser = (function () {
+        var Browser = (function (_super) {
+            __extends(Browser, _super);
             function Browser() {
+                var _this = this;
+                _super.call(this);
+                this.resizeEndInterval = 100;
+                this.scrollEndInterval = 100;
+                this.isResize = false;
+                this.isScroll = false;
+
+                var $window = $(window);
+
+                // リサイズイベント
+                var resizeEndTimer;
+                $window.on('resize', function (e) {
+                    if (!_this.isResize) {
+                        _this.trigger('resizestart');
+                    }
+                    _this.isResize = true;
+                    _this.trigger('resize');
+                    clearTimeout(resizeEndTimer);
+                    resizeEndTimer = setTimeout(function () {
+                        _this.isResize = false;
+                        _this.trigger('resize');
+                        _this.trigger('resizeend');
+                    }, _this.resizeEndInterval);
+                });
+
+                // スクロールイベント
+                var scrollEndTimer;
+                $window.on('scroll', function (e) {
+                    if (!_this.isScroll) {
+                        _this.trigger('scrollstart');
+                    }
+                    _this.isScroll = true;
+                    _this.trigger('scroll');
+                    clearTimeout(scrollEndTimer);
+                    scrollEndTimer = setTimeout(function () {
+                        _this.isScroll = false;
+                        _this.trigger('scroll');
+                        _this.trigger('scrollend');
+                    }, _this.resizeEndInterval);
+                });
             }
             /**
-            * デバイス・OS・ブラウザを管理する
+            * ユーザーエージェント情報を取得する
             *
             * @version 0.0.2
             * @since 0.0.1
@@ -87,12 +223,14 @@ var baser;
                 };
                 return result;
             };
+            Browser.browser = new Browser();
+
             Browser.spec = {
                 isTouchable: flexibleWindowObject.ontouchstart !== undefined,
                 ua: Browser.getUA()
             };
             return Browser;
-        })();
+        })(ui.EventDispacher);
         ui.Browser = Browser;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
@@ -103,7 +241,7 @@ var baser;
         /**
         * 時間管理クラス
         *
-        * @version 0.0.2
+        * @version 0.0.8
         * @since 0.0.1
         *
         */
@@ -111,12 +249,38 @@ var baser;
             /**
             * コンストラクタ
             *
-            * @version 0.0.1
+            * @version 0.0.8
             * @since 0.0.1
             *
             */
             function Timer() {
-                this.datetime = new Date();
+                /**
+                * タイマーID
+                *
+                * @version 0.0.8
+                * @since 0.0.8
+                *
+                */
+                this.timerId = null;
+                /**
+                * インターバル
+                *
+                * `13`は[jQuery](http://jquery.com/)を参考
+                *
+                * @version 0.0.8
+                * @since 0.0.8
+                *
+                */
+                this.interval = 13;
+                /**
+                * プログレスイベントのコールバック
+                *
+                * @version 0.0.8
+                * @since 0.0.8
+                *
+                */
+                this._onProgress = null;
+                this.now();
             }
             /**
             * 暗黙の型変換時の振る舞い
@@ -140,9 +304,352 @@ var baser;
                 this.datetime = new Date();
                 return this.valueOf();
             };
+
+            /**
+            * タイマーをスタートする
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.prototype.start = function (time) {
+                var _this = this;
+                var startTimestamp = this.now();
+                this.stop();
+                var tick = function () {
+                    _this.timerId = setTimeout(function () {
+                        var period = _this.now() - startTimestamp;
+                        if (period < time) {
+                            if (_this._onProgress) {
+                                _this._onProgress.call(_this);
+                            }
+                            tick();
+                        } else {
+                            _this.stop();
+                        }
+                    }, _this.interval);
+                };
+                return this;
+            };
+
+            /**
+            * タイマーをストップする
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.prototype.stop = function () {
+                clearTimeout(this.timerId);
+                this.timerId = null;
+                return this;
+            };
+
+            /**
+            * 遅延処理
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.prototype.wait = function (time, callback, context) {
+                var _this = this;
+                if (context == null) {
+                    context = this;
+                }
+                this.stop();
+                this.timerId = setTimeout(function () {
+                    _this.stop();
+                    callback.call(context);
+                }, time);
+                return this;
+            };
+
+            /**
+            * プログレスイベントを登録
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.prototype.progress = function (callback) {
+                if ($.isFunction(callback)) {
+                    this._onProgress = callback;
+                }
+                return this;
+            };
+
+            /**
+            * 遅延処理
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            Timer.wait = function (time, callback, context) {
+                return new Timer().wait(time, callback, context);
+            };
             return Timer;
         })();
         ui.Timer = Timer;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
+        /**
+        * アニメーションフレームを管理するクラス
+        *
+        * @version 0.0.10
+        * @since 0.0.10
+        *
+        */
+        var AnimationFrames = (function () {
+            /**
+            * フレーム毎のに実行するコールバックを登録する
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            * @return {number} リクエストIDを返す
+            *
+            */
+            function AnimationFrames(callback) {
+                this.callback = callback;
+            }
+            AnimationFrames.prototype.start = function (context) {
+                var _this = this;
+                var interval;
+                context = context || this;
+                if ('requestAnimationFrame' in window) {
+                    this.requestId = requestAnimationFrame(function () {
+                        cancelAnimationFrame(_this.requestId);
+                        _this.callback.call(context);
+                        _this.start(context);
+                    });
+                } else {
+                    interval = 1000 / AnimationFrames.FRAME_RATE;
+                    this.requestId = setTimeout(function () {
+                        clearTimeout(_this.requestId);
+                        _this.callback.call(context);
+                        _this.start(context);
+                    }, interval);
+                }
+            };
+
+            /**
+            * リクエストしたコールバックを停止する
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            * @return {number} リクエストIDを返す
+            *
+            */
+            AnimationFrames.prototype.stop = function () {
+                if ('cancelAnimationFrame' in window) {
+                    cancelAnimationFrame(this.requestId);
+                } else {
+                    clearTimeout(this.requestId);
+                }
+            };
+            AnimationFrames.FRAME_RATE = 60;
+            return AnimationFrames;
+        })();
+        ui.AnimationFrames = AnimationFrames;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
+        
+
+        /**
+        * スクロールを管理するクラス
+        *
+        * @version 0.0.8
+        * @since 0.0.8
+        *
+        */
+        var Scroll = (function () {
+            function Scroll() {
+                this.timer = new ui.Timer();
+            }
+            Scroll.prototype.to = function (selector, options) {
+                var _this = this;
+                var ele;
+                var x;
+                var y;
+                var docWidth;
+                var docHeight;
+                var winWidth;
+                var winHeight;
+                var maxScrollX;
+                var maxScrollY;
+                var $target;
+                var offset = 0;
+
+                this.options = options || {};
+                offset += this.options.offset || 0;
+
+                if (this.options.wheelCancel) {
+                    $(document).on('mousewheel', function () {
+                        if (_this.isScroll) {
+                            _this._finish();
+                            if ($.isFunction(_this.options.onScrollCancel)) {
+                                _this.options.onScrollCancel.call(_this, new $.Event('scrollcancel'));
+                            }
+                        }
+                        return;
+                    });
+                }
+
+                // 第一引数が数値だった場合はその値のy軸へスクロール
+                if ($.isNumeric(selector)) {
+                    offset += (parseFloat(selector) || 0);
+                    this.targetX = 0;
+                    this.targetY = offset;
+                } else if (selector) {
+                    $target = $(selector);
+                    if (!$target.length) {
+                        return this;
+                    }
+                    ele = $target[0];
+
+                    // スクロール先座標をセットする
+                    x = 0;
+                    y = 0;
+
+                    while (ele) {
+                        x += ele.offsetLeft;
+                        y += ele.offsetTop;
+                        ele = ele.offsetParent;
+                    }
+                    winWidth = document.documentElement.clientWidth;
+                    winHeight = document.documentElement.clientHeight;
+                    docWidth = document.documentElement.scrollWidth;
+                    docHeight = document.documentElement.scrollHeight;
+                    maxScrollX = Math.max(winWidth, docWidth);
+                    maxScrollY = Math.max(winHeight, docHeight);
+                    this.targetX = Math.min(x, maxScrollX) + offset;
+                    this.targetY = Math.min(y, maxScrollY) + offset;
+                } else {
+                    $target = $(window.location.hash);
+                    if ($target.length) {
+                        ui.Timer.wait(Scroll.delayWhenURLHashTarget, function () {
+                            window.scrollTo(0, 0);
+                            _this.to($target, offset);
+                            return;
+                        });
+                    }
+                    return this;
+                }
+
+                // スクロール停止中ならスクロール開始
+                if (!this.isScroll) {
+                    this.isScroll = true;
+                    if ($.isFunction(this.options.onScrollStart)) {
+                        this.options.onScrollStart.call(this, new $.Event('scrollstart'));
+                    }
+                    this._scroll();
+                }
+                return this;
+            };
+
+            Scroll.prototype._scroll = function () {
+                var currentX = this._getX();
+                var currentY = this._getY();
+                var vx = (this.targetX - currentX) / Scroll.speed;
+                var vy = (this.targetY - currentY) / Scroll.speed;
+                var nextX = Math.floor(currentX + vx);
+                var nextY = Math.floor(currentY + vy);
+                if ((Math.abs(vx) < 1 && Math.abs(vy) < 1) || (this.prevX === currentX && this.prevY === currentY)) {
+                    // 目標座標付近に到達していたら終了
+                    window.scrollTo(this.targetX, this.targetY);
+                    this._finish();
+                    if ($.isFunction(this.options.onScrollEnd)) {
+                        this.options.onScrollEnd.call(this, new $.Event('scrollend'));
+                    }
+                } else {
+                    // 繰り返し
+                    window.scrollTo(nextX, nextY);
+                    this.prevX = currentX;
+                    this.prevY = currentY;
+                    if ($.isFunction(this.options.onScrollProgress)) {
+                        this.options.onScrollProgress.call(this, new $.Event('scrollprogress'));
+                    }
+                    this.timer.wait(Scroll.interval, this._scroll, this);
+                }
+            };
+
+            Scroll.prototype._getX = function () {
+                return (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement.scrollLeft || document.body.scrollLeft);
+            };
+
+            Scroll.prototype._getY = function () {
+                return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement.scrollTop || document.body.scrollTop);
+            };
+
+            Scroll.prototype._finish = function () {
+                this.isScroll = false;
+                this.prevX = null;
+                this.prevY = null;
+                this.timer.stop();
+            };
+            Scroll.speed = 4;
+            Scroll.interval = 20;
+            Scroll.delayWhenURLHashTarget = 30;
+            return Scroll;
+        })();
+        ui.Scroll = Scroll;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
+        /**
+        * 要素の寸法(幅・高さ)を管理するクラス
+        *
+        * @version 0.0.9
+        * @since 0.0.9
+        *
+        */
+        var Dimension = (function () {
+            /**
+            * コンストラクタ
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            function Dimension(el) {
+                if (el) {
+                    this.el = el;
+                }
+            }
+            return Dimension;
+        })();
+        ui.Dimension = Dimension;
+    })(baser.ui || (baser.ui = {}));
+    var ui = baser.ui;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    (function (ui) {
+        /**
+        * フォームのバリデーションを担うクラス
+        *
+        * @version 0.0.x
+        * @since 0.0.x
+        *
+        */
+        var Validation = (function () {
+            function Validation() {
+            }
+            return Validation;
+        })();
+        ui.Validation = Validation;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
 })(baser || (baser = {}));
@@ -289,12 +796,6 @@ var baser;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
 })(baser || (baser = {}));
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var baser;
 (function (baser) {
     (function (ui) {
@@ -823,6 +1324,7 @@ var baser;
                 Radio.prototype._onchenge = function () {
                     _super.prototype._onchenge.call(this);
 
+                    // 同じname属性のラジオボタン要素も同時に変更をする
                     element.Form.radioGroups[this.name].update(this);
                 };
                 return Radio;
@@ -976,10 +1478,10 @@ var baser;
                     this.$el.addClass(Box.className);
                 }
                 /**
-                * ラジオボタンを拡張する
+                * ボックスの高さを揃える
                 *
-                * @version 0.0.5
-                * @since 0.0.5
+                * @version 0.0.x
+                * @since 0.0.x
                 * @param $elem 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
                 *
@@ -993,10 +1495,10 @@ var baser;
                 };
 
                 /**
-                * 高さをそろえる
+                * ボックスの高さを揃える
                 *
-                * @version 0.0.5
-                * @since 0.0.5
+                * @version 0.0.x
+                * @since 0.0.x
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
                 *
@@ -1019,6 +1521,8 @@ var baser;
 (function (baser) {
     (function (ui) {
         (function (element) {
+            
+
             /**
             * マップ要素
             *
@@ -1031,7 +1535,7 @@ var baser;
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.6
+                * @version 0.0.9
                 * @since 0.0.6
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 *
@@ -1045,7 +1549,7 @@ var baser;
                         this._init(options);
                     } else {
                         if (console && console.warn) {
-                            console.warn('ReferenceError: google.maps, Must load script "//maps.google.com/maps/api/js"');
+                            console.warn('ReferenceError: "//maps.google.com/maps/api/js" を先に読み込む必要があります。');
                         }
                     }
 
@@ -1080,7 +1584,8 @@ var baser;
                             ]
                         },
                         scrollwheel: false,
-                        center: new google.maps.LatLng(mapCenterLat, mapCenterLng)
+                        center: new google.maps.LatLng(mapCenterLat, mapCenterLng),
+                        styles: null
                     }, options);
 
                     this.info = new google.maps.InfoWindow({
@@ -1108,6 +1613,13 @@ var baser;
             })(element.Element);
             element.Map = Map;
 
+            /**
+            * 座標要素
+            *
+            * @version 0.0.6
+            * @since 0.0.6
+            *
+            */
             var Coordinate = (function () {
                 function Coordinate($el) {
                     this.$el = $el;
@@ -1222,10 +1734,12 @@ var baser;
 
                     if (width) {
                         $mov.width(width);
+                        $mov.data('width', width);
                     }
 
                     if (height) {
                         $mov.height(height);
+                        $mov.data('height', height);
                     }
 
                     $.getScript(protocol + Youtube.API_URL);
@@ -1267,204 +1781,414 @@ var baser;
     })(baser.ui || (baser.ui = {}));
     var ui = baser.ui;
 })(baser || (baser = {}));
-var baser;
-(function (baser) {
-    (function (ui) {
-        /**
-        * フォームのバリデーションを担うクラス
-        *
-        * @version 0.0.2
-        * @since 0.0.1
-        *
-        */
-        var Validation = (function () {
-            function Validation() {
-            }
-            return Validation;
-        })();
-        ui.Validation = Validation;
-    })(baser.ui || (baser.ui = {}));
-    var ui = baser.ui;
-})(baser || (baser = {}));
 this.baser = baser;
+// since 0.0.8
+$.fn.bcScrollTo = function (options) {
+    return this.on('click', function (e) {
+        var $this = $(this);
+        var href = $this.attr('href');
+        var keyword;
+        var target;
+        var scroll = new baser.ui.Scroll();
+        var absPath;
+        var currentReferer;
+        if (href) {
+            // キーワードを一番に優先する
+            if (options && $.isPlainObject(options.keywords)) {
+                for (keyword in options.keywords) {
+                    if (options.keywords.hasOwnProperty(keyword)) {
+                        target = options.keywords[keyword];
+                        if (keyword === href) {
+                            scroll.to(target, this.options);
+                            e.preventDefault();
+                            console.log(href);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // 「/pathname/#hash」のリンクパターンの場合
+            //「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
+            absPath = $this.prop('href');
+            currentReferer = location.protocol + '//' + location.host + location.pathname + location.search;
+            href = absPath.replace(currentReferer, '');
+
+            // #top はHTML5ではページトップを意味する
+            if (href === '#top') {
+                scroll.to(0, options);
+                e.preventDefault();
+                return;
+            }
+
+            try  {
+                target = $(href);
+                if (target.length) {
+                    scroll.to(target, this.options);
+                    e.preventDefault();
+                    return;
+                }
+            } catch (err) {
+            }
+        }
+        return;
+    });
+};
+
+// since 0.0.8
+$.bcScrollTo = function (selector, options) {
+    var scroll = new baser.ui.Scroll();
+    scroll.to(selector, options);
+};
 $.fn.bcRadio = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
         baser.ui.element.Form.radio($elem, options);
     });
 };
-
 $.fn.bcCheckbox = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
         baser.ui.element.Form.checkbox($elem, options);
     });
 };
-
 $.fn.bcSelect = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
         baser.ui.element.Form.select($elem, options);
     });
 };
+var baser;
+(function (baser) {
+    /**
+    * 親のコンテナ要素の幅に合わせて、自信の縦横比を保ったまま幅の変更に対応する
+    *
+    * @version 0.0.9
+    * @since 0.0.9
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * ### Target HTML
+    *
+    * ```html
+    * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+    * ```
+    *
+    * ### Execute
+    *
+    * ```js
+    * $('.sample').bcYoutube().find('iframe').bcKeepAspectRatio();
+    * ```
+    *
+    * ### Result
+    *
+    * comming soon...
+    *
+    */
+    function bcKeepAspectRatio() {
+        var $w = $(window);
 
+        this.each(function (i, elem) {
+            var $elem = $(elem);
+            var baseWidth = +$elem.data('width');
+            var baseHeight = +$elem.data('height');
+            var aspectRatio = baseWidth / baseHeight;
+            $w.on('resize', function () {
+                var width = $elem.width();
+                $elem.css({
+                    width: '100%',
+                    height: width / aspectRatio
+                });
+            }).trigger('resize');
+        });
+
+        baser.ui.Timer.wait(30, function () {
+            $w.trigger('resize');
+        });
+        return this;
+    }
+
+    $.fn.bcKeepAspectRatio = bcKeepAspectRatio;
+})(baser || (baser = {}));
 $.fn.bcBoxAlignHeight = function () {
     baser.ui.element.Box.alignHeight(this);
     return this;
 };
-
-$.fn.bcMaps = function () {
+$.fn.bcMaps = function (options) {
     return this.each(function (i, elem) {
         var $elem = $(elem);
         var data = $elem.data(baser.ui.element.Map.className);
         if (data) {
             data.reload();
         } else {
-            new baser.ui.element.Map($elem);
+            new baser.ui.element.Map($elem, options);
         }
     });
 };
-
-$.fn.bcYoutube = function () {
-    return this.each(function (i, elem) {
-        var $elem = $(elem);
-        var data = $elem.data(baser.ui.element.Youtube.className);
-        if (data) {
-            data.reload();
-        } else {
-            new baser.ui.element.Youtube($elem);
-        }
-    });
-};
-
-// クラスAPI化予定
-// since 0.0.7
-$.fn.bcBackground = function (options) {
-    return this.each(function (i, elem) {
-        var config = $.extend({
-            align: 'center',
-            valign: 'center',
-            size: 'contain',
-            child: '>*:first'
-        }, options);
-
-        var $elem = $(elem);
-        var $child = $elem.find(config.child);
-
-        var objectWidth = +($elem.data('width') || $child.data('width') || $child.attr('width') || $child.width()) || 400;
-        var objectHeight = +($elem.data('height') || $child.data('height') || $child.attr('height') || $child.height()) || 300;
-        var objectAspectRatio = objectWidth / objectHeight;
-
-        var currentCSSPosition = $elem.css('position');
-        if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
-            $elem.css('position', 'relative');
-        }
-
-        $child.css({
-            position: 'absolute',
-            top: 0,
-            left: 0
+var baser;
+(function (baser) {
+    /**
+    * YouTubeを埋め込む
+    *
+    * @version 0.0.8
+    * @since 0.0.8
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * ### Target HTML
+    *
+    * ```html
+    * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+    * ```
+    *
+    * ### Execute
+    *
+    * ```js
+    * $('.sample').bcYoutube();
+    * ```
+    *
+    * ### Result
+    *
+    * <div data-height="400" data-theme-id="9760" data-slug-hash="pboIt" data-default-tab="result" data-user="YusukeHirao" class='codepen'><pre><code>$(&#39;.sample&#39;).bcYoutube();</code></pre>
+    <p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a> by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+    </div><script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+    *
+    */
+    function bcYoutube() {
+        return this.each(function (i, elem) {
+            var $elem = $(elem);
+            var data = $elem.data(baser.ui.element.Youtube.className);
+            if (data) {
+                data.reload();
+            } else {
+                new baser.ui.element.Youtube($elem);
+            }
         });
+    }
 
-        var exec = function () {
-            var containerWidth = $elem.width();
-            var containerHeight = $elem.height();
-            var containerAspectRatio = containerWidth / containerHeight;
+    // jQueryのインスタンスメソッドとしてprototypeに登録
+    $.fn.bcYoutube = bcYoutube;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    /**
+    * 親のコンテナ要素の幅に合わせて、自信の縦横比を保ったまま幅の変更に対応する
+    *
+    * @version 0.0.10
+    * @since 0.0.9
+    * @param {Object} options オプション
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * ### Target HTML
+    *
+    * ```html
+    * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+    * ```
+    *
+    * ### Execute
+    *
+    * ```js
+    * $('.sample').bcYoutube().find('iframe').bcKeepAspectRatio();
+    * ```
+    *
+    * ### Result
+    *
+    * comming soon...
+    *
+    */
+    function bcBackground(options) {
+        return this.each(function (i, elem) {
+            var config = $.extend({
+                align: 'center',
+                valign: 'center',
+                size: 'contain',
+                child: '>*:first'
+            }, options);
 
-            var scale;
+            var $elem = $(elem);
+            var $child = $elem.find(config.child);
 
-            switch (config.size) {
-                case 'contain':
-                    if (1 < containerAspectRatio) {
-                        // 画像が横長 もしくは コンテナのアス比の方が大きい
-                        if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
-                            scale = containerWidth / objectWidth;
-                        } else {
-                            scale = containerHeight / objectHeight;
-                        }
-                        // コンテナが縦長
-                    } else {
-                        // 画像が横長 もしくは 画像のアス比の方が大きい
-                        if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
-                            scale = containerHeight / objectHeight;
-                        } else {
-                            scale = containerWidth / objectWidth;
-                        }
-                    }
-                    break;
-                case 'cover':
-                    if (1 < containerAspectRatio) {
-                        // 画像が横長 もしくは コンテナのアス比の方が大きい
-                        if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
-                            scale = containerHeight / objectHeight;
-                        } else {
-                            scale = containerWidth / objectWidth;
-                        }
-                        // コンテナが縦長
-                    } else {
-                        // 画像が横長 もしくは 画像のアス比の方が大きい
-                        if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
-                            scale = containerWidth / objectWidth;
-                        } else {
-                            scale = containerHeight / objectHeight;
-                        }
-                    }
-                    break;
-                default:
-                    return;
-            }
+            var objectWidth = +($elem.data('width') || $child.data('width') || $child.attr('width') || $child.width()) || 400;
+            var objectHeight = +($elem.data('height') || $child.data('height') || $child.attr('height') || $child.height()) || 300;
+            var objectAspectRatio = objectWidth / objectHeight;
 
-            // 画像の幅と高さ
-            var newWidth = objectWidth * scale;
-            var newHeight = objectHeight * scale;
-
-            var top;
-            switch (config.align) {
-                case 'top':
-                    top = 0;
-                    break;
-                case 'bottom':
-                    top = containerHeight - newHeight;
-                    break;
-                case 'center':
-                default: {
-                    top = (containerHeight / 2) - (newHeight / 2);
-                }
-            }
-
-            var left;
-            switch (config.valign) {
-                case 'left':
-                    left = 0;
-                    break;
-                case 'right':
-                    left = containerWidth - newWidth;
-                    break;
-                case 'center':
-                default: {
-                    left = (containerWidth / 2) - (newWidth / 2);
-                }
+            var currentCSSPosition = $elem.css('position');
+            if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
+                $elem.css('position', 'relative');
             }
 
             $child.css({
-                width: newWidth,
-                height: newHeight,
-                top: top,
-                left: left
+                position: 'absolute',
+                top: 0,
+                left: 0
             });
-        };
-        exec();
 
-        // リサイズ時に動画サイズを変更
-        $(window).on('resize', function () {
-            exec();
+            var css = {};
+
+            var calc = function () {
+                var containerWidth = $elem.width();
+                var containerHeight = $elem.height();
+                var containerAspectRatio = containerWidth / containerHeight;
+
+                var scale;
+
+                switch (config.size) {
+                    case 'contain':
+                        if (1 < containerAspectRatio) {
+                            // 画像が横長 もしくは コンテナのアス比の方が大きい
+                            if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
+                                scale = containerWidth / objectWidth;
+                            } else {
+                                scale = containerHeight / objectHeight;
+                            }
+                            // コンテナが縦長
+                        } else {
+                            // 画像が横長 もしくは 画像のアス比の方が大きい
+                            if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
+                                scale = containerHeight / objectHeight;
+                            } else {
+                                scale = containerWidth / objectWidth;
+                            }
+                        }
+                        break;
+                    case 'cover':
+                        if (1 < containerAspectRatio) {
+                            // 画像が横長 もしくは コンテナのアス比の方が大きい
+                            if (1 < objectWidth && objectAspectRatio < containerAspectRatio) {
+                                scale = containerHeight / objectHeight;
+                            } else {
+                                scale = containerWidth / objectWidth;
+                            }
+                            // コンテナが縦長
+                        } else {
+                            // 画像が横長 もしくは 画像のアス比の方が大きい
+                            if (1 < objectHeight && containerAspectRatio < objectAspectRatio) {
+                                scale = containerWidth / objectWidth;
+                            } else {
+                                scale = containerHeight / objectHeight;
+                            }
+                        }
+                        break;
+                    default:
+                        return;
+                }
+
+                // 画像の幅と高さ
+                var newWidth = objectWidth * scale;
+                var newHeight = objectHeight * scale;
+
+                var top;
+                switch (config.align) {
+                    case 'top':
+                        top = 0;
+                        break;
+                    case 'bottom':
+                        top = containerHeight - newHeight;
+                        break;
+                    case 'center':
+                    default: {
+                        top = (containerHeight / 2) - (newHeight / 2);
+                    }
+                }
+
+                var left;
+                switch (config.valign) {
+                    case 'left':
+                        left = 0;
+                        break;
+                    case 'right':
+                        left = containerWidth - newWidth;
+                        break;
+                    case 'center':
+                    default: {
+                        left = (containerWidth / 2) - (newWidth / 2);
+                    }
+                }
+
+                css = {
+                    width: newWidth,
+                    height: newHeight,
+                    top: top,
+                    left: left
+                };
+            };
+            calc();
+
+            // 計算結果をアニメーションフレーム毎にDOMに反映
+            var animation = new baser.ui.AnimationFrames(function () {
+                $child.css(css);
+            });
+
+            baser.ui.Browser.browser.on('resizestart', function () {
+                animation.start();
+            }).on('resize', function () {
+                // リサイズ時にサイズを計算
+                calc();
+            }).on('resizeend', function () {
+                animation.stop();
+            });
+
+            animation.start();
+            baser.ui.Timer.wait(300, function () {
+                animation.stop();
+            });
         });
+    }
+    ;
+
+    $.fn.bcBackground = bcBackground;
+})(baser || (baser = {}));
+$.fn.bcImageLoaded = function (callback) {
+    return this.each(function (i, elem) {
+        var $elem = $(elem);
+        var manifest = [];
+        var $imgs = $elem.find('img');
+        if ($imgs.length) {
+            $imgs.hide();
+            $imgs.each(function () {
+                var loaded = $.Deferred();
+                var img = new Image();
+                img.onload = function () {
+                    loaded.resolve();
+                    img.onload = null; // GC
+                    img = null; // GC
+                };
+                img.src = this.src;
+                manifest.push(loaded.promise());
+            });
+            $.when.apply($, manifest).done(function () {
+                $imgs.show();
+                callback.call(elem);
+            });
+        } else {
+            callback.call(elem);
+        }
     });
 };
+/* 外部ライブラリ d.ts
+================================================================= */
 /// <reference path="../typings/tsd.d.ts" />
+/* ユーティリティ
+================================================================= */
 /// <reference path="baser/utility/String.ts" />
+/* UI
+================================================================= */
+/// <reference path="baser/ui/EventDispacher.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
+/// <reference path="baser/ui/AnimationFrames.ts" />
+/// <reference path="baser/ui/Scroll.ts" />
+/// <reference path="baser/ui/Dimension.ts" />
+/// <reference path="baser/ui/Validation.ts" />
+/* UI/エレメント
+================================================================= */
 /// <reference path="baser/ui/element/Element.ts" />
 /// <reference path="baser/ui/element/Form.ts" />
 /// <reference path="baser/ui/element/FormElement.ts" />
@@ -1476,8 +2200,20 @@ $.fn.bcBackground = function (options) {
 /// <reference path="baser/ui/element/Box.ts" />
 /// <reference path="baser/ui/element/Map.ts" />
 /// <reference path="baser/ui/element/Youtube.ts" />
-/// <reference path="baser/ui/Validation.ts" />
+/* baserJSコア
+================================================================= */
 /// <reference path="baser.ts" />
-/// <reference path="jquery.baser.ts" />
+/* jQueryプラグイン
+================================================================= */
+/// <reference path="jquery/bcScrollTo.ts" />
+/// <reference path="jquery/bcRadio.ts" />
+/// <reference path="jquery/bcCheckbox.ts" />
+/// <reference path="jquery/bcSelect.ts" />
+/// <reference path="jquery/bcKeepAspectRatio.ts" />
+/// <reference path="jquery/bcBoxAlignHeight.ts" />
+/// <reference path="jquery/bcMaps.ts" />
+/// <reference path="jquery/bcYoutube.ts" />
+/// <reference path="jquery/bcBackground.ts" />
+/// <reference path="jquery/bcImageLoaded.ts" />
 
 }).call(this);

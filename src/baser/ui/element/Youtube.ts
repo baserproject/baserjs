@@ -50,13 +50,21 @@ module baser {
 				static movies: Youtube[] = [];
 
 				/**
-				 * 管理対象の要素
+				 * ムービーのID
 				 *
 				 * @version 0.0.7
 				 * @since 0.0.7
 				 *
 				 */
 				public movieId: string;
+
+				/**
+				 * ムービーのオプション
+				 *
+				 * @version 0.0.7
+				 * @since 0.0.7
+				 *
+				 */
 				public movieOption: any;
 
 				/**
@@ -133,10 +141,12 @@ module baser {
 
 					if (width) {
 						$mov.width(width);
+						$mov.data('width', width);
 					}
 
 					if (height) {
 						$mov.height(height);
+						$mov.data('height', height);
 					}
 
 					$.getScript(protocol + Youtube.API_URL);

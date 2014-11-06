@@ -23,15 +23,53 @@ declare module baser {
 declare module baser {
     module ui {
         /**
+        * イベント駆動できるクラス
+        *
+        * @version 0.0.10
+        * @since 0.0.10
+        *
+        */
+        class EventDispacher {
+            constructor();
+            public on(type: string, handler: Function): EventDispacher;
+            public off(): EventDispacher;
+            public trigger(type: string, context?: any): EventDispacher;
+        }
+        class EventHandler {
+            public id: string;
+            public context: EventDispacher;
+            public type: string;
+            public handler: Function;
+            constructor(context: EventDispacher, type: string, handler: Function);
+        }
+        class DispacheEvent {
+            private _isImmediatePropagationStopped;
+            constructor(type: string);
+            public isImmediatePropagationStopped(): boolean;
+            public stopImmediatePropagation(): void;
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
         * ブラウザの情報を管理するクラス
         *
         * @version 0.0.2
         * @since 0.0.2
         *
         */
-        class Browser {
+        class Browser extends EventDispacher {
             /**
-            * デバイス・OS・ブラウザを管理する
+            * ブラウザ
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            *
+            */
+            static browser: Browser;
+            /**
+            * デバイス・OS・ブラウザの情報
             *
             * @version 0.0.1
             * @since 0.0.1
@@ -42,13 +80,18 @@ declare module baser {
                 ua: any;
             };
             /**
-            * デバイス・OS・ブラウザを管理する
+            * ユーザーエージェント情報を取得する
             *
             * @version 0.0.2
             * @since 0.0.1
             *
             */
             static getUA(): any;
+            public resizeEndInterval: number;
+            public scrollEndInterval: number;
+            public isResize: boolean;
+            public isScroll: boolean;
+            constructor();
         }
     }
 }
@@ -57,7 +100,7 @@ declare module baser {
         /**
         * 時間管理クラス
         *
-        * @version 0.0.2
+        * @version 0.0.8
         * @since 0.0.1
         *
         */
@@ -65,14 +108,41 @@ declare module baser {
             /**
             * コアとなるDateオブジェクト
             *
+            * @version 0.0.1
             * @since 0.0.1
             *
             */
             public datetime: Date;
             /**
+            * タイマーID
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public timerId: number;
+            /**
+            * インターバル
+            *
+            * `13`は[jQuery](http://jquery.com/)を参考
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public interval: number;
+            /**
+            * プログレスイベントのコールバック
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            private _onProgress;
+            /**
             * コンストラクタ
             *
-            * @version 0.0.1
+            * @version 0.0.8
             * @since 0.0.1
             *
             */
@@ -93,6 +163,219 @@ declare module baser {
             *
             */
             public now(): number;
+            /**
+            * タイマーをスタートする
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public start(time: number): Timer;
+            /**
+            * タイマーをストップする
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public stop(): Timer;
+            /**
+            * 遅延処理
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public wait(time: number, callback: Function, context?: any): Timer;
+            /**
+            * プログレスイベントを登録
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            public progress(callback: Function): Timer;
+            /**
+            * 遅延処理
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            *
+            */
+            static wait(time: number, callback: Function, context?: any): Timer;
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
+        * アニメーションフレームを管理するクラス
+        *
+        * @version 0.0.10
+        * @since 0.0.10
+        *
+        */
+        class AnimationFrames {
+            /**
+            * フレームレート
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            *
+            */
+            static FRAME_RATE: number;
+            /**
+            * フレーム毎に実行するコールバック
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            *
+            */
+            public callback: Function;
+            /**
+            * フレームのリクエストID
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            *
+            */
+            public requestId: number;
+            /**
+            * フレーム毎のに実行するコールバックを登録する
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            * @return {number} リクエストIDを返す
+            *
+            */
+            constructor(callback: Function);
+            public start(context?: any): void;
+            /**
+            * リクエストしたコールバックを停止する
+            *
+            * @version 0.0.10
+            * @since 0.0.10
+            * @return {number} リクエストIDを返す
+            *
+            */
+            public stop(): void;
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
+        * Scrollクラスのオプションのインターフェイス
+        *
+        * @version 0.0.8
+        * @since 0.0.8
+        *
+        */
+        interface ScrollOptions {
+            offset?: number;
+            keywords?: {
+                [index: string]: any;
+            };
+            wheelCancel?: boolean;
+            onScrollEnd?: Function;
+            onScrollCancel?: Function;
+            onScrollStart?: Function;
+            onScrollProgress?: Function;
+        }
+        /**
+        * スクロールを管理するクラス
+        *
+        * @version 0.0.8
+        * @since 0.0.8
+        *
+        */
+        class Scroll {
+            static speed: number;
+            static interval: number;
+            static delayWhenURLHashTarget: number;
+            public targetX: number;
+            public targetY: number;
+            public prevX: number;
+            public prevY: number;
+            public isScroll: boolean;
+            public timer: Timer;
+            public options: ScrollOptions;
+            /**
+            * 対象の要素もしくは位置にスクロールを移動させる
+            *
+            * @version 0.0.8
+            * @since 0.0.8
+            * @param {string|HTMLElement|JQuery|number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
+            * @param {ScrollOptions} オプション
+            * @return {Scroll} 自信のスクロールオブジェクト
+            *
+            */
+            public to(selector: string, options?: ScrollOptions): Scroll;
+            public to(selector: HTMLElement, options?: ScrollOptions): Scroll;
+            public to(selector: JQuery, options?: ScrollOptions): Scroll;
+            public to(selector: number, options?: ScrollOptions): Scroll;
+            private _scroll();
+            private _getX();
+            private _getY();
+            private _finish();
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
+        * 要素の寸法(幅・高さ)を管理するクラス
+        *
+        * @version 0.0.9
+        * @since 0.0.9
+        *
+        */
+        class Dimension {
+            /**
+            * 幅
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            private _width;
+            /**
+            * 高さ
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            private _height;
+            /**
+            * 管理する要素
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            public el: Element;
+            /**
+            * コンストラクタ
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            constructor(el?: Element);
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
+        * フォームのバリデーションを担うクラス
+        *
+        * @version 0.0.x
+        * @since 0.0.x
+        *
+        */
+        class Validation {
         }
     }
 }
@@ -672,10 +955,10 @@ declare module baser {
                 */
                 static boxes: string[];
                 /**
-                * ラジオボタンを拡張する
+                * ボックスの高さを揃える
                 *
-                * @version 0.0.5
-                * @since 0.0.5
+                * @version 0.0.x
+                * @since 0.0.x
                 * @param $elem 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
                 *
@@ -691,10 +974,10 @@ declare module baser {
                 */
                 constructor($el: JQuery);
                 /**
-                * 高さをそろえる
+                * ボックスの高さを揃える
                 *
-                * @version 0.0.5
-                * @since 0.0.5
+                * @version 0.0.x
+                * @since 0.0.x
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 * @param options オプション
                 *
@@ -707,6 +990,55 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            /**
+            * MapOptionクラスのオプションハッシュのインターフェイス
+            *
+            * @version 0.0.9
+            * @since 0.0.9
+            *
+            */
+            interface MapOption {
+                /**
+                * ズーム率
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
+                zoom?: number;
+                /**
+                * マップのコントロールオプション
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
+                mapTypeControlOptions?: google.maps.MapTypeControlOptions;
+                /**
+                * スクロールホイールが有効かどうか
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
+                scrollwheel?: boolean;
+                /**
+                * 地図の中央の座標
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
+                center?: google.maps.LatLng;
+                /**
+                * 地図のスタイル
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
+                styles?: google.maps.MapTypeStyle[];
+            }
             /**
             * マップ要素
             *
@@ -742,7 +1074,7 @@ declare module baser {
                 */
                 static className: string;
                 /**
-                * 管理対象の要素
+                * 管理するマップ要素リスト
                 *
                 * @version 0.0.6
                 * @since 0.0.6
@@ -750,25 +1082,46 @@ declare module baser {
                 */
                 static maps: Map[];
                 /**
-                * 管理対象の要素
+                * Google Mapsのインスタンス
                 *
                 * @version 0.0.6
                 * @since 0.0.6
                 *
                 */
                 public gmap: google.maps.Map;
+                /**
+                * インフォウィンドウ
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                *
+                */
                 public info: google.maps.InfoWindow;
+                /**
+                * ピンを置いた座標の要素
+                *
+                * @version 0.0.6
+                * @since 0.0.6
+                *
+                */
                 public $coordinates: JQuery;
-                public mapOption: any;
+                /**
+                * マップオプション
+                *
+                * @version 0.0.9
+                * @since 0.0.9
+                *
+                */
+                public mapOption: MapOption;
                 /**
                 * コンストラクタ
                 *
-                * @version 0.0.6
+                * @version 0.0.9
                 * @since 0.0.6
                 * @param $el 管理するDOM要素のjQueryオブジェクト
                 *
                 */
-                constructor($el: JQuery, options?: any);
+                constructor($el: JQuery, options?: MapOption);
                 private _init(options?);
                 public reload(): void;
             }
@@ -819,13 +1172,20 @@ declare module baser {
                 */
                 static movies: Youtube[];
                 /**
-                * 管理対象の要素
+                * ムービーのID
                 *
                 * @version 0.0.7
                 * @since 0.0.7
                 *
                 */
                 public movieId: string;
+                /**
+                * ムービーのオプション
+                *
+                * @version 0.0.7
+                * @since 0.0.7
+                *
+                */
                 public movieOption: any;
                 /**
                 * コンストラクタ
@@ -851,16 +1211,15 @@ declare module baser {
         }
     }
 }
+interface JQueryStatic {
+    bcScrollTo(selector: string, options?: baser.ui.ScrollOptions): void;
+    bcScrollTo(selector: HTMLElement, options?: baser.ui.ScrollOptions): void;
+    bcScrollTo(selector: JQuery, options?: baser.ui.ScrollOptions): void;
+    bcScrollTo(selector: number, options?: baser.ui.ScrollOptions): void;
+}
 declare module baser {
-    module ui {
-        /**
-        * フォームのバリデーションを担うクラス
-        *
-        * @version 0.0.2
-        * @since 0.0.1
-        *
-        */
-        class Validation {
-        }
-    }
+}
+declare module baser {
+}
+declare module baser {
 }
