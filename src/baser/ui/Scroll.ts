@@ -3,7 +3,7 @@ module baser {
 	export module ui {
 
 		/**
-		 * Scrollクラスのオプションハッシュのインターフェイス
+		 * Scrollクラスのオプションのインターフェイス
 		 *
 		 * @version 0.0.8
 		 * @since 0.0.8
