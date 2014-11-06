@@ -13,7 +13,7 @@ module baser {
 	 * ### Target HTML
 	 *
 	 * ```html
-	 * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+	 * <div class="sample" data-id="rb0zOstIiyU" data-width="720" data-height="480"></div>
 	 * ```
 	 *
 	 * ### Execute

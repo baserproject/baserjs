@@ -1211,11 +1211,36 @@ declare module baser {
         }
     }
 }
+declare module baser {
+}
+declare module baser {
+}
+/**
+* 指定の要素、もしくはy座標までスムーズにスクロールをさせる
+*
+* @version 0.0.8
+* @since 0.0.8
+*
+* * * *
+*
+* ## Sample
+*
+* comming soon...
+*
+*/
 interface JQueryStatic {
     bcScrollTo(selector: string, options?: baser.ui.ScrollOptions): void;
     bcScrollTo(selector: HTMLElement, options?: baser.ui.ScrollOptions): void;
     bcScrollTo(selector: JQuery, options?: baser.ui.ScrollOptions): void;
     bcScrollTo(selector: number, options?: baser.ui.ScrollOptions): void;
+}
+declare module baser {
+}
+declare module baser {
+}
+declare module baser {
+}
+declare module baser {
 }
 declare module baser {
 }

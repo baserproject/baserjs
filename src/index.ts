@@ -36,13 +36,13 @@
 
 /* jQueryプラグイン
 ================================================================= */
+/// <reference path="jquery/bcYoutube.ts" />
 /// <reference path="jquery/bcScrollTo.ts" />
 /// <reference path="jquery/bcRadio.ts" />
 /// <reference path="jquery/bcCheckbox.ts" />
 /// <reference path="jquery/bcSelect.ts" />
-/// <reference path="jquery/bcKeepAspectRatio.ts" />
-/// <reference path="jquery/bcBoxAlignHeight.ts" />
 /// <reference path="jquery/bcMaps.ts" />
-/// <reference path="jquery/bcYoutube.ts" />
-/// <reference path="jquery/bcBackground.ts" />
+// <reference path="jquery/bcBoxAlignHeight.ts" /> // 未実装のため読み込まない
 /// <reference path="jquery/bcImageLoaded.ts" />
+/// <reference path="jquery/bcBackground.ts" />
+/// <reference path="jquery/bcKeepAspectRatio.ts" />

@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.10-rc.1 r141
- * update: 2014-11-06
+ * baserjs - v0.0.10-rc.1 r142
+ * update: 2014-11-07
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1782,151 +1782,6 @@ var baser;
     var ui = baser.ui;
 })(baser || (baser = {}));
 this.baser = baser;
-// since 0.0.8
-$.fn.bcScrollTo = function (options) {
-    return this.on('click', function (e) {
-        var $this = $(this);
-        var href = $this.attr('href');
-        var keyword;
-        var target;
-        var scroll = new baser.ui.Scroll();
-        var absPath;
-        var currentReferer;
-        if (href) {
-            // キーワードを一番に優先する
-            if (options && $.isPlainObject(options.keywords)) {
-                for (keyword in options.keywords) {
-                    if (options.keywords.hasOwnProperty(keyword)) {
-                        target = options.keywords[keyword];
-                        if (keyword === href) {
-                            scroll.to(target, this.options);
-                            e.preventDefault();
-                            console.log(href);
-                            return;
-                        }
-                    }
-                }
-            }
-
-            // 「/pathname/#hash」のリンクパターンの場合
-            //「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
-            absPath = $this.prop('href');
-            currentReferer = location.protocol + '//' + location.host + location.pathname + location.search;
-            href = absPath.replace(currentReferer, '');
-
-            // #top はHTML5ではページトップを意味する
-            if (href === '#top') {
-                scroll.to(0, options);
-                e.preventDefault();
-                return;
-            }
-
-            try  {
-                target = $(href);
-                if (target.length) {
-                    scroll.to(target, this.options);
-                    e.preventDefault();
-                    return;
-                }
-            } catch (err) {
-            }
-        }
-        return;
-    });
-};
-
-// since 0.0.8
-$.bcScrollTo = function (selector, options) {
-    var scroll = new baser.ui.Scroll();
-    scroll.to(selector, options);
-};
-$.fn.bcRadio = function (options) {
-    return this.each(function (i, elem) {
-        var $elem = $(elem);
-        baser.ui.element.Form.radio($elem, options);
-    });
-};
-$.fn.bcCheckbox = function (options) {
-    return this.each(function (i, elem) {
-        var $elem = $(elem);
-        baser.ui.element.Form.checkbox($elem, options);
-    });
-};
-$.fn.bcSelect = function (options) {
-    return this.each(function (i, elem) {
-        var $elem = $(elem);
-        baser.ui.element.Form.select($elem, options);
-    });
-};
-var baser;
-(function (baser) {
-    /**
-    * 親のコンテナ要素の幅に合わせて、自信の縦横比を保ったまま幅の変更に対応する
-    *
-    * @version 0.0.9
-    * @since 0.0.9
-    *
-    * * * *
-    *
-    * ## Sample
-    *
-    * ### Target HTML
-    *
-    * ```html
-    * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
-    * ```
-    *
-    * ### Execute
-    *
-    * ```js
-    * $('.sample').bcYoutube().find('iframe').bcKeepAspectRatio();
-    * ```
-    *
-    * ### Result
-    *
-    * comming soon...
-    *
-    */
-    function bcKeepAspectRatio() {
-        var $w = $(window);
-
-        this.each(function (i, elem) {
-            var $elem = $(elem);
-            var baseWidth = +$elem.data('width');
-            var baseHeight = +$elem.data('height');
-            var aspectRatio = baseWidth / baseHeight;
-            $w.on('resize', function () {
-                var width = $elem.width();
-                $elem.css({
-                    width: '100%',
-                    height: width / aspectRatio
-                });
-            }).trigger('resize');
-        });
-
-        baser.ui.Timer.wait(30, function () {
-            $w.trigger('resize');
-        });
-        return this;
-    }
-
-    $.fn.bcKeepAspectRatio = bcKeepAspectRatio;
-})(baser || (baser = {}));
-$.fn.bcBoxAlignHeight = function () {
-    baser.ui.element.Box.alignHeight(this);
-    return this;
-};
-$.fn.bcMaps = function (options) {
-    return this.each(function (i, elem) {
-        var $elem = $(elem);
-        var data = $elem.data(baser.ui.element.Map.className);
-        if (data) {
-            data.reload();
-        } else {
-            new baser.ui.element.Map($elem, options);
-        }
-    });
-};
 var baser;
 (function (baser) {
     /**
@@ -1942,7 +1797,7 @@ var baser;
     * ### Target HTML
     *
     * ```html
-    * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+    * <div class="sample" data-id="rb0zOstIiyU" data-width="720" data-height="480"></div>
     * ```
     *
     * ### Execute
@@ -1972,6 +1827,240 @@ var baser;
 
     // jQueryのインスタンスメソッドとしてprototypeに登録
     $.fn.bcYoutube = bcYoutube;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    /**
+    * リンク要素からのアンカーまでスムーズにスクロールをさせる
+    *
+    * @version 0.0.8
+    * @since 0.0.8
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * comming soon...
+    *
+    */
+    function bcScrollTo(options) {
+        return this.on('click', function (e) {
+            var $this = $(this);
+            var href = $this.attr('href');
+            var keyword;
+            var target;
+            var scroll = new baser.ui.Scroll();
+            var absPath;
+            var currentReferer;
+            if (href) {
+                // キーワードを一番に優先する
+                if (options && $.isPlainObject(options.keywords)) {
+                    for (keyword in options.keywords) {
+                        if (options.keywords.hasOwnProperty(keyword)) {
+                            target = options.keywords[keyword];
+                            if (keyword === href) {
+                                scroll.to(target, this.options);
+                                e.preventDefault();
+                                console.log(href);
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                // 「/pathname/#hash」のリンクパターンの場合
+                //「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
+                absPath = $this.prop('href');
+                currentReferer = location.protocol + '//' + location.host + location.pathname + location.search;
+                href = absPath.replace(currentReferer, '');
+
+                // #top はHTML5ではページトップを意味する
+                if (href === '#top') {
+                    scroll.to(0, options);
+                    e.preventDefault();
+                    return;
+                }
+
+                try  {
+                    target = $(href);
+                    if (target.length) {
+                        scroll.to(target, this.options);
+                        e.preventDefault();
+                        return;
+                    }
+                } catch (err) {
+                }
+            }
+            return;
+        });
+    }
+
+    $.fn.bcScrollTo = bcScrollTo;
+})(baser || (baser = {}));
+
+$.bcScrollTo = function (selector, options) {
+    var scroll = new baser.ui.Scroll();
+    scroll.to(selector, options);
+};
+var baser;
+(function (baser) {
+    /**
+    * WAI-ARIAに対応した装飾可能な汎用要素でラップしたラジオボタンに変更する
+    *
+    * @version 0.0.1
+    * @since 0.0.1
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * comming soon...
+    *
+    */
+    function bcRadio(options) {
+        return this.each(function (i, elem) {
+            var $elem = $(elem);
+            baser.ui.element.Form.radio($elem, options);
+        });
+    }
+
+    $.fn.bcRadio = bcRadio;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    /**
+    * WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する
+    *
+    * @version 0.0.1
+    * @since 0.0.1
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * comming soon...
+    *
+    */
+    function bcCheckbox(options) {
+        return this.each(function (i, elem) {
+            var $elem = $(elem);
+            baser.ui.element.Form.checkbox($elem, options);
+        });
+    }
+
+    $.fn.bcCheckbox = bcCheckbox;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    /**
+    * WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する
+    *
+    * @version 0.0.1
+    * @since 0.0.1
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * comming soon...
+    *
+    */
+    function bcSelect(options) {
+        return this.each(function (i, elem) {
+            var $elem = $(elem);
+            baser.ui.element.Form.select($elem, options);
+        });
+    }
+
+    $.fn.bcSelect = bcSelect;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    /**
+    * YouTubeを埋め込む
+    *
+    * @version 0.0.8
+    * @since 0.0.8
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * ### Target HTML
+    *
+    * ```html
+    * <div class="sample" data-lat="33.606785" data-lng="130.418314"></div>
+    * ```
+    *
+    * ### Execute
+    *
+    * ```js
+    * $('.sample').bcMaps();
+    * ```
+    *
+    * ### Result
+    *
+    * comming soon...
+    *
+    */
+    function bcMaps(options) {
+        return this.each(function (i, elem) {
+            var $elem = $(elem);
+            var data = $elem.data(baser.ui.element.Map.className);
+            if (data) {
+                data.reload();
+            } else {
+                new baser.ui.element.Map($elem, options);
+            }
+        });
+    }
+
+    $.fn.bcMaps = bcMaps;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    /**
+    * 要素内の画像の読み込みが完了してからコールバックを実行する
+    *
+    * @version 0.0.9
+    * @since 0.0.9
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * comming soon...
+    *
+    */
+    function bcImageLoaded(callback) {
+        return this.each(function (i, elem) {
+            var $elem = $(elem);
+            var manifest = [];
+            var $imgs = $elem.find('img');
+            if ($imgs.length) {
+                $imgs.hide();
+                $imgs.each(function () {
+                    var loaded = $.Deferred();
+                    var img = new Image();
+                    img.onload = function () {
+                        loaded.resolve();
+                        img.onload = null; // GC
+                        img = null; // GC
+                    };
+                    img.src = this.src;
+                    manifest.push(loaded.promise());
+                });
+                $.when.apply($, manifest).done(function () {
+                    $imgs.show();
+                    callback.call(elem);
+                });
+            } else {
+                callback.call(elem);
+            }
+        });
+    }
+
+    $.fn.bcImageLoaded = bcImageLoaded;
 })(baser || (baser = {}));
 var baser;
 (function (baser) {
@@ -2145,33 +2234,62 @@ var baser;
 
     $.fn.bcBackground = bcBackground;
 })(baser || (baser = {}));
-$.fn.bcImageLoaded = function (callback) {
-    return this.each(function (i, elem) {
-        var $elem = $(elem);
-        var manifest = [];
-        var $imgs = $elem.find('img');
-        if ($imgs.length) {
-            $imgs.hide();
-            $imgs.each(function () {
-                var loaded = $.Deferred();
-                var img = new Image();
-                img.onload = function () {
-                    loaded.resolve();
-                    img.onload = null; // GC
-                    img = null; // GC
-                };
-                img.src = this.src;
-                manifest.push(loaded.promise());
-            });
-            $.when.apply($, manifest).done(function () {
-                $imgs.show();
-                callback.call(elem);
-            });
-        } else {
-            callback.call(elem);
-        }
-    });
-};
+var baser;
+(function (baser) {
+    /**
+    * 親のコンテナ要素の幅に合わせて、自信の縦横比を保ったまま幅の変更に対応する
+    *
+    * iframeなどの縦横比を保ちたいが、幅を変更しても高さが変化しない要素などに有効
+    *
+    * @version 0.0.9
+    * @since 0.0.9
+    *
+    * * * *
+    *
+    * ## Sample
+    *
+    * ### Target HTML
+    *
+    * ```html
+    * <div class="sample" data-id="rb0zOstIiyU" data-width="3840" data-height="2160"></div>
+    * ```
+    *
+    * ### Execute
+    *
+    * ```js
+    * $('.sample').bcYoutube().find('iframe').bcKeepAspectRatio();
+    * ```
+    *
+    * ### Result
+    *
+    * comming soon...
+    *
+    */
+    function bcKeepAspectRatio() {
+        var $w = $(window);
+
+        this.each(function (i, elem) {
+            var $elem = $(elem);
+            var baseWidth = +$elem.data('width');
+            var baseHeight = +$elem.data('height');
+            var aspectRatio = baseWidth / baseHeight;
+            $w.on('resize', function () {
+                var width = $elem.width();
+                $elem.css({
+                    width: '100%',
+                    height: width / aspectRatio
+                });
+            }).trigger('resize');
+        });
+
+        baser.ui.Timer.wait(30, function () {
+            $w.trigger('resize');
+        });
+        return this;
+    }
+
+    $.fn.bcKeepAspectRatio = bcKeepAspectRatio;
+})(baser || (baser = {}));
 /* 外部ライブラリ d.ts
 ================================================================= */
 /// <reference path="../typings/tsd.d.ts" />
@@ -2205,15 +2323,15 @@ $.fn.bcImageLoaded = function (callback) {
 /// <reference path="baser.ts" />
 /* jQueryプラグイン
 ================================================================= */
+/// <reference path="jquery/bcYoutube.ts" />
 /// <reference path="jquery/bcScrollTo.ts" />
 /// <reference path="jquery/bcRadio.ts" />
 /// <reference path="jquery/bcCheckbox.ts" />
 /// <reference path="jquery/bcSelect.ts" />
-/// <reference path="jquery/bcKeepAspectRatio.ts" />
-/// <reference path="jquery/bcBoxAlignHeight.ts" />
 /// <reference path="jquery/bcMaps.ts" />
-/// <reference path="jquery/bcYoutube.ts" />
-/// <reference path="jquery/bcBackground.ts" />
+// <reference path="jquery/bcBoxAlignHeight.ts" /> // 未実装のため読み込まない
 /// <reference path="jquery/bcImageLoaded.ts" />
+/// <reference path="jquery/bcBackground.ts" />
+/// <reference path="jquery/bcKeepAspectRatio.ts" />
 
 }).call(this);
