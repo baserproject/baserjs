@@ -8,8 +8,10 @@
 
 /* UI
 ================================================================= */
+/// <reference path="baser/ui/EventDispacher.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
+/// <reference path="baser/ui/AnimationFrames.ts" />
 /// <reference path="baser/ui/Scroll.ts" />
 /// <reference path="baser/ui/Dimension.ts" />
 /// <reference path="baser/ui/Validation.ts" />
