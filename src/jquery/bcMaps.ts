@@ -1,7 +1,9 @@
 module baser {
 
 	/**
-	 * YouTubeを埋め込む
+	 * マップを埋め込む
+	 *
+	 * 現在の対応はGoogle Mapsのみ
 	 *
 	 * @version 0.0.8
 	 * @since 0.0.8

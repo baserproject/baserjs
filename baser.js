@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.0.10-rc.1 r143
+ * baserjs - v0.0.10-rc.1 r144
  * update: 2014-11-07
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1977,7 +1977,9 @@ var baser;
 var baser;
 (function (baser) {
     /**
-    * YouTubeを埋め込む
+    * マップを埋め込む
+    *
+    * 現在の対応はGoogle Mapsのみ
     *
     * @version 0.0.8
     * @since 0.0.8
@@ -2065,7 +2067,11 @@ var baser;
 var baser;
 (function (baser) {
     /**
-    * 親のコンテナ要素の幅に合わせて、自信の縦横比を保ったまま幅の変更に対応する
+    * 自信の要素を基準に、指定の子要素を背景のように扱う
+    *
+    * CSSの`background-size`の`contain`と`cover`の振る舞いに対応
+    *
+    * 基準も縦横のセンター・上下・左右に指定可能
     *
     * @version 0.0.10
     * @since 0.0.9
