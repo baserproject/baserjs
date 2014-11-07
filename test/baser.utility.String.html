@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>baser.utility.String</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+test('baser.utility.String.UIDのテスト', function() {
+	ok(baser.utility.String.UID, 'baser.utility.String.UID は存在します');
+
+	var i;
+
+	for (i = 0; i < 1000; i++) {
+		notEqual(baser.utility.String.UID(), baser.utility.String.UID(), 'baser.utility.String.UID は絶対にユニークな文字列を返すかどうかのテスト ' + (i + 1) + '回目');
+	}
+
+	for (i = 0; i < 1000; i++) {
+		notEqual(baser.utility.String.UID('abc'), baser.utility.String.UID('abc'), 'baser.utility.String.UID は引数に同じシードを渡しても絶対にユニークな文字列を返すかどうかのテスト ' + (i + 1) + '回目');
+	}
+
+
+});
+
+</script>
+
+</body>
+</html>
