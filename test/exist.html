@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>モジュール/プロパティ/メソッドの存在確認</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+test('モジュールの存在確認', function() {
+	ok(baser, 'baser は存在します');
+	ok(baser.ui, 'baser.ui は存在します');
+	ok(baser.utility, 'baser.utility は存在します');
+	ok(baser.ui.AnimationFrames, 'baser.ui.AnimationFrames は存在します');
+	ok(baser.ui.Browser, 'baser.ui.Browser は存在します');
+	ok(baser.ui.Dimension, 'baser.ui.Dimension は存在します');
+	ok(baser.ui.EventDispacher, 'baser.ui.EventDispacher は存在します');
+	ok(baser.ui.Scroll, 'baser.ui.Scroll は存在します');
+	ok(baser.ui.Timer, 'baser.ui.Timer は存在します');
+	ok(baser.ui.Validation, 'baser.ui.Validation は存在します');
+	ok(baser.ui.element, 'baser.ui.element は存在します');
+	ok(baser.ui.element.Box, 'baser.ui.element.Box は存在します');
+	ok(baser.ui.element.CheckableElement, 'baser.ui.element.CheckableElement は存在します');
+	ok(baser.ui.element.Checkbox, 'baser.ui.element.Checkbox は存在します');
+	ok(baser.ui.element.Element, 'baser.ui.element.Element は存在します');
+	ok(baser.ui.element.Form, 'baser.ui.element.Form は存在します');
+	ok(baser.ui.element.FormElement, 'baser.ui.element.FormElement は存在します');
+	ok(baser.ui.element.Map, 'baser.ui.element.Map は存在します');
+	ok(baser.ui.element.Radio, 'baser.ui.element.Radio は存在します');
+	ok(baser.ui.element.RadioGroup, 'baser.ui.element.RadioGroup は存在します');
+	ok(baser.ui.element.Select, 'baser.ui.element.Select は存在します');
+	ok(baser.ui.element.Youtube, 'baser.ui.element.Youtube は存在します');
+	ok(baser.utility.String, 'baser.utility.String は存在します');
+});
+
+test('jQueryインスタンスメソッドの存在確認', function() {
+	ok(jQuery.fn.bcBackground, 'bcBackground method は存在します');
+	ok(!jQuery.fn.bcBoxAlignHeight, 'bcBoxAlignHeight method はつくってません');
+	ok(jQuery.fn.bcCheckbox, 'bcCheckbox method は存在します');
+	ok(jQuery.fn.bcImageLoaded, 'bcImageLoaded method は存在します');
+	ok(jQuery.fn.bcKeepAspectRatio, 'bcKeepAspectRatio method は存在します');
+	ok(jQuery.fn.bcMaps, 'bcMaps method は存在します');
+	ok(jQuery.fn.bcRadio, 'bcRadio method は存在します');
+	ok(jQuery.fn.bcScrollTo, 'bcScrollTo method は存在します');
+	ok(jQuery.fn.bcSelect, 'bcSelect method は存在します');
+	ok(jQuery.fn.bcYoutube, 'bcYoutube method は存在します');
+});
+
+test('jQuery静的メソッドの存在確認', function() {
+	ok(jQuery.bcScrollTo, 'bcScrollTo static method は存在します');
+});
+
+</script>
+
+</body>
+</html>
