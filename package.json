@@ -5,7 +5,7 @@
   "description": "Client side JavaScript libraries for baserCMS",
   "main": "baser.js",
   "scripts": {
-    "test": "npm test"
+    "test": "grunt qunit"
   },
   "repository": {
     "type": "git",

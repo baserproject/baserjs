@@ -87,6 +87,11 @@ module.exports = function(grunt) {
           config: 'tsd.json'
         }
       }
+    },
+    qunit: {
+      all: [
+        'test/*.html'
+      ]
     }
   });
 
@@ -95,6 +100,7 @@ module.exports = function(grunt) {
     'concat',
     'uglify',
     'tsd',
+    'qunit',
     'typedoc',
     'update'
   ]);
@@ -105,6 +111,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.registerTask('update', 'Update Revision', function() {
     pkg.revision = parseInt(pkg.revision, 10) + 1;
     return grunt.file.write('package.json', JSON.stringify(pkg, null, 2));
