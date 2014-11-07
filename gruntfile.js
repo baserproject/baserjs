@@ -73,7 +73,8 @@ module.exports = function(grunt) {
       build: {
         options: {
           out: 'docs/',
-          name: '<%= pkg.name %>'
+          name: '<%= pkg.name %>',
+          gaID: 'UA-56482699-1'
         },
         src: 'src/index.ts'
       }

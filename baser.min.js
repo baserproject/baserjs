@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.0.10-rc.1 r142
+ * baserjs - v0.0.10-rc.1 r143
  * update: 2014-11-07
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
