@@ -1,7 +1,9 @@
 baserJS
 ===
 
-Client side JavaScript libraries for [baserCMS](http://basercms.net/)
+[![Build Status](https://travis-ci.org/baserproject/baserjs.svg?branch=dev)](https://travis-ci.org/baserproject/baserjs)
+
+コーポレートサイトにちょうどいいJavaScriptライブラリ
 
 ## Usage
 
@@ -10,32 +12,11 @@ Client side JavaScript libraries for [baserCMS](http://basercms.net/)
 <script src="baser.js"></script>
 ```
 
-## Example
+## Bower Installation
 
-```html
-<input type="radio" name="foo" id="bar"><label for="bar">ラベル</label>
+```sh
+$ bower install baserjs
 ```
-
-↓
-
-```javascript
-$('input:radio').bcRadio();
-```
-
-↓
-
-```html
-<span class="-bc-form-element-wapper">
-	<input type="radio" name="foo" id="bar" class="-bc-form-element -bc-form-element-radio -bc-form-element-state-unchecked -bc-form-element-blur" aria-checked="false">
-	<label for="bar" class="-bc-form-element -bc-form-element-label -bc-form-element-radio-label -bc-form-element-blur">ラベル</label>
-</span>
-```
-
-## Methods
-
-- bcRadio()
-- bcCheckbox()
-- bcSelect()
 
 * * *
 
