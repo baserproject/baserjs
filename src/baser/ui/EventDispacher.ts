@@ -31,7 +31,8 @@ module baser {
 				return this;
 			}
 
-			public off (): EventDispacher {
+			public off (type?: string): EventDispacher {
+				delete types[type];
 				return this;
 			}
 
