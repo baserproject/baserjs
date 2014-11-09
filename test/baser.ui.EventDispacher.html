@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>baser.ui.EventDispacher</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+test('baser.ui.EventDispacher.on/trigger のテスト', 2, function() {
+
+	var eDispacher = new baser.ui.EventDispacher();
+
+	eDispacher.on('xEvent', function() {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+	});
+	eDispacher.on('xEvent', function() {
+		ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
+	});
+
+	eDispacher.trigger('xEvent');
+
+});
+
+test('baser.ui.EventDispacher.on/off のテスト', 0, function() {
+
+	var eDispacher = new baser.ui.EventDispacher();
+
+	eDispacher.on('xEvent', function() {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+	});
+	eDispacher.on('xEvent', function() {
+		ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
+	});
+
+	eDispacher.off('xEvent');
+
+	eDispacher.trigger('xEvent');
+
+});
+
+</script>
+
+</body>
+</html>

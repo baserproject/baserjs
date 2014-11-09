@@ -32,7 +32,7 @@ declare module baser {
         class EventDispacher {
             constructor();
             public on(type: string, handler: Function): EventDispacher;
-            public off(): EventDispacher;
+            public off(type?: string): EventDispacher;
             public trigger(type: string, context?: any): EventDispacher;
         }
         class EventHandler {

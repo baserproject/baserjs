@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.10-rc.1 r144
- * update: 2014-11-07
+ * baserjs - v0.0.11-beta r146
+ * update: 2014-11-10
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -81,7 +81,8 @@ var baser;
                 return this;
             };
 
-            EventDispacher.prototype.off = function () {
+            EventDispacher.prototype.off = function (type) {
+                delete types[type];
                 return this;
             };
 
