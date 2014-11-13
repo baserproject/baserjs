@@ -70,7 +70,8 @@ module.exports = function(grunt) {
         ],
         tasks: [
           'typescript',
-          'concat'
+          'concat:lib',
+          'concat:dist'
         ],
         options: {
           interrupt: true
@@ -108,7 +109,7 @@ module.exports = function(grunt) {
     'concat:lib',
     'concat:dist',
     'uglify',
-    'tsd',
+    // 'tsd', // モジュール内のエラーが起こるため一時的に使用停止
     'qunit',
     'typedoc',
     'update'
