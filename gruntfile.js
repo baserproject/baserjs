@@ -40,6 +40,13 @@ module.exports = function(grunt) {
       },
     },
     concat: {
+      lib: {
+        src: [
+          'src/lib/jquery-cookie/src/jquery.cookie.js',
+          'src/lib/jquery-mousewheel/jquery.mousewheel.js'
+        ],
+        dest: 'src/__tmp/__lib.js'
+      },
       dist: {
         options: {
           banner: '<%= meta.banner %>' + '\n' +
@@ -48,6 +55,7 @@ module.exports = function(grunt) {
         },
         src: [
           'src/__wrap/__intro.js',
+          '<%= concat.lib.dest %>',
           '<%= typescript.dist.dest %>',
           'src/__wrap/__outro.js'
         ],
@@ -97,7 +105,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', [
     'typescript',
-    'concat',
+    'concat:lib',
+    'concat:dist',
     'uglify',
     'tsd',
     'qunit',
