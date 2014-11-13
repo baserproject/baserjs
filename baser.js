@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.0.12-beta r148
+ * baserjs - v0.0.13-beta r151
  * update: 2014-11-13
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -2677,6 +2677,12 @@ var baser;
 /// <reference path="jquery/bcSelect.ts" />
 /// <reference path="jquery/bcMaps.ts" />
 // <reference path="jquery/bcBoxAlignHeight.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcBoxLink.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcExtendLink.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcRollover.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcShy.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcWink.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcSplitList.ts" /> // 未実装のため読み込まない
 /// <reference path="jquery/bcImageLoaded.ts" />
 /// <reference path="jquery/bcBackground.ts" />
 /// <reference path="jquery/bcKeepAspectRatio.ts" />

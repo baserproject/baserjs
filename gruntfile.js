@@ -33,7 +33,8 @@ module.exports = function(grunt) {
           banner: '<%= meta.banner %>' + '\n' +
           '\n' +
           '',
-          report: 'min'
+          report: 'gzip',
+          sourceMap: true
         },
         src: [DEST],
         dest: DEST_MIN
