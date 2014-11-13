@@ -43,6 +43,12 @@
 /// <reference path="jquery/bcSelect.ts" />
 /// <reference path="jquery/bcMaps.ts" />
 // <reference path="jquery/bcBoxAlignHeight.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcBoxLink.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcExtendLink.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcRollover.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcShy.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcWink.ts" /> // 未実装のため読み込まない
+// <reference path="jquery/bcSplitList.ts" /> // 未実装のため読み込まない
 /// <reference path="jquery/bcImageLoaded.ts" />
 /// <reference path="jquery/bcBackground.ts" />
 /// <reference path="jquery/bcKeepAspectRatio.ts" />
