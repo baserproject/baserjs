@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.0.13-beta r151
+ * baserjs - v0.0.13-beta r152
  * update: 2014-11-13
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -2032,6 +2032,7 @@ var baser;
                 *
                 */
                 Youtube.prototype._init = function (options) {
+                    var _this = this;
                     var id = this.$el.data('id');
                     var width = +(this.$el.data('width') || this.$el.attr('width') || NaN);
                     var height = +(this.$el.data('height') || this.$el.attr('height') || NaN);
@@ -2093,6 +2094,7 @@ var baser;
                         }
                         if (y && y.pauseVideo && y.playVideo) {
                             clearInterval(i);
+                            _this.$el.trigger('embeddedyoutubeplay', [y]);
                             $(window).on('blur', function () {
                                 y.pauseVideo();
                             }).on('focus', function () {

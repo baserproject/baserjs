@@ -159,6 +159,7 @@ module baser {
 						}
 						if (y && y.pauseVideo && y.playVideo) {
 							clearInterval(i);
+							this.$el.trigger('embeddedyoutubeplay', [y]);
 							$(window).on('blur', () => {
 								y.pauseVideo();
 							}).on('focus', () => {
