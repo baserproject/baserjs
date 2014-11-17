@@ -1,7 +1,7 @@
 baserJS
 ===
 
-[![Build Status](https://travis-ci.org/baserproject/baserjs.svg?branch=dev)](https://travis-ci.org/baserproject/baserjs)
+[![Build Status](https://travis-ci.org/baserproject/baserjs.svg)](https://travis-ci.org/baserproject/baserjs)
 
 コーポレートサイトにちょうどいいJavaScriptライブラリ
 

@@ -1,7 +1,7 @@
 {
   "name": "baserjs",
-  "version": "0.0.13-beta",
-  "revision": 152,
+  "version": "0.0.13-rc.1",
+  "revision": 154,
   "description": "Client side JavaScript libraries for baserCMS",
   "main": "baser.js",
   "scripts": {
