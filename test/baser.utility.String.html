@@ -16,7 +16,7 @@
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 
 <!-- Core Module -->
-<script src="../baser.min.js"></script>
+<script src="../baser.js"></script>
 
 <!-- Qunit -->
 <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
@@ -26,6 +26,7 @@
 "use strict";
 
 test('baser.utility.String.UIDのテスト', function() {
+
 	ok(baser.utility.String.UID, 'baser.utility.String.UID は存在します');
 
 	var i;
@@ -37,6 +38,82 @@ test('baser.utility.String.UIDのテスト', function() {
 	for (i = 0; i < 1000; i++) {
 		notEqual(baser.utility.String.UID('abc'), baser.utility.String.UID('abc'), 'baser.utility.String.UID は引数に同じシードを渡しても絶対にユニークな文字列を返すかどうかのテスト ' + (i + 1) + '回目');
 	}
+
+});
+
+test('baser.utility.String.hyphenDelimitedのテスト', function() {
+
+	ok(baser.utility.String.hyphenDelimited, 'baser.utility.String.hyphenDelimited は存在します');
+
+	equal(baser.utility.String.hyphenDelimited(''), '', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('a'), 'a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('A'), 'a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('0'), '0', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('aA'), 'a-a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('a a'), 'a-a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('a A'), 'a-a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('A-a'), 'a-a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('a_a'), 'a-a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('a-A'), 'a-a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('A-a'), 'a-a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('A _ -a'), 'a-a', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+	equal(baser.utility.String.hyphenDelimited('baser.utility.String.hyphenDelimited'), 'baser-utility-string-hyphen-delimited', 'baser.utility.String.hyphenDelimited の変換は成功しています');
+
+});
+
+
+test('baser.utility.String.snakeCaseのテスト', function() {
+
+	ok(baser.utility.String.snakeCase, 'baser.utility.String.snakeCase は存在します');
+
+	equal(baser.utility.String.snakeCase(''), '', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('a'), 'a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('A'), 'a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('0'), '0', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('aA'), 'a_a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('a a'), 'a_a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('a A'), 'a_a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('A-a'), 'a_a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('a_a'), 'a_a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('a-A'), 'a_a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('A-a'), 'a_a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('A _ -a'), 'a_a', 'baser.utility.String.snakeCase の変換は成功しています');
+	equal(baser.utility.String.snakeCase('baser.utility.String.snakeCase'), 'baser_utility_string_snake_case', 'baser.utility.String.snakeCase の変換は成功しています');
+
+});
+
+test('baser.utility.String.camelCaseのテスト', function() {
+
+	ok(baser.utility.String.camelCase, 'baser.utility.String.camelCase は存在します');
+
+	equal(baser.utility.String.camelCase(''), '', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a'), 'a', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('A'), 'a', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('0'), '0', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('aA'), 'aA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a a'), 'aA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a A'), 'aA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('A-a'), 'aA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a_a'), 'aA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a-A'), 'aA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('A-a'), 'aA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('A _ -a'), 'aA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('baser.utility.String.camelCase'), 'baserUtilityStringCamelCase', 'baser.utility.String.camelCase の変換は成功しています');
+
+	equal(baser.utility.String.camelCase('', true), '', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a', true), 'A', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('A', true), 'A', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('0', true), '0', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('aA', true), 'AA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a a', true), 'AA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a A', true), 'AA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('A-a', true), 'AA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a_a', true), 'AA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('a-A', true), 'AA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('A-a', true), 'AA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('A _ -a', true), 'AA', 'baser.utility.String.camelCase の変換は成功しています');
+	equal(baser.utility.String.camelCase('baser.utility.String.camelCase', true), 'BaserUtilityStringCamelCase', 'baser.utility.String.camelCase の変換は成功しています');
+
 
 });
 
