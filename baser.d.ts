@@ -17,6 +17,30 @@ declare module baser {
             *
             */
             static UID(seed?: number): string;
+            /**
+            * ハイフン チェインケース化
+            *
+            * @version 0.1.0
+            * @since 0.1.0
+            *
+            */
+            static hyphenDelimited(str: string): string;
+            /**
+            * スネークケース化
+            *
+            * @version 0.1.0
+            * @since 0.1.0
+            *
+            */
+            static snakeCase(str: string): string;
+            /**
+            * キャメルケース化
+            *
+            * @version 0.1.0
+            * @since 0.1.0
+            *
+            */
+            static camelCase(str: string, upperCase?: boolean): string;
         }
     }
 }
@@ -382,6 +406,18 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            enum ElementClassNameCase {
+                HYPHEN_DELIMITED = 0,
+                SNAKE_CASE = 1,
+                CAMEL_CASE = 2,
+            }
+            enum ClassNameSeparatorForBEM {
+                HYPHEN = 0,
+                DOUBLE_HYPHEN = 1,
+                UNDERSCORE = 2,
+                DOUBLE_UNDERSCORE = 3,
+                CAMEL_CASE = 4,
+            }
             /**
             * DOM要素の抽象クラス
             *
@@ -390,6 +426,38 @@ declare module baser {
             *
             */
             class Element {
+                /**
+                * クラス名のデフォルトのプレフィックス
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                static classNameDefaultPrefix: string;
+                /**
+                * クラス名のデフォルトの単語繋ぎの形式
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                static classNameDefaultCase: ElementClassNameCase;
+                /**
+                * BEMのエレメントのクラス名の繋ぎ文字
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                static classNameDefaultSeparatorForElement: ClassNameSeparatorForBEM;
+                /**
+                * BEMのモディファイアのクラス名の繋ぎ文字
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                static classNameDefaultSeparatorForModifier: ClassNameSeparatorForBEM;
                 /**
                 * 管理するDOM要素のjQueryオブジェクト
                 *
@@ -412,6 +480,22 @@ declare module baser {
                 */
                 public name: string;
                 /**
+                * クラス名文字列を生成する
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                static createClassName(blockNames: string, elementNames?: string, modifierName?: string): string;
+                /**
+                * クラス名を付加する
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                static addClassTo($elem: JQuery, blockNames: string, elementNames?: string, modifierName?: string): void;
+                /**
                 * コンストラクタ
                 *
                 * @version 0.0.1
@@ -420,6 +504,14 @@ declare module baser {
                 *
                 */
                 constructor($el: JQuery);
+                /**
+                * クラス名を付加する
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                public addClass(blockNames: string, elementNames?: string, modifierName?: string): void;
             }
         }
     }

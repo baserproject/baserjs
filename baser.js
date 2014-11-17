@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.13-beta r152
- * update: 2014-11-13
+ * baserjs - v0.1.0-alpha r153
+ * update: 2014-11-18
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -387,6 +387,62 @@ var baser;
                 var uid = 'uid-' + uniqueNumber.toString(24);
 
                 return uid;
+            };
+
+            /**
+            * ハイフン チェインケース化
+            *
+            * @version 0.1.0
+            * @since 0.1.0
+            *
+            */
+            String.hyphenDelimited = function (str) {
+                var words = str.replace(/[A-Z]/g, function ($1) {
+                    return ' ' + $1.toLowerCase();
+                }).split(/[^a-z0-9]+/ig);
+
+                var result = [];
+
+                var i = 0;
+                var l = words.length;
+                for (; i < l; i++) {
+                    if (words[i]) {
+                        result.push(words[i].toLowerCase());
+                    }
+                }
+
+                return result.join('-');
+            };
+
+            /**
+            * スネークケース化
+            *
+            * @version 0.1.0
+            * @since 0.1.0
+            *
+            */
+            String.snakeCase = function (str) {
+                return String.hyphenDelimited(str).replace(/-/g, '_');
+            };
+
+            /**
+            * キャメルケース化
+            *
+            * @version 0.1.0
+            * @since 0.1.0
+            *
+            */
+            String.camelCase = function (str, upperCase) {
+                if (typeof upperCase === "undefined") { upperCase = false; }
+                var hdStr = String.hyphenDelimited(str);
+
+                if (upperCase && /^[a-z]/.test(hdStr)) {
+                    hdStr = '-' + hdStr;
+                }
+
+                return hdStr.replace(/-([a-z])/g, function ($1, $2) {
+                    return $2.toUpperCase();
+                });
             };
             return String;
         })();
@@ -998,6 +1054,27 @@ var baser;
 (function (baser) {
     (function (ui) {
         (function (element) {
+            (function (ElementClassNameCase) {
+                ElementClassNameCase[ElementClassNameCase["HYPHEN_DELIMITED"] = 0] = "HYPHEN_DELIMITED";
+                ElementClassNameCase[ElementClassNameCase["SNAKE_CASE"] = 1] = "SNAKE_CASE";
+                ElementClassNameCase[ElementClassNameCase["CAMEL_CASE"] = 2] = "CAMEL_CASE";
+            })(element.ElementClassNameCase || (element.ElementClassNameCase = {}));
+            var ElementClassNameCase = element.ElementClassNameCase;
+
+            (function (ClassNameSeparatorForBEM) {
+                ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["HYPHEN"] = 0] = "HYPHEN";
+                ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["DOUBLE_HYPHEN"] = 1] = "DOUBLE_HYPHEN";
+                ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["UNDERSCORE"] = 2] = "UNDERSCORE";
+                ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["DOUBLE_UNDERSCORE"] = 3] = "DOUBLE_UNDERSCORE";
+                ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["CAMEL_CASE"] = 4] = "CAMEL_CASE";
+            })(element.ClassNameSeparatorForBEM || (element.ClassNameSeparatorForBEM = {}));
+            var ClassNameSeparatorForBEM = element.ClassNameSeparatorForBEM;
+
+            var HYPHEN = '-';
+            var DOUBLE_HYPHEN = '--';
+            var UNDERSCORE = '_';
+            var DOUBLE_UNDERSCORE = '__';
+
             /**
             * DOM要素の抽象クラス
             *
@@ -1036,6 +1113,132 @@ var baser;
                         this.name = name;
                     }
                 }
+                /**
+                * クラス名文字列を生成する
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                Element.createClassName = function (blockNames, elementNames, modifierName) {
+                    if (typeof elementNames === "undefined") { elementNames = ''; }
+                    if (typeof modifierName === "undefined") { modifierName = ''; }
+                    var className = '';
+                    var prefix;
+                    var separator;
+                    var elementSeparator;
+                    var modifierSeparator;
+                    switch (Element.classNameDefaultCase) {
+                        case 0 /* HYPHEN_DELIMITED */:
+                            separator = HYPHEN;
+                            blockNames = baser.utility.String.hyphenDelimited(blockNames);
+                            elementNames = baser.utility.String.hyphenDelimited(elementNames);
+                            modifierName = baser.utility.String.hyphenDelimited(modifierName);
+                            break;
+                        case 1 /* SNAKE_CASE */:
+                            separator = UNDERSCORE;
+                            blockNames = baser.utility.String.snakeCase(blockNames);
+                            elementNames = baser.utility.String.snakeCase(elementNames);
+                            modifierName = baser.utility.String.snakeCase(modifierName);
+                            break;
+                        case 2 /* CAMEL_CASE */:
+                            separator = '';
+                            blockNames = baser.utility.String.camelCase(blockNames, true);
+                            elementNames = baser.utility.String.camelCase(elementNames);
+                            modifierName = baser.utility.String.camelCase(modifierName);
+                            break;
+                    }
+                    switch (Element.classNameDefaultSeparatorForElement) {
+                        case 0 /* HYPHEN */:
+                            elementSeparator = HYPHEN;
+                            break;
+                        case 1 /* DOUBLE_HYPHEN */:
+                            elementSeparator = DOUBLE_HYPHEN;
+                            break;
+                        case 2 /* UNDERSCORE */:
+                            elementSeparator = UNDERSCORE;
+                            break;
+                        case 3 /* DOUBLE_UNDERSCORE */:
+                            elementSeparator = DOUBLE_UNDERSCORE;
+                            break;
+                        case 4 /* CAMEL_CASE */:
+                            elementSeparator = '';
+                            break;
+                    }
+                    switch (Element.classNameDefaultSeparatorForModifier) {
+                        case 0 /* HYPHEN */:
+                            modifierSeparator = HYPHEN;
+                            break;
+                        case 1 /* DOUBLE_HYPHEN */:
+                            modifierSeparator = DOUBLE_HYPHEN;
+                            break;
+                        case 2 /* UNDERSCORE */:
+                            modifierSeparator = UNDERSCORE;
+                            break;
+                        case 3 /* DOUBLE_UNDERSCORE */:
+                            modifierSeparator = DOUBLE_UNDERSCORE;
+                            break;
+                        case 4 /* CAMEL_CASE */:
+                            modifierSeparator = '';
+                            break;
+                    }
+                    if (Element.classNameDefaultPrefix) {
+                        prefix = Element.classNameDefaultPrefix;
+
+                        // 先頭のアルファベット・アンダースコア・ハイフン以外を削除
+                        prefix = prefix.replace(/^[^a-z_-]/i, '');
+
+                        // アルファベット・数字・アンダースコア・ハイフン以外を削除
+                        prefix = prefix.replace(/[^a-z0-9_-]+/ig, '');
+
+                        // 先頭の2個以上連続するハイフンを削除
+                        prefix = prefix.replace(/^--+/, '-');
+                        className += prefix;
+                    }
+                    className += separator + blockNames;
+                    if (elementNames) {
+                        className += elementSeparator + elementNames;
+                    }
+                    if (modifierName) {
+                        className += modifierSeparator + modifierName;
+                    }
+                    return className;
+                };
+
+                /**
+                * クラス名を付加する
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                Element.addClassTo = function ($elem, blockNames, elementNames, modifierName) {
+                    if (typeof elementNames === "undefined") { elementNames = ''; }
+                    if (typeof modifierName === "undefined") { modifierName = ''; }
+                    var className = Element.createClassName(blockNames, elementNames, modifierName);
+                    $elem.addClass(className);
+                };
+
+                /**
+                * クラス名を付加する
+                *
+                * @version 0.1.0
+                * @since 0.1.0
+                *
+                */
+                Element.prototype.addClass = function (blockNames, elementNames, modifierName) {
+                    if (typeof elementNames === "undefined") { elementNames = ''; }
+                    if (typeof modifierName === "undefined") { modifierName = ''; }
+                    var className = Element.createClassName(blockNames, elementNames, modifierName);
+                    this.$el.addClass(className);
+                };
+                Element.classNameDefaultPrefix = '-bc';
+
+                Element.classNameDefaultCase = 0 /* HYPHEN_DELIMITED */;
+
+                Element.classNameDefaultSeparatorForElement = 3 /* DOUBLE_UNDERSCORE */;
+
+                Element.classNameDefaultSeparatorForModifier = 1 /* DOUBLE_HYPHEN */;
                 return Element;
             })();
             element.Element = Element;
@@ -2523,7 +2726,7 @@ var baser;
                 var newHeight = objectHeight * scale;
 
                 var top;
-                switch (config.align) {
+                switch (config.valign) {
                     case 'top':
                         top = 0;
                         break;
@@ -2537,7 +2740,7 @@ var baser;
                 }
 
                 var left;
-                switch (config.valign) {
+                switch (config.align) {
                     case 'left':
                         left = 0;
                         break;
