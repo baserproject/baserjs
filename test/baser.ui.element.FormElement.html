@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>baser.ui.element.FormElement</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+	<input id="target" type="text">
+</div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+test('baser.ui.element.FormElementの後方互換テスト', function() {
+	expect(4);
+
+	var $target = $('#target');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	ok(target.$el.hasClass('-bc-form-element'));
+	ok(target.$el.hasClass('-bc-form-element-blur'));
+	ok(target.$el.parent().hasClass('-bc-form-element-wrapper'));
+
+	target.$el.on('focus', function() {
+		ok($(this).hasClass('-bc-form-element-focus'));
+	});
+
+	target.$el.trigger('focus');
+
+});
+
+</script>
+
+</body>
+</html>

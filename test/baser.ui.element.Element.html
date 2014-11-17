@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>baser.ui.element.Element</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+test('baser.ui.element.Element.createClassNameのテスト', function() {
+
+	ok(baser.ui.element.Element.createClassName, 'baser.ui.element.Element.createClassName は存在します');
+
+	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), '-bc-block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+
+
+	baser.ui.element.Element.classNameDefaultPrefix = 'original-prefix';
+	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), 'original-prefix-block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), 'original-prefix-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), 'original-prefix-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), 'original-prefix-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+
+	baser.ui.element.Element.classNameDefaultPrefix = 'PREFIX   AAAAA';
+	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), 'PREFIXAAAAA-block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), 'PREFIXAAAAA-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), 'PREFIXAAAAA-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), 'PREFIXAAAAA-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+
+	baser.ui.element.Element.classNameDefaultPrefix = '-bc';
+	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), '-bc-block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+
+	baser.ui.element.Element.classNameDefaultCase = baser.ui.element.ElementClassNameCase.SNAKE_CASE;
+	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), '-bc_block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bc_block_block__element_element--modifier_modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bc_block_block__element_element--modifier_modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bc_block_block__element_element--modifier_modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+
+	baser.ui.element.Element.classNameDefaultCase = baser.ui.element.ElementClassNameCase.CAMEL_CASE;
+	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), '-bcBlock__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bcBlockBlock__elementElement--modifierModifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bcBlockBlock__elementElement--modifierModifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bcBlockBlock__elementElement--modifierModifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+
+	ok(baser.ui.element.Element.classNameDefaultSeparatorForElement, 'baser.ui.element.Element.classNameDefaultSeparatorForElement は存在します');
+	ok(baser.ui.element.Element.classNameDefaultSeparatorForModifier, 'baser.ui.element.Element.classNameDefaultSeparatorForModifier は存在します');
+
+});
+
+</script>
+
+</body>
+</html>
