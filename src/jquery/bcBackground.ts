@@ -115,7 +115,7 @@ module baser {
 				var newHeight: number = objectHeight * scale;
 
 				var top: number;
-				switch (config.align) {
+				switch (config.valign) {
 					case 'top':
 						top = 0;
 						break;
@@ -129,7 +129,7 @@ module baser {
 				}
 
 				var left: number;
-				switch (config.valign) {
+				switch (config.align) {
 					case 'left':
 						left = 0;
 						break;
