@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.13-beta r152
- * update: 2014-11-13
+ * baserjs - v0.0.13-beta r153
+ * update: 2014-11-18
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1365,7 +1365,9 @@ var baser;
                         _this.$el.find('option').eq(index).prop('selected', true);
                         e.stopPropagation();
                         e.preventDefault();
-                        _this._onchange();
+
+                        // 標準の select 要素に登録されたイベントを発火
+                        _this.$el.trigger('change');
                     });
 
                     this.$pseudo.on('click.bcSelect', function (e) {
@@ -2523,7 +2525,7 @@ var baser;
                 var newHeight = objectHeight * scale;
 
                 var top;
-                switch (config.align) {
+                switch (config.valign) {
                     case 'top':
                         top = 0;
                         break;
@@ -2537,7 +2539,7 @@ var baser;
                 }
 
                 var left;
-                switch (config.valign) {
+                switch (config.align) {
                     case 'left':
                         left = 0;
                         break;

@@ -107,7 +107,8 @@ module baser {
 						this.$el.find('option').eq(index).prop('selected', true);
 						e.stopPropagation();
 						e.preventDefault();
-						this._onchange();
+						// 標準の select 要素に登録されたイベントを発火
+						this.$el.trigger('change');
 					});
 
 					this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
