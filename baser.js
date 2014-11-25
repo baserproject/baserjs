@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.13-beta r153
- * update: 2014-11-18
+ * baserjs - v0.0.14-beta r159
+ * update: 2014-11-21
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -2367,6 +2367,123 @@ var baser;
 var baser;
 (function (baser) {
     /**
+    * マウスオーバー時に一瞬透明になるエフェクトをかける
+    *
+    * @version 0.0.14
+    * @since 0.0.14
+    *
+    */
+    var bcWink = function (options) {
+        var config = $.extend({
+            close: 50,
+            open: 200,
+            opacity: 0.4,
+            target: null,
+            stopOnTouch: true
+        }, options);
+        this.each(function (i, elem) {
+            var $this = $(elem);
+            var $target;
+
+            if (config.target) {
+                $target = $this.find(config.target);
+            } else {
+                $target = $this;
+            }
+
+            $this.on('mouseenter', function (e) {
+                if (config.stopOnTouch && $this.data('-bc-is-touchstarted')) {
+                    $this.data('-bc-is-touchstarted', false);
+                    return true;
+                }
+                $target.stop(true, false).fadeTo(config.close, config.opacity).fadeTo(config.open, 1);
+                return true;
+            });
+
+            if (config.stopOnTouch) {
+                $this.on('touchstart', function (e) {
+                    $this.data('-bc-is-touchstarted', true);
+                    return true;
+                });
+            }
+        });
+        return this;
+    };
+
+    // jQueryのインスタンスメソッドとしてprototypeに登録
+    $.fn.bcWink = bcWink;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    /**
+    * リストを均等に分割する
+    *
+    * @version 0.0.14
+    * @since 0.0.14
+    *
+    */
+    var bcSplitList = function (columnSize, options) {
+        var CLASS_NAME = '-bc-splited-list';
+        var CLASS_NAME_NTH = '-bc-splited-list--nth';
+        var CLASS_NAME_ITEM = '-bc-splited-list__item';
+        var config = $.extend({
+            dataKey: '-bc-split-list-index'
+        }, options);
+        this.each(function (i, elem) {
+            var $container = $(elem);
+            var $list = $container.find('ul');
+            var $items = $list.find('li');
+            var size = $items.length;
+            var sizeParCol = Math.floor(size / columnSize);
+            var sizeRem = size % columnSize;
+
+            var $col;
+            var remShift = sizeRem;
+            var row = 1;
+            var col = 1;
+            $items.each(function (itemIndex, itemEl) {
+                var $item = $(itemEl);
+
+                itemIndex += 1; // 0からでなく1からのカウント
+
+                var colByCurrentRow;
+                if (0 < remShift) {
+                    colByCurrentRow = sizeParCol + 1;
+                } else {
+                    colByCurrentRow = sizeParCol;
+                }
+
+                if (!$col) {
+                    $col = $('<ul></ul>');
+                    $col.addClass(CLASS_NAME);
+                    $col.addClass(CLASS_NAME_NTH + col);
+                    $col.appendTo($container);
+                }
+                $item.appendTo($col);
+                $item.data(config.dataKey, itemIndex - 1);
+                $item.addClass(CLASS_NAME_ITEM);
+                $item.addClass(CLASS_NAME_ITEM + '--nth' + (itemIndex - 1));
+
+                if (colByCurrentRow === row) {
+                    col += 1;
+                    row = 0;
+                    remShift -= 1;
+                    $col = null;
+                }
+                row += 1;
+            });
+
+            $list.remove();
+        });
+        return this;
+    };
+
+    // jQueryのインスタンスメソッドとしてprototypeに登録
+    $.fn.bcSplitList = bcSplitList;
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    /**
     * 要素内の画像の読み込みが完了してからコールバックを実行する
     *
     * @version 0.0.9
@@ -2685,8 +2802,8 @@ var baser;
 // <reference path="jquery/bcExtendLink.ts" /> // 未実装のため読み込まない
 // <reference path="jquery/bcRollover.ts" /> // 未実装のため読み込まない
 // <reference path="jquery/bcShy.ts" /> // 未実装のため読み込まない
-// <reference path="jquery/bcWink.ts" /> // 未実装のため読み込まない
-// <reference path="jquery/bcSplitList.ts" /> // 未実装のため読み込まない
+/// <reference path="jquery/bcWink.ts" />
+/// <reference path="jquery/bcSplitList.ts" />
 /// <reference path="jquery/bcImageLoaded.ts" />
 /// <reference path="jquery/bcBackground.ts" />
 /// <reference path="jquery/bcKeepAspectRatio.ts" />

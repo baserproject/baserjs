@@ -1248,3 +1248,7 @@ declare module baser {
 }
 declare module baser {
 }
+declare module baser {
+}
+declare module baser {
+}
