@@ -153,12 +153,12 @@ module baser {
 
 					var y: YT.Player;
 
-					var i: number = setInterval( () => {
+					var i: number = window.setInterval( () => {
 						if (!y && 'YT' in window && YT.Player) {
 							y = new YT.Player(playerID, null);
 						}
 						if (y && y.pauseVideo && y.playVideo) {
-							clearInterval(i);
+							window.clearInterval(i);
 							this.$el.trigger('embeddedyoutubeplay', [y]);
 							$(window).on('blur', () => {
 								y.pauseVideo();
