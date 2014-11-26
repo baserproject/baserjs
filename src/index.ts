@@ -42,11 +42,11 @@
 /// <reference path="jquery/bcCheckbox.ts" />
 /// <reference path="jquery/bcSelect.ts" />
 /// <reference path="jquery/bcMaps.ts" />
-// <reference path="jquery/bcBoxAlignHeight.ts" /> // 未実装のため読み込まない
+/// <reference path="jquery/bcBoxAlignHeight.ts" />
 // <reference path="jquery/bcBoxLink.ts" /> // 未実装のため読み込まない
 // <reference path="jquery/bcExtendLink.ts" /> // 未実装のため読み込まない
-// <reference path="jquery/bcRollover.ts" /> // 未実装のため読み込まない
-// <reference path="jquery/bcShy.ts" /> // 未実装のため読み込まない
+/// <reference path="jquery/bcRollover.ts" />
+/// <reference path="jquery/bcShy.ts" />
 /// <reference path="jquery/bcWink.ts" />
 /// <reference path="jquery/bcSplitList.ts" />
 /// <reference path="jquery/bcImageLoaded.ts" />
