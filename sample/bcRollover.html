@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Test - Form</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="../baser.js"></script>
+	<script>
+	$(function() {
+
+		$('.Rollover').bcRollover();
+		$('.Rollover2').bcRollover({
+			pattern: /_out(\.(?:[a-z0-9]{1,6}))$/i,
+			replace: '_over$1',
+		});
+
+	});
+	</script>
+	<style>
+	img {
+		display: block;
+		margin-bottom: 20px;
+	}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+
+		<h1>Rollover</h1>
+
+		<h2>sample1</h2>
+
+		<img class="Rollover" src="dammy">
+		<img class="Rollover" src="dammy.jpg">
+		<img class="Rollover" src="dammy_off.jpg">
+		<img class="Rollover" src="dammy_off_on.jpg">
+		<img class="Rollover" src="dammy_off_off">
+		<img class="Rollover2" src="dammy_out.png">
+		<img class="Rollover2" src="dammy_out_out.png">
+		<img class="Rollover2" src="dammy_out_over.png">
+
+		<hr>
+
+	</div>
+
+</body>
+</html>

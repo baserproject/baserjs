@@ -75,8 +75,8 @@ module baser {
 					}
 					this.isResize = true;
 					this.trigger('resize');
-					clearTimeout(resizeEndTimer);
-					resizeEndTimer = setTimeout( (): void => {
+					window.clearTimeout(resizeEndTimer);
+					resizeEndTimer = window.setTimeout( (): void => {
 						this.isResize = false;
 						this.trigger('resize');
 						this.trigger('resizeend');
@@ -91,8 +91,8 @@ module baser {
 					}
 					this.isScroll = true;
 					this.trigger('scroll');
-					clearTimeout(scrollEndTimer);
-					scrollEndTimer = setTimeout( (): void => {
+					window.clearTimeout(scrollEndTimer);
+					scrollEndTimer = window.setTimeout( (): void => {
 						this.isScroll = false;
 						this.trigger('scroll');
 						this.trigger('scrollend');

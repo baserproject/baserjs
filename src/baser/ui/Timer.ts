@@ -94,7 +94,7 @@ module baser {
 				var startTimestamp: number = this.now();
 				this.stop();
 				var tick: Function = (): void => {
-					this.timerId = setTimeout( (): void => {
+					this.timerId = window.setTimeout( (): void => {
 						var period: number = this.now() - startTimestamp;
 						if (period < time) {
 							if (this._onProgress) {
@@ -134,7 +134,7 @@ module baser {
 					context = this;
 				}
 				this.stop();
-				this.timerId = setTimeout( (): void => {
+				this.timerId = window.setTimeout( (): void => {
 					this.stop();
 					callback.call(context);
 				}, time);
