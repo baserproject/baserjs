@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.15-rc r161
- * update: 2014-11-26
+ * baserjs - v0.0.16-alpha r173
+ * update: 2014-12-02
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1971,7 +1971,7 @@ var baser;
         var element;
         (function (element) {
             /**
-             * マップ要素
+             * YouTube要素
              *
              * @version 0.0.7
              * @since 0.0.7
@@ -2010,22 +2010,33 @@ var baser;
                     var width = +(this.$el.data('width') || this.$el.attr('width') || NaN);
                     var height = +(this.$el.data('height') || this.$el.attr('height') || NaN);
                     var protocol = location.protocol === 'file:' ? 'http:' : '';
+                    this.movieOption = $.extend({
+                        rel: false,
+                        autoplay: true,
+                        stopOnInactive: false,
+                        controls: false,
+                        loop: true,
+                        showinfo: false
+                    }, options);
                     this.$el.empty();
+                    var ids = id.split(/\s*,\s*/);
                     var $mov = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
                     var param = $.param({
                         version: 3,
-                        playlist: id,
-                        rel: 0,
-                        autoplay: 1,
-                        controls: 0,
+                        rel: this.movieOption.rel ? 1 : 0,
+                        autoplay: this.movieOption.autoplay ? 1 : 0,
+                        controls: this.movieOption.controls ? 1 : 0,
                         disablekb: 1,
                         iv_load_policy: 3,
-                        loop: 1,
+                        loop: this.movieOption.loop ? 1 : 0,
                         modestbranding: 1,
-                        showinfo: 0,
+                        showinfo: this.movieOption.showinfo ? 1 : 0,
                         wmode: 'transparent',
                         enablejsapi: 1
                     });
+                    if (ids.length >= 2) {
+                        param += '&amp;playlist=' + ids.join(',');
+                    }
                     var src = protocol + Youtube.PLAYER_URL + id + '?' + param;
                     this.movieId = id;
                     $mov.prop('src', src);
@@ -2048,24 +2059,27 @@ var baser;
                     }
                     $.getScript(protocol + Youtube.API_URL);
                     var y;
-                    var i = window.setInterval(function () {
-                        if (!y && 'YT' in window && YT.Player) {
-                            y = new YT.Player(playerID, null);
-                        }
-                        if (y && y.pauseVideo && y.playVideo) {
-                            window.clearInterval(i);
-                            _this.$el.trigger('embeddedyoutubeplay', [y]);
-                            $(window).on('blur', function () {
-                                y.pauseVideo();
-                            }).on('focus', function () {
-                                y.playVideo();
-                            });
-                        }
-                    }, 300);
+                    var intervalTimer;
+                    if (this.movieOption.stopOnInactive) {
+                        intervalTimer = window.setInterval(function () {
+                            if (!y && 'YT' in window && YT.Player) {
+                                y = new YT.Player(playerID, null);
+                            }
+                            if (y && y.pauseVideo && y.playVideo) {
+                                window.clearInterval(intervalTimer);
+                                _this.$el.trigger('embeddedyoutubeplay', [y]);
+                                $(window).on('blur', function () {
+                                    y.pauseVideo();
+                                }).on('focus', function () {
+                                    y.playVideo();
+                                });
+                            }
+                        }, 300);
+                    }
                     return true;
                 };
-                Youtube.prototype.reload = function () {
-                    this._init();
+                Youtube.prototype.reload = function (options) {
+                    this._init(options);
                 };
                 /**
                  * 管理対象の要素に付加するclass属性値のプレフィックス
@@ -2137,15 +2151,15 @@ var baser;
     </div><script async src="//assets.codepen.io/assets/embed/ei.js"></script>
      *
      */
-    function bcYoutube() {
+    function bcYoutube(options) {
         return this.each(function (i, elem) {
             var $elem = $(elem);
             var data = $elem.data(baser.ui.element.Youtube.className);
             if (data) {
-                data.reload();
+                data.reload(options);
             }
             else {
-                new baser.ui.element.Youtube($elem);
+                new baser.ui.element.Youtube($elem, options);
             }
         });
     }

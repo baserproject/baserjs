@@ -1132,7 +1132,58 @@ declare module baser {
     module ui {
         module element {
             /**
-             * マップ要素
+             * Youtubeクラスのコンストラクタのオプション
+             *
+             * @version 0.0.16
+             * @since 0.0.16
+             *
+             */
+            interface YoutubeOption {
+                /**
+                 * 関連動画を再生後に表示させるかどうか
+                 *
+                 * @since 0.0.16
+                 *
+                 */
+                rel?: boolean;
+                /**
+                 * 自動再生させるかどうか
+                 *
+                 * @since 0.0.16
+                 *
+                 */
+                autoplay?: boolean;
+                /**
+                 * ウィンドウがアクティブでなくなった時に再生を停止するかどうか
+                 *
+                 * @since 0.0.16
+                 *
+                 */
+                stopOnInactive?: boolean;
+                /**
+                 * コントロールを表示させるかどうか
+                 *
+                 * @since 0.0.16
+                 *
+                 */
+                controls?: boolean;
+                /**
+                 * ループ再生するかどうか
+                 *
+                 * @since 0.0.16
+                 *
+                 */
+                loop?: boolean;
+                /**
+                 * 動画情報を表示させるかどうか
+                 *
+                 * @since 0.0.16
+                 *
+                 */
+                showinfo?: boolean;
+            }
+            /**
+             * YouTube要素
              *
              * @version 0.0.7
              * @since 0.0.7
@@ -1186,7 +1237,7 @@ declare module baser {
                  * @since 0.0.7
                  *
                  */
-                movieOption: any;
+                movieOption: YoutubeOption;
                 /**
                  * コンストラクタ
                  *
@@ -1195,7 +1246,7 @@ declare module baser {
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  *
                  */
-                constructor($el: JQuery, options?: any);
+                constructor($el: JQuery, options?: YoutubeOption);
                 /**
                  * 初期化
                  *
@@ -1206,7 +1257,7 @@ declare module baser {
                  *
                  */
                 private _init(options?);
-                reload(): void;
+                reload(options?: YoutubeOption): void;
             }
         }
     }

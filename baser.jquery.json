@@ -1,7 +1,7 @@
 {
     "name": "baserjs",
     "title": "baser",
-    "version": "0.0.15-rc",
+    "version": "0.0.16-alpha",
     "author": {
         "name": "baserCMS Users Community",
         "url": "https://github.com/baserproject/baserjs"
