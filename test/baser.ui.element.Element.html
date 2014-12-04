@@ -10,7 +10,9 @@
 <body>
 
 <div id="qunit"></div>
-<div id="qunit-fixture"></div>
+<div id="qunit-fixture">
+	<div id="test"></div>
+</div>
 
 <!-- Libraries -->
 <script src="../bower_components/jquery/dist/jquery.js"></script>
@@ -67,6 +69,29 @@ test('baser.ui.element.Element.createClassNameのテスト', function() {
 
 	ok(baser.ui.element.Element.classNameDefaultSeparatorForElement, 'baser.ui.element.Element.classNameDefaultSeparatorForElement は存在します');
 	ok(baser.ui.element.Element.classNameDefaultSeparatorForModifier, 'baser.ui.element.Element.classNameDefaultSeparatorForModifier は存在します');
+
+});
+
+test('baser.ui.element.Element.prototype.addClassのテスト', function() {
+
+	// リセット
+	baser.ui.element.Element.classNameDefaultCase = baser.ui.element.ElementClassNameCase.HYPHEN_DELIMITED;
+
+	var $test = $('#test');
+	var testElem = new baser.ui.element.Element($test);
+
+
+	testElem.addClass('sample-block');
+	ok(testElem.$el.hasClass('-bc-sample-block'), 'baser.ui.element.Element.prototype.addClass で問題なくクラスは付加されました');
+
+	testElem.addClass('sample-block', 'sample-box');
+	ok(testElem.$el.hasClass('-bc-sample-block__sample-box'), 'baser.ui.element.Element.prototype.addClass で問題なくクラスは付加されました');
+
+	testElem.addClass('sample-block', 'sample-box', 'sample-modifier');
+	ok(testElem.$el.hasClass('-bc-sample-block__sample-box--sample-modifier'), 'baser.ui.element.Element.prototype.addClass で問題なくクラスは付加されました');
+
+	testElem.addClass('sample-block', '', 'sample-modifier');
+	ok(testElem.$el.hasClass('-bc-sample-block--sample-modifier'), 'baser.ui.element.Element.prototype.addClass で問題なくクラスは付加されました');
 
 });
 
