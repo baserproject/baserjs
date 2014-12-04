@@ -47,9 +47,7 @@ module baser {
 				 *
 				 */
 				static radio ($elem: JQuery, options?: CheckableElementOption): JQuery {
-
 					var radio: Radio = new Radio($elem, options);
-
 					return $elem;
 				}
 
@@ -63,9 +61,7 @@ module baser {
 				 *
 				 */
 				static checkbox ($elem: JQuery, options?: CheckableElementOption): JQuery {
-
 					var checkbox: Checkbox = new Checkbox($elem, options);
-
 					return $elem;
 				}
 
@@ -79,31 +75,7 @@ module baser {
 				 *
 				 */
 				static select ($elem: JQuery, options?: FormElementOption): JQuery {
-
 					var select: Select = new Select($elem, options);
-
-					return $elem;
-				}
-
-				/**
-				 * [未実装] 複数選択可セレクトボックスを拡張する
-				 *
-				 * @param $elem 管理するDOM要素のjQueryオブジェクト
-				 * @param options オプション
-				 *
-				 */
-				static selectMultiple ($elem: JQuery): JQuery {
-					return $elem;
-				}
-
-				/**
-				 * [未実装] 妥当性チェックを拡張する
-				 *
-				 * @param $elem 管理するDOM要素のjQueryオブジェクト
-				 * @param options オプション
-				 *
-				 */
-				static valid ($elem: JQuery, options?: any): JQuery {
 					return $elem;
 				}
 
