@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test - Form</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="../baser.js"></script>
+	<script>
+	$(function() {
+
+		$(':radio').bcRadio();
+
+	});
+	</script>
+	<style>
+
+/* Wrapper Element */
+.-bc-form-radio-wrapper {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Input Body Element */
+.-bc-form-radio {
+  display: none;
+}
+
+/* Label Element */
+.-bc-form-element__label {
+  display: block;
+  padding: 10px 20px;
+  background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.-bc-form-element__label:before {
+    content: '✓';
+    color: #bbb;
+    font-weight: bold;
+    font-size: 1.5em;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+.-bc-form-element__label--checked:before {
+    color: green;
+}
+
+	</style>
+</head>
+<body>
+
+<input type="radio" name="key" id="foo" />
+<label for="foo">foo</label>
+
+<input type="radio" name="key" id="bar" />
+<label for="bar">bar</label>
+
+
+</body>
+</html>

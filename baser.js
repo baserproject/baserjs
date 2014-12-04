@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.1.0-alpha r182
+ * baserjs - v0.1.0-alpha r183
  * update: 2014-12-05
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1805,8 +1805,8 @@ var baser;
                  */
                 Select.prototype._onfocus = function () {
                     _super.prototype._onfocus.call(this);
-                    element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, element.FormElement.classNameStateFocus);
-                    element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, element.FormElement.classNameStateBlur);
+                    element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateFocus);
+                    element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
                 };
                 /**
                  * フォーカスがはずれた時の処理
@@ -1819,8 +1819,8 @@ var baser;
                     // 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
                     if (this.$pseudo) {
                         _super.prototype._onblur.call(this);
-                        element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, element.FormElement.classNameStateBlur);
-                        element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, element.FormElement.classNameStateFocus);
+                        element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
+                        element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateFocus);
                     }
                 };
                 /**
