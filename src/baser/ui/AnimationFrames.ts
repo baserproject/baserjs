@@ -61,8 +61,8 @@ module baser {
 					});
 				} else {
 					interval = 1000 / AnimationFrames.FRAME_RATE;
-					this.requestId = setTimeout( (): void => {
-						clearTimeout(this.requestId);
+					this.requestId = window.setTimeout( (): void => {
+						window.clearTimeout(this.requestId);
 						this.callback.call(context);
 						this.start(context);
 					}, interval);
@@ -81,7 +81,7 @@ module baser {
 				if ('cancelAnimationFrame' in window) {
 					cancelAnimationFrame(this.requestId);
 				} else {
-					clearTimeout(this.requestId);
+					window.clearTimeout(this.requestId);
 				}
 			}
 

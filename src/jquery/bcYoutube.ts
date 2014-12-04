@@ -29,14 +29,14 @@ module baser {
 	</div><script async src="//assets.codepen.io/assets/embed/ei.js"></script>
 	 *
 	 */
-	function bcYoutube (): JQuery {
+	function bcYoutube (options?: baser.ui.element.YoutubeOption): JQuery {
 		return this.each( (i: number, elem: HTMLElement): void => {
 			var $elem: JQuery = $(elem);
 			var data: baser.ui.element.Youtube = $elem.data(baser.ui.element.Youtube.className);
 			if (data) {
-				data.reload();
+				data.reload(options);
 			} else {
-				new baser.ui.element.Youtube($elem);
+				new baser.ui.element.Youtube($elem, options);
 			}
 		});
 	}

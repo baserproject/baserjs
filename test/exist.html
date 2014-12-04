@@ -53,7 +53,7 @@ test('モジュールの存在確認', function() {
 
 test('jQueryインスタンスメソッドの存在確認', function() {
 	ok(jQuery.fn.bcBackground, 'bcBackground method は存在します');
-	ok(!jQuery.fn.bcBoxAlignHeight, 'bcBoxAlignHeight method はつくってません');
+	ok(jQuery.fn.bcBoxAlignHeight, 'bcBoxAlignHeight method は存在します');
 	ok(jQuery.fn.bcCheckbox, 'bcCheckbox method は存在します');
 	ok(jQuery.fn.bcImageLoaded, 'bcImageLoaded method は存在します');
 	ok(jQuery.fn.bcKeepAspectRatio, 'bcKeepAspectRatio method は存在します');
