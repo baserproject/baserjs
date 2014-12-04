@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.16-alpha.2 r177
- * update: 2014-12-04
+ * baserjs - v0.1.0-alpha r180
+ * update: 2014-12-05
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1035,12 +1035,26 @@ var baser;
     (function (ui) {
         var element;
         (function (element) {
+            /**
+             * クラス名の形式
+             *
+             * @version 0.1.0
+             * @since 0.0.1
+             *
+             */
             (function (ElementClassNameCase) {
                 ElementClassNameCase[ElementClassNameCase["HYPHEN_DELIMITED"] = 0] = "HYPHEN_DELIMITED";
                 ElementClassNameCase[ElementClassNameCase["SNAKE_CASE"] = 1] = "SNAKE_CASE";
                 ElementClassNameCase[ElementClassNameCase["CAMEL_CASE"] = 2] = "CAMEL_CASE";
             })(element.ElementClassNameCase || (element.ElementClassNameCase = {}));
             var ElementClassNameCase = element.ElementClassNameCase;
+            /**
+             * BEM式のクラス名の接続形式
+             *
+             * @version 0.1.0
+             * @since 0.1.0
+             *
+             */
             (function (ClassNameSeparatorForBEM) {
                 ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["HYPHEN"] = 0] = "HYPHEN";
                 ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["DOUBLE_HYPHEN"] = 1] = "DOUBLE_HYPHEN";
@@ -1056,7 +1070,7 @@ var baser;
             /**
              * DOM要素の抽象クラス
              *
-             * @version 0.0.2
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -1064,7 +1078,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  *
@@ -1084,10 +1098,13 @@ var baser;
                         this.id = baser.utility.String.UID();
                         this.$el.attr('id', this.id);
                     }
+                    // name属性の抽出
                     var name = this.$el.attr('name');
                     if (name) {
                         this.name = name;
                     }
+                    // 共通クラスの付加
+                    this.addClass(Element.classNameElementCommon);
                 }
                 /**
                  * クラス名文字列を生成する
@@ -1191,6 +1208,19 @@ var baser;
                     $elem.addClass(className);
                 };
                 /**
+                 * クラス名を取り除く
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Element.removeClassFrom = function ($elem, blockNames, elementNames, modifierName) {
+                    if (elementNames === void 0) { elementNames = ''; }
+                    if (modifierName === void 0) { modifierName = ''; }
+                    var className = Element.createClassName(blockNames, elementNames, modifierName);
+                    $elem.removeClass(className);
+                };
+                /**
                  * クラス名を付加する
                  *
                  * @version 0.1.0
@@ -1211,6 +1241,14 @@ var baser;
                  *
                  */
                 Element.classNameDefaultPrefix = '-bc';
+                /**
+                 * インスタンスに付加するデフォルトのクラス名
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Element.classNameElementCommon = 'element';
                 /**
                  * クラス名のデフォルトの単語繋ぎの形式
                  *
@@ -1250,7 +1288,7 @@ var baser;
             /**
              * フォーム要素を扱う静的クラス
              *
-             * @version 0.0.2
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -1297,33 +1335,6 @@ var baser;
                     return $elem;
                 };
                 /**
-                 * [未実装] 複数選択可セレクトボックスを拡張する
-                 *
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Form.selectMultiple = function ($elem) {
-                    return $elem;
-                };
-                /**
-                 * [未実装] 妥当性チェックを拡張する
-                 *
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Form.valid = function ($elem, options) {
-                    return $elem;
-                };
-                /**
-                 * 管理対象の要素に付加するclass属性値のプレフィックス
-                 *
-                 * @since 0.0.1
-                 *
-                 */
-                Form.className = '-bc-form-element';
-                /**
                  * 管理対象要素リスト
                  *
                  * @since 0.0.1
@@ -1349,14 +1360,10 @@ var baser;
     (function (ui) {
         var element;
         (function (element) {
-            var CLASS_WRAPPER = '-wrapper';
-            var CLASS_LABEL = '-label';
-            var CLASS_FOCUS = '-focus';
-            var CLASS_BLUR = '-blur';
             /**
              * フォーム要素の抽象クラス
              *
-             * @version 0.0.5
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -1365,7 +1372,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.5
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1381,12 +1388,14 @@ var baser;
                      *
                      */
                     this.isFocus = false;
-                    this.$el.addClass(element.Form.className);
                     var config = $.extend(FormElement.defaultOption, options);
+                    // 共通のクラスを付加
+                    this.addClass(FormElement.classNameFormElementCommon);
                     // label要素の検索 & 生成
                     var $label;
                     // 祖先のlabel要素を検索
                     $label = this.$el.closest('label');
+                    // labelでネストされていたかどうか
                     this.isWrappedByLabel = !!$label.length;
                     if (!$label.length) {
                         // for属性に関連づいたlabel要素を検索
@@ -1409,18 +1418,20 @@ var baser;
                         }
                     }
                     this.$label = $label;
-                    $label.addClass(element.Form.className);
-                    $label.addClass(element.Form.className + CLASS_LABEL);
+                    element.Element.addClassTo($label, FormElement.classNameFormElementCommon);
+                    element.Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
                     var wrapperHtml = '<span />';
                     var $wrapper = $(wrapperHtml);
-                    $wrapper.addClass(element.Form.className + CLASS_WRAPPER);
+                    element.Element.addClassTo($wrapper, FormElement.classNameFormElementCommon);
+                    element.Element.addClassTo($wrapper, FormElement.classNameWrapper);
                     if (this.isWrappedByLabel) {
                         this.$label.wrapAll($wrapper);
+                        this.$wrapper = this.$label.parent('span');
                     }
                     else {
                         this.$el.add(this.$label).wrapAll($wrapper);
+                        this.$wrapper = this.$el.parent('span');
                     }
-                    this.$wrapper = this.$el.closest('.' + element.Form.className + CLASS_WRAPPER);
                     this.$el.on('focus.bcFormElement', function () {
                         _this._onfocus();
                     });
@@ -1432,34 +1443,36 @@ var baser;
                     element.Form.elements.push(this);
                 }
                 /**
-                 * フォーカスがあたった時のルーチン
+                 * フォーカスがあたった時の処理
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
-                 * @protected プロテクテッドメソッド想定
                  *
                  */
                 FormElement.prototype._onfocus = function () {
                     this.isFocus = true;
-                    this.$el.addClass(element.Form.className + CLASS_FOCUS);
-                    this.$el.removeClass(element.Form.className + CLASS_BLUR);
-                    this.$label.addClass(element.Form.className + CLASS_FOCUS);
-                    this.$label.removeClass(element.Form.className + CLASS_BLUR);
+                    element.Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
+                    element.Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
+                    element.Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
+                    element.Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
+                    element.Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
+                    element.Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);
                 };
                 /**
-                 * フォーカスがはずれた時のルーチン
+                 * フォーカスがはずれた時の処理
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
-                 * @protected プロテクテッドメソッド想定
                  *
                  */
                 FormElement.prototype._onblur = function () {
                     this.isFocus = false;
-                    this.$el.addClass(element.Form.className + CLASS_BLUR);
-                    this.$el.removeClass(element.Form.className + CLASS_FOCUS);
-                    this.$label.addClass(element.Form.className + CLASS_BLUR);
-                    this.$label.removeClass(element.Form.className + CLASS_FOCUS);
+                    element.Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
+                    element.Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
+                    element.Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);
+                    element.Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
+                    element.Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
+                    element.Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
                 };
                 /**
                  * オプションのデフォルト値
@@ -1474,6 +1487,46 @@ var baser;
                     labelClass: '',
                     autoLabeling: true
                 };
+                /**
+                 * FormElement関連の要素の共通のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                FormElement.classNameFormElementCommon = 'form-element';
+                /**
+                 * FormElement関連のラッパー要素の共通のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                FormElement.classNameWrapper = 'wrapper';
+                /**
+                 * FormElement関連のラベル要素の共通のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                FormElement.classNameLabel = 'label';
+                /**
+                 * FormElement関連の要素のフォーカス時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                FormElement.classNameStateFocus = 'focus';
+                /**
+                 * FormElement関連の要素のフォーカスがはずれた時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                FormElement.classNameStateBlur = 'blur';
                 return FormElement;
             })(element.Element);
             element.FormElement = FormElement;
@@ -1486,16 +1539,11 @@ var baser;
     (function (ui) {
         var element;
         (function (element) {
-            var CLASS_SELECT = '-select';
-            var CLASS_OPTION = '-option';
-            var CLASS_PSEUDO = '-pseudo';
-            var CLASS_FOCUS = '-focus';
-            var CLASS_BLUR = '-blur';
             var $document = $(document);
             /**
              * セレクトボックスの拡張クラス
              *
-             * @version 0.0.1
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -1504,7 +1552,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.4
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1513,27 +1561,26 @@ var baser;
                 function Select($el, options) {
                     var _this = this;
                     _super.call(this, $el, options);
-                    this.$el.addClass(element.Form.className + CLASS_SELECT);
-                    this.$wrapper.addClass(element.Form.className + CLASS_SELECT + '-wrapper');
+                    this.addClass(Select.classNameSelect);
+                    element.Element.addClassTo(this.$wrapper, Select.classNameSelect + '-' + element.FormElement.classNameWrapper);
                     var $elements = this.$label.children().detach();
                     this.$label.empty();
                     this.$label.append($elements);
-                    this.$label.addClass(element.Form.className);
-                    this.$label.addClass(element.Form.className + CLASS_SELECT + '-label');
+                    element.Element.addClassTo(this.$label, Select.classNameSelect, element.FormElement.classNameLabel);
                     this.$pseudo = $('<a />'); // Focusable
                     this.$pseudo.attr('href', '#');
                     this.$pseudo.appendTo(this.$label);
-                    this.$pseudo.addClass(element.Form.className);
-                    this.$pseudo.addClass(element.Form.className + CLASS_SELECT + CLASS_PSEUDO);
+                    element.Element.addClassTo(this.$pseudo, element.FormElement.classNameFormElementCommon);
+                    element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
                     this.$selected = $('<span />');
                     this.$selected.text(this.label);
                     this.$selected.appendTo(this.$pseudo);
-                    this.$selected.addClass(element.Form.className);
-                    this.$selected.addClass(element.Form.className + CLASS_SELECT + CLASS_PSEUDO + '-selected');
+                    element.Element.addClassTo(this.$selected, element.FormElement.classNameFormElementCommon);
+                    element.Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
                     this.$options = $('<ul />');
                     this.$options.appendTo(this.$pseudo);
-                    this.$options.addClass(element.Form.className);
-                    this.$options.addClass(element.Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-list');
+                    element.Element.addClassTo(this.$options, element.FormElement.classNameFormElementCommon);
+                    element.Element.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
                     this.$el.find('option').each(function (i, opt) {
                         var $opt = $(opt);
                         var value = $opt.val();
@@ -1542,8 +1589,8 @@ var baser;
                         $psuedoOpt.appendTo(_this.$options);
                         $psuedoOpt.data('value', value);
                         $psuedoOpt.text(text);
-                        $psuedoOpt.addClass(element.Form.className);
-                        $psuedoOpt.addClass(element.Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION);
+                        element.Element.addClassTo($psuedoOpt, element.FormElement.classNameFormElementCommon);
+                        element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
                     });
                     this._update();
                     this.$el.on('change.bcSelect', function () {
@@ -1566,12 +1613,10 @@ var baser;
                             this.$pseudo.on('click.bcSelect', function (e) {
                                 _this.$label.focus();
                             });
-                            this.$el.addClass(element.Form.className + CLASS_SELECT + '-os-iphone');
-                            this.$label.addClass(element.Form.className + CLASS_SELECT + '-os-iphone');
+                            this.addClass(Select.classNameOsIOs);
                         }
                         else if (ui.Browser.spec.ua.android) {
-                            this.$el.addClass(element.Form.className + CLASS_SELECT + '-os-android');
-                            this.$label.addClass(element.Form.className + CLASS_SELECT + '-os-android');
+                            this.addClass(Select.classNameOsAndroid);
                         }
                     }
                     else {
@@ -1619,38 +1664,36 @@ var baser;
                     this._onblur();
                 };
                 /**
-                 * フォーカスがあたった時のルーチン
+                 * フォーカスがあたった時の処理
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
-                 * @protected プロテクテッドメソッド想定
                  *
                  */
                 Select.prototype._onfocus = function () {
                     _super.prototype._onfocus.call(this);
-                    this.$pseudo.addClass(element.Form.className + CLASS_FOCUS);
-                    this.$pseudo.removeClass(element.Form.className + CLASS_BLUR);
+                    element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, element.FormElement.classNameStateFocus);
+                    element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, element.FormElement.classNameStateBlur);
                 };
                 /**
-                 * フォーカスがはずれた時のルーチン
+                 * フォーカスがはずれた時の処理
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
-                 * @protected プロテクテッドメソッド想定
                  *
                  */
                 Select.prototype._onblur = function () {
                     // 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
                     if (this.$pseudo) {
                         _super.prototype._onblur.call(this);
-                        this.$pseudo.addClass(element.Form.className + CLASS_BLUR);
-                        this.$pseudo.removeClass(element.Form.className + CLASS_FOCUS);
+                        element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, element.FormElement.classNameStateBlur);
+                        element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, element.FormElement.classNameStateFocus);
                     }
                 };
                 /**
                  * 要素の状態を更新する
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
                  *
                  */
@@ -1667,15 +1710,87 @@ var baser;
                         }
                         $psuedoOpt.attr('aria-selected', '' + isSelected);
                         if (isSelected) {
-                            $psuedoOpt.addClass(element.Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-selected');
-                            $psuedoOpt.removeClass(element.Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-unselected');
+                            element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+                            element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
                         }
                         else {
-                            $psuedoOpt.addClass(element.Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-unselected');
-                            $psuedoOpt.removeClass(element.Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-selected');
+                            element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
+                            element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
                         }
                     });
                 };
+                /**
+                 * Select要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.classNameSelect = 'form-select';
+                /**
+                 * Select要素の擬似要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.classNamePseudoSelect = 'pseudo-select';
+                /**
+                 * Select要素の選択した値を表示する擬似要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.classNamePseudoSelectedDisplay = 'selected-display';
+                /**
+                 * Select要素のoption要素をのクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.classNameSelectOptionList = 'option-list';
+                /**
+                 * Select要素のoption要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.classNameSelectOption = 'item';
+                /**
+                 * iOSの場合に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.classNameOsIOs = 'os-i-os';
+                /**
+                 * Androidの場合に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.classNameOsAndroid = 'os-android';
+                /**
+                 * Select要素の擬似option要素の選択時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.classNameStateSelected = 'selected';
+                /**
+                 * Select要素の擬似option要素の選択がはずれた時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.classNameStateUnselected = 'unselected';
                 return Select;
             })(element.FormElement);
             element.Select = Select;
@@ -1688,12 +1803,10 @@ var baser;
     (function (ui) {
         var element;
         (function (element) {
-            var CLASS_STATE_CHECKED = '-state-checked';
-            var CLASS_STATE_UNCHECKED = '-state-unchecked';
             /**
              * ラジオボタンとチェックボックスの抽象クラス
              *
-             * @version 0.0.3
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -1747,31 +1860,35 @@ var baser;
                 /**
                  * 要素の状態を更新する
                  *
-                 * @version 0.0.3
+                 * @version 0.1.0
                  * @since 0.0.1
                  *
                  */
                 CheckableElement.prototype._update = function () {
                     var checked = this.$el.prop('checked');
-                    var checkedClass = element.Form.className + CLASS_STATE_CHECKED;
-                    var uncheckedClass = element.Form.className + CLASS_STATE_UNCHECKED;
                     // WAI-ARIA属性
                     this.$el.attr('aria-checked', '' + checked);
                     if (checked) {
-                        this.$el.removeClass(uncheckedClass);
-                        this.$el.addClass(checkedClass);
                         this.$el.addClass(this._checkedClass);
-                        this.$label.removeClass(uncheckedClass);
-                        this.$label.addClass(checkedClass);
                         this.$label.addClass(this._checkedClass);
+                        this.$wrapper.addClass(this._checkedClass);
+                        element.Element.addClassTo(this.$el, element.FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
+                        element.Element.addClassTo(this.$label, element.FormElement.classNameFormElementCommon, element.FormElement.classNameLabel, CheckableElement.classNameStateChecked);
+                        element.Element.addClassTo(this.$wrapper, element.FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
+                        element.Element.removeClassFrom(this.$el, element.FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
+                        element.Element.removeClassFrom(this.$label, element.FormElement.classNameFormElementCommon, element.FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
+                        element.Element.removeClassFrom(this.$wrapper, element.FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
                     }
                     else {
-                        this.$el.addClass(uncheckedClass);
-                        this.$el.removeClass(checkedClass);
                         this.$el.removeClass(this._checkedClass);
-                        this.$label.addClass(uncheckedClass);
-                        this.$label.removeClass(checkedClass);
                         this.$label.removeClass(this._checkedClass);
+                        this.$wrapper.removeClass(this._checkedClass);
+                        element.Element.addClassTo(this.$el, element.FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
+                        element.Element.addClassTo(this.$label, element.FormElement.classNameFormElementCommon, element.FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
+                        element.Element.addClassTo(this.$wrapper, element.FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
+                        element.Element.removeClassFrom(this.$el, element.FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
+                        element.Element.removeClassFrom(this.$label, element.FormElement.classNameFormElementCommon, element.FormElement.classNameLabel, CheckableElement.classNameStateChecked);
+                        element.Element.removeClassFrom(this.$wrapper, element.FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
                     }
                     this.checked = checked;
                 };
@@ -1784,6 +1901,22 @@ var baser;
                 CheckableElement.defaultOption = {
                     checkedClass: ''
                 };
+                /**
+                 * CheckableElement関連の要素のチェック時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                CheckableElement.classNameStateChecked = 'checked';
+                /**
+                 * CheckableElement関連の要素のチェックがはずれた時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                CheckableElement.classNameStateUnchecked = 'unchecked';
                 return CheckableElement;
             })(element.FormElement);
             element.CheckableElement = CheckableElement;
@@ -1796,11 +1929,10 @@ var baser;
     (function (ui) {
         var element;
         (function (element) {
-            var CLASS_RADIO = '-radio';
             /**
              * ラジオボタンの拡張クラス
              *
-             * @version 0.0.1
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -1809,7 +1941,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.4
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1817,9 +1949,9 @@ var baser;
                  */
                 function Radio($el, options) {
                     _super.call(this, $el, options);
-                    this.$el.addClass(element.Form.className + CLASS_RADIO);
-                    this.$wrapper.addClass(element.Form.className + CLASS_RADIO + '-wrapper');
-                    this.$label.addClass(element.Form.className + CLASS_RADIO + '-label');
+                    this.addClass(Radio.classNameRadio);
+                    element.Element.addClassTo(this.$label, Radio.classNameRadio, element.FormElement.classNameLabel);
+                    element.Element.addClassTo(this.$wrapper, Radio.classNameRadio + '-' + element.FormElement.classNameWrapper);
                     // ラジオボタングループに登録
                     if (!element.Form.radioGroups[this.name]) {
                         element.Form.radioGroups[this.name] = new element.RadioGroup(this.name);
@@ -1838,6 +1970,14 @@ var baser;
                     // 同じname属性のラジオボタン要素も同時に変更をする
                     element.Form.radioGroups[this.name].update(this);
                 };
+                /**
+                 * Radio要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Radio.classNameRadio = 'form-radio';
                 return Radio;
             })(element.CheckableElement);
             element.Radio = Radio;
@@ -1850,11 +1990,10 @@ var baser;
     (function (ui) {
         var element;
         (function (element) {
-            var CLASS_CHECKBOX = '-checkbox';
             /**
              * チェックボックスの拡張クラス
              *
-             * @version 0.0.1
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -1863,7 +2002,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.4
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1871,12 +2010,18 @@ var baser;
                  */
                 function Checkbox($el, options) {
                     _super.call(this, $el, options);
-                    this.$el.addClass(element.Form.className + CLASS_CHECKBOX);
-                    this.$wrapper.addClass(element.Form.className + CLASS_CHECKBOX + '-wrapper');
-                    if (this.$label) {
-                        this.$label.addClass(element.Form.className + CLASS_CHECKBOX + '-label');
-                    }
+                    this.addClass(Checkbox.classNameCheckbox);
+                    element.Element.addClassTo(this.$label, Checkbox.classNameCheckbox, element.FormElement.classNameLabel);
+                    element.Element.addClassTo(this.$wrapper, Checkbox.classNameCheckbox + '-' + element.FormElement.classNameWrapper);
                 }
+                /**
+                 * Checkbox要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Checkbox.classNameCheckbox = 'form-checkbox';
                 return Checkbox;
             })(element.CheckableElement);
             element.Checkbox = Checkbox;

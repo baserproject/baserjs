@@ -4,21 +4,28 @@ module baser {
 
 		export module element {
 
-			var CLASS_RADIO: string = '-radio';
-
 			/**
 			 * ラジオボタンの拡張クラス
 			 *
-			 * @version 0.0.1
+			 * @version 0.1.0
 			 * @since 0.0.1
 			 *
 			 */
 			export class Radio extends CheckableElement {
 
 				/**
+				 * Radio要素のクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameRadio: string = 'form-radio';
+
+				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.4
+				 * @version 0.1.0
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
@@ -28,9 +35,9 @@ module baser {
 
 					super($el, options);
 
-					this.$el.addClass(Form.className + CLASS_RADIO);
-					this.$wrapper.addClass(Form.className + CLASS_RADIO + '-wrapper');
-					this.$label.addClass(Form.className + CLASS_RADIO + '-label');
+					this.addClass(Radio.classNameRadio);
+					Element.addClassTo(this.$label, Radio.classNameRadio, FormElement.classNameLabel);
+					Element.addClassTo(this.$wrapper, Radio.classNameRadio + '-' + FormElement.classNameWrapper);
 
 					// ラジオボタングループに登録
 					if (!Form.radioGroups[this.name]) {

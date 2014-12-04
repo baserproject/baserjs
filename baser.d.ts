@@ -406,11 +406,25 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            /**
+             * クラス名の形式
+             *
+             * @version 0.1.0
+             * @since 0.0.1
+             *
+             */
             enum ElementClassNameCase {
                 HYPHEN_DELIMITED = 0,
                 SNAKE_CASE = 1,
                 CAMEL_CASE = 2,
             }
+            /**
+             * BEM式のクラス名の接続形式
+             *
+             * @version 0.1.0
+             * @since 0.1.0
+             *
+             */
             enum ClassNameSeparatorForBEM {
                 HYPHEN = 0,
                 DOUBLE_HYPHEN = 1,
@@ -421,7 +435,7 @@ declare module baser {
             /**
              * DOM要素の抽象クラス
              *
-             * @version 0.0.2
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -434,6 +448,14 @@ declare module baser {
                  *
                  */
                 static classNameDefaultPrefix: string;
+                /**
+                 * インスタンスに付加するデフォルトのクラス名
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameElementCommon: string;
                 /**
                  * クラス名のデフォルトの単語繋ぎの形式
                  *
@@ -496,9 +518,17 @@ declare module baser {
                  */
                 static addClassTo($elem: JQuery, blockNames: string, elementNames?: string, modifierName?: string): void;
                 /**
+                 * クラス名を取り除く
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static removeClassFrom($elem: JQuery, blockNames: string, elementNames?: string, modifierName?: string): void;
+                /**
                  * コンストラクタ
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  *
@@ -522,18 +552,11 @@ declare module baser {
             /**
              * フォーム要素を扱う静的クラス
              *
-             * @version 0.0.2
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
             class Form {
-                /**
-                 * 管理対象の要素に付加するclass属性値のプレフィックス
-                 *
-                 * @since 0.0.1
-                 *
-                 */
-                static className: string;
                 /**
                  * 管理対象要素リスト
                  *
@@ -580,22 +603,6 @@ declare module baser {
                  *
                  */
                 static select($elem: JQuery, options?: FormElementOption): JQuery;
-                /**
-                 * [未実装] 複数選択可セレクトボックスを拡張する
-                 *
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                static selectMultiple($elem: JQuery): JQuery;
-                /**
-                 * [未実装] 妥当性チェックを拡張する
-                 *
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                static valid($elem: JQuery, options?: any): JQuery;
             }
         }
     }
@@ -645,7 +652,7 @@ declare module baser {
             /**
              * フォーム要素の抽象クラス
              *
-             * @version 0.0.5
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -658,6 +665,46 @@ declare module baser {
                  *
                  */
                 static defaultOption: FormElementOption;
+                /**
+                 * FormElement関連の要素の共通のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameFormElementCommon: string;
+                /**
+                 * FormElement関連のラッパー要素の共通のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameWrapper: string;
+                /**
+                 * FormElement関連のラベル要素の共通のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameLabel: string;
+                /**
+                 * FormElement関連の要素のフォーカス時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameStateFocus: string;
+                /**
+                 * FormElement関連の要素のフォーカスがはずれた時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameStateBlur: string;
                 /**
                  * フォーカスがあたっている状態かどうか
                  *
@@ -696,7 +743,7 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.5
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -704,20 +751,18 @@ declare module baser {
                  */
                 constructor($el: JQuery, options: FormElementOption);
                 /**
-                 * フォーカスがあたった時のルーチン
+                 * フォーカスがあたった時の処理
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
-                 * @protected プロテクテッドメソッド想定
                  *
                  */
                 _onfocus(): void;
                 /**
-                 * フォーカスがはずれた時のルーチン
+                 * フォーカスがはずれた時の処理
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
-                 * @protected プロテクテッドメソッド想定
                  *
                  */
                 _onblur(): void;
@@ -731,11 +776,83 @@ declare module baser {
             /**
              * セレクトボックスの拡張クラス
              *
-             * @version 0.0.1
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
             class Select extends FormElement {
+                /**
+                 * Select要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameSelect: string;
+                /**
+                 * Select要素の擬似要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNamePseudoSelect: string;
+                /**
+                 * Select要素の選択した値を表示する擬似要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNamePseudoSelectedDisplay: string;
+                /**
+                 * Select要素のoption要素をのクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameSelectOptionList: string;
+                /**
+                 * Select要素のoption要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameSelectOption: string;
+                /**
+                 * iOSの場合に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameOsIOs: string;
+                /**
+                 * Androidの場合に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameOsAndroid: string;
+                /**
+                 * Select要素の擬似option要素の選択時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameStateSelected: string;
+                /**
+                 * Select要素の擬似option要素の選択がはずれた時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameStateUnselected: string;
                 /**
                  * 選択されたオプションを表示する表示領域のjQueryオブジェクト
                  *
@@ -760,7 +877,7 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.4
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -784,27 +901,25 @@ declare module baser {
                  */
                 private _onchange();
                 /**
-                 * フォーカスがあたった時のルーチン
+                 * フォーカスがあたった時の処理
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
-                 * @protected プロテクテッドメソッド想定
                  *
                  */
                 _onfocus(): void;
                 /**
-                 * フォーカスがはずれた時のルーチン
+                 * フォーカスがはずれた時の処理
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
-                 * @protected プロテクテッドメソッド想定
                  *
                  */
                 _onblur(): void;
                 /**
                  * 要素の状態を更新する
                  *
-                 * @version 0.0.1
+                 * @version 0.1.0
                  * @since 0.0.1
                  *
                  */
@@ -835,7 +950,7 @@ declare module baser {
             /**
              * ラジオボタンとチェックボックスの抽象クラス
              *
-             * @version 0.0.3
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
@@ -847,6 +962,22 @@ declare module baser {
                  *
                  */
                 static defaultOption: CheckableElementOption;
+                /**
+                 * CheckableElement関連の要素のチェック時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameStateChecked: string;
+                /**
+                 * CheckableElement関連の要素のチェックがはずれた時に付加されるクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameStateUnchecked: string;
                 /**
                  * チェック状態
                  *
@@ -898,7 +1029,7 @@ declare module baser {
                 /**
                  * 要素の状態を更新する
                  *
-                 * @version 0.0.3
+                 * @version 0.1.0
                  * @since 0.0.1
                  *
                  */
@@ -913,15 +1044,23 @@ declare module baser {
             /**
              * ラジオボタンの拡張クラス
              *
-             * @version 0.0.1
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
             class Radio extends CheckableElement {
                 /**
+                 * Radio要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameRadio: string;
+                /**
                  * コンストラクタ
                  *
-                 * @version 0.0.4
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -946,15 +1085,23 @@ declare module baser {
             /**
              * チェックボックスの拡張クラス
              *
-             * @version 0.0.1
+             * @version 0.1.0
              * @since 0.0.1
              *
              */
             class Checkbox extends CheckableElement {
                 /**
+                 * Checkbox要素のクラス
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                static classNameCheckbox: string;
+                /**
                  * コンストラクタ
                  *
-                 * @version 0.0.4
+                 * @version 0.1.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション

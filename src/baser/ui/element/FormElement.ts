@@ -4,11 +4,6 @@ module baser {
 
 		export module element {
 
-			var CLASS_WRAPPER: string = '-wrapper';
-			var CLASS_LABEL: string = '-label';
-			var CLASS_FOCUS: string = '-focus';
-			var CLASS_BLUR: string = '-blur';
-
 			/**
 			 * FormElementクラスのオプションハッシュのインターフェイス
 			 *
@@ -56,7 +51,7 @@ module baser {
 			/**
 			 * フォーム要素の抽象クラス
 			 *
-			 * @version 0.0.5
+			 * @version 0.1.0
 			 * @since 0.0.1
 			 *
 			 */
@@ -75,6 +70,51 @@ module baser {
 					labelClass: '',
 					autoLabeling: true
 				};
+
+				/**
+				 * FormElement関連の要素の共通のクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameFormElementCommon: string = 'form-element';
+
+				/**
+				 * FormElement関連のラッパー要素の共通のクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameWrapper: string = 'wrapper';
+
+				/**
+				 * FormElement関連のラベル要素の共通のクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameLabel: string = 'label';
+
+				/**
+				 * FormElement関連の要素のフォーカス時に付加されるクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameStateFocus: string = 'focus';
+
+				/**
+				 * FormElement関連の要素のフォーカスがはずれた時に付加されるクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameStateBlur: string = 'blur';
 
 				/**
 				 * フォーカスがあたっている状態かどうか
@@ -119,25 +159,28 @@ module baser {
 				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.5
+				 * @version 0.1.0
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
 				 *
 				 */
 				constructor ($el: JQuery, options: FormElementOption) {
-					super($el);
 
-					this.$el.addClass(Form.className);
+					super($el);
 
 					var config: FormElementOption = $.extend(FormElement.defaultOption, options);
 
+					// 共通のクラスを付加
+					this.addClass(FormElement.classNameFormElementCommon);
 
 					// label要素の検索 & 生成
 					var $label: JQuery;
+
 					// 祖先のlabel要素を検索
 					$label = this.$el.closest('label');
 
+					// labelでネストされていたかどうか
 					this.isWrappedByLabel = !!$label.length;
 
 					if (!$label.length) {
@@ -162,18 +205,22 @@ module baser {
 					}
 					this.$label = $label;
 
-					$label.addClass(Form.className);
-					$label.addClass(Form.className + CLASS_LABEL);
+					Element.addClassTo($label, FormElement.classNameFormElementCommon);
+					Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
 
 					var wrapperHtml: string = '<span />';
 					var $wrapper = $(wrapperHtml);
-					$wrapper.addClass(Form.className + CLASS_WRAPPER);
+
+					Element.addClassTo($wrapper, FormElement.classNameFormElementCommon);
+					Element.addClassTo($wrapper, FormElement.classNameWrapper);
+
 					if (this.isWrappedByLabel) {
 						this.$label.wrapAll($wrapper);
+						this.$wrapper = this.$label.parent('span');
 					} else {
 						this.$el.add(this.$label).wrapAll($wrapper);
+						this.$wrapper = this.$el.parent('span');
 					}
-					this.$wrapper = this.$el.closest('.' + Form.className + CLASS_WRAPPER);
 
 					this.$el.on('focus.bcFormElement', (): void => {
 						this._onfocus();
@@ -191,35 +238,37 @@ module baser {
 				}
 
 				/**
-				 * フォーカスがあたった時のルーチン
+				 * フォーカスがあたった時の処理
 				 *
-				 * @version 0.0.1
+				 * @version 0.1.0
 				 * @since 0.0.1
-				 * @protected プロテクテッドメソッド想定
 				 *
 				 */
 				public _onfocus (): void {
 					this.isFocus = true;
-					this.$el.addClass(Form.className + CLASS_FOCUS);
-					this.$el.removeClass(Form.className + CLASS_BLUR);
-					this.$label.addClass(Form.className + CLASS_FOCUS);
-					this.$label.removeClass(Form.className + CLASS_BLUR);
+					Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
+					Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
+					Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
+					Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
+					Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
+					Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);
 				}
 
 				/**
-				 * フォーカスがはずれた時のルーチン
+				 * フォーカスがはずれた時の処理
 				 *
-				 * @version 0.0.1
+				 * @version 0.1.0
 				 * @since 0.0.1
-				 * @protected プロテクテッドメソッド想定
 				 *
 				 */
 				public _onblur (): void {
 					this.isFocus = false;
-					this.$el.addClass(Form.className + CLASS_BLUR);
-					this.$el.removeClass(Form.className + CLASS_FOCUS);
-					this.$label.addClass(Form.className + CLASS_BLUR);
-					this.$label.removeClass(Form.className + CLASS_FOCUS);
+					Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
+					Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
+					Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);
+					Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
+					Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
+					Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
 				}
 
 			}

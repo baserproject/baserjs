@@ -32,14 +32,18 @@ test('baser.ui.element.FormElementの後方互換テスト', function() {
 
 	var $target = $('#target');
 
+	// 設定は要素を new する以前に必要
+	baser.ui.element.Element.classNameDefaultSeparatorForModifier = baser.ui.element.ClassNameSeparatorForBEM.HYPHEN;
+	baser.ui.element.FormElement.classNameWrapper = 'form-element-wrapper';
+
 	var target = new baser.ui.element.FormElement($target);
 
-	ok(target.$el.hasClass('-bc-form-element'));
-	ok(target.$el.hasClass('-bc-form-element-blur'));
-	ok(target.$el.parent().hasClass('-bc-form-element-wrapper'));
+	ok(target.$el.hasClass('-bc-form-element'), '本体のクラス');
+	ok(target.$el.hasClass('-bc-form-element-blur'), 'blurクラス');
+	ok(target.$el.parent().hasClass('-bc-form-element-wrapper'), 'ラッパー要素のクラス');
 
 	target.$el.on('focus', function() {
-		ok($(this).hasClass('-bc-form-element-focus'));
+		ok($(this).hasClass('-bc-form-element-focus'), 'focusクラス');
 	});
 
 	target.$el.trigger('focus');

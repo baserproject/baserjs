@@ -79,6 +79,16 @@ module.exports = function(grunt) {
         }
       }
     },
+    clean: {
+      options: {
+        force: true
+      },
+      docs: {
+        src: [
+          'docs/'
+        ]
+      }
+    },
     typedoc: {
       build: {
         options: {
@@ -112,6 +122,7 @@ module.exports = function(grunt) {
     'uglify',
     // 'tsd', // モジュール内のエラーが起こるため一時的に使用停止
     'qunit',
+    'clean:docs',
     'typedoc',
     'update'
   ]);
@@ -122,6 +133,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.registerTask('update', 'Update Revision', function() {
     pkg.revision = parseInt(pkg.revision, 10) + 1;

@@ -4,9 +4,6 @@ module baser {
 
 		export module element {
 
-			var CLASS_STATE_CHECKED: string = '-state-checked';
-			var CLASS_STATE_UNCHECKED: string = '-state-unchecked';
-
 			/**
 			 * CheckableElementクラスのオプションハッシュのインターフェイス
 			 *
@@ -29,7 +26,7 @@ module baser {
 			/**
 			 * ラジオボタンとチェックボックスの抽象クラス
 			 *
-			 * @version 0.0.3
+			 * @version 0.1.0
 			 * @since 0.0.1
 			 *
 			 */
@@ -44,6 +41,24 @@ module baser {
 				static defaultOption: CheckableElementOption = {
 					checkedClass: ''
 				};
+
+				/**
+				 * CheckableElement関連の要素のチェック時に付加されるクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameStateChecked: string = 'checked';
+
+				/**
+				 * CheckableElement関連の要素のチェックがはずれた時に付加されるクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameStateUnchecked: string = 'unchecked';
 
 				/**
 				 * チェック状態
@@ -130,7 +145,7 @@ module baser {
 				/**
 				 * 要素の状態を更新する
 				 *
-				 * @version 0.0.3
+				 * @version 0.1.0
 				 * @since 0.0.1
 				 *
 				 */
@@ -138,26 +153,35 @@ module baser {
 
 					var checked: boolean = <boolean> this.$el.prop('checked');
 
-					var checkedClass: string = Form.className + CLASS_STATE_CHECKED;
-					var uncheckedClass: string = Form.className + CLASS_STATE_UNCHECKED;
-
 					// WAI-ARIA属性
 					this.$el.attr('aria-checked', <string> '' + checked);
 
 					if (checked) {
-						this.$el.removeClass(uncheckedClass);
-						this.$el.addClass(checkedClass);
+
 						this.$el.addClass(this._checkedClass);
-						this.$label.removeClass(uncheckedClass);
-						this.$label.addClass(checkedClass);
 						this.$label.addClass(this._checkedClass);
+						this.$wrapper.addClass(this._checkedClass);
+
+						Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
+						Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateChecked);
+						Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
+						Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
+						Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
+						Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
+
 					} else {
-						this.$el.addClass(uncheckedClass);
-						this.$el.removeClass(checkedClass);
+
 						this.$el.removeClass(this._checkedClass);
-						this.$label.addClass(uncheckedClass);
-						this.$label.removeClass(checkedClass);
 						this.$label.removeClass(this._checkedClass);
+						this.$wrapper.removeClass(this._checkedClass);
+
+						Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
+						Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
+						Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
+						Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
+						Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateChecked);
+						Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
+
 					}
 
 					this.checked = checked;

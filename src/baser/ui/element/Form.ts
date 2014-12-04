@@ -7,19 +7,11 @@ module baser {
 			/**
 			 * フォーム要素を扱う静的クラス
 			 *
-			 * @version 0.0.2
+			 * @version 0.1.0
 			 * @since 0.0.1
 			 *
 			 */
 			export class Form {
-
-				/**
-				 * 管理対象の要素に付加するclass属性値のプレフィックス
-				 *
-				 * @since 0.0.1
-				 *
-				 */
-				static className: string = '-bc-form-element';
 
 				/**
 				 * 管理対象要素リスト

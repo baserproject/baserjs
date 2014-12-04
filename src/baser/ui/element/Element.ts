@@ -4,12 +4,26 @@ module baser {
 
 		export module element {
 
+			/**
+			 * クラス名の形式
+			 *
+			 * @version 0.1.0
+			 * @since 0.0.1
+			 *
+			 */
 			export enum ElementClassNameCase {
 				HYPHEN_DELIMITED,
 				SNAKE_CASE,
 				CAMEL_CASE
 			}
 
+			/**
+			 * BEM式のクラス名の接続形式
+			 *
+			 * @version 0.1.0
+			 * @since 0.1.0
+			 *
+			 */
 			export enum ClassNameSeparatorForBEM {
 				HYPHEN,
 				DOUBLE_HYPHEN,
@@ -26,7 +40,7 @@ module baser {
 			/**
 			 * DOM要素の抽象クラス
 			 *
-			 * @version 0.0.2
+			 * @version 0.1.0
 			 * @since 0.0.1
 			 *
 			 */
@@ -40,6 +54,15 @@ module baser {
 				 *
 				 */
 				static classNameDefaultPrefix: string = '-bc';
+
+				/**
+				 * インスタンスに付加するデフォルトのクラス名
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameElementCommon: string = 'element';
 
 				/**
 				 * クラス名のデフォルトの単語繋ぎの形式
@@ -191,9 +214,22 @@ module baser {
 				}
 
 				/**
+				 * クラス名を取り除く
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static removeClassFrom ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
+					var className: string = Element.createClassName(blockNames, elementNames, modifierName);
+					$elem.removeClass(className);
+				}
+
+
+				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.1
+				 * @version 0.1.0
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 *
@@ -208,10 +244,14 @@ module baser {
 						this.$el.attr('id', this.id);
 					}
 
+					// name属性の抽出
 					var name: string = this.$el.attr('name');
 					if (name) {
 						this.name = name;
 					}
+
+					// 共通クラスの付加
+					this.addClass(Element.classNameElementCommon);
 
 				}
 

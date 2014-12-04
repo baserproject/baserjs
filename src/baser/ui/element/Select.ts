@@ -4,23 +4,98 @@ module baser {
 
 		export module element {
 
-			var CLASS_SELECT: string = '-select';
-			var CLASS_OPTION: string = '-option';
-			var CLASS_PSEUDO: string = '-pseudo';
-			var CLASS_FOCUS: string = '-focus';
-			var CLASS_BLUR: string = '-blur';
-
-			var $document = $(document);
+			var $document: JQuery = $(document);
 
 			/**
 			 * セレクトボックスの拡張クラス
 			 *
-			 * @version 0.0.1
+			 * @version 0.1.0
 			 * @since 0.0.1
 			 *
 			 */
 			export class Select extends FormElement {
 
+				/**
+				 * Select要素のクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameSelect: string = 'form-select';
+
+
+				/**
+				 * Select要素の擬似要素のクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNamePseudoSelect: string = 'pseudo-select';
+
+				/**
+				 * Select要素の選択した値を表示する擬似要素のクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNamePseudoSelectedDisplay: string = 'selected-display';
+
+				/**
+				 * Select要素のoption要素をのクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameSelectOptionList: string = 'option-list';
+
+				/**
+				 * Select要素のoption要素のクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameSelectOption: string = 'item';
+
+				/**
+				 * iOSの場合に付加されるクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameOsIOs: string = 'os-i-os';
+
+				/**
+				 * Androidの場合に付加されるクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameOsAndroid: string = 'os-android';
+
+				/**
+				 * Select要素の擬似option要素の選択時に付加されるクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameStateSelected: string = 'selected';
+
+				/**
+				 * Select要素の擬似option要素の選択がはずれた時に付加されるクラス
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				static classNameStateUnselected: string = 'unselected';
 				/**
 				 * 選択されたオプションを表示する表示領域のjQueryオブジェクト
 				 *
@@ -48,7 +123,7 @@ module baser {
 				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.4
+				 * @version 0.1.0
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
@@ -58,31 +133,31 @@ module baser {
 
 					super($el, options);
 
-					this.$el.addClass(Form.className + CLASS_SELECT);
-					this.$wrapper.addClass(Form.className + CLASS_SELECT + '-wrapper');
+					this.addClass(Select.classNameSelect);
+
+					Element.addClassTo(this.$wrapper, Select.classNameSelect + '-' + FormElement.classNameWrapper);
 
 					var $elements:JQuery = this.$label.children().detach();
 					this.$label.empty();
 					this.$label.append($elements);
-					this.$label.addClass(Form.className);
-					this.$label.addClass(Form.className + CLASS_SELECT + '-label');
+					Element.addClassTo(this.$label, Select.classNameSelect, FormElement.classNameLabel);
 
 					this.$pseudo = $('<a />'); // Focusable
 					this.$pseudo.attr('href', '#');
 					this.$pseudo.appendTo(this.$label);
-					this.$pseudo.addClass(Form.className);
-					this.$pseudo.addClass(Form.className + CLASS_SELECT + CLASS_PSEUDO);
+					Element.addClassTo(this.$pseudo, FormElement.classNameFormElementCommon);
+					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
 
 					this.$selected = $('<span />');
 					this.$selected.text(this.label);
 					this.$selected.appendTo(this.$pseudo);
-					this.$selected.addClass(Form.className);
-					this.$selected.addClass(Form.className + CLASS_SELECT + CLASS_PSEUDO + '-selected');
+					Element.addClassTo(this.$selected, FormElement.classNameFormElementCommon);
+					Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
 
 					this.$options = $('<ul />');
 					this.$options.appendTo(this.$pseudo);
-					this.$options.addClass(Form.className);
-					this.$options.addClass(Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-list');
+					Element.addClassTo(this.$options, FormElement.classNameFormElementCommon);
+					Element.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
 					this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
 						var $opt: JQuery = $(opt);
 						var value: string = $opt.val();
@@ -91,8 +166,8 @@ module baser {
 						$psuedoOpt.appendTo(this.$options);
 						$psuedoOpt.data('value', value);
 						$psuedoOpt.text(text);
-						$psuedoOpt.addClass(Form.className);
-						$psuedoOpt.addClass(Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION);
+						Element.addClassTo($psuedoOpt, FormElement.classNameFormElementCommon);
+						Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
 					});
 
 					this._update();
@@ -120,11 +195,9 @@ module baser {
 							this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
 								this.$label.focus();
 							});
-							this.$el.addClass(Form.className + CLASS_SELECT + '-os-iphone');
-							this.$label.addClass(Form.className + CLASS_SELECT + '-os-iphone');
+							this.addClass(Select.classNameOsIOs);
 						} else if (Browser.spec.ua.android) {
-							this.$el.addClass(Form.className + CLASS_SELECT + '-os-android');
-							this.$label.addClass(Form.className + CLASS_SELECT + '-os-android');
+							this.addClass(Select.classNameOsAndroid);
 						}
 					} else {
 						this._psuedoFocusEvent();
@@ -183,40 +256,38 @@ module baser {
 				}
 
 				/**
-				 * フォーカスがあたった時のルーチン
+				 * フォーカスがあたった時の処理
 				 *
-				 * @version 0.0.1
+				 * @version 0.1.0
 				 * @since 0.0.1
-				 * @protected プロテクテッドメソッド想定
 				 *
 				 */
 				public _onfocus () {
 					super._onfocus();
-					this.$pseudo.addClass(Form.className + CLASS_FOCUS);
-					this.$pseudo.removeClass(Form.className + CLASS_BLUR);
+					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, FormElement.classNameStateFocus);
+					Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, FormElement.classNameStateBlur);
 				}
 
 				/**
-				 * フォーカスがはずれた時のルーチン
+				 * フォーカスがはずれた時の処理
 				 *
-				 * @version 0.0.1
+				 * @version 0.1.0
 				 * @since 0.0.1
-				 * @protected プロテクテッドメソッド想定
 				 *
 				 */
 				public _onblur () {
 					// 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
 					if (this.$pseudo) {
 						super._onblur();
-						this.$pseudo.addClass(Form.className + CLASS_BLUR);
-						this.$pseudo.removeClass(Form.className + CLASS_FOCUS);
+						Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, FormElement.classNameStateBlur);
+						Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, FormElement.classNameStateFocus);
 					}
 				}
 
 				/**
 				 * 要素の状態を更新する
 				 *
-				 * @version 0.0.1
+				 * @version 0.1.0
 				 * @since 0.0.1
 				 *
 				 */
@@ -234,11 +305,11 @@ module baser {
 						}
 						$psuedoOpt.attr('aria-selected', <string> '' + isSelected);
 						if (isSelected) {
-							$psuedoOpt.addClass(Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-selected');
-							$psuedoOpt.removeClass(Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-unselected');
+							Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+							Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
 						} else {
-							$psuedoOpt.addClass(Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-unselected');
-							$psuedoOpt.removeClass(Form.className + CLASS_SELECT + CLASS_PSEUDO + CLASS_OPTION + '-selected');
+							Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
+							Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
 						}
 					});
 
