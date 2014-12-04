@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.1.0-alpha r180
+ * baserjs - v0.1.0-alpha r181
  * update: 2014-12-05
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1008,6 +1008,139 @@ var baser;
             return Dimension;
         })();
         ui.Dimension = Dimension;
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        /**
+         * Box管理を担うクラス
+         *
+         * @version 0.1.0
+         * @since 0.0.15
+         *
+         */
+        var Box = (function () {
+            function Box() {
+            }
+            Box.alignment = function ($target, columns, callback, breakPoint) {
+                if (breakPoint === void 0) { breakPoint = 0; }
+                var tiles = null;
+                var max = null;
+                var c = null;
+                var h = null;
+                var last = $target.length - 1;
+                var s = null;
+                if (!columns) {
+                    columns = $target.length;
+                }
+                $target.each(function (i) {
+                    var s;
+                    var tile;
+                    var j, l;
+                    var cancel = false;
+                    if (breakPoint < window.document.documentElement.clientWidth) {
+                        s = this.style;
+                        s.removeProperty('height');
+                        c = i % columns;
+                        if (c === 0) {
+                            tiles = [];
+                        }
+                        tile = tiles[c] = $(this);
+                        h = tile.height();
+                        if (c === 0 || h > max) {
+                            max = h;
+                        }
+                        if (i === last || c === columns - 1) {
+                            l = tiles.length;
+                            for (j = 0; j < l; j++) {
+                                if (tiles[j]) {
+                                    if ($.isFunction(callback)) {
+                                        cancel = !callback.call($target, max, h, tiles);
+                                    }
+                                    if (!cancel) {
+                                        tiles[j].height(max);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                return $target;
+            };
+            // 文字の大きさを確認するためのdummyChar要素
+            Box.createChar = function () {
+                var dummyChar;
+                var $dummyChar = $('<p>M</p>').css({
+                    display: 'block',
+                    visibility: 'hidden',
+                    position: 'absolute',
+                    padding: 0,
+                    top: 0
+                });
+                $dummyChar.appendTo('body');
+                Box.settings.dummyChar = $dummyChar[0];
+                Box.settings.currentSize = Box.settings.dummyChar.offsetHeight;
+            };
+            // 文字の大きさが変わったか
+            Box.isChanged = function () {
+                if (Box.settings.currentSize === Box.settings.dummyChar.offsetHeight) {
+                    return false;
+                }
+                Box.settings.currentSize = Box.settings.dummyChar.offsetHeight;
+                return true;
+            };
+            // 文書を読み込んだ時点で
+            // 文字の大きさを確認しておく
+            // 文字の大きさが変わっていたら、
+            // handlers中の関数を順に実行
+            Box.observer = function () {
+                if (Box.isChanged()) {
+                    Box.reflatting();
+                }
+                return;
+            };
+            // 高さ揃えを再実行する処理
+            Box.reflatting = function () {
+                var settings = Box.settings;
+                var i;
+                var l = settings.sets.length;
+                var set;
+                for (i = 0; i < l; i++) {
+                    set = Box.settings.sets[i];
+                    set.height('auto');
+                    Box.alignment(set, settings.columns[i], settings.callbacks[i], settings.breakPoints[i]);
+                }
+                return;
+            };
+            Box.init = function () {
+                var $w;
+                if (!Box.isInitialized) {
+                    $w = $(window);
+                    $w.load(Box.reflatting);
+                    $w.resize(Box.reflatting);
+                    Box.isInitialized = true;
+                    Box.createChar();
+                    // TODO: オプションでタイマーを回すのを制御できるようにする
+                    // TODO: ストップする関数を作る
+                    window.setInterval(Box.observer, Box.settings.interval);
+                }
+            };
+            Box.isInitialized = false;
+            Box.settings = {
+                handlers: [],
+                interval: 1000,
+                currentSize: 0,
+                dummyChar: null,
+                sets: [],
+                columns: [],
+                callbacks: [],
+                breakPoints: []
+            };
+            return Box;
+        })();
+        ui.Box = Box;
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
 var baser;
@@ -2106,81 +2239,6 @@ var baser;
         var element;
         (function (element) {
             /**
-             * ボックス要素の抽象クラス
-             *
-             * @version 0.0.5
-             * @since 0.0.5
-             *
-             */
-            var Box = (function (_super) {
-                __extends(Box, _super);
-                /**
-                 * コンストラクタ
-                 *
-                 * @version 0.0.5
-                 * @since 0.0.5
-                 * @param $el 管理するDOM要素のjQueryオブジェクト
-                 *
-                 */
-                function Box($el) {
-                    _super.call(this, $el);
-                    this.$el.addClass(Box.className);
-                }
-                /**
-                 * ボックスの高さを揃える
-                 *
-                 * @version 0.0.x
-                 * @since 0.0.x
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Box.alignHeight = function ($elem, options) {
-                    var box = new Box($elem);
-                    box.alignHeight(options);
-                    return $elem;
-                };
-                /**
-                 * ボックスの高さを揃える
-                 *
-                 * @version 0.0.x
-                 * @since 0.0.x
-                 * @param $el 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Box.prototype.alignHeight = function (options) {
-                    return this;
-                };
-                /**
-                 * 管理対象の要素に付加するclass属性値のプレフィックス
-                 *
-                 * @version 0.0.5
-                 * @since 0.0.5
-                 *
-                 */
-                Box.className = '-bc-box-element';
-                /**
-                 * 管理対象の要素
-                 *
-                 * @version 0.0.5
-                 * @since 0.0.5
-                 *
-                 */
-                Box.boxes = [];
-                return Box;
-            })(element.Element);
-            element.Box = Box;
-        })(element = ui.element || (ui.element = {}));
-    })(ui = baser.ui || (baser.ui = {}));
-})(baser || (baser = {}));
-var baser;
-(function (baser) {
-    var ui;
-    (function (ui) {
-        var element;
-        (function (element) {
-            /**
              * マップ要素
              *
              * @version 0.0.6
@@ -2709,125 +2767,6 @@ var baser;
 })(baser || (baser = {}));
 var baser;
 (function (baser) {
-    var Box = (function () {
-        function Box() {
-        }
-        Box.alignment = function ($target, columns, callback, breakPoint) {
-            if (breakPoint === void 0) { breakPoint = 0; }
-            var tiles = null;
-            var max = null;
-            var c = null;
-            var h = null;
-            var last = $target.length - 1;
-            var s = null;
-            if (!columns) {
-                columns = $target.length;
-            }
-            $target.each(function (i) {
-                var s;
-                var tile;
-                var j, l;
-                var cancel = false;
-                if (breakPoint < window.document.documentElement.clientWidth) {
-                    s = this.style;
-                    s.removeProperty('height');
-                    c = i % columns;
-                    if (c === 0) {
-                        tiles = [];
-                    }
-                    tile = tiles[c] = $(this);
-                    h = tile.height();
-                    if (c === 0 || h > max) {
-                        max = h;
-                    }
-                    if (i === last || c === columns - 1) {
-                        l = tiles.length;
-                        for (j = 0; j < l; j++) {
-                            if (tiles[j]) {
-                                if ($.isFunction(callback)) {
-                                    cancel = !callback.call($target, max, h, tiles);
-                                }
-                                if (!cancel) {
-                                    tiles[j].height(max);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            return $target;
-        };
-        // 文字の大きさを確認するためのdummyChar要素
-        Box.createChar = function () {
-            var dummyChar;
-            var $dummyChar = $('<p>M</p>').css({
-                display: 'block',
-                visibility: 'hidden',
-                position: 'absolute',
-                padding: 0,
-                top: 0
-            });
-            $dummyChar.appendTo('body');
-            Box.settings.dummyChar = $dummyChar[0];
-            Box.settings.currentSize = Box.settings.dummyChar.offsetHeight;
-        };
-        // 文字の大きさが変わったか
-        Box.isChanged = function () {
-            if (Box.settings.currentSize === Box.settings.dummyChar.offsetHeight) {
-                return false;
-            }
-            Box.settings.currentSize = Box.settings.dummyChar.offsetHeight;
-            return true;
-        };
-        // 文書を読み込んだ時点で
-        // 文字の大きさを確認しておく
-        // 文字の大きさが変わっていたら、
-        // handlers中の関数を順に実行
-        Box.observer = function () {
-            if (Box.isChanged()) {
-                Box.reflatting();
-            }
-            return;
-        };
-        // 高さ揃えを再実行する処理
-        Box.reflatting = function () {
-            var settings = Box.settings;
-            var i;
-            var l = settings.sets.length;
-            var set;
-            for (i = 0; i < l; i++) {
-                set = Box.settings.sets[i];
-                set.height('auto');
-                Box.alignment(set, settings.columns[i], settings.callbacks[i], settings.breakPoints[i]);
-            }
-            return;
-        };
-        Box.init = function () {
-            var $w;
-            if (!Box.isInitialized) {
-                $w = $(window);
-                $w.load(Box.reflatting);
-                $w.resize(Box.reflatting);
-                Box.isInitialized = true;
-                Box.createChar();
-                // TODO: オプションでタイマーを回すのを制御できるようにする
-                // TODO: ストップする関数を作る
-                window.setInterval(Box.observer, Box.settings.interval);
-            }
-        };
-        Box.isInitialized = false;
-        Box.settings = {
-            handlers: [],
-            interval: 1000,
-            currentSize: 0,
-            dummyChar: null,
-            sets: [],
-            columns: [],
-            callbacks: [],
-            breakPoints: []
-        };
-        return Box;
-    })();
     /**
      * 要素の高さを揃える
      *
@@ -2839,16 +2778,16 @@ var baser;
      */
     function bcBoxAlignHeight(column, detailTarget, callback, breakPoint) {
         if (breakPoint === void 0) { breakPoint = 0; }
-        Box.init();
+        baser.ui.Box.init();
         var $detailTarget;
-        var settings = Box.settings;
+        var settings = baser.ui.Box.settings;
         // 要素群の高さを揃え、setsに追加
         if (detailTarget) {
             $detailTarget = this.find(detailTarget);
             if ($detailTarget.length) {
                 this.each(function () {
                     var $split = $(this).find(detailTarget);
-                    Box.alignment($split, column, callback, breakPoint);
+                    baser.ui.Box.alignment($split, column, callback, breakPoint);
                     settings.sets.push($split);
                     settings.columns.push(column);
                     settings.callbacks.push(callback);
@@ -2857,7 +2796,7 @@ var baser;
             }
         }
         else {
-            Box.alignment(this, column, callback, breakPoint);
+            baser.ui.Box.alignment(this, column, callback, breakPoint);
             settings.sets.push(this);
             settings.columns.push(column);
             settings.callbacks.push(callback);

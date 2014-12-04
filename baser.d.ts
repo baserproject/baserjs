@@ -393,6 +393,27 @@ declare module baser {
 declare module baser {
     module ui {
         /**
+         * Box管理を担うクラス
+         *
+         * @version 0.1.0
+         * @since 0.0.15
+         *
+         */
+        class Box {
+            static alignment($target: JQuery, columns: number, callback: Function, breakPoint?: number): JQuery;
+            static createChar(): void;
+            static isChanged(): boolean;
+            static observer(): void;
+            static reflatting(): void;
+            static init(): void;
+            static isInitialized: boolean;
+            static settings: any;
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
          * フォームのバリデーションを担うクラス
          *
          * @version 0.0.x
@@ -1162,66 +1183,6 @@ declare module baser {
                  *
                  */
                 update(ignoreRadio: Radio): void;
-            }
-        }
-    }
-}
-declare module baser {
-    module ui {
-        module element {
-            /**
-             * ボックス要素の抽象クラス
-             *
-             * @version 0.0.5
-             * @since 0.0.5
-             *
-             */
-            class Box extends Element {
-                /**
-                 * 管理対象の要素に付加するclass属性値のプレフィックス
-                 *
-                 * @version 0.0.5
-                 * @since 0.0.5
-                 *
-                 */
-                static className: string;
-                /**
-                 * 管理対象の要素
-                 *
-                 * @version 0.0.5
-                 * @since 0.0.5
-                 *
-                 */
-                static boxes: string[];
-                /**
-                 * ボックスの高さを揃える
-                 *
-                 * @version 0.0.x
-                 * @since 0.0.x
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                static alignHeight($elem: JQuery, options?: Object): JQuery;
-                /**
-                 * コンストラクタ
-                 *
-                 * @version 0.0.5
-                 * @since 0.0.5
-                 * @param $el 管理するDOM要素のjQueryオブジェクト
-                 *
-                 */
-                constructor($el: JQuery);
-                /**
-                 * ボックスの高さを揃える
-                 *
-                 * @version 0.0.x
-                 * @since 0.0.x
-                 * @param $el 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                alignHeight(options?: Object): Box;
             }
         }
     }
