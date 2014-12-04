@@ -264,8 +264,8 @@ module baser {
 				 */
 				public _onfocus () {
 					super._onfocus();
-					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, FormElement.classNameStateFocus);
-					Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, FormElement.classNameStateBlur);
+					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
+					Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
 				}
 
 				/**
@@ -279,8 +279,8 @@ module baser {
 					// 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
 					if (this.$pseudo) {
 						super._onblur();
-						Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, FormElement.classNameStateBlur);
-						Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, FormElement.classNameStateFocus);
+						Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
+						Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
 					}
 				}
 
