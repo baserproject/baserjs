@@ -190,7 +190,7 @@ module baser {
 						enablejsapi: 1
 					});
 
-					if (ids.length >= 2) {
+					if (ids.length >= 2 || this.movieOption.loop) {
 						param += '&amp;playlist=' + ids.join(',');
 					}
 

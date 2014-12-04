@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.0.16-alpha r173
- * update: 2014-12-02
+ * baserjs - v0.0.16-alpha.2 r175
+ * update: 2014-12-04
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -2034,7 +2034,7 @@ var baser;
                         wmode: 'transparent',
                         enablejsapi: 1
                     });
-                    if (ids.length >= 2) {
+                    if (ids.length >= 2 || this.movieOption.loop) {
                         param += '&amp;playlist=' + ids.join(',');
                     }
                     var src = protocol + Youtube.PLAYER_URL + id + '?' + param;
