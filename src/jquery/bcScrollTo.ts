@@ -3,7 +3,7 @@ module baser {
 	/**
 	 * リンク要素からのアンカーまでスムーズにスクロールをさせる
 	 *
-	 * @version 0.0.8
+	 * @version 0.1.0
 	 * @since 0.0.8
 	 *
 	 * * * *
@@ -29,9 +29,8 @@ module baser {
 						if (options.keywords.hasOwnProperty(keyword)) {
 							target = options.keywords[keyword];
 							if (keyword === href) {
-								scroll.to(target, this.options);
+								scroll.to(target, options);
 								e.preventDefault();
-								console.log(href);
 								return;
 							}
 						}
@@ -53,7 +52,7 @@ module baser {
 				try {
 					target = $(href);
 					if (target.length) {
-						scroll.to(target, this.options);
+						scroll.to(target, options);
 						e.preventDefault();
 						return;
 					}

@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.1.0-rc r184
- * update: 2014-12-05
+ * baserjs - v0.1.0-rc r185
+ * update: 2014-12-06
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -2586,7 +2586,7 @@ var baser;
     /**
      * リンク要素からのアンカーまでスムーズにスクロールをさせる
      *
-     * @version 0.0.8
+     * @version 0.1.0
      * @since 0.0.8
      *
      * * * *
@@ -2612,9 +2612,8 @@ var baser;
                         if (options.keywords.hasOwnProperty(keyword)) {
                             target = options.keywords[keyword];
                             if (keyword === href) {
-                                scroll.to(target, this.options);
+                                scroll.to(target, options);
                                 e.preventDefault();
-                                console.log(href);
                                 return;
                             }
                         }
@@ -2634,7 +2633,7 @@ var baser;
                 try {
                     target = $(href);
                     if (target.length) {
-                        scroll.to(target, this.options);
+                        scroll.to(target, options);
                         e.preventDefault();
                         return;
                     }
