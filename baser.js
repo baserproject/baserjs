@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.1.0-rc r185
- * update: 2014-12-06
+ * baserjs - v0.1.0-rc r186
+ * update: 2014-12-12
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -575,6 +575,22 @@ var baser;
                     }, _this.resizeEndInterval);
                 });
             }
+            /**
+             * ページ遷移する
+             *
+             * @version 0.1.0
+             * @since 0.1.0
+             *
+             */
+            Browser.jumpTo = function (path, isBlank) {
+                if (isBlank === void 0) { isBlank = false; }
+                if (!isBlank) {
+                    window.location.href = path;
+                }
+                else {
+                    window.open(path, null);
+                }
+            };
             /**
              * ユーザーエージェント情報を取得する
              *
@@ -2806,6 +2822,17 @@ var baser;
     // jQueryのインスタンスメソッドとしてprototypeに登録
     $.fn.bcBoxAlignHeight = bcBoxAlignHeight;
 })(baser || (baser = {}));
+$.fn.bcBoxLink = function () {
+    this.on('click', function (e) {
+        var $elem = $(this);
+        var $link = $elem.find('a, area').eq(0);
+        var href = $link.prop('href');
+        var isBlank = $link.prop('target') === '_blank';
+        baser.ui.Browser.jumpTo(href, isBlank);
+        e.preventDefault();
+    });
+    return this;
+};
 var baser;
 (function (baser) {
     /**

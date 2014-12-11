@@ -43,7 +43,7 @@
 /// <reference path="jquery/bcSelect.ts" />
 /// <reference path="jquery/bcMaps.ts" />
 /// <reference path="jquery/bcBoxAlignHeight.ts" />
-// <reference path="jquery/bcBoxLink.ts" /> // 未実装のため読み込まない
+/// <reference path="jquery/bcBoxLink.ts" />
 // <reference path="jquery/bcExtendLink.ts" /> // 未実装のため読み込まない
 /// <reference path="jquery/bcRollover.ts" />
 /// <reference path="jquery/bcShy.ts" />

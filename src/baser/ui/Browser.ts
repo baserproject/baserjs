@@ -38,6 +38,21 @@ module baser {
 			};
 
 			/**
+			 * ページ遷移する
+			 *
+			 * @version 0.1.0
+			 * @since 0.1.0
+			 *
+			 */
+			static jumpTo (path: string, isBlank: boolean = false): void {
+				if (!isBlank) {
+					window.location.href = path;
+				} else {
+					window.open(path, null);
+				}
+			}
+
+			/**
 			 * ユーザーエージェント情報を取得する
 			 *
 			 * @version 0.0.2

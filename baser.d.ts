@@ -104,6 +104,14 @@ declare module baser {
                 ua: any;
             };
             /**
+             * ページ遷移する
+             *
+             * @version 0.1.0
+             * @since 0.1.0
+             *
+             */
+            static jumpTo(path: string, isBlank?: boolean): void;
+            /**
              * ユーザーエージェント情報を取得する
              *
              * @version 0.0.2
