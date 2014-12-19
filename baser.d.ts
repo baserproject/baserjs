@@ -41,6 +41,14 @@ declare module baser {
              *
              */
             static camelCase(str: string, upperCase?: boolean): string;
+            /**
+             * 文字列が論理値の偽相等であるかどうか
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             */
+            static isFalsy(str: string): boolean;
         }
     }
 }
@@ -539,6 +547,22 @@ declare module baser {
                  */
                 static createClassName(blockNames: string, elementNames?: string, modifierName?: string): string;
                 /**
+                 * 要素の属性の真偽を判定する
+                 *
+                 * DOM APIの標準で判定できるものはそれで判断
+                 *
+                 * 値なし属性の場合は存在すれば真
+                 *
+                 * 値あり属性の場合は偽相等の文字列でなければ全て真とする
+                 *
+                 * ただし値なし属性の場合は値が空文字列のため、偽相等の文字列の例外とする
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
+                static getBoolAttr($elem: JQuery, attrName: string): boolean;
+                /**
                  * クラス名を付加する
                  *
                  * @version 0.1.0
@@ -571,6 +595,16 @@ declare module baser {
                  *
                  */
                 addClass(blockNames: string, elementNames?: string, modifierName?: string): void;
+                /**
+                 * 要素の属性の真偽を判定する
+                 *
+                 * `baser.ui.element.Element.getBoolAttr` のインスタンスメソッド版
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
+                getBoolAttr(attrName: string): boolean;
             }
         }
     }
