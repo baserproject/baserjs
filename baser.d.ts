@@ -1,4 +1,4 @@
-/// <reference path="typings/tsd.d.ts" />
+/// <reference path="typings/bundle.d.ts" />
 declare module baser {
     module utility {
         /**

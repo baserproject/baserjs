@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.1.0-rc r187
+ * baserjs - v0.2.0-alpha r191
  * update: 2014-12-19
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -3401,6 +3401,6 @@ var baser;
 })(baser || (baser = {}));
 /* 外部ライブラリ d.ts
 ================================================================= */
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/bundle.d.ts" />
 
 }).call(this);
