@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.1.0-rc r186
- * update: 2014-12-12
+ * baserjs - v0.1.0-rc r189
+ * update: 2014-12-19
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -3344,6 +3344,6 @@ var baser;
 })(baser || (baser = {}));
 /* 外部ライブラリ d.ts
 ================================================================= */
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/bundle.d.ts" />
 
 }).call(this);
