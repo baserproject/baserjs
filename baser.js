@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.1.0-rc r185
- * update: 2014-12-06
+ * baserjs - v0.2.0-alpha r188
+ * update: 2014-12-26
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -436,6 +436,109 @@ var baser;
             return String;
         })();
         utility.String = String;
+    })(utility = baser.utility || (baser.utility = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var utility;
+    (function (utility) {
+        /**
+         * ユーティリティ算術クラス
+         *
+         * @version 0.2.0
+         * @since 0.0.2
+         *
+         */
+        var Mathematics = (function () {
+            function Mathematics() {
+            }
+            /**
+             * 指定の範囲のランダムな数を返す
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             * @param base 基準の数
+             * @param dist 基準からこの数までの範囲の乱数になる
+             * @return 乱数
+             *
+             */
+            Mathematics.random = function (base, dist) {
+                if (base === void 0) { base = 1; }
+                if (dist === void 0) { dist = 0; }
+                var random = Math.random();
+                var from = Math.min(base, dist);
+                var to = Math.max(base, dist);
+                return random * (to - from) + from;
+            };
+            /**
+             * 配列内の数値の合計を算出する
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             * @param numberList 数の配列
+             * @return 合計値
+             *
+             */
+            Mathematics.sam = function (numberList) {
+                var result = 0;
+                var i = 0;
+                var l = numberList.length;
+                for (; i < l; i++) {
+                    result += numberList[i];
+                }
+                return result;
+            };
+            /**
+             * 均等に分割する
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             * @param n 分割される数
+             * @param devide 分割する数
+             * @param returnInfo 詳細情報を返すかどうか
+             * @return `returnInfo`が真の場合 分割された数値で構成された配列を、偽の場合 詳細情報と結果を返す
+             *
+             */
+            Mathematics.split = function (n, devide, returnInfo) {
+                if (returnInfo === void 0) { returnInfo = false; }
+                n = Math.floor(n);
+                devide = Math.floor(devide);
+                // 分割した数
+                var splited = Math.floor(n / devide);
+                // 余り
+                var rem = n % devide;
+                // 余りの数だけ+1される
+                var addtion = rem;
+                var result = [];
+                var i = devide;
+                if (!(devide <= 0)) {
+                    while (i--) {
+                        if (0 < addtion || rem < 0 && 0 === addtion) {
+                            result.push(splited + 1);
+                        }
+                        else {
+                            result.push(splited);
+                        }
+                        addtion -= rem < 0 ? -1 : 1;
+                    }
+                }
+                if (returnInfo) {
+                    return {
+                        result: result,
+                        commonNumber: splited,
+                        addtion: rem
+                    };
+                }
+                else {
+                    return result;
+                }
+            };
+            return Mathematics;
+        })();
+        utility.Mathematics = Mathematics;
     })(utility = baser.utility || (baser.utility = {}));
 })(baser || (baser = {}));
 var baser;
@@ -2994,56 +3097,56 @@ var baser;
     /**
      * リストを均等に分割する
      *
-     * @version 0.0.14
+     * @version 0.2.0
      * @since 0.0.14
      *
      */
     var bcSplitList = function (columnSize, options) {
-        var CLASS_NAME = '-bc-splited-list';
-        var CLASS_NAME_NTH = '-bc-splited-list--nth';
-        var CLASS_NAME_ITEM = '-bc-splited-list__item';
+        var CLASS_NAME = 'splited-list';
+        var CLASS_NAME_NTH = 'nth';
+        var CLASS_NAME_ITEM = 'item';
         var config = $.extend({
-            dataKey: '-bc-split-list-index'
+            dataKey: '-bc-split-list-index',
+            splitChildren: true
         }, options);
         this.each(function (i, elem) {
             var $container = $(elem);
-            var $list = $container.find('ul');
-            var $items = $list.find('li');
+            var $list = $container.find('>ul');
+            var $items;
+            if (!config.splitChildren) {
+                // 直下のliのみ取得
+                $items = $list.find('>li').detach();
+            }
+            else {
+                // 入れ子のliも含めて全て取得
+                $items = $list.find('li').detach();
+                // 入れ子のulの削除
+                $items.find('ul').remove();
+            }
+            // リストアイテムの総数
             var size = $items.length;
-            var sizeParCol = Math.floor(size / columnSize);
-            var sizeRem = size % columnSize;
+            var splited = baser.utility.Mathematics.split(size, columnSize);
+            var i;
+            var j;
+            var sizeByColumn;
+            var itemArray = $items.toArray();
             var $col;
-            var remShift = sizeRem;
-            var row = 1;
-            var col = 1;
-            $items.each(function (itemIndex, itemEl) {
-                var $item = $(itemEl);
-                itemIndex += 1; // 0からでなく1からのカウント
-                var colByCurrentRow;
-                if (0 < remShift) {
-                    colByCurrentRow = sizeParCol + 1;
+            var $item;
+            for (i = 0; i < columnSize; i++) {
+                sizeByColumn = splited[i];
+                $col = $('<ul></ul>');
+                baser.ui.element.Element.addClassTo($col, CLASS_NAME);
+                baser.ui.element.Element.addClassTo($col, CLASS_NAME, '', CLASS_NAME_NTH + columnSize);
+                $col.appendTo($container);
+                for (j = 0; j < sizeByColumn; j++) {
+                    $item = $(itemArray.shift());
+                    $item.appendTo($col);
+                    $item.data(config.dataKey, i);
+                    baser.ui.element.Element.addClassTo($item, CLASS_NAME, CLASS_NAME_ITEM);
+                    baser.ui.element.Element.addClassTo($item, CLASS_NAME, CLASS_NAME_ITEM, CLASS_NAME_NTH + i);
                 }
-                else {
-                    colByCurrentRow = sizeParCol;
-                }
-                if (!$col) {
-                    $col = $('<ul></ul>');
-                    $col.addClass(CLASS_NAME);
-                    $col.addClass(CLASS_NAME_NTH + col);
-                    $col.appendTo($container);
-                }
-                $item.appendTo($col);
-                $item.data(config.dataKey, itemIndex - 1);
-                $item.addClass(CLASS_NAME_ITEM);
-                $item.addClass(CLASS_NAME_ITEM + '--nth' + (itemIndex - 1));
-                if (colByCurrentRow === row) {
-                    col += 1;
-                    row = 0;
-                    remShift -= 1;
-                    $col = null;
-                }
-                row += 1;
-            });
+                $col = null;
+            }
             $list.remove();
         });
         return this;
