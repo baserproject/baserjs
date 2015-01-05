@@ -14,3 +14,7 @@
 	} else if (isNode) {
 		$ = jQuery = require('jquery');
 	}
+
+	if (!isBrowser) {
+		throw new Error('baserJS requires a window with a document');
+	}
