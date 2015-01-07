@@ -17,10 +17,10 @@ module baser {
 
 			var column: number = <number> +columnOrKeyword;
 
-			baser.ui.element.Box.boot();
+			baser.ui.Box.boot();
 
 			var $detailTarget: JQuery;
-			var settings = baser.ui.element.Box.settings;
+			var settings = baser.ui.Box.settings;
 
 			// 要素群の高さを揃え、setsに追加
 			if (detailTarget) {
@@ -28,11 +28,11 @@ module baser {
 				if ($detailTarget.length) {
 					this.each(function () {
 						var $split: JQuery = $(this).find(detailTarget);
-						baser.ui.element.Box.push($split, column, callback, breakPoint);
+						baser.ui.Box.push($split, column, callback, breakPoint);
 					});
 				}
 			} else {
-				baser.ui.element.Box.push(this, column, callback, breakPoint);
+				baser.ui.Box.push(this, column, callback, breakPoint);
 			}
 
 		} else {
@@ -45,7 +45,7 @@ module baser {
 
 					this.each(function () {
 
-						baser.ui.element.Box.destory($(this));
+						baser.ui.Box.destory($(this));
 
 					});
 
