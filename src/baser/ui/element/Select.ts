@@ -4,8 +4,6 @@ module baser {
 
 		export module element {
 
-			var $document: JQuery = $(document);
-
 			/**
 			 * セレクトボックスの拡張クラス
 			 *
@@ -96,6 +94,7 @@ module baser {
 				 *
 				 */
 				static classNameStateUnselected: string = 'unselected';
+
 				/**
 				 * 選択されたオプションを表示する表示領域のjQueryオブジェクト
 				 *
@@ -254,19 +253,21 @@ module baser {
 						this.$pseudo.focus();
 					});
 
-					this.$pseudo.on('focus.bcSelect', (e: JQueryEventObject): void => {
-						e.stopPropagation();
-						$document.trigger('click.bcSelect');
-						this._onfocus();
+					$(document).on('click.bcSelect', (): void => {
+						this._onblur();
 					});
 
-					this.$selected.on('click.bcSelect', (e: JQueryEventObject): void => {
+					// 擬似セレクトボックスにフォーカス・またはクリックが起こった時に発火する
+
+					this.$pseudo.on('focus.bcSelect', (e: JQueryEventObject): void => {
+						this._onfocus();
+						e.stopPropagation();
+					});
+
+					this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
+						this._onfocus();
 						e.stopPropagation();
 						e.preventDefault();
-					});
-
-					$document.on('click.bcSelect', (): void => {
-						this._onblur();
 					});
 
 				}
@@ -294,11 +295,18 @@ module baser {
 				 *
 				 */
 				public _onfocus () {
-					super._onfocus();
-					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
-					Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
-					// オプションが開かれた後にスクロール位置を調整する
-					this._scrollToSelectedPosition();
+					if (!this.hasFocus) {
+						this.hasFocus = true;
+						// 全体のフォーカスを外す
+						$(document).trigger('click.bcSelect');
+						// 親クラスのフォーカスを実行
+						super._onfocus();
+						// DOMのclassを制御
+						Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
+						Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
+						// オプションが開かれた後にスクロール位置を調整する
+						this._scrollToSelectedPosition();
+					}
 				}
 
 				/**
@@ -311,6 +319,7 @@ module baser {
 				public _onblur () {
 					// 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
 					if (this.$pseudo) {
+						this.hasFocus = false;
 						super._onblur();
 						Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
 						Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);

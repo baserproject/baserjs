@@ -119,6 +119,16 @@ module baser {
 				/**
 				 * フォーカスがあたっている状態かどうか
 				 *
+				 * @since 0.1.0
+				 *
+				 */
+				public hasFocus: boolean = false;
+
+				/**
+				 * 削除予定
+				 * フォーカスがあたっている状態かどうか
+				 *
+				 * @deprecated
 				 * @since 0.0.1
 				 *
 				 */
@@ -245,7 +255,7 @@ module baser {
 				 *
 				 */
 				public _onfocus (): void {
-					this.isFocus = true;
+					this.hasFocus = true;
 					Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
 					Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
 					Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
@@ -262,7 +272,7 @@ module baser {
 				 *
 				 */
 				public _onblur (): void {
-					this.isFocus = false;
+					this.hasFocus = false;
 					Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
 					Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
 					Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);

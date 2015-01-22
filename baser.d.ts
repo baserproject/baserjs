@@ -306,7 +306,7 @@ declare module baser {
         interface ScrollOptions {
             offset?: number;
             keywords?: {
-                [x: string]: any;
+                [index: string]: any;
             };
             wheelCancel?: boolean;
             onScrollEnd?: Function;
@@ -600,7 +600,7 @@ declare module baser {
                  *
                  */
                 static radioGroups: {
-                    [x: string]: RadioGroup;
+                    [index: string]: RadioGroup;
                 };
                 /**
                  * ラジオボタンを拡張する
@@ -737,6 +737,15 @@ declare module baser {
                 /**
                  * フォーカスがあたっている状態かどうか
                  *
+                 * @since 0.1.0
+                 *
+                 */
+                hasFocus: boolean;
+                /**
+                 * 削除予定
+                 * フォーカスがあたっている状態かどうか
+                 *
+                 * @deprecated
                  * @since 0.0.1
                  *
                  */

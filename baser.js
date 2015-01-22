@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.1.0-rc r187
- * update: 2015-01-22
+ * baserjs - v0.1.0-rc r190
+ * update: 2015-01-23
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1533,6 +1533,15 @@ var baser;
                     /**
                      * フォーカスがあたっている状態かどうか
                      *
+                     * @since 0.1.0
+                     *
+                     */
+                    this.hasFocus = false;
+                    /**
+                     * 削除予定
+                     * フォーカスがあたっている状態かどうか
+                     *
+                     * @deprecated
                      * @since 0.0.1
                      *
                      */
@@ -1599,7 +1608,7 @@ var baser;
                  *
                  */
                 FormElement.prototype._onfocus = function () {
-                    this.isFocus = true;
+                    this.hasFocus = true;
                     element.Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
                     element.Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
                     element.Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
@@ -1615,7 +1624,7 @@ var baser;
                  *
                  */
                 FormElement.prototype._onblur = function () {
-                    this.isFocus = false;
+                    this.hasFocus = false;
                     element.Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
                     element.Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
                     element.Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);
@@ -1688,7 +1697,6 @@ var baser;
     (function (ui) {
         var element;
         (function (element) {
-            var $document = $(document);
             /**
              * セレクトボックスの拡張クラス
              *
@@ -1811,17 +1819,18 @@ var baser;
                     this.$el.on('focus.bcSelect', function () {
                         _this.$pseudo.focus();
                     });
-                    this.$pseudo.on('focus.bcSelect', function (e) {
-                        e.stopPropagation();
-                        $document.trigger('click.bcSelect');
-                        _this._onfocus();
+                    $(document).on('click.bcSelect', function () {
+                        _this._onblur();
                     });
-                    this.$selected.on('click.bcSelect', function (e) {
+                    // 擬似セレクトボックスにフォーカス・またはクリックが起こった時に発火する
+                    this.$pseudo.on('focus.bcSelect', function (e) {
+                        _this._onfocus();
+                        e.stopPropagation();
+                    });
+                    this.$pseudo.on('click.bcSelect', function (e) {
+                        _this._onfocus();
                         e.stopPropagation();
                         e.preventDefault();
-                    });
-                    $document.on('click.bcSelect', function () {
-                        _this._onblur();
                     });
                 };
                 /**
@@ -1843,11 +1852,18 @@ var baser;
                  *
                  */
                 Select.prototype._onfocus = function () {
-                    _super.prototype._onfocus.call(this);
-                    element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateFocus);
-                    element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
-                    // オプションが開かれた後にスクロール位置を調整する
-                    this._scrollToSelectedPosition();
+                    if (!this.hasFocus) {
+                        this.hasFocus = true;
+                        // 全体のフォーカスを外す
+                        $(document).trigger('click.bcSelect');
+                        // 親クラスのフォーカスを実行
+                        _super.prototype._onfocus.call(this);
+                        // DOMのclassを制御
+                        element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateFocus);
+                        element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
+                        // オプションが開かれた後にスクロール位置を調整する
+                        this._scrollToSelectedPosition();
+                    }
                 };
                 /**
                  * フォーカスがはずれた時の処理
@@ -1859,6 +1875,7 @@ var baser;
                 Select.prototype._onblur = function () {
                     // 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
                     if (this.$pseudo) {
+                        this.hasFocus = false;
                         _super.prototype._onblur.call(this);
                         element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
                         element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateFocus);
@@ -3266,10 +3283,9 @@ var baser;
                         top = containerHeight - newHeight;
                         break;
                     case 'center':
-                    default:
-                        {
-                            top = (containerHeight / 2) - (newHeight / 2);
-                        }
+                    default: {
+                        top = (containerHeight / 2) - (newHeight / 2);
+                    }
                 }
                 var left;
                 switch (config.align) {
@@ -3280,10 +3296,9 @@ var baser;
                         left = containerWidth - newWidth;
                         break;
                     case 'center':
-                    default:
-                        {
-                            left = (containerWidth / 2) - (newWidth / 2);
-                        }
+                    default: {
+                        left = (containerWidth / 2) - (newWidth / 2);
+                    }
                 }
                 css = {
                     width: newWidth,
@@ -3370,5 +3385,51 @@ var baser;
 /* 外部ライブラリ d.ts
 ================================================================= */
 /// <reference path="../typings/tsd.d.ts" />
+/* ユーティリティ
+================================================================= */
+/// <reference path="baser/utility/String.ts" />
+/* UI
+================================================================= */
+/// <reference path="baser/ui/EventDispacher.ts" />
+/// <reference path="baser/ui/Browser.ts" />
+/// <reference path="baser/ui/Timer.ts" />
+/// <reference path="baser/ui/AnimationFrames.ts" />
+/// <reference path="baser/ui/Scroll.ts" />
+/// <reference path="baser/ui/Dimension.ts" />
+/// <reference path="baser/ui/Box.ts" />
+/// <reference path="baser/ui/Validation.ts" />
+/* UI/エレメント
+================================================================= */
+/// <reference path="baser/ui/element/Element.ts" />
+/// <reference path="baser/ui/element/Form.ts" />
+/// <reference path="baser/ui/element/FormElement.ts" />
+/// <reference path="baser/ui/element/Select.ts" />
+/// <reference path="baser/ui/element/CheckableElement.ts" />
+/// <reference path="baser/ui/element/Radio.ts" />
+/// <reference path="baser/ui/element/Checkbox.ts" />
+/// <reference path="baser/ui/element/RadioGroup.ts" />
+/// <reference path="baser/ui/element/Map.ts" />
+/// <reference path="baser/ui/element/Youtube.ts" />
+/* baserJSコア
+================================================================= */
+/// <reference path="baser.ts" />
+/* jQueryプラグイン
+================================================================= */
+/// <reference path="jquery/bcYoutube.ts" />
+/// <reference path="jquery/bcScrollTo.ts" />
+/// <reference path="jquery/bcRadio.ts" />
+/// <reference path="jquery/bcCheckbox.ts" />
+/// <reference path="jquery/bcSelect.ts" />
+/// <reference path="jquery/bcMaps.ts" />
+/// <reference path="jquery/bcBoxAlignHeight.ts" />
+/// <reference path="jquery/bcBoxLink.ts" />
+// <reference path="jquery/bcExtendLink.ts" /> // 未実装のため読み込まない
+/// <reference path="jquery/bcRollover.ts" />
+/// <reference path="jquery/bcShy.ts" />
+/// <reference path="jquery/bcWink.ts" />
+/// <reference path="jquery/bcSplitList.ts" />
+/// <reference path="jquery/bcImageLoaded.ts" />
+/// <reference path="jquery/bcBackground.ts" />
+/// <reference path="jquery/bcKeepAspectRatio.ts" />
 
 }).call(this);
