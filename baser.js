@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.1.0-rc r190
+ * baserjs - v0.1.0-rc r191
  * update: 2015-01-23
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1853,7 +1853,6 @@ var baser;
                  */
                 Select.prototype._onfocus = function () {
                     if (!this.hasFocus) {
-                        this.hasFocus = true;
                         // 全体のフォーカスを外す
                         $(document).trigger('click.bcSelect');
                         // 親クラスのフォーカスを実行
@@ -1875,7 +1874,6 @@ var baser;
                 Select.prototype._onblur = function () {
                     // 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
                     if (this.$pseudo) {
-                        this.hasFocus = false;
                         _super.prototype._onblur.call(this);
                         element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
                         element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateFocus);

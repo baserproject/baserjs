@@ -296,7 +296,6 @@ module baser {
 				 */
 				public _onfocus () {
 					if (!this.hasFocus) {
-						this.hasFocus = true;
 						// 全体のフォーカスを外す
 						$(document).trigger('click.bcSelect');
 						// 親クラスのフォーカスを実行
@@ -319,7 +318,6 @@ module baser {
 				public _onblur () {
 					// 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
 					if (this.$pseudo) {
-						this.hasFocus = false;
 						super._onblur();
 						Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
 						Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
