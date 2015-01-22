@@ -99,12 +99,20 @@ module.exports = function(grunt) {
         src: 'src/index.ts'
       }
     },
-    tsd: {
-      refresh: {
+    tslint: {
+      options: {
+        configuration: grunt.file.readJSON('tslint.json')
+      },
+      files: {
+        src: [
+          'src/**/*.ts'
+        ]
+      }
+    },
+    dtsm: {
+      main: {
         options: {
-          command: 'reinstall',
-          latest: true,
-          config: 'tsd.json'
+          config: 'dtsm.json'
         }
       }
     },
@@ -120,16 +128,16 @@ module.exports = function(grunt) {
     'concat:lib',
     'concat:dist',
     'uglify',
-    // 'tsd', // モジュール内のエラーが起こるため一時的に使用停止
     'qunit',
     'clean:docs',
     'typedoc',
     'update'
   ]);
 
-  grunt.loadNpmTasks('grunt-tsd');
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-typedoc');
+  grunt.loadNpmTasks('grunt-tslint');
+  grunt.loadNpmTasks('grunt-dtsm');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');

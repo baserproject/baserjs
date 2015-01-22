@@ -12,6 +12,9 @@
 <div id="qunit"></div>
 <div id="qunit-fixture">
 	<div id="test"></div>
+	<div id="getBoolAttr">
+		<input type="checkbox" checked data-foo data-bar="bar" data-hoge="" data-fuga="false" data-false="0" data-true="1.0">
+	</div>
 </div>
 
 <!-- Libraries -->
@@ -92,6 +95,38 @@ test('baser.ui.element.Element.prototype.addClassのテスト', function() {
 
 	testElem.addClass('sample-block', '', 'sample-modifier');
 	ok(testElem.$el.hasClass('-bc-sample-block--sample-modifier'), 'baser.ui.element.Element.prototype.addClass で問題なくクラスは付加されました');
+
+
+});
+
+test('baser.ui.element.Element.getBoolAttrのテスト', function() {
+
+	// <input type="checkbox" checked data-foo data-bar="bar" data-hoge="" data-fuga="false" data-false="0" data-true="1.0">
+
+	var $test = $('#getBoolAttr input');
+	ok(baser.ui.element.Element.getBoolAttr($test, 'checked'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
+	ok(baser.ui.element.Element.getBoolAttr($test, 'data-foo'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
+	ok(baser.ui.element.Element.getBoolAttr($test, 'data-bar'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
+	ok(baser.ui.element.Element.getBoolAttr($test, 'data-hoge'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
+	ok(!baser.ui.element.Element.getBoolAttr($test, 'data-fuga'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
+	ok(!baser.ui.element.Element.getBoolAttr($test, 'data-false'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
+	ok(baser.ui.element.Element.getBoolAttr($test, 'data-true'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
+
+});
+
+test('baser.ui.element.Element.prototype.getBoolAttrのテスト', function() {
+
+	// <input type="checkbox" checked data-foo data-bar="bar" data-hoge="" data-fuga="false" data-false="0" data-true="1.0">
+
+	var $test = $('#getBoolAttr input');
+	var testElem = new baser.ui.element.Element($test);
+	ok(testElem.getBoolAttr('checked'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(testElem.getBoolAttr('data-foo'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(testElem.getBoolAttr('data-bar'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(testElem.getBoolAttr('data-hoge'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(!testElem.getBoolAttr('data-fuga'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(!testElem.getBoolAttr('data-false'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(testElem.getBoolAttr('data-true'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
 
 });
 

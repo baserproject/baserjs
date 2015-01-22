@@ -24,9 +24,20 @@ module baser {
 	 *
 	 * ### Result
 	 *
-	 * <div data-height="400" data-theme-id="9760" data-slug-hash="pboIt" data-default-tab="result" data-user="YusukeHirao" class='codepen'><pre><code>$(&#39;.sample&#39;).bcYoutube();</code></pre>
-	<p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a> by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
-	</div><script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+	 * <div data-height="400"
+	     data-theme-id="9760"
+	     data-slug-hash="pboIt"
+	     data-default-tab="result"
+	     data-user="YusukeHirao"
+	     class='codepen'>
+	     <pre>
+	       <code>$(&#39;.sample&#39;).bcYoutube();</code>
+	     </pre>
+	     <p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a>
+	     by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>)
+	     on <a href='http://codepen.io'>CodePen</a>.</p>
+	   </div>
+	   <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
 	 *
 	 */
 	function bcYoutube (options?: baser.ui.element.YoutubeOption): JQuery {

@@ -1,7 +1,7 @@
 {
   "name": "baserjs",
-  "version": "0.1.0-rc",
-  "revision": 191,
+  "version": "0.2.0-rc",
+  "revision": 196,
   "description": "Client side JavaScript libraries for baserCMS",
   "main": "baser.js",
   "scripts": {
@@ -32,12 +32,13 @@
     "grunt": "*",
     "grunt-contrib-clean": "*",
     "grunt-contrib-concat": "*",
-    "grunt-contrib-qunit": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "*",
-    "grunt-tsd": "*",
-    "grunt-typedoc": "*",
+    "grunt-contrib-qunit": "*",
+    "qunitjs": "*",
     "grunt-typescript": "*",
-    "qunitjs": "*"
+    "grunt-typedoc": "*",
+    "grunt-tslint": "*",
+    "grunt-dtsm": "*"
   }
 }

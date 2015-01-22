@@ -1,4 +1,4 @@
-/// <reference path="typings/tsd.d.ts" />
+/// <reference path="typings/bundle.d.ts" />
 declare module baser {
     module utility {
         /**
@@ -41,6 +41,43 @@ declare module baser {
              *
              */
             static camelCase(str: string, upperCase?: boolean): string;
+            /**
+             * 文字列が論理値の偽相等であるかどうか
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             */
+            static isFalsy(str: string): boolean;
+        }
+    }
+}
+declare module baser {
+    module utility {
+        /**
+         * ユーティリティ配列クラス
+         *
+         * @version 0.2.0
+         * @since 0.2.0
+         *
+         */
+        class Array {
+            /**
+             * 配列中の対象の要素が一番最初に存在するインデックス番号を返す
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             */
+            static indexOf<T>(array: any[], element: T): number;
+            /**
+             * 配列中の対象のインデックスを削除する
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             */
+            static remove(array: any[], index: number): any[];
         }
     }
 }
@@ -403,18 +440,22 @@ declare module baser {
         /**
          * Box管理を担うクラス
          *
-         * @version 0.1.0
+         * @version 0.2.0
          * @since 0.0.15
          *
          */
         class Box {
-            static alignment($target: JQuery, columns: number, callback: Function, breakPoint?: number): JQuery;
+            static align($target: JQuery, columns: number, callback: Function, breakPoint?: number): JQuery;
             static createChar(): void;
             static isChanged(): boolean;
             static observer(): void;
-            static reflatting(): void;
-            static init(): void;
-            static isInitialized: boolean;
+            static reAlign(): void;
+            static boot(): void;
+            static sleep(): void;
+            static push($target: JQuery, column?: number, callback?: Function, breakPoint?: number): void;
+            static destory($target: any): void;
+            static watchTimer: number;
+            static isBooted: boolean;
             static settings: any;
         }
     }
@@ -539,6 +580,22 @@ declare module baser {
                  */
                 static createClassName(blockNames: string, elementNames?: string, modifierName?: string): string;
                 /**
+                 * 要素の属性の真偽を判定する
+                 *
+                 * DOM APIの標準で判定できるものはそれで判断
+                 *
+                 * 値なし属性の場合は存在すれば真
+                 *
+                 * 値あり属性の場合は偽相等の文字列でなければ全て真とする
+                 *
+                 * ただし値なし属性の場合は値が空文字列のため、偽相等の文字列の例外とする
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
+                static getBoolAttr($elem: JQuery, attrName: string): boolean;
+                /**
                  * クラス名を付加する
                  *
                  * @version 0.1.0
@@ -571,6 +628,16 @@ declare module baser {
                  *
                  */
                 addClass(blockNames: string, elementNames?: string, modifierName?: string): void;
+                /**
+                 * 要素の属性の真偽を判定する
+                 *
+                 * `baser.ui.element.Element.getBoolAttr` のインスタンスメソッド版
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
+                getBoolAttr(attrName: string): boolean;
             }
         }
     }
@@ -1280,7 +1347,7 @@ declare module baser {
                  * @since 0.0.6
                  *
                  */
-                static lat: number;
+                static defaultLat: number;
                 /**
                  * 初期設定用の経度
                  * 東京都庁
@@ -1289,7 +1356,23 @@ declare module baser {
                  * @since 0.0.6
                  *
                  */
-                static lng: number;
+                static defaultLng: number;
+                /**
+                 * 緯度
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
+                lat: number;
+                /**
+                 * 経度
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
+                lng: number;
                 /**
                  * 管理対象の要素に付加するclass属性値のプレフィックス
                  *
@@ -1344,11 +1427,30 @@ declare module baser {
                  * @version 0.0.9
                  * @since 0.0.6
                  * @param $el 管理するDOM要素のjQueryオブジェクト
+                 * @param options マップオプション
                  *
                  */
                 constructor($el: JQuery, options?: MapOption);
-                private _init(options?);
-                reload(): void;
+                /**
+                 * 初期化
+                 *
+                 * @version 0.2.0
+                 * @since 0.0.6
+                 *
+                 */
+                private _init();
+                /**
+                 * レンダリング
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 * @param mapCenterLat 緯度
+                 * @param mapCenterLng 経度
+                 *
+                 */
+                private _render(mapCenterLat, mapCenterLng);
+                reload(options?: MapOption): void;
+                static getLatLngByAddress(address: string, callback: (lat: number, lng: number) => void): void;
             }
         }
     }

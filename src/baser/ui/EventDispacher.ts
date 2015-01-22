@@ -15,8 +15,7 @@ module baser {
 		export class EventDispacher {
 
 			constructor () {
-
-
+				// void
 			}
 
 			public on (type: string, handler: Function): EventDispacher {
@@ -91,6 +90,7 @@ module baser {
 			private _isImmediatePropagationStopped: boolean = false;
 
 			constructor (type: string) {
+				// void
 			}
 
 			public isImmediatePropagationStopped (): boolean {

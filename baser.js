@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.1.0-rc r191
+ * baserjs - v0.2.0-rc r196
  * update: 2015-01-23
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -7,13 +7,25 @@
  */
 
 (function () {
-"use strict";
+	"use strict";
 
-var window = this;
-var document = window.document;
-var location = window.location;
-var $ = jQuery;
+	var global = this;
 
+	var isBrowser = 'document' in global;
+	var isWebWorkers = 'WorkerLocation' in global;
+	var isNode = 'process' in global;
+
+	var jQuery, $;
+
+	if (isBrowser) {
+		$ = jQuery = global.jQuery;
+	} else if (isNode) {
+		$ = jQuery = require('jquery');
+	}
+
+	if (!isBrowser) {
+		throw new Error('baserJS requires a window with a document');
+	}
 
 /*!
  * jQuery Cookie Plugin v1.4.1
@@ -433,9 +445,68 @@ var baser;
                     return $2.toUpperCase();
                 });
             };
+            /**
+             * 文字列が論理値の偽相等であるかどうか
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             */
+            String.isFalsy = function (str) {
+                str = str.toLowerCase();
+                var rFalsy = /^\s*(?:false|null|undefined|0|0?(?:\.0+)?)?\s*$/i;
+                return rFalsy.test(str);
+            };
             return String;
         })();
         utility.String = String;
+    })(utility = baser.utility || (baser.utility = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var utility;
+    (function (utility) {
+        /**
+         * ユーティリティ配列クラス
+         *
+         * @version 0.2.0
+         * @since 0.2.0
+         *
+         */
+        var Array = (function () {
+            function Array() {
+            }
+            /**
+             * 配列中の対象の要素が一番最初に存在するインデックス番号を返す
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             */
+            Array.indexOf = function (array, element) {
+                var i = 0;
+                var l = array.length;
+                for (; i < l; i++) {
+                    if (element === array[i]) {
+                        return i;
+                    }
+                }
+                return -1;
+            };
+            /**
+             * 配列中の対象のインデックスを削除する
+             *
+             * @version 0.2.0
+             * @since 0.2.0
+             *
+             */
+            Array.remove = function (array, index) {
+                array.splice(index, 1);
+                return array;
+            };
+            return Array;
+        })();
+        utility.Array = Array;
     })(utility = baser.utility || (baser.utility = {}));
 })(baser || (baser = {}));
 var baser;
@@ -453,6 +524,7 @@ var baser;
          */
         var EventDispacher = (function () {
             function EventDispacher() {
+                // void
             }
             EventDispacher.prototype.on = function (type, handler) {
                 var eventHandler = new EventHandler(this, type, handler);
@@ -504,6 +576,7 @@ var baser;
         var DispacheEvent = (function () {
             function DispacheEvent(type) {
                 this._isImmediatePropagationStopped = false;
+                // void
             }
             DispacheEvent.prototype.isImmediatePropagationStopped = function () {
                 return this._isImmediatePropagationStopped;
@@ -1033,14 +1106,14 @@ var baser;
         /**
          * Box管理を担うクラス
          *
-         * @version 0.1.0
+         * @version 0.2.0
          * @since 0.0.15
          *
          */
         var Box = (function () {
             function Box() {
             }
-            Box.alignment = function ($target, columns, callback, breakPoint) {
+            Box.align = function ($target, columns, callback, breakPoint) {
                 if (breakPoint === void 0) { breakPoint = 0; }
                 var tiles = null;
                 var max = null;
@@ -1110,15 +1183,14 @@ var baser;
             // 文書を読み込んだ時点で
             // 文字の大きさを確認しておく
             // 文字の大きさが変わっていたら、
-            // handlers中の関数を順に実行
             Box.observer = function () {
                 if (Box.isChanged()) {
-                    Box.reflatting();
+                    Box.reAlign();
                 }
                 return;
             };
             // 高さ揃えを再実行する処理
-            Box.reflatting = function () {
+            Box.reAlign = function () {
                 var settings = Box.settings;
                 var i;
                 var l = settings.sets.length;
@@ -1126,33 +1198,72 @@ var baser;
                 for (i = 0; i < l; i++) {
                     set = Box.settings.sets[i];
                     set.height('auto');
-                    Box.alignment(set, settings.columns[i], settings.callbacks[i], settings.breakPoints[i]);
+                    Box.align(set, settings.columns[i], settings.callbacks[i], settings.breakPoints[i]);
                 }
                 return;
             };
-            Box.init = function () {
+            Box.boot = function () {
                 var $w;
-                if (!Box.isInitialized) {
+                if (!Box.isBooted) {
                     $w = $(window);
-                    $w.load(Box.reflatting);
-                    $w.resize(Box.reflatting);
-                    Box.isInitialized = true;
+                    $w.on('load', Box.reAlign);
+                    $w.on('resize', Box.reAlign);
+                    Box.isBooted = true;
                     Box.createChar();
                     // TODO: オプションでタイマーを回すのを制御できるようにする
-                    // TODO: ストップする関数を作る
-                    window.setInterval(Box.observer, Box.settings.interval);
+                    Box.watchTimer = window.setInterval(Box.observer, Box.settings.interval);
                 }
             };
-            Box.isInitialized = false;
+            Box.sleep = function () {
+                var $w = $(window);
+                $w.off('load', Box.reAlign);
+                $w.off('resize', Box.reAlign);
+                window.clearInterval(Box.watchTimer);
+            };
+            Box.push = function ($target, column, callback, breakPoint) {
+                if (column === void 0) { column = null; }
+                if (callback === void 0) { callback = null; }
+                if (breakPoint === void 0) { breakPoint = null; }
+                var uid = $target.data('-box-align-height-');
+                if (uid) {
+                    this.destory($target);
+                }
+                else {
+                    uid = baser.utility.String.UID();
+                    $target.data('-box-align-height-', uid);
+                }
+                Box.align($target, column, callback, breakPoint);
+                Box.settings.uidList.push(uid);
+                Box.settings.sets.push($target);
+                Box.settings.columns.push(column);
+                Box.settings.callbacks.push(callback);
+                Box.settings.breakPoints.push(breakPoint);
+            };
+            Box.destory = function ($target) {
+                $target.each(function () {
+                    this.style.removeProperty('height');
+                });
+                var uid = $target.data('-box-align-height-');
+                var index = baser.utility.Array.indexOf(Box.settings.uidList, uid);
+                Box.settings.uidList = baser.utility.Array.remove(Box.settings.uidList, index);
+                Box.settings.sets = baser.utility.Array.remove(Box.settings.sets, index);
+                Box.settings.columns = baser.utility.Array.remove(Box.settings.columns, index);
+                Box.settings.callbacks = baser.utility.Array.remove(Box.settings.callbacks, index);
+                Box.settings.breakPoints = baser.utility.Array.remove(Box.settings.breakPoints, index);
+                if (Box.settings.uidList.length === 0) {
+                    this.sleep();
+                }
+            };
+            Box.isBooted = false;
             Box.settings = {
-                handlers: [],
                 interval: 1000,
                 currentSize: 0,
                 dummyChar: null,
                 sets: [],
                 columns: [],
                 callbacks: [],
-                breakPoints: []
+                breakPoints: [],
+                uidList: []
             };
             return Box;
         })();
@@ -1344,6 +1455,39 @@ var baser;
                     return className;
                 };
                 /**
+                 * 要素の属性の真偽を判定する
+                 *
+                 * DOM APIの標準で判定できるものはそれで判断
+                 *
+                 * 値なし属性の場合は存在すれば真
+                 *
+                 * 値あり属性の場合は偽相等の文字列でなければ全て真とする
+                 *
+                 * ただし値なし属性の場合は値が空文字列のため、偽相等の文字列の例外とする
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
+                Element.getBoolAttr = function ($elem, attrName) {
+                    // DOM APIの標準で判定できるものはそれで判断
+                    var propValue = $elem.prop(attrName);
+                    if (propValue === true) {
+                        return true;
+                    }
+                    // 属性の値の取得 値なし属性の場合は 存在しない場合 undefined を返す
+                    var value = $elem.attr(attrName);
+                    if (value === undefined) {
+                        return false;
+                    }
+                    // 値なし属性の場合は値が空文字列 （偽相等の文字列の例外）
+                    if (value === '') {
+                        return true;
+                    }
+                    // 値あり属性の場合は偽相等の文字列でなければ全て真とする
+                    return !baser.utility.String.isFalsy(value);
+                };
+                /**
                  * クラス名を付加する
                  *
                  * @version 0.1.0
@@ -1381,6 +1525,18 @@ var baser;
                     if (modifierName === void 0) { modifierName = ''; }
                     var className = Element.createClassName(blockNames, elementNames, modifierName);
                     this.$el.addClass(className);
+                };
+                /**
+                 * 要素の属性の真偽を判定する
+                 *
+                 * `baser.ui.element.Element.getBoolAttr` のインスタンスメソッド版
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
+                Element.prototype.getBoolAttr = function (attrName) {
+                    return Element.getBoolAttr(this.$el, attrName);
                 };
                 /**
                  * クラス名のデフォルトのプレフィックス
@@ -2309,13 +2465,15 @@ var baser;
                  * @version 0.0.9
                  * @since 0.0.6
                  * @param $el 管理するDOM要素のjQueryオブジェクト
+                 * @param options マップオプション
                  *
                  */
                 function Map($el, options) {
                     _super.call(this, $el);
                     this.$el.addClass(Map.className);
                     if ('google' in window && google.maps) {
-                        this._init(options);
+                        this.mapOption = options;
+                        this._init();
                     }
                     else {
                         if (console && console.warn) {
@@ -2325,11 +2483,40 @@ var baser;
                     Map.maps.push(this);
                     $el.data(Map.className, this);
                 }
-                Map.prototype._init = function (options) {
+                /**
+                 * 初期化
+                 *
+                 * @version 0.2.0
+                 * @since 0.0.6
+                 *
+                 */
+                Map.prototype._init = function () {
                     var _this = this;
-                    var mapCenterLat = this.$el.data('lat') || Map.lat;
-                    var mapCenterLng = this.$el.data('lng') || Map.lng;
-                    this.$coordinates = this.$coordinates || this.$el.find('[data-lat][data-lng]').detach();
+                    var mapCenterLat = this.$el.data('lat') || Map.defaultLat;
+                    var mapCenterLng = this.$el.data('lng') || Map.defaultLng;
+                    var mapCenterAddress = this.$el.data('address') || '';
+                    if (mapCenterAddress) {
+                        // 住所から緯度・経度を検索する（非同期）
+                        Map.getLatLngByAddress(mapCenterAddress, function (lat, lng) {
+                            _this._render(lat, lng);
+                        });
+                    }
+                    else {
+                        this._render(mapCenterLat, mapCenterLng);
+                    }
+                };
+                /**
+                 * レンダリング
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 * @param mapCenterLat 緯度
+                 * @param mapCenterLng 経度
+                 *
+                 */
+                Map.prototype._render = function (mapCenterLat, mapCenterLng) {
+                    var _this = this;
+                    this.$coordinates = this.$coordinates || this.$el.find('[data-lat][data-lng], [data-address]').detach();
                     if (this.$coordinates.length <= 0) {
                         this.$coordinates = this.$el;
                     }
@@ -2350,7 +2537,7 @@ var baser;
                         scrollwheel: false,
                         center: new google.maps.LatLng(mapCenterLat, mapCenterLng),
                         styles: null
-                    }, options);
+                    }, this.mapOption);
                     this.info = new google.maps.InfoWindow({
                         disableAutoPan: true
                     });
@@ -2359,8 +2546,38 @@ var baser;
                         coordinate.markTo(_this);
                     });
                 };
-                Map.prototype.reload = function () {
+                Map.prototype.reload = function (options) {
+                    this.mapOption = options;
                     this._init();
+                };
+                Map.getLatLngByAddress = function (address, callback) {
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        address: address
+                    }, function (results, status) {
+                        var lat;
+                        var lng;
+                        switch (status) {
+                            case google.maps.GeocoderStatus.OK:
+                                lat = results[0].geometry.location.lat();
+                                lng = results[0].geometry.location.lng();
+                                break;
+                            case google.maps.GeocoderStatus.INVALID_REQUEST:
+                            case google.maps.GeocoderStatus.ZERO_RESULTS:
+                            case google.maps.GeocoderStatus.OVER_QUERY_LIMIT:
+                                if (console && console.warn) {
+                                    console.warn('ReferenceError: "' + address + 'は不正な住所のだったため結果を返すことができませんでした。"');
+                                }
+                                break;
+                            case google.maps.GeocoderStatus.ERROR:
+                            case google.maps.GeocoderStatus.UNKNOWN_ERROR:
+                                if (console && console.warn) {
+                                    console.warn('Error: "エラーが発生しました。"');
+                                }
+                                break;
+                        }
+                        callback(lat, lng);
+                    });
                 };
                 /**
                  * 初期設定用の緯度
@@ -2370,7 +2587,7 @@ var baser;
                  * @since 0.0.6
                  *
                  */
-                Map.lat = 35.681382;
+                Map.defaultLat = 35.681382;
                 /**
                  * 初期設定用の経度
                  * 東京都庁
@@ -2379,7 +2596,7 @@ var baser;
                  * @since 0.0.6
                  *
                  */
-                Map.lng = 139.766084;
+                Map.defaultLng = 139.766084;
                 /**
                  * 管理対象の要素に付加するclass属性値のプレフィックス
                  *
@@ -2408,14 +2625,34 @@ var baser;
              */
             var Coordinate = (function () {
                 function Coordinate($el) {
+                    var _this = this;
+                    var address = $el.data('address');
+                    var dfd = $.Deferred();
                     this.$el = $el;
-                    this.lat = $el.data('lat');
-                    this.lng = $el.data('lng');
-                    this.title = $el.attr('title') || $el.data('title') || $el.find('h1,h2,h3,h4,h5,h6').text() || null;
-                    this.icon = $el.data('icon') || null;
+                    if (address) {
+                        Map.getLatLngByAddress(address, function (lat, lng) {
+                            _this.lat = lat;
+                            _this.lng = lng;
+                            dfd.resolve();
+                        });
+                    }
+                    else {
+                        this.lat = $el.data('lat');
+                        this.lng = $el.data('lng');
+                        dfd.resolve();
+                    }
+                    this.promiseLatLng = dfd.promise();
                 }
                 Coordinate.prototype.markTo = function (map) {
                     var _this = this;
+                    this.promiseLatLng.done(function () {
+                        _this._markTo(map);
+                    });
+                };
+                Coordinate.prototype._markTo = function (map) {
+                    var _this = this;
+                    this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
+                    this.icon = this.$el.data('icon') || null;
                     this.marker = new google.maps.Marker({
                         position: new google.maps.LatLng(this.lat, this.lng),
                         title: this.title,
@@ -2617,9 +2854,20 @@ var baser;
      *
      * ### Result
      *
-     * <div data-height="400" data-theme-id="9760" data-slug-hash="pboIt" data-default-tab="result" data-user="YusukeHirao" class='codepen'><pre><code>$(&#39;.sample&#39;).bcYoutube();</code></pre>
-    <p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a> by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
-    </div><script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+     * <div data-height="400"
+         data-theme-id="9760"
+         data-slug-hash="pboIt"
+         data-default-tab="result"
+         data-user="YusukeHirao"
+         class='codepen'>
+         <pre>
+           <code>$(&#39;.sample&#39;).bcYoutube();</code>
+         </pre>
+         <p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a>
+         by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>)
+         on <a href='http://codepen.io'>CodePen</a>.</p>
+       </div>
+       <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
      *
      */
     function bcYoutube(options) {
@@ -2811,7 +3059,7 @@ var baser;
             var $elem = $(elem);
             var data = $elem.data(baser.ui.element.Map.className);
             if (data) {
-                data.reload();
+                data.reload(options);
             }
             else {
                 new baser.ui.element.Map($elem, options);
@@ -2822,40 +3070,37 @@ var baser;
 })(baser || (baser = {}));
 var baser;
 (function (baser) {
-    /**
-     * 要素の高さを揃える
-     *
-     * TODO: 計算ロジックとDOMアクセスのロジックを分ける
-     *
-     * @version 0.0.15
-     * @since 0.0.15
-     *
-     */
-    function bcBoxAlignHeight(column, detailTarget, callback, breakPoint) {
+    function bcBoxAlignHeight(columnOrKeyword, detailTarget, callback, breakPoint) {
         if (breakPoint === void 0) { breakPoint = 0; }
-        baser.ui.Box.init();
-        var $detailTarget;
-        var settings = baser.ui.Box.settings;
-        // 要素群の高さを揃え、setsに追加
-        if (detailTarget) {
-            $detailTarget = this.find(detailTarget);
-            if ($detailTarget.length) {
-                this.each(function () {
-                    var $split = $(this).find(detailTarget);
-                    baser.ui.Box.alignment($split, column, callback, breakPoint);
-                    settings.sets.push($split);
-                    settings.columns.push(column);
-                    settings.callbacks.push(callback);
-                    settings.breakPoints.push(breakPoint);
-                });
+        if ($.isNumeric(columnOrKeyword)) {
+            var column = +columnOrKeyword;
+            baser.ui.Box.boot();
+            var $detailTarget;
+            var settings = baser.ui.Box.settings;
+            // 要素群の高さを揃え、setsに追加
+            if (detailTarget) {
+                $detailTarget = this.find(detailTarget);
+                if ($detailTarget.length) {
+                    this.each(function () {
+                        var $split = $(this).find(detailTarget);
+                        baser.ui.Box.push($split, column, callback, breakPoint);
+                    });
+                }
+            }
+            else {
+                baser.ui.Box.push(this, column, callback, breakPoint);
             }
         }
         else {
-            baser.ui.Box.alignment(this, column, callback, breakPoint);
-            settings.sets.push(this);
-            settings.columns.push(column);
-            settings.callbacks.push(callback);
-            settings.breakPoints.push(breakPoint);
+            var keyword = columnOrKeyword;
+            switch (keyword) {
+                case 'destroy': {
+                    this.each(function () {
+                        baser.ui.Box.destory($(this));
+                    });
+                    break;
+                }
+            }
         }
         return this;
     }
@@ -3382,10 +3627,11 @@ var baser;
 })(baser || (baser = {}));
 /* 外部ライブラリ d.ts
 ================================================================= */
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/bundle.d.ts" />
 /* ユーティリティ
 ================================================================= */
 /// <reference path="baser/utility/String.ts" />
+/// <reference path="baser/utility/Array.ts" />
 /* UI
 ================================================================= */
 /// <reference path="baser/ui/EventDispacher.ts" />
@@ -3430,4 +3676,9 @@ var baser;
 /// <reference path="jquery/bcBackground.ts" />
 /// <reference path="jquery/bcKeepAspectRatio.ts" />
 
-}).call(this);
+	if (isNode) {
+		module.exports = baser;
+	} else {
+		global.baser = baser;
+	}
+}).call((this || 0).self || global);
