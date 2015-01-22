@@ -34,7 +34,7 @@ module baser {
 			var $elem: JQuery = $(elem);
 			var data: baser.ui.element.Map = $elem.data(baser.ui.element.Map.className);
 			if (data) {
-				data.reload();
+				data.reload(options);
 			} else {
 				new baser.ui.element.Map($elem, options);
 			}

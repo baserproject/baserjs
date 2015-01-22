@@ -77,7 +77,7 @@ module baser {
 				 * @since 0.0.6
 				 *
 				 */
-				static lat: number = 35.681382;
+				static defaultLat: number = 35.681382;
 
 				/**
 				 * 初期設定用の経度
@@ -87,7 +87,25 @@ module baser {
 				 * @since 0.0.6
 				 *
 				 */
-				static lng: number = 139.766084;
+				static defaultLng: number = 139.766084;
+
+				/**
+				 * 緯度
+				 *
+				 * @version 0.2.0
+				 * @since 0.2.0
+				 *
+				 */
+				public lat: number;
+
+				/**
+				 * 経度
+				 *
+				 * @version 0.2.0
+				 * @since 0.2.0
+				 *
+				 */
+				public lng: number;
 
 				/**
 				 * 管理対象の要素に付加するclass属性値のプレフィックス
@@ -149,6 +167,7 @@ module baser {
 				 * @version 0.0.9
 				 * @since 0.0.6
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
+				 * @param options マップオプション
 				 *
 				 */
 				constructor ($el: JQuery, options?: MapOption) {
@@ -158,7 +177,8 @@ module baser {
 					this.$el.addClass(Map.className);
 
 					if ('google' in window && google.maps) {
-						this._init(options);
+						this.mapOption = options;
+						this._init();
 					} else {
 						if (console && console.warn) {
 							console.warn('ReferenceError: "//maps.google.com/maps/api/js" を先に読み込む必要があります。');
@@ -171,12 +191,43 @@ module baser {
 
 				}
 
-				private _init (options?: MapOption): void {
+				/**
+				 * 初期化
+				 *
+				 * @version 0.2.0
+				 * @since 0.0.6
+				 *
+				 */
+				private _init (): void {
 
-					var mapCenterLat: number = <number>this.$el.data('lat') || Map.lat;
-					var mapCenterLng: number = <number>this.$el.data('lng') || Map.lng;
+					var mapCenterLat: number = <number>this.$el.data('lat') || Map.defaultLat;
+					var mapCenterLng: number = <number>this.$el.data('lng') || Map.defaultLng;
 
-					this.$coordinates = this.$coordinates || this.$el.find('[data-lat][data-lng]').detach();
+					var mapCenterAddress: string = this.$el.data('address') || '';
+
+					if (mapCenterAddress) {
+						// 住所から緯度・経度を検索する（非同期）
+						Map.getLatLngByAddress(mapCenterAddress, (lat:number, lng: number): void => {
+							this._render(lat, lng);
+						});
+					} else {
+						this._render(mapCenterLat, mapCenterLng);
+					}
+
+				}
+
+				/**
+				 * レンダリング
+				 *
+				 * @version 0.2.0
+				 * @since 0.2.0
+				 * @param mapCenterLat 緯度
+				 * @param mapCenterLng 経度
+				 *
+				 */
+				private _render (mapCenterLat: number, mapCenterLng: number): void {
+
+					this.$coordinates = this.$coordinates || this.$el.find('[data-lat][data-lng], [data-address]').detach();
 					if (this.$coordinates.length <= 0) {
 						this.$coordinates = this.$el;
 					}
@@ -200,7 +251,7 @@ module baser {
 						scrollwheel: <boolean> false,
 						center: <google.maps.LatLng> new google.maps.LatLng(mapCenterLat, mapCenterLng),
 						styles: null
-					}, options);
+					}, this.mapOption);
 
 					this.info = new google.maps.InfoWindow({
 						disableAutoPan: <boolean> true
@@ -213,8 +264,39 @@ module baser {
 					});
 				}
 
-				public reload (): void {
+				public reload (options?: MapOption): void {
+					this.mapOption = options;
 					this._init();
+				}
+
+				static getLatLngByAddress (address: string, callback: (lat:number, lng: number) => void): void {
+					var geocoder: google.maps.Geocoder = new google.maps.Geocoder();
+					geocoder.geocode(<google.maps.GeocoderRequest> {
+						address: address
+					}, (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus): void => {
+						var lat: number;
+						var lng: number;
+						switch (status) {
+							case google.maps.GeocoderStatus.OK:
+								lat = results[0].geometry.location.lat();
+								lng = results[0].geometry.location.lng();
+								break;
+							case google.maps.GeocoderStatus.INVALID_REQUEST:
+							case google.maps.GeocoderStatus.ZERO_RESULTS:
+							case google.maps.GeocoderStatus.OVER_QUERY_LIMIT:
+									if (console && console.warn) {
+										console.warn('ReferenceError: "' + address + 'は不正な住所のだったため結果を返すことができませんでした。"');
+									}
+								break;
+							case google.maps.GeocoderStatus.ERROR:
+							case google.maps.GeocoderStatus.UNKNOWN_ERROR:
+									if (console && console.warn) {
+										console.warn('Error: "エラーが発生しました。"');
+									}
+								break;
+						}
+						callback(lat, lng);
+					});
 				}
 
 			}
@@ -234,18 +316,41 @@ module baser {
 				public lat: number;
 				public lng: number;
 				public marker: google.maps.Marker;
+				public promiseLatLng: JQueryPromise<void>;
 
 				constructor ($el: JQuery) {
 
+					var address: string = $el.data('address');
+
+					var dfd: JQueryDeferred<void> = $.Deferred<void>();
+
 					this.$el = $el;
-					this.lat = <number> $el.data('lat');
-					this.lng = <number> $el.data('lng');
-					this.title = $el.attr('title') || $el.data('title') || $el.find('h1,h2,h3,h4,h5,h6').text() || null;
-					this.icon = $el.data('icon') || null;
+
+					if (address) {
+						Map.getLatLngByAddress(address, (lat:number, lng: number): void => {
+							this.lat = lat;
+							this.lng = lng;
+							dfd.resolve();
+						});
+					} else {
+						this.lat = <number> $el.data('lat');
+						this.lng = <number> $el.data('lng');
+						dfd.resolve();
+					}
+
+					this.promiseLatLng = dfd.promise();
 
 				}
 
 				public markTo (map: Map): void {
+					this.promiseLatLng.done((): void => {
+						this._markTo(map);
+					});
+				}
+
+				private _markTo (map: Map): void {
+					this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
+					this.icon = this.$el.data('icon') || null;
 					this.marker = new google.maps.Marker({
 						position: new google.maps.LatLng(this.lat, this.lng),
 						title: this.title,
