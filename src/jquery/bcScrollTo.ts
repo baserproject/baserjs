@@ -56,7 +56,7 @@ module baser {
 						e.preventDefault();
 						return;
 					}
-				} catch (err) {}
+				} catch (err) { /* void */ }
 			}
 			return;
 		});

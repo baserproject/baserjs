@@ -11,7 +11,7 @@ module baser {
 		 */
 		export interface ScrollOptions {
 			offset?: number;
-			keywords?: { [index: string]: any; }
+			keywords?: { [index: string]: any; };
 			wheelCancel?: boolean;
 			onScrollEnd?: Function;
 			onScrollCancel?: Function;

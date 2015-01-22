@@ -207,7 +207,7 @@ module baser {
 
 					if (mapCenterAddress) {
 						// 住所から緯度・経度を検索する（非同期）
-						Map.getLatLngByAddress(mapCenterAddress, (lat:number, lng: number): void => {
+						Map.getLatLngByAddress(mapCenterAddress, (lat: number, lng: number): void => {
 							this._render(lat, lng);
 						});
 					} else {
@@ -259,7 +259,7 @@ module baser {
 
 					this.gmap = new google.maps.Map(this.$el[0], this.mapOption);
 
-					$.each(coordinates, (i:number, coordinate: Coordinate ): void => {
+					$.each(coordinates, (i: number, coordinate: Coordinate ): void => {
 						coordinate.markTo(this);
 					});
 				}
@@ -269,7 +269,7 @@ module baser {
 					this._init();
 				}
 
-				static getLatLngByAddress (address: string, callback: (lat:number, lng: number) => void): void {
+				static getLatLngByAddress (address: string, callback: (lat: number, lng: number) => void): void {
 					var geocoder: google.maps.Geocoder = new google.maps.Geocoder();
 					geocoder.geocode(<google.maps.GeocoderRequest> {
 						address: address
@@ -327,7 +327,7 @@ module baser {
 					this.$el = $el;
 
 					if (address) {
-						Map.getLatLngByAddress(address, (lat:number, lng: number): void => {
+						Map.getLatLngByAddress(address, (lat: number, lng: number): void => {
 							this.lat = lat;
 							this.lng = lng;
 							dfd.resolve();

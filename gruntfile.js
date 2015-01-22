@@ -99,6 +99,23 @@ module.exports = function(grunt) {
         src: 'src/index.ts'
       }
     },
+    tslint: {
+      options: {
+        configuration: grunt.file.readJSON('tslint.json')
+      },
+      files: {
+        src: [
+          'src/**/*.ts'
+        ]
+      }
+    },
+    dtsm: {
+      main: {
+        options: {
+          config: 'dtsm.json'
+        }
+      }
+    },
     qunit: {
       all: [
         'test/*.html'
@@ -119,6 +136,8 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-typedoc');
+  grunt.loadNpmTasks('grunt-tslint');
+  grunt.loadNpmTasks('grunt-dtsm');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');

@@ -246,12 +246,36 @@ module baser {
 				 */
 				public _onfocus (): void {
 					this.isFocus = true;
-					Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
-					Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
-					Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
-					Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
-					Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
-					Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);
+					Element.addClassTo(
+						this.$el,
+						FormElement.classNameFormElementCommon,
+						'',
+						FormElement.classNameStateFocus);
+					Element.addClassTo(
+						this.$label,
+						FormElement.classNameFormElementCommon,
+						FormElement.classNameLabel,
+						FormElement.classNameStateFocus);
+					Element.addClassTo(
+						this.$wrapper,
+						FormElement.classNameWrapper,
+						'',
+						FormElement.classNameStateFocus);
+					Element.removeClassFrom(
+						this.$el,
+						FormElement.classNameFormElementCommon,
+						'',
+						FormElement.classNameStateBlur);
+					Element.removeClassFrom(
+						this.$label,
+						FormElement.classNameFormElementCommon,
+						FormElement.classNameLabel,
+						FormElement.classNameStateBlur);
+					Element.removeClassFrom(
+						this.$wrapper,
+						FormElement.classNameWrapper,
+						'',
+						FormElement.classNameStateBlur);
 				}
 
 				/**
@@ -263,12 +287,36 @@ module baser {
 				 */
 				public _onblur (): void {
 					this.isFocus = false;
-					Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
-					Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
-					Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);
-					Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
-					Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
-					Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
+					Element.addClassTo(
+						this.$el,
+						FormElement.classNameFormElementCommon,
+						'',
+						FormElement.classNameStateBlur);
+					Element.addClassTo(
+						this.$label,
+						FormElement.classNameFormElementCommon,
+						FormElement.classNameLabel,
+						FormElement.classNameStateBlur);
+					Element.addClassTo(
+						this.$wrapper,
+						FormElement.classNameWrapper,
+						'',
+						FormElement.classNameStateBlur);
+					Element.removeClassFrom(
+						this.$el,
+						FormElement.classNameFormElementCommon,
+						'',
+						FormElement.classNameStateFocus);
+					Element.removeClassFrom(
+						this.$label,
+						FormElement.classNameFormElementCommon,
+						FormElement.classNameLabel,
+						FormElement.classNameStateFocus);
+					Element.removeClassFrom(
+						this.$wrapper,
+						FormElement.classNameWrapper,
+						'',
+						FormElement.classNameStateFocus);
 				}
 
 			}

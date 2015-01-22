@@ -137,7 +137,7 @@ module baser {
 
 					Element.addClassTo(this.$wrapper, Select.classNameSelect + '-' + FormElement.classNameWrapper);
 
-					var $elements:JQuery = this.$label.children().detach();
+					var $elements: JQuery = this.$label.children().detach();
 					this.$label.empty();
 					this.$label.append($elements);
 					Element.addClassTo(this.$label, Select.classNameSelect, FormElement.classNameLabel);

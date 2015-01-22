@@ -162,12 +162,32 @@ module baser {
 						this.$label.addClass(this._checkedClass);
 						this.$wrapper.addClass(this._checkedClass);
 
-						Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
-						Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateChecked);
-						Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
-						Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
-						Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
-						Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
+						Element.addClassTo(
+							this.$el, FormElement.classNameFormElementCommon,
+							'',
+							CheckableElement.classNameStateChecked);
+						Element.addClassTo(
+							this.$label, FormElement.classNameFormElementCommon,
+							FormElement.classNameLabel,
+							CheckableElement.classNameStateChecked);
+						Element.addClassTo(
+							this.$wrapper, FormElement.classNameWrapper,
+							'',
+							CheckableElement.classNameStateChecked);
+						Element.removeClassFrom(
+							this.$el, FormElement.classNameFormElementCommon,
+							'',
+							CheckableElement.classNameStateUnchecked);
+						Element.removeClassFrom(
+							this.$label,
+							FormElement.classNameFormElementCommon,
+							FormElement.classNameLabel,
+							CheckableElement.classNameStateUnchecked);
+						Element.removeClassFrom(
+							this.$wrapper,
+							FormElement.classNameWrapper,
+							'',
+							CheckableElement.classNameStateUnchecked);
 
 					} else {
 
@@ -175,12 +195,36 @@ module baser {
 						this.$label.removeClass(this._checkedClass);
 						this.$wrapper.removeClass(this._checkedClass);
 
-						Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
-						Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
-						Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
-						Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
-						Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateChecked);
-						Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
+						Element.addClassTo(
+							this.$el,
+							FormElement.classNameFormElementCommon,
+							'',
+							CheckableElement.classNameStateUnchecked);
+						Element.addClassTo(
+							this.$label,
+							FormElement.classNameFormElementCommon,
+							FormElement.classNameLabel,
+							CheckableElement.classNameStateUnchecked);
+						Element.addClassTo(
+							this.$wrapper,
+							FormElement.classNameWrapper,
+							'',
+							CheckableElement.classNameStateUnchecked);
+						Element.removeClassFrom(
+							this.$el,
+							FormElement.classNameFormElementCommon,
+							'',
+							CheckableElement.classNameStateChecked);
+						Element.removeClassFrom(
+							this.$label,
+							FormElement.classNameFormElementCommon,
+							FormElement.classNameLabel,
+							CheckableElement.classNameStateChecked);
+						Element.removeClassFrom(
+							this.$wrapper,
+							FormElement.classNameWrapper,
+							'',
+							CheckableElement.classNameStateChecked);
 
 					}
 
