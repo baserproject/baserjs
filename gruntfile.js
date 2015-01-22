@@ -99,15 +99,6 @@ module.exports = function(grunt) {
         src: 'src/index.ts'
       }
     },
-    tsd: {
-      refresh: {
-        options: {
-          command: 'reinstall',
-          latest: true,
-          config: 'tsd.json'
-        }
-      }
-    },
     qunit: {
       all: [
         'test/*.html'
@@ -120,14 +111,12 @@ module.exports = function(grunt) {
     'concat:lib',
     'concat:dist',
     'uglify',
-    // 'tsd', // モジュール内のエラーが起こるため一時的に使用停止
     'qunit',
     'clean:docs',
     'typedoc',
     'update'
   ]);
 
-  grunt.loadNpmTasks('grunt-tsd');
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-typedoc');
   grunt.loadNpmTasks('grunt-contrib-uglify');

@@ -117,6 +117,41 @@ test('baser.utility.String.camelCaseのテスト', function() {
 
 });
 
+test('baser.utility.String.isFalsyのテスト', function() {
+
+	ok(baser.utility.String.isFalsy, 'baser.utility.String.isFalsy は存在します');
+
+	// 偽相等
+	ok(baser.utility.String.isFalsy(''), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy(' '), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('　'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('false'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('FALSE'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('null'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('NULL'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('undefined'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('UNDEFINED'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('0'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('0.000'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(baser.utility.String.isFalsy('.0000'), 'baser.utility.String.isFalsy は正しく動作しています。');
+
+	// 真相等
+	ok(!baser.utility.String.isFalsy('true'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('TRUE'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('T'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('F'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('n'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('Nil'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('undefine'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('die'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('kill'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('1'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('1.00'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('0.001'), 'baser.utility.String.isFalsy は正しく動作しています。');
+	ok(!baser.utility.String.isFalsy('.0001'), 'baser.utility.String.isFalsy は正しく動作しています。');
+
+});
+
 </script>
 
 </body>

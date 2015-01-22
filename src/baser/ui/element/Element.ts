@@ -202,6 +202,46 @@ module baser {
 				}
 
 				/**
+				 * 要素の属性の真偽を判定する
+				 *
+				 * DOM APIの標準で判定できるものはそれで判断
+				 *
+				 * 値なし属性の場合は存在すれば真
+				 *
+				 * 値あり属性の場合は偽相等の文字列でなければ全て真とする
+				 *
+				 * ただし値なし属性の場合は値が空文字列のため、偽相等の文字列の例外とする
+				 *
+				 * @version 0.2.0
+				 * @since 0.2.0
+				 *
+				 */
+				static getBoolAttr ($elem: JQuery, attrName: string): boolean {
+
+					// DOM APIの標準で判定できるものはそれで判断
+					var propValue: any = $elem.prop(attrName);
+					if (propValue === true) {
+						return true;
+					}
+
+					// 属性の値の取得 値なし属性の場合は 存在しない場合 undefined を返す
+					var value: string = $elem.attr(attrName);
+
+					if (value === undefined) {
+						return false;
+					}
+
+					// 値なし属性の場合は値が空文字列 （偽相等の文字列の例外）
+					if (value === '') {
+						return true;
+					}
+
+					// 値あり属性の場合は偽相等の文字列でなければ全て真とする
+					return !baser.utility.String.isFalsy(value);
+
+				}
+
+				/**
 				 * クラス名を付加する
 				 *
 				 * @version 0.1.0
@@ -266,6 +306,22 @@ module baser {
 					var className: string = Element.createClassName(blockNames, elementNames, modifierName);
 					this.$el.addClass(className);
 				}
+
+				/**
+				 * 要素の属性の真偽を判定する
+				 *
+				 * `baser.ui.element.Element.getBoolAttr` のインスタンスメソッド版
+				 *
+				 * @version 0.2.0
+				 * @since 0.2.0
+				 *
+				 */
+				public getBoolAttr (attrName: string): boolean {
+
+					return Element.getBoolAttr(this.$el, attrName);
+
+				}
+
 
 			}
 

@@ -5,13 +5,13 @@ module baser {
 		/**
 		 * Box管理を担うクラス
 		 *
-		 * @version 0.1.0
+		 * @version 0.2.0
 		 * @since 0.0.15
 		 *
 		 */
 		export class Box {
 
-			static alignment ($target: JQuery, columns: number, callback: Function, breakPoint: number = 0): JQuery {
+			static align ($target: JQuery, columns: number, callback: Function, breakPoint: number = 0): JQuery {
 				var tiles: JQuery[] = null;
 				var max = null;
 				var c: number = null;
@@ -83,16 +83,15 @@ module baser {
 			// 文書を読み込んだ時点で
 			// 文字の大きさを確認しておく
 			// 文字の大きさが変わっていたら、
-			// handlers中の関数を順に実行
 			static observer (): void {
 				if (Box.isChanged()) {
-					Box.reflatting();
+					Box.reAlign();
 				}
 				return;
 			}
 
 			// 高さ揃えを再実行する処理
-			static reflatting (): void {
+			static reAlign (): void {
 				var settings: any = Box.settings;
 				var i: number;
 				var l: number = settings.sets.length;
@@ -100,29 +99,71 @@ module baser {
 				for (i = 0; i < l; i++) {
 					set = Box.settings.sets[i];
 					set.height('auto');
-					Box.alignment(set, settings.columns[i], settings.callbacks[i], settings.breakPoints[i]);
+					Box.align(set, settings.columns[i], settings.callbacks[i], settings.breakPoints[i]);
 				}
 				return;
 			}
 
-			static init (): void {
+			static boot (): void {
 				var $w: JQuery;
-				if (!Box.isInitialized) {
+				if (!Box.isBooted) {
 					$w = $(window);
-					$w.load(Box.reflatting);
-					$w.resize(Box.reflatting);
-					Box.isInitialized = true;
+					$w.on('load', Box.reAlign);
+					$w.on('resize', Box.reAlign);
+					Box.isBooted = true;
 					Box.createChar();
 					// TODO: オプションでタイマーを回すのを制御できるようにする
-					// TODO: ストップする関数を作る
-					window.setInterval(Box.observer, Box.settings.interval);
+					Box.watchTimer = window.setInterval(Box.observer, Box.settings.interval);
 				}
 			}
 
-			static isInitialized: boolean = false;
+			static sleep (): void {
+				var $w: JQuery = $(window);
+				$w.off('load', Box.reAlign);
+				$w.off('resize', Box.reAlign);
+				window.clearInterval(Box.watchTimer);
+			}
+
+			static push ($target: JQuery, column: number = null, callback: Function = null, breakPoint: number = null): void {
+				var uid: string = $target.data('-box-align-height-');
+				if (uid) {
+					this.destory($target);
+				} else {
+					uid = utility.String.UID();
+					$target.data('-box-align-height-', uid);
+				}
+				Box.align($target, column, callback, breakPoint);
+				Box.settings.uidList.push(uid);
+				Box.settings.sets.push($target);
+				Box.settings.columns.push(column);
+				Box.settings.callbacks.push(callback);
+				Box.settings.breakPoints.push(breakPoint);
+			}
+
+			static destory ($target) {
+				$target.each(function () {
+					this.style.removeProperty('height');
+				});
+
+				var uid: string = $target.data('-box-align-height-');
+				var index: number = utility.Array.indexOf(Box.settings.uidList, uid);
+
+				Box.settings.uidList = utility.Array.remove(Box.settings.uidList, index);
+				Box.settings.sets = utility.Array.remove(Box.settings.sets, index);
+				Box.settings.columns = utility.Array.remove(Box.settings.columns, index);
+				Box.settings.callbacks = utility.Array.remove(Box.settings.callbacks, index);
+				Box.settings.breakPoints = utility.Array.remove(Box.settings.breakPoints, index);
+
+				if (Box.settings.uidList.length === 0) {
+					this.sleep();
+				}
+			}
+
+			static watchTimer: number;
+
+			static isBooted: boolean = false;
 
 			static settings: any = {
-				handlers: [],
 				interval: 1000,
 				currentSize: 0,
 				dummyChar: null,
@@ -130,11 +171,11 @@ module baser {
 				columns: [],
 				callbacks: [],
 				breakPoints: [],
-			}
-
+				uidList: []
+			};
 
 		}
-	}
 
+	}
 
 }

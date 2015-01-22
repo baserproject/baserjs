@@ -94,6 +94,23 @@ module baser {
 
 			}
 
+			/**
+			 * 文字列が論理値の偽相等であるかどうか
+			 *
+			 * @version 0.2.0
+			 * @since 0.2.0
+			 *
+			 */
+			static isFalsy (str: string): boolean {
+
+				str = str.toLowerCase();
+
+				var rFalsy: RegExp = /^\s*(?:false|null|undefined|0|0?(?:\.0+)?)?\s*$/i;
+
+				return rFalsy.test(str);
+
+			}
+
 		}
 
 	}
