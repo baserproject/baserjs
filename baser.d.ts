@@ -914,6 +914,14 @@ declare module baser {
                  */
                 constructor($el: JQuery, options: CheckableElementOption);
                 /**
+                 * オプションが開かれた後にスクロール位置を調整する
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                private _scrollToSelectedPosition();
+                /**
                  * 擬似要素にフォーカスがあったった時のイベント伝達を制御する
                  *
                  * @version 0.0.1

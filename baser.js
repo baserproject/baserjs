@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.1.0-rc r186
- * update: 2014-12-12
+ * baserjs - v0.1.0-rc r187
+ * update: 2015-01-22
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1773,6 +1773,31 @@ var baser;
                     }
                 }
                 /**
+                 * オプションが開かれた後にスクロール位置を調整する
+                 *
+                 * @version 0.1.0
+                 * @since 0.1.0
+                 *
+                 */
+                Select.prototype._scrollToSelectedPosition = function () {
+                    var $psuedoOptList = this.$options.find('li');
+                    var $psuedoOpt;
+                    this.$el.find('option').each(function (i, opt) {
+                        var $opt = $(opt);
+                        var isSelected = $opt.prop('selected');
+                        if (isSelected) {
+                            $psuedoOpt = $psuedoOptList.eq(i);
+                        }
+                    });
+                    // ポジションを正しく取得するために一度スクロール位置をリセットする
+                    this.$options.scrollTop(0);
+                    var optPos = $psuedoOpt.offset();
+                    var cntPos = this.$options.offset();
+                    if (optPos && cntPos) {
+                        this.$options.scrollTop(optPos.top - cntPos.top);
+                    }
+                };
+                /**
                  * 擬似要素にフォーカスがあったった時のイベント伝達を制御する
                  *
                  * @version 0.0.1
@@ -1792,8 +1817,6 @@ var baser;
                         _this._onfocus();
                     });
                     this.$selected.on('click.bcSelect', function (e) {
-                        $document.trigger('click.bcSelect');
-                        _this._onfocus();
                         e.stopPropagation();
                         e.preventDefault();
                     });
@@ -1823,6 +1846,8 @@ var baser;
                     _super.prototype._onfocus.call(this);
                     element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateFocus);
                     element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
+                    // オプションが開かれた後にスクロール位置を調整する
+                    this._scrollToSelectedPosition();
                 };
                 /**
                  * フォーカスがはずれた時の処理

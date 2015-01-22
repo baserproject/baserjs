@@ -206,6 +206,39 @@ module baser {
 				}
 
 				/**
+				 * オプションが開かれた後にスクロール位置を調整する
+				 *
+				 * @version 0.1.0
+				 * @since 0.1.0
+				 *
+				 */
+				private _scrollToSelectedPosition (): void {
+
+					var $psuedoOptList: JQuery = this.$options.find('li');
+
+					var $psuedoOpt: JQuery;
+
+					this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
+						var $opt: JQuery = $(opt);
+						var isSelected: boolean = <boolean> $opt.prop('selected');
+						if (isSelected) {
+							$psuedoOpt = $psuedoOptList.eq(i);
+						}
+					});
+
+					// ポジションを正しく取得するために一度スクロール位置をリセットする
+					this.$options.scrollTop(0);
+
+					var optPos: JQueryCoordinates = $psuedoOpt.offset();
+					var cntPos: JQueryCoordinates = this.$options.offset();
+
+					if (optPos && cntPos) {
+						this.$options.scrollTop(optPos.top - cntPos.top);
+					}
+
+				}
+
+				/**
 				 * 擬似要素にフォーカスがあったった時のイベント伝達を制御する
 				 *
 				 * @version 0.0.1
@@ -228,8 +261,6 @@ module baser {
 					});
 
 					this.$selected.on('click.bcSelect', (e: JQueryEventObject): void => {
-						$document.trigger('click.bcSelect');
-						this._onfocus();
 						e.stopPropagation();
 						e.preventDefault();
 					});
@@ -266,6 +297,8 @@ module baser {
 					super._onfocus();
 					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
 					Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
+					// オプションが開かれた後にスクロール位置を調整する
+					this._scrollToSelectedPosition();
 				}
 
 				/**
