@@ -149,7 +149,11 @@ module baser {
 					left: left
 				};
 			};
+
+			// 初期計算
 			calc();
+			// 初期反映
+			$child.css(css);
 
 			// 計算結果をアニメーションフレーム毎にDOMに反映
 			var animation: baser.ui.AnimationFrames = new baser.ui.AnimationFrames( (): void => {

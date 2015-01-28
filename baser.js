@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.2.0-rc r196
- * update: 2015-01-23
+ * baserjs - v0.2.0-rc.2 r198
+ * update: 2015-01-28
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -3550,7 +3550,10 @@ var baser;
                     left: left
                 };
             };
+            // 初期計算
             calc();
+            // 初期反映
+            $child.css(css);
             // 計算結果をアニメーションフレーム毎にDOMに反映
             var animation = new baser.ui.AnimationFrames(function () {
                 $child.css(css);
