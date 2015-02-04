@@ -6,6 +6,7 @@
 ================================================================= */
 /// <reference path="baser/utility/String.ts" />
 /// <reference path="baser/utility/Array.ts" />
+/// <reference path="baser/utility/Mathematics.ts" />
 
 /* UI
 ================================================================= */

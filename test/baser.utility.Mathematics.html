@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>baser.utility.Mathematics</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+test('baser.utility.Mathematics.samのテスト', function() {
+
+	ok(baser.utility.Mathematics.sam, 'baser.utility.Mathematics.sam 存在確認');
+
+	equal(baser.utility.Mathematics.sam([34232135, 2342342, 23523525, 2354232532, 234243235235]), (34232135 + 2342342 + 23523525 + 2354232532 + 234243235235), '34232135 + 2342342 + 23523525 + 2354232532 + 234243235235');
+	equal(baser.utility.Mathematics.sam([302323.232353, 325323.2321457, -34345.34, 0.003453003453453, 67805634]), (302323.232353 + 325323.2321457 + -34345.34 + 0.003453003453453 + 67805634), '302323.232353 + 325323.2321457 + -34345.34 + 0.003453003453453 + 67805634');
+
+});
+
+test('baser.utility.Mathematics.splitのテスト', function() {
+
+	ok(baser.utility.Mathematics.split, 'baser.utility.Mathematics.split 存在確認');
+
+	deepEqual(baser.utility.Mathematics.split(20, 6), [4, 4, 3, 3, 3, 3], '20の6分割');
+	deepEqual(baser.utility.Mathematics.split(200, 12), [17, 17, 17, 17, 17, 17, 17, 17, 16, 16, 16, 16], '200の12分割');
+	deepEqual(baser.utility.Mathematics.split(10, 6), [2, 2, 2, 2, 1, 1], '10の6分割');
+	deepEqual(baser.utility.Mathematics.split(23, 6), [4, 4, 4, 4, 4, 3], '23の6分割');
+	deepEqual(baser.utility.Mathematics.split(32, 6), [6, 6, 5, 5, 5, 5], '32の6分割');
+	deepEqual(baser.utility.Mathematics.split(50, 49), [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], '50の49分割');
+	deepEqual(baser.utility.Mathematics.split(1, 3), [1, 0, 0], '1の3分割');
+	deepEqual(baser.utility.Mathematics.split(2, 5), [1, 1, 0, 0, 0], '2の5分割');
+	deepEqual(baser.utility.Mathematics.split(-21, 5), [-5, -4, -4, -4, -4], '-21の5分割');
+	deepEqual(baser.utility.Mathematics.split(-43, 8), [-6, -6, -6, -5, -5, -5, -5, -5], '-43の8分割');
+	deepEqual(baser.utility.Mathematics.split(23, -5), [], '23の-5分割');
+
+});
+
+test('baser.utility.Mathematics.splitのランダム', function() {
+
+	var time = 5000; // テスト回数
+
+	var max = 10000;
+	var min = -10000;
+
+	expect(time * 2); // テスト回数設定 1回に合計と配列数を行うので2をかける
+
+	// テスト実行
+	while (time--) {
+
+		var base = Math.floor(baser.utility.Mathematics.random(min, max));
+		var devide = Math.floor(baser.utility.Mathematics.random(1, max));
+
+		var result = baser.utility.Mathematics.split(base, devide);
+
+		// 合計値の確認
+		equal(baser.utility.Mathematics.sam(result), base, base + 'の' + devide + '分割の合計確認');
+		// 配列数の確認
+		equal(result.length, devide, base + 'の' + devide + '分割の配列数確認');
+
+	}
+
+});
+
+
+</script>
+
+</body>
+</html>

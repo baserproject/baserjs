@@ -3,61 +3,61 @@ module baser {
 	/**
 	 * リストを均等に分割する
 	 *
-	 * @version 0.0.14
+	 * @version 0.2.0
 	 * @since 0.0.14
 	 *
 	 */
 	var bcSplitList = function (columnSize: number, options: any): JQuery {
-		var CLASS_NAME: string = '-bc-splited-list';
-		var CLASS_NAME_NTH: string = '-bc-splited-list--nth';
-		var CLASS_NAME_ITEM: string = '-bc-splited-list__item';
+		var CLASS_NAME: string = 'splited-list';
+		var CLASS_NAME_NTH: string = 'nth';
+		var CLASS_NAME_ITEM: string = 'item';
 		var config: any = $.extend({
 			dataKey: '-bc-split-list-index',
+			splitChildren: true
 		}, options);
 		this.each( (i: number, elem: HTMLElement): void => {
 
 			var $container: JQuery = $(elem);
-			var $list: JQuery = $container.find('ul');
-			var $items: JQuery = $list.find('li');
+			var $list: JQuery = $container.find('>ul');
+			var $items: JQuery;
+			if (!config.splitChildren) {
+				// 直下のliのみ取得
+				$items = $list.find('>li').detach();
+			} else {
+				// 入れ子のliも含めて全て取得
+				$items = $list.find('li').detach();
+				// 入れ子のulの削除
+				$items.find('ul').remove();
+			}
+
+			// リストアイテムの総数
 			var size: number = $items.length;
-			var sizeParCol: number = Math.floor(size / columnSize);
-			var sizeRem = size % columnSize;
 
+			var splited: number[] = baser.utility.Mathematics.split(size, columnSize);
+
+			var i: number;
+			var j: number;
+			var sizeByColumn: number;
+
+			var itemArray: HTMLElement[] = $items.toArray();
 			var $col: JQuery;
-			var remShift: number = sizeRem;
-			var row: number = 1;
-			var col: number = 1;
-			$items.each( (itemIndex: number, itemEl: HTMLElement): void => {
-				var $item = $(itemEl);
+			var $item: JQuery;
 
-				itemIndex += 1; // 0からでなく1からのカウント
-
-				var colByCurrentRow: number;
-				if (0 < remShift) {
-					colByCurrentRow = sizeParCol + 1;
-				} else {
-					colByCurrentRow = sizeParCol;
+			for (i = 0; i < columnSize; i++) {
+				sizeByColumn = splited[i];
+				$col = $('<ul></ul>');
+				baser.ui.element.Element.addClassTo($col, CLASS_NAME);
+				baser.ui.element.Element.addClassTo($col, CLASS_NAME, '', CLASS_NAME_NTH + columnSize);
+				$col.appendTo($container);
+				for (j = 0; j < sizeByColumn; j++) {
+					$item = $(itemArray.shift());
+					$item.appendTo($col);
+					$item.data(config.dataKey, i);
+					baser.ui.element.Element.addClassTo($item, CLASS_NAME, CLASS_NAME_ITEM);
+					baser.ui.element.Element.addClassTo($item, CLASS_NAME, CLASS_NAME_ITEM, CLASS_NAME_NTH + i);
 				}
-
-				if (!$col) {
-					$col = $('<ul></ul>');
-					$col.addClass(CLASS_NAME);
-					$col.addClass(CLASS_NAME_NTH + col);
-					$col.appendTo($container);
-				}
-				$item.appendTo($col);
-				$item.data(config.dataKey, itemIndex - 1);
-				$item.addClass(CLASS_NAME_ITEM);
-				$item.addClass(CLASS_NAME_ITEM + '--nth' + (itemIndex - 1));
-
-				if (colByCurrentRow === row) {
-					col += 1;
-					row = 0;
-					remShift -= 1;
-					$col = null;
-				}
-				row += 1;
-			});
+				$col = null;
+			}
 
 			$list.remove();
 
