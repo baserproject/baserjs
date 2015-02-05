@@ -7,7 +7,7 @@ module baser {
 	 *
 	 * 基準も縦横のセンター・上下・左右に指定可能
 	 *
-	 * @version 0.0.10
+	 * @version 0.2.0
 	 * @since 0.0.9
 	 * @param {Object} options オプション
 	 *
@@ -142,9 +142,14 @@ module baser {
 					}
 				}
 
+				var none: string = 'none';
 				css = {
 					width: newWidth,
 					height: newHeight,
+					maxWidth: none,
+					minWidth: 0,
+					maxHeight: none,
+					minHeight: 0,
 					top: top,
 					left: left
 				};

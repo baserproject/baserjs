@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.2.0-rc.3 r199
- * update: 2015-02-04
+ * baserjs - v0.2.0 r202
+ * update: 2015-02-05
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -3520,7 +3520,7 @@ var baser;
      *
      * 基準も縦横のセンター・上下・左右に指定可能
      *
-     * @version 0.0.10
+     * @version 0.2.0
      * @since 0.0.9
      * @param {Object} options オプション
      *
@@ -3646,9 +3646,14 @@ var baser;
                         left = (containerWidth / 2) - (newWidth / 2);
                     }
                 }
+                var none = 'none';
                 css = {
                     width: newWidth,
                     height: newHeight,
+                    maxWidth: none,
+                    minWidth: 0,
+                    maxHeight: none,
+                    minHeight: 0,
                     top: top,
                     left: left
                 };
