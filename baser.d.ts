@@ -1031,7 +1031,7 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.2.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1491,7 +1491,7 @@ declare module baser {
                 /**
                  * レンダリング
                  *
-                 * @version 0.2.0
+                 * @version 0.2.1
                  * @since 0.2.0
                  * @param mapCenterLat 緯度
                  * @param mapCenterLng 経度

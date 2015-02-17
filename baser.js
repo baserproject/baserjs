@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.2.0 r202
- * update: 2015-02-05
+ * baserjs - v0.2.1 r207
+ * update: 2015-02-17
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1968,7 +1968,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.2.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -2033,6 +2033,11 @@ var baser;
                         }
                         else if (ui.Browser.spec.ua.android) {
                             this.addClass(Select.classNameOsAndroid);
+                        }
+                        else {
+                            // iPhone Android 以外のタッチデバイス
+                            // タッチインターフェイスのあるWindows OS Chromeなども該当
+                            this._psuedoFocusEvent();
                         }
                     }
                     else {
@@ -2611,7 +2616,7 @@ var baser;
                 /**
                  * レンダリング
                  *
-                 * @version 0.2.0
+                 * @version 0.2.1
                  * @since 0.2.0
                  * @param mapCenterLat 緯度
                  * @param mapCenterLng 経度
@@ -2629,7 +2634,7 @@ var baser;
                         var coordinate = new Coordinate($this);
                         coordinates.push(coordinate);
                     });
-                    this.mapOption = this.mapOption || $.extend({
+                    this.mapOption = $.extend({
                         zoom: 14,
                         mapTypeControlOptions: {
                             mapTypeIds: [
@@ -3174,6 +3179,7 @@ var baser;
 var baser;
 (function (baser) {
     function bcBoxAlignHeight(columnOrKeyword, detailTarget, callback, breakPoint) {
+        if (columnOrKeyword === void 0) { columnOrKeyword = 0; }
         if (breakPoint === void 0) { breakPoint = 0; }
         if ($.isNumeric(columnOrKeyword)) {
             var column = +columnOrKeyword;
