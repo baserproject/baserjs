@@ -5,13 +5,13 @@ module baser {
 	 *
 	 * TODO: 計算ロジックとDOMアクセスのロジックを分ける
 	 *
-	 * @version 0.2.0
+	 * @version 0.2.1
 	 * @since 0.0.15
 	 *
 	 */
-	function bcBoxAlignHeight (columnOrKeyword: number, detailTarget?: string, callback?: Function, breakPoint?: number): JQuery;
-	function bcBoxAlignHeight (columnOrKeyword: string): JQuery;
-	function bcBoxAlignHeight (columnOrKeyword: any, detailTarget?: string, callback?: Function, breakPoint: number = 0): JQuery {
+	function bcBoxAlignHeight (columnOrKeyword?: number, detailTarget?: string, callback?: Function, breakPoint?: number): JQuery;
+	function bcBoxAlignHeight (columnOrKeyword?: string): JQuery;
+	function bcBoxAlignHeight (columnOrKeyword: any = 0, detailTarget?: string, callback?: Function, breakPoint: number = 0): JQuery {
 
 		if ($.isNumeric(columnOrKeyword)) {
 
