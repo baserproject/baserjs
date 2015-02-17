@@ -219,7 +219,7 @@ module baser {
 				/**
 				 * レンダリング
 				 *
-				 * @version 0.2.0
+				 * @version 0.2.1
 				 * @since 0.2.0
 				 * @param mapCenterLat 緯度
 				 * @param mapCenterLng 経度
@@ -240,7 +240,7 @@ module baser {
 						coordinates.push(coordinate);
 					});
 
-					this.mapOption = <MapOption> this.mapOption || $.extend({
+					this.mapOption = <MapOption> $.extend({
 						zoom: 14,
 						mapTypeControlOptions: <google.maps.MapTypeControlOptions> {
 							mapTypeIds: <google.maps.MapTypeId[]> [

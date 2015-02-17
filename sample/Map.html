@@ -10,7 +10,9 @@
 	<script>
 	$(function() {
 
-		$('.map').bcMaps();
+		$('.map').bcMaps({
+			zoom: 20
+		});
 
 		$('.map2_trigger').on('click', function() {
 			$('.map2').slideToggle(600, function() {
