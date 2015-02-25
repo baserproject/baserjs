@@ -5,7 +5,7 @@ module baser {
 		/**
 		 * Box管理を担うクラス
 		 *
-		 * @version 0.2.0
+		 * @version 0.2.2
 		 * @since 0.0.15
 		 *
 		 */
@@ -22,13 +22,11 @@ module baser {
 					columns = $target.length;
 				}
 				$target.each(function (i: number) {
-					var s: CSSStyleDeclaration;
 					var tile: JQuery;
 					var j: number, l: number;
 					var cancel: boolean = false;
 					if (breakPoint < window.document.documentElement.clientWidth) {
-						s = this.style;
-						s.removeProperty('height');
+						element.Element.removeCSSPropertyFromDOMElement('height', this);
 						c = i % columns;
 						if (c === 0) {
 							tiles = [];
@@ -141,9 +139,7 @@ module baser {
 			}
 
 			static destory ($target) {
-				$target.each(function () {
-					this.style.removeProperty('height');
-				});
+				element.Element.removeCSSProperty('height', $target);
 
 				var uid: string = $target.data('-box-align-height-');
 				var index: number = utility.Array.indexOf(Box.settings.uidList, uid);

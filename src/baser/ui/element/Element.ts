@@ -265,6 +265,38 @@ module baser {
 					$elem.removeClass(className);
 				}
 
+				/**
+				 * CSSプロパティをDOM要素から取り除く
+				 *
+				 * @version 0.2.2
+				 * @since 0.2.2
+				 *
+				 */
+				static removeCSSPropertyFromDOMElement (propertyName: string, elem: HTMLElement): void {
+					var style: CSSStyleDeclaration = elem.style;
+					// IE8以下はCSSStyleDeclarationのインターフェイスが標準でないのでメソッド定義チェックでエラーになる
+					var styleIE8lt: any = <any> style;
+					if (style) {
+						if (style.removeProperty) {
+							style.removeProperty(propertyName);
+						} else if (styleIE8lt.removeAttribute) {
+							styleIE8lt.removeAttribute(propertyName);
+						}
+					}
+				}
+
+				/**
+				 * CSSプロパティを取り除く
+				 *
+				 * @version 0.2.2
+				 * @since 0.2.2
+				 *
+				 */
+				static removeCSSProperty (propertyName: string, $elem: JQuery): void {
+					$elem.each( (i: number, elem: HTMLElement) => {
+						Element.removeCSSPropertyFromDOMElement(propertyName, elem);
+					});
+				}
 
 				/**
 				 * コンストラクタ
