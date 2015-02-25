@@ -489,7 +489,7 @@ declare module baser {
         /**
          * Box管理を担うクラス
          *
-         * @version 0.2.0
+         * @version 0.2.2
          * @since 0.0.15
          *
          */
@@ -660,6 +660,22 @@ declare module baser {
                  *
                  */
                 static removeClassFrom($elem: JQuery, blockNames: string, elementNames?: string, modifierName?: string): void;
+                /**
+                 * CSSプロパティをDOM要素から取り除く
+                 *
+                 * @version 0.2.2
+                 * @since 0.2.2
+                 *
+                 */
+                static removeCSSPropertyFromDOMElement(propertyName: string, elem: HTMLElement): void;
+                /**
+                 * CSSプロパティを取り除く
+                 *
+                 * @version 0.2.2
+                 * @since 0.2.2
+                 *
+                 */
+                static removeCSSProperty(propertyName: string, $elem: JQuery): void;
                 /**
                  * コンストラクタ
                  *

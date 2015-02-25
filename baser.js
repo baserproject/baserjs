@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.2.1 r207
- * update: 2015-02-17
+ * baserjs - v0.2.2 r211
+ * update: 2015-02-25
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1209,7 +1209,7 @@ var baser;
         /**
          * Box管理を担うクラス
          *
-         * @version 0.2.0
+         * @version 0.2.2
          * @since 0.0.15
          *
          */
@@ -1228,13 +1228,11 @@ var baser;
                     columns = $target.length;
                 }
                 $target.each(function (i) {
-                    var s;
                     var tile;
                     var j, l;
                     var cancel = false;
                     if (breakPoint < window.document.documentElement.clientWidth) {
-                        s = this.style;
-                        s.removeProperty('height');
+                        ui.element.Element.removeCSSPropertyFromDOMElement('height', this);
                         c = i % columns;
                         if (c === 0) {
                             tiles = [];
@@ -1343,9 +1341,7 @@ var baser;
                 Box.settings.breakPoints.push(breakPoint);
             };
             Box.destory = function ($target) {
-                $target.each(function () {
-                    this.style.removeProperty('height');
-                });
+                ui.element.Element.removeCSSProperty('height', $target);
                 var uid = $target.data('-box-align-height-');
                 var index = baser.utility.Array.indexOf(Box.settings.uidList, uid);
                 Box.settings.uidList = baser.utility.Array.remove(Box.settings.uidList, index);
@@ -1615,6 +1611,38 @@ var baser;
                     if (modifierName === void 0) { modifierName = ''; }
                     var className = Element.createClassName(blockNames, elementNames, modifierName);
                     $elem.removeClass(className);
+                };
+                /**
+                 * CSSプロパティをDOM要素から取り除く
+                 *
+                 * @version 0.2.2
+                 * @since 0.2.2
+                 *
+                 */
+                Element.removeCSSPropertyFromDOMElement = function (propertyName, elem) {
+                    var style = elem.style;
+                    // IE8以下はCSSStyleDeclarationのインターフェイスが標準でないのでメソッド定義チェックでエラーになる
+                    var styleIE8lt = style;
+                    if (style) {
+                        if (style.removeProperty) {
+                            style.removeProperty(propertyName);
+                        }
+                        else if (styleIE8lt.removeAttribute) {
+                            styleIE8lt.removeAttribute(propertyName);
+                        }
+                    }
+                };
+                /**
+                 * CSSプロパティを取り除く
+                 *
+                 * @version 0.2.2
+                 * @since 0.2.2
+                 *
+                 */
+                Element.removeCSSProperty = function (propertyName, $elem) {
+                    $elem.each(function (i, elem) {
+                        Element.removeCSSPropertyFromDOMElement(propertyName, elem);
+                    });
                 };
                 /**
                  * クラス名を付加する
