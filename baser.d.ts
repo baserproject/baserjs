@@ -140,11 +140,46 @@ declare module baser {
          *
          */
         class EventDispacher {
+            /**
+             * コンストラクタ
+             *
+             * @version 0.0.10
+             * @since 0.0.10
+             *
+             */
             constructor();
+            /**
+             * イベントハンドラを登録する
+             *
+             * @version 0.0.10
+             * @since 0.0.10
+             *
+             */
             on(type: string, handler: Function): EventDispacher;
+            /**
+             * イベントハンドラを削除する
+             *
+             * @version 0.0.10
+             * @since 0.0.10
+             *
+             */
             off(type?: string): EventDispacher;
-            trigger(type: string, context?: any): EventDispacher;
+            /**
+             * イベントハンドラを発火させる
+             *
+             * @version 0.3.0
+             * @since 0.0.10
+             *
+             */
+            trigger(type: string, args?: any[], context?: any): EventDispacher;
         }
+        /**
+         * イベントハンドラのラッパークラス
+         *
+         * @version 0.0.10
+         * @since 0.0.10
+         *
+         */
         class EventHandler {
             id: string;
             context: EventDispacher;
@@ -152,7 +187,15 @@ declare module baser {
             handler: Function;
             constructor(context: EventDispacher, type: string, handler: Function);
         }
+        /**
+         * イベントオブジェクトのクラス
+         *
+         * @version 0.3.0
+         * @since 0.0.10
+         *
+         */
         class DispacheEvent {
+            type: string;
             private _isImmediatePropagationStopped;
             constructor(type: string);
             isImmediatePropagationStopped(): boolean;
@@ -554,11 +597,11 @@ declare module baser {
             /**
              * DOM要素の抽象クラス
              *
-             * @version 0.1.0
+             * @version 0.3.0
              * @since 0.0.1
              *
              */
-            class Element {
+            class Element extends EventDispacher {
                 /**
                  * クラス名のデフォルトのプレフィックス
                  *
@@ -679,7 +722,7 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.3.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  *
@@ -1642,7 +1685,9 @@ declare module baser {
                 /**
                  * 初期化
                  *
-                 * @version 0.0.7
+                 * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
+                 *
+                 * @version 0.3.0
                  * @since 0.0.7
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @return {booelan} 初期化が成功したかどうか

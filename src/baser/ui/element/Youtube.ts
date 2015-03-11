@@ -148,7 +148,9 @@ module baser {
 				/**
 				 * 初期化
 				 *
-				 * @version 0.0.7
+				 * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
+				 *
+				 * @version 0.3.0
 				 * @since 0.0.7
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @return {booelan} 初期化が成功したかどうか
@@ -227,22 +229,57 @@ module baser {
 					var y: YT.Player;
 					var intervalTimer: number;
 
-					if (this.movieOption.stopOnInactive) {
-						intervalTimer = window.setInterval( () => {
-							if (!y && 'YT' in window && YT.Player) {
-								y = new YT.Player(playerID, null);
-							}
-							if (y && y.pauseVideo && y.playVideo) {
-								window.clearInterval(intervalTimer);
-								this.$el.trigger('embeddedyoutubeplay', [y]);
+					intervalTimer = window.setInterval( () => {
+						if (!y && 'YT' in window && YT.Player) {
+							y = new YT.Player(playerID, {
+								events: {
+									onStateChange: (e: YT.EventArgs): void => {
+										switch (e.data) {
+											case YT.PlayerState.BUFFERING: {
+												this.trigger('buffering', [y]);
+												break;
+											}
+											case YT.PlayerState.CUED: {
+												this.trigger('cued', [y]);
+												break;
+											}
+											case YT.PlayerState.ENDED: {
+												this.trigger('ended', [y]);
+												break;
+											}
+											case YT.PlayerState.PAUSED: {
+												this.trigger('paused', [y]);
+												break;
+											}
+											case YT.PlayerState.PLAYING: {
+												this.trigger('playing', [y]);
+												break;
+											}
+											default: {
+												if ('console' in window) {
+													console.warn('YouTube Player state is unknown.');
+												}
+											}
+										}
+									}
+								}
+							});
+						}
+						if (y && y.pauseVideo && y.playVideo) {
+							window.clearInterval(intervalTimer);
+
+							this.$el.trigger('embeddedyoutubeplay', [y]); // 廃止予定
+							this.trigger('embeded', [y]);
+
+							if (this.movieOption.stopOnInactive) {
 								$(window).on('blur', () => {
 									y.pauseVideo();
 								}).on('focus', () => {
 									y.playVideo();
 								});
 							}
-						}, 300);
-					}
+						}
+					}, 300);
 
 					return true;
 

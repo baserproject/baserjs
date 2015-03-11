@@ -40,11 +40,11 @@ module baser {
 			/**
 			 * DOM要素の抽象クラス
 			 *
-			 * @version 0.1.0
+			 * @version 0.3.0
 			 * @since 0.0.1
 			 *
 			 */
-			export class Element {
+			export class Element extends EventDispacher {
 
 				/**
 				 * クラス名のデフォルトのプレフィックス
@@ -301,12 +301,15 @@ module baser {
 				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.1.0
+				 * @version 0.3.0
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 *
 				 */
 				constructor ($el: JQuery) {
+
+					super();
+
 					this.$el = $el;
 
 					// IDの抽出 & 生成

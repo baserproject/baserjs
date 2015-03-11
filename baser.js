@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.2.2 r211
- * update: 2015-02-25
+ * baserjs - v0.3.0 r212
+ * update: 2015-03-11
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -626,9 +626,23 @@ var baser;
          *
          */
         var EventDispacher = (function () {
+            /**
+             * コンストラクタ
+             *
+             * @version 0.0.10
+             * @since 0.0.10
+             *
+             */
             function EventDispacher() {
                 // void
             }
+            /**
+             * イベントハンドラを登録する
+             *
+             * @version 0.0.10
+             * @since 0.0.10
+             *
+             */
             EventDispacher.prototype.on = function (type, handler) {
                 var eventHandler = new EventHandler(this, type, handler);
                 eventHandlers[eventHandler.id] = eventHandler;
@@ -638,11 +652,26 @@ var baser;
                 types[type].push(eventHandler);
                 return this;
             };
+            /**
+             * イベントハンドラを削除する
+             *
+             * @version 0.0.10
+             * @since 0.0.10
+             *
+             */
             EventDispacher.prototype.off = function (type) {
                 delete types[type];
                 return this;
             };
-            EventDispacher.prototype.trigger = function (type, context) {
+            /**
+             * イベントハンドラを発火させる
+             *
+             * @version 0.3.0
+             * @since 0.0.10
+             *
+             */
+            EventDispacher.prototype.trigger = function (type, args, context) {
+                if (args === void 0) { args = []; }
                 var eventHandler;
                 var e;
                 context = context || this;
@@ -654,7 +683,8 @@ var baser;
                         eventHandler = types[type][i];
                         if (eventHandler.context === this) {
                             e = new DispacheEvent(type);
-                            eventHandler.handler.call(context, e);
+                            args.unshift(e);
+                            eventHandler.handler.apply(context, args);
                             if (e.isImmediatePropagationStopped()) {
                                 break;
                             }
@@ -666,6 +696,13 @@ var baser;
             return EventDispacher;
         })();
         ui.EventDispacher = EventDispacher;
+        /**
+         * イベントハンドラのラッパークラス
+         *
+         * @version 0.0.10
+         * @since 0.0.10
+         *
+         */
         var EventHandler = (function () {
             function EventHandler(context, type, handler) {
                 this.context = context;
@@ -676,10 +713,17 @@ var baser;
             return EventHandler;
         })();
         ui.EventHandler = EventHandler;
+        /**
+         * イベントオブジェクトのクラス
+         *
+         * @version 0.3.0
+         * @since 0.0.10
+         *
+         */
         var DispacheEvent = (function () {
             function DispacheEvent(type) {
                 this._isImmediatePropagationStopped = false;
-                // void
+                this.type = type;
             }
             DispacheEvent.prototype.isImmediatePropagationStopped = function () {
                 return this._isImmediatePropagationStopped;
@@ -1429,20 +1473,22 @@ var baser;
             /**
              * DOM要素の抽象クラス
              *
-             * @version 0.1.0
+             * @version 0.3.0
              * @since 0.0.1
              *
              */
-            var Element = (function () {
+            var Element = (function (_super) {
+                __extends(Element, _super);
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.3.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  *
                  */
                 function Element($el) {
+                    _super.call(this);
                     /**
                      * 管理するDOM要素のname属性値
                      *
@@ -1710,7 +1756,7 @@ var baser;
                  */
                 Element.classNameDefaultSeparatorForModifier = 1 /* DOUBLE_HYPHEN */;
                 return Element;
-            })();
+            })(ui.EventDispacher);
             element.Element = Element;
         })(element = ui.element || (ui.element = {}));
     })(ui = baser.ui || (baser.ui = {}));
@@ -2842,7 +2888,9 @@ var baser;
                 /**
                  * 初期化
                  *
-                 * @version 0.0.7
+                 * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
+                 *
+                 * @version 0.3.0
                  * @since 0.0.7
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @return {booelan} 初期化が成功したかどうか
@@ -2904,22 +2952,56 @@ var baser;
                     $.getScript(protocol + Youtube.API_URL);
                     var y;
                     var intervalTimer;
-                    if (this.movieOption.stopOnInactive) {
-                        intervalTimer = window.setInterval(function () {
-                            if (!y && 'YT' in window && YT.Player) {
-                                y = new YT.Player(playerID, null);
-                            }
-                            if (y && y.pauseVideo && y.playVideo) {
-                                window.clearInterval(intervalTimer);
-                                _this.$el.trigger('embeddedyoutubeplay', [y]);
+                    intervalTimer = window.setInterval(function () {
+                        if (!y && 'YT' in window && YT.Player) {
+                            y = new YT.Player(playerID, {
+                                events: {
+                                    onStateChange: function (e) {
+                                        switch (e.data) {
+                                            case YT.PlayerState.BUFFERING: {
+                                                _this.trigger('buffering', [y]);
+                                                break;
+                                            }
+                                            case YT.PlayerState.CUED: {
+                                                _this.trigger('cued', [y]);
+                                                break;
+                                            }
+                                            case YT.PlayerState.ENDED: {
+                                                _this.trigger('ended', [y]);
+                                                break;
+                                            }
+                                            case YT.PlayerState.PAUSED: {
+                                                _this.trigger('paused', [y]);
+                                                break;
+                                            }
+                                            case YT.PlayerState.PLAYING: {
+                                                _this.trigger('playing', [y]);
+                                                break;
+                                            }
+                                            default: {
+                                                if ('console' in window) {
+                                                    console.warn('YouTube Player state is unknown.');
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        if (y && y.pauseVideo && y.playVideo) {
+                            window.clearInterval(intervalTimer);
+                            // 廃止予定
+                            _this.$el.trigger('embeddedyoutubeplay', [y]);
+                            _this.trigger('embeded', [y]);
+                            if (_this.movieOption.stopOnInactive) {
                                 $(window).on('blur', function () {
                                     y.pauseVideo();
                                 }).on('focus', function () {
                                     y.playVideo();
                                 });
                             }
-                        }, 300);
-                    }
+                        }
+                    }, 300);
                     return true;
                 };
                 Youtube.prototype.reload = function (options) {

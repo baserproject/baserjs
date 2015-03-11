@@ -1,7 +1,7 @@
 {
   "name": "baserjs",
-  "version": "0.2.2",
-  "revision": 211,
+  "version": "0.3.0",
+  "revision": 212,
   "description": "Client side JavaScript libraries for baserCMS",
   "main": "baser.js",
   "scripts": {
@@ -29,16 +29,18 @@
   "website": "https://github.com/baserproject/",
   "license": "MIT",
   "devDependencies": {
-    "grunt": "*",
-    "grunt-contrib-clean": "*",
-    "grunt-contrib-concat": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-contrib-qunit": "*",
-    "qunitjs": "*",
-    "grunt-typescript": "*",
-    "grunt-typedoc": "*",
-    "grunt-tslint": "*",
-    "grunt-dtsm": "*"
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-qunit": "^0.5.2",
+    "grunt-contrib-uglify": "^0.8.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-dtsm": "^0.2.6",
+    "grunt-tslint": "^2.0.0",
+    "grunt-typedoc": "^0.2.1",
+    "grunt-typescript": "^0.6.1",
+    "qunitjs": "^1.17.1",
+    "tslint": "^2.1.1",
+    "typescript": "^1.4.1"
   }
 }

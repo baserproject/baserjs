@@ -8,7 +8,16 @@
 	<script>
 	$(function() {
 
-		$('.youtube').bcYoutube();
+		var yt = $('.youtube').bcYoutube({
+			controls: true
+		}).data(baser.ui.element.Youtube.className);
+
+		yt.on('buffering', function (e, ytplayer) { console.log(e.type, ytplayer) });
+		yt.on('cued', function (e, ytplayer) { console.log(e.type, ytplayer) });
+		yt.on('ended', function (e, ytplayer) { console.log(e.type, ytplayer) });
+		yt.on('paused', function (e, ytplayer) { console.log(e.type, ytplayer) });
+		yt.on('playing', function (e, ytplayer) { console.log(e.type, ytplayer) });
+		yt.on('embeded', function (e, ytplayer) { console.log(e.type, ytplayer) });
 
 	});
 	</script>
@@ -24,7 +33,7 @@
 
 		<h2>sample1</h2>
 
-		<div class="youtube" data-id="oQ75KYZ205M" data-width="1920" data-height="1080"></div>
+		<div class="youtube" data-id="WHvuHj5ssEc" data-width="1920" data-height="1080"></div>
 
 		<hr>
 

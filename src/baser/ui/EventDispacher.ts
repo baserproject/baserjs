@@ -14,10 +14,24 @@ module baser {
 		 */
 		export class EventDispacher {
 
+			/**
+			 * コンストラクタ
+			 *
+			 * @version 0.0.10
+			 * @since 0.0.10
+			 *
+			 */
 			constructor () {
 				// void
 			}
 
+			/**
+			 * イベントハンドラを登録する
+			 *
+			 * @version 0.0.10
+			 * @since 0.0.10
+			 *
+			 */
 			public on (type: string, handler: Function): EventDispacher {
 
 				var eventHandler: EventHandler = new EventHandler(this, type, handler);
@@ -30,12 +44,26 @@ module baser {
 				return this;
 			}
 
+			/**
+			 * イベントハンドラを削除する
+			 *
+			 * @version 0.0.10
+			 * @since 0.0.10
+			 *
+			 */
 			public off (type?: string): EventDispacher {
 				delete types[type];
 				return this;
 			}
 
-			public trigger (type: string, context?: any): EventDispacher {
+			/**
+			 * イベントハンドラを発火させる
+			 *
+			 * @version 0.3.0
+			 * @since 0.0.10
+			 *
+			 */
+			public trigger (type: string, args: any[] = [], context?: any): EventDispacher {
 
 				var eventHandler: EventHandler;
 				var e: DispacheEvent;
@@ -53,7 +81,8 @@ module baser {
 						eventHandler = types[type][i];
 						if (eventHandler.context === this) {
 							e = new DispacheEvent(type);
-							eventHandler.handler.call(context, e);
+							args.unshift(e);
+							eventHandler.handler.apply(context, args);
 							if (e.isImmediatePropagationStopped()) {
 								break;
 							}
@@ -67,6 +96,13 @@ module baser {
 
 		}
 
+		/**
+		 * イベントハンドラのラッパークラス
+		 *
+		 * @version 0.0.10
+		 * @since 0.0.10
+		 *
+		 */
 		export class EventHandler {
 
 			public id: string;
@@ -85,12 +121,21 @@ module baser {
 
 		}
 
+		/**
+		 * イベントオブジェクトのクラス
+		 *
+		 * @version 0.3.0
+		 * @since 0.0.10
+		 *
+		 */
 		export class DispacheEvent {
+
+			public type: string;
 
 			private _isImmediatePropagationStopped: boolean = false;
 
 			constructor (type: string) {
-				// void
+				this.type = type;
 			}
 
 			public isImmediatePropagationStopped (): boolean {
