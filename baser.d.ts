@@ -1090,7 +1090,7 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.2.1
+                 * @version 0.3.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション

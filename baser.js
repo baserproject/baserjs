@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.3.0 r212
- * update: 2015-03-11
+ * baserjs - v0.3.1 r214
+ * update: 2015-03-13
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -2042,7 +2042,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.2.1
+                 * @version 0.3.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -2104,9 +2104,13 @@ var baser;
                                 _this.$label.focus();
                             });
                             this.addClass(Select.classNameOsIOs);
+                            element.Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
+                            element.Element.addClassTo(this.$label, Select.classNameOsIOs);
                         }
                         else if (ui.Browser.spec.ua.android) {
                             this.addClass(Select.classNameOsAndroid);
+                            element.Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
+                            element.Element.addClassTo(this.$label, Select.classNameOsAndroid);
                         }
                         else {
                             // iPhone Android 以外のタッチデバイス
@@ -2990,8 +2994,7 @@ var baser;
                         }
                         if (y && y.pauseVideo && y.playVideo) {
                             window.clearInterval(intervalTimer);
-                            // 廃止予定
-                            _this.$el.trigger('embeddedyoutubeplay', [y]);
+                            _this.$el.trigger('embeddedyoutubeplay', [y]); // 廃止予定
                             _this.trigger('embeded', [y]);
                             if (_this.movieOption.stopOnInactive) {
                                 $(window).on('blur', function () {

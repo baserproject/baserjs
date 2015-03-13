@@ -122,7 +122,7 @@ module baser {
 				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.2.1
+				 * @version 0.3.1
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
@@ -195,8 +195,12 @@ module baser {
 								this.$label.focus();
 							});
 							this.addClass(Select.classNameOsIOs);
+							Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
+							Element.addClassTo(this.$label, Select.classNameOsIOs);
 						} else if (Browser.spec.ua.android) {
 							this.addClass(Select.classNameOsAndroid);
+							Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
+							Element.addClassTo(this.$label, Select.classNameOsAndroid);
 						} else {
 							// iPhone Android 以外のタッチデバイス
 							// タッチインターフェイスのあるWindows OS Chromeなども該当
