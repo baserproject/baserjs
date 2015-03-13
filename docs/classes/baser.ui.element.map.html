@@ -114,11 +114,13 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.map.html#_coordinates" class="tsd-kind-icon">$coordinates</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.map.html#_el" class="tsd-kind-icon">$el</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.map.html#static-classname" class="tsd-kind-icon">class<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.map.html#static-defaultlat" class="tsd-kind-icon">default<wbr>Lat</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.map.html#static-defaultlng" class="tsd-kind-icon">default<wbr>Lng</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.map.html#gmap" class="tsd-kind-icon">gmap</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.map.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.map.html#info" class="tsd-kind-icon">info</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.map.html#static-lat" class="tsd-kind-icon">lat</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.map.html#static-lng" class="tsd-kind-icon">lng</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.map.html#lat" class="tsd-kind-icon">lat</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.map.html#lng" class="tsd-kind-icon">lng</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.map.html#mapoption" class="tsd-kind-icon">map<wbr>Option</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.map.html#static-maps" class="tsd-kind-icon">maps</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.map.html#name" class="tsd-kind-icon">name</a></li>
@@ -128,8 +130,14 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.element.map.html#_init" class="tsd-kind-icon">_init</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.element.map.html#_render" class="tsd-kind-icon">_render</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.map.html#addclass" class="tsd-kind-icon">add<wbr>Class</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.map.html#getboolattr" class="tsd-kind-icon">get<wbr>Bool<wbr>Attr</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.map.html#static-getlatlngbyaddress" class="tsd-kind-icon">get<wbr>Lat<wbr>Lng<wbr>ByAddress</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.map.html#off" class="tsd-kind-icon">off</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.map.html#on" class="tsd-kind-icon">on</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.map.html#reload" class="tsd-kind-icon">reload</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.map.html#trigger" class="tsd-kind-icon">trigger</a></li>
 							</ul>
 						</section>
 					</div>
@@ -144,10 +152,10 @@
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
-								<p>Overwrites         <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#constructor">constructor</a>
+								<p>Overwrites         <a href="baser.ui.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.eventdispacher.html#constructor">constructor</a>
 								</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L154">ui/element/Map.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L173">ui/element/Map.ts:173</a></li>
 								</ul>
 								</aside>        <div class="tsd-comment tsd-typography">
 								<div class="lead">
@@ -174,6 +182,11 @@
 								</li>
 								<li>
 									<h5>options?:         <a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-signature-type">MapOption</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>マップオプション</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.element.map.html" class="tsd-signature-type">Map</a>
@@ -188,7 +201,7 @@
 					<div class="tsd-signature tsd-kind-icon">$coordinates<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">JQuery</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L135">ui/element/Map.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L153">ui/element/Map.ts:153</a></li>
 						</ul>
 						</aside>        <div class="tsd-comment tsd-typography">
 						<div class="lead">
@@ -229,11 +242,55 @@
 					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L99">ui/element/Map.ts:99</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L117">ui/element/Map.ts:117</a></li>
 						</ul>
 						</aside>        <div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>管理対象の要素に付加するclass属性値のプレフィックス</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.0.6</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.0.6</p>
+							</dd>
+						</dl>
+					</div>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="static-defaultlat" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> default<wbr>Lat</h3>
+					<div class="tsd-signature tsd-kind-icon">default<wbr>Lat<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L80">ui/element/Map.ts:80</a></li>
+						</ul>
+						</aside>        <div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>初期設定用の緯度
+							東京都庁</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.0.6</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.0.6</p>
+							</dd>
+						</dl>
+					</div>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="static-defaultlng" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> default<wbr>Lng</h3>
+					<div class="tsd-signature tsd-kind-icon">default<wbr>Lng<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L90">ui/element/Map.ts:90</a></li>
+						</ul>
+						</aside>        <div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>初期設定用の経度
+							東京都庁</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>version</dt>
@@ -250,7 +307,7 @@
 					<div class="tsd-signature tsd-kind-icon">gmap<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">google.maps.Map</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L117">ui/element/Map.ts:117</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L135">ui/element/Map.ts:135</a></li>
 						</ul>
 						</aside>        <div class="tsd-comment tsd-typography">
 						<div class="lead">
@@ -291,7 +348,7 @@
 					<div class="tsd-signature tsd-kind-icon">info<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">google.maps.InfoWindow</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L126">ui/element/Map.ts:126</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L144">ui/element/Map.ts:144</a></li>
 						</ul>
 						</aside>        <div class="tsd-comment tsd-typography">
 						<div class="lead">
@@ -306,47 +363,45 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-lat" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> lat</h3>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+					<a name="lat" class="tsd-anchor"></a>
+					<h3>lat</h3>
 					<div class="tsd-signature tsd-kind-icon">lat<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L80">ui/element/Map.ts:80</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L99">ui/element/Map.ts:99</a></li>
 						</ul>
 						</aside>        <div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>初期設定用の緯度
-							東京都庁</p>
+							<p>緯度</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>version</dt>
-							<dd><p>0.0.6</p>
+							<dd><p>0.2.0</p>
 							</dd>
 							<dt>since</dt>
-							<dd><p>0.0.6</p>
+							<dd><p>0.2.0</p>
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-lng" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> lng</h3>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+					<a name="lng" class="tsd-anchor"></a>
+					<h3>lng</h3>
 					<div class="tsd-signature tsd-kind-icon">lng<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L90">ui/element/Map.ts:90</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L108">ui/element/Map.ts:108</a></li>
 						</ul>
 						</aside>        <div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>初期設定用の経度
-							東京都庁</p>
+							<p>経度</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>version</dt>
-							<dd><p>0.0.6</p>
+							<dd><p>0.2.0</p>
 							</dd>
 							<dt>since</dt>
-							<dd><p>0.0.6</p>
+							<dd><p>0.2.0</p>
 							</dd>
 						</dl>
 					</div>
@@ -356,7 +411,7 @@
 					<div class="tsd-signature tsd-kind-icon">map<wbr>Option<span class="tsd-signature-symbol">:</span>         <a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-signature-type">MapOption</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L144">ui/element/Map.ts:144</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L162">ui/element/Map.ts:162</a></li>
 						</ul>
 						</aside>        <div class="tsd-comment tsd-typography">
 						<div class="lead">
@@ -377,7 +432,7 @@
 					<div class="tsd-signature tsd-kind-icon">maps<span class="tsd-signature-symbol">:</span>         <a href="baser.ui.element.map.html" class="tsd-signature-type">Map</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L108">ui/element/Map.ts:108</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L126">ui/element/Map.ts:126</a></li>
 						</ul>
 						</aside>        <div class="tsd-comment tsd-typography">
 						<div class="lead">
@@ -418,18 +473,69 @@
 					<a name="_init" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagprivate">private</span> _init</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">_init<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-signature-type">MapOption</a><span class="tsd-signature-symbol">)</span></li>
+						<li class="tsd-signature tsd-kind-icon">_init<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L174">ui/element/Map.ts:174</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L201">ui/element/Map.ts:201</a></li>
 								</ul>
-							</aside>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>初期化</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.0.6</p>
+									</dd>
+								</dl>
+							</div>
+						</li>
+					</ul>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+					<a name="_render" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagprivate">private</span> _render</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_render<span class="tsd-signature-symbol">(</span>mapCenterLat<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, mapCenterLng<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L228">ui/element/Map.ts:228</a></li>
+								</ul>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>レンダリング</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.2.1</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options?:         <a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-signature-type">MapOption</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5>mapCenterLat:         <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>緯度</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>mapCenterLng:         <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>経度</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 						</li>
@@ -445,7 +551,7 @@
 								<p>Inherited from         <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#addclass">addClass</a>
 								</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Element.ts#L265">ui/element/Element.ts:265</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Element.ts#L340">ui/element/Element.ts:340</a></li>
 								</ul>
 								</aside>        <div class="tsd-comment tsd-typography">
 								<div class="lead">
@@ -474,18 +580,224 @@
 							</ul>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
-					<a name="reload" class="tsd-anchor"></a>
-					<h3>reload</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">reload<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="getboolattr" class="tsd-anchor"></a>
+					<h3>get<wbr>Bool<wbr>Attr</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Bool<wbr>Attr<span class="tsd-signature-symbol">(</span>attrName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<p>Inherited from         <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#getboolattr">getBoolAttr</a>
+								</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Element.ts#L354">ui/element/Element.ts:354</a></li>
+								</ul>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>要素の属性の真偽を判定する</p>
+								</div>
+								<p><code>baser.ui.element.Element.getBoolAttr</code> のインスタンスメソッド版</p>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>attrName:         <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">boolean</span>
+							</h4>
+						</li>
+					</ul>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="static-getlatlngbyaddress" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> get<wbr>Lat<wbr>Lng<wbr>ByAddress</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Lat<wbr>Lng<wbr>ByAddress<span class="tsd-signature-symbol">(</span>address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L216">ui/element/Map.ts:216</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L272">ui/element/Map.ts:272</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>address:         <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>callback:         <span class="tsd-signature-type">Function</span></h5>
+									<ul class="tsd-parameters">
+										<li>
+											<h5>callback function signature<span class="tsd-signature-symbol"></span></h5>
+											<ul class="tsd-signatures tsd-kind-function-type tsd-parent-kind-parameter tsd-is-external">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>lat<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, lng<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description"><aside class="tsd-sources">
+														<ul>
+															<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L272">ui/element/Map.ts:272</a></li>
+														</ul>
+													</aside>
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>lat:         <span class="tsd-signature-type">number</span></h5>
+														</li>
+														<li>
+															<h5>lng:         <span class="tsd-signature-type">number</span></h5>
+														</li>
+													</ul>
+												</li>
+										</ul>        </li>
+								</ul>            </li>
+							</ul>
+						</li>
+					</ul>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="off" class="tsd-anchor"></a>
+					<h3>off</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">off<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<p>Inherited from         <a href="baser.ui.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.eventdispacher.html#off">off</a>
+								</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L54">ui/EventDispacher.ts:54</a></li>
+								</ul>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>イベントハンドラを削除する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.0.10</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.0.10</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type?:         <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
+							</h4>
+						</li>
+					</ul>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="on" class="tsd-anchor"></a>
+					<h3>on</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<p>Inherited from         <a href="baser.ui.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.eventdispacher.html#on">on</a>
+								</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L35">ui/EventDispacher.ts:35</a></li>
+								</ul>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>イベントハンドラを登録する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.0.10</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.0.10</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type:         <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>handler:         <span class="tsd-signature-type">Function</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
+							</h4>
+						</li>
+					</ul>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="reload" class="tsd-anchor"></a>
+					<h3>reload</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">reload<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-signature-type">MapOption</a><span class="tsd-signature-symbol">)</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Map.ts#L267">ui/element/Map.ts:267</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>options?:         <a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-signature-type">MapOption</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="trigger" class="tsd-anchor"></a>
+					<h3>trigger</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array&lt;any&gt;</span><span class="tsd-signature-symbol"> =&nbsp;</span>[], context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description"><aside class="tsd-sources">
+								<p>Inherited from         <a href="baser.ui.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.eventdispacher.html#trigger">trigger</a>
+								</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L66">ui/EventDispacher.ts:66</a></li>
+								</ul>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>イベントハンドラを発火させる</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.3.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.0.10</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type:         <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>args?:         <span class="tsd-signature-type">Array&lt;any&gt;</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+								</li>
+								<li>
+									<h5>context?:         <span class="tsd-signature-type">any</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
+							</h4>
 						</li>
 					</ul>
 			</section></section>
@@ -568,6 +880,12 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
 								<a href="baser.ui.element.map.html#static-classname" class="tsd-kind-icon">class<wbr>Name</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.map.html#static-defaultlat" class="tsd-kind-icon">default<wbr>Lat</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.map.html#static-defaultlng" class="tsd-kind-icon">default<wbr>Lng</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="baser.ui.element.map.html#gmap" class="tsd-kind-icon">gmap</a>
 							</li>
@@ -577,11 +895,11 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="baser.ui.element.map.html#info" class="tsd-kind-icon">info</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.map.html#static-lat" class="tsd-kind-icon">lat</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.element.map.html#lat" class="tsd-kind-icon">lat</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.map.html#static-lng" class="tsd-kind-icon">lng</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.element.map.html#lng" class="tsd-kind-icon">lng</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="baser.ui.element.map.html#mapoption" class="tsd-kind-icon">map<wbr>Option</a>
@@ -595,11 +913,29 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
 								<a href="baser.ui.element.map.html#_init" class="tsd-kind-icon">_init</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+								<a href="baser.ui.element.map.html#_render" class="tsd-kind-icon">_render</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="baser.ui.element.map.html#addclass" class="tsd-kind-icon">add<wbr>Class</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="baser.ui.element.map.html#getboolattr" class="tsd-kind-icon">get<wbr>Bool<wbr>Attr</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.map.html#static-getlatlngbyaddress" class="tsd-kind-icon">get<wbr>Lat<wbr>Lng<wbr>ByAddress</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="baser.ui.element.map.html#off" class="tsd-kind-icon">off</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="baser.ui.element.map.html#on" class="tsd-kind-icon">on</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="baser.ui.element.map.html#reload" class="tsd-kind-icon">reload</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="baser.ui.element.map.html#trigger" class="tsd-kind-icon">trigger</a>
 							</li>
 						</ul>
 					</li>
@@ -616,9 +952,6 @@
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
 						<a href="baser.ui.element.youtube.html" class="tsd-kind-icon">Youtube</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-						<a href="../modules/baser.ui.element.html#_document" class="tsd-kind-icon">$document</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
 						<a href="../modules/baser.ui.element.html#double_hyphen" class="tsd-kind-icon">DOUBLE_<wbr>HYPHEN</a>

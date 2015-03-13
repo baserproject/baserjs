@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DispacheEvent | baserjs</title>
+	<title>Mathematics | baserjs</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,13 +54,13 @@
 					<a href="../modules/baser.html">baser</a>
 				</li>
 				<li>
-					<a href="../modules/baser.ui.html">ui</a>
+					<a href="../modules/baser.utility.html">utility</a>
 				</li>
 				<li>
-					<a href="baser.ui.dispacheevent.html">DispacheEvent</a>
+					<a href="baser.utility.mathematics.html">Mathematics</a>
 				</li>
 			</ul>
-			<h1>Class DispacheEvent</h1>
+			<h1>Class Mathematics</h1>
 		</div>
 	</div>
 </header>
@@ -70,14 +70,14 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>イベントオブジェクトのクラス</p>
+						<p>ユーティリティ算術クラス</p>
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>version</dt>
-						<dd><p>0.3.0</p>
+						<dd><p>0.2.0</p>
 						</dd>
 						<dt>since</dt>
-						<dd><p>0.0.10</p>
+						<dd><p>0.0.2</p>
 						</dd>
 					</dl>
 				</div>
@@ -87,101 +87,159 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Constructor methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.dispacheevent.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-external">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.dispacheevent.html#_isimmediatepropagationstopped" class="tsd-kind-icon">_is<wbr>Immediate<wbr>Propagation<wbr>Stopped</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.dispacheevent.html#type" class="tsd-kind-icon">type</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-external">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.dispacheevent.html#isimmediatepropagationstopped" class="tsd-kind-icon">is<wbr>Immediate<wbr>Propagation<wbr>Stopped</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.dispacheevent.html#stopimmediatepropagation" class="tsd-kind-icon">stop<wbr>Immediate<wbr>Propagation</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.utility.mathematics.html#static-random" class="tsd-kind-icon">random</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.utility.mathematics.html#static-sam" class="tsd-kind-icon">sam</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.utility.mathematics.html#static-split" class="tsd-kind-icon">split</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 				</section>            <section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Constructor methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
-					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.dispacheevent.html" class="tsd-signature-type">DispacheEvent</a></li>
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="static-random" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> random</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">random<span class="tsd-signature-symbol">(</span>base<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>1, dist<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>0<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L137">ui/EventDispacher.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/utility/Mathematics.ts#L25">utility/Mathematics.ts:25</a></li>
 								</ul>
-							</aside>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>指定の範囲のランダムな数を返す</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>type:         <span class="tsd-signature-type">string</span></h5>
+									<h5>base?:         <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>基準の数</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>dist?:         <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>基準からこの数までの範囲の乱数になる</p>
+										</div>
+									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.dispacheevent.html" class="tsd-signature-type">DispacheEvent</a>
+							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">number</span>
 							</h4>
+							<p>乱数</p>
 						</li>
 					</ul>
-				</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-					<a name="_isimmediatepropagationstopped" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _is<wbr>Immediate<wbr>Propagation<wbr>Stopped</h3>
-					<div class="tsd-signature tsd-kind-icon">_is<wbr>Immediate<wbr>Propagation<wbr>Stopped<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L135">ui/EventDispacher.ts:135</a></li>
-						</ul>
-					</aside>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
-					<a name="type" class="tsd-anchor"></a>
-					<h3>type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L133">ui/EventDispacher.ts:133</a></li>
-						</ul>
-					</aside>
-				</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
-					<a name="isimmediatepropagationstopped" class="tsd-anchor"></a>
-					<h3>is<wbr>Immediate<wbr>Propagation<wbr>Stopped</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Immediate<wbr>Propagation<wbr>Stopped<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="static-sam" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> sam</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">sam<span class="tsd-signature-symbol">(</span>numberList<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array&lt;number&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L141">ui/EventDispacher.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/utility/Mathematics.ts#L42">utility/Mathematics.ts:42</a></li>
 								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">boolean</span>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>配列内の数値の合計を算出する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>numberList:         <span class="tsd-signature-type">Array&lt;number&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>数の配列</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">number</span>
 							</h4>
+							<p>合計値</p>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
-					<a name="stopimmediatepropagation" class="tsd-anchor"></a>
-					<h3>stop<wbr>Immediate<wbr>Propagation</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">stop<wbr>Immediate<wbr>Propagation<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="static-split" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagstatic">static</span> split</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">split<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, devide<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, returnInfo<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;</span>false<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L145">ui/EventDispacher.ts:145</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/utility/Mathematics.ts#L64">utility/Mathematics.ts:64</a></li>
 								</ul>
-							</aside>
+								</aside>        <div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>均等に分割する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>n:         <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>分割される数</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>devide:         <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>分割する数</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5>returnInfo?:         <span class="tsd-signature-type">boolean</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>詳細情報を返すかどうか</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">any</span>
+							</h4>
+							<p><code>returnInfo</code>が真の場合 分割された数値で構成された配列を、偽の場合 詳細情報と結果を返す</p>
 						</li>
 					</ul>
 			</section></section>
@@ -198,75 +256,42 @@
 					<li class=" tsd-kind-container tsd-is-external">
 						<a href="../modules/baser.html">baser</a>
 					</li>
-					<li class="current tsd-kind-container tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
 						<a href="../modules/baser.ui.html">baser.ui</a>
 					</li>
 					<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
 						<a href="../modules/baser.ui.element.html">baser.ui.element</a>
 					</li>
-					<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
+					<li class="current tsd-kind-container tsd-parent-kind-container tsd-is-external">
 						<a href="../modules/baser.utility.html">baser.utility</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-container tsd-is-external">
-						<a href="../interfaces/baser.ui.scrolloptions.html" class="tsd-kind-icon">Scroll<wbr>Options</a>
-					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.animationframes.html" class="tsd-kind-icon">Animation<wbr>Frames</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.box.html" class="tsd-kind-icon">Box</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.browser.html" class="tsd-kind-icon">Browser</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.dimension.html" class="tsd-kind-icon">Dimension</a>
+						<a href="baser.utility.array.html" class="tsd-kind-icon">Array</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.dispacheevent.html" class="tsd-kind-icon">Dispache<wbr>Event</a>
+						<a href="baser.utility.mathematics.html" class="tsd-kind-icon">Mathematics</a>
 						<ul>
-							<li class=" tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
-								<a href="baser.ui.dispacheevent.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.utility.mathematics.html#static-random" class="tsd-kind-icon">random</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
-								<a href="baser.ui.dispacheevent.html#_isimmediatepropagationstopped" class="tsd-kind-icon">_is<wbr>Immediate<wbr>Propagation<wbr>Stopped</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.utility.mathematics.html#static-sam" class="tsd-kind-icon">sam</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
-								<a href="baser.ui.dispacheevent.html#type" class="tsd-kind-icon">type</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
-								<a href="baser.ui.dispacheevent.html#isimmediatepropagationstopped" class="tsd-kind-icon">is<wbr>Immediate<wbr>Propagation<wbr>Stopped</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
-								<a href="baser.ui.dispacheevent.html#stopimmediatepropagation" class="tsd-kind-icon">stop<wbr>Immediate<wbr>Propagation</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.utility.mathematics.html#static-split" class="tsd-kind-icon">split</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.eventdispacher.html" class="tsd-kind-icon">Event<wbr>Dispacher</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.eventhandler.html" class="tsd-kind-icon">Event<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.scroll.html" class="tsd-kind-icon">Scroll</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.timer.html" class="tsd-kind-icon">Timer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.validation.html" class="tsd-kind-icon">Validation</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-						<a href="../modules/baser.ui.html#flexiblewindowobject" class="tsd-kind-icon">flexible<wbr>Window<wbr>Object</a>
+						<a href="baser.utility.string.html" class="tsd-kind-icon">String</a>
 					</li>
 				</ul>
 			</nav>

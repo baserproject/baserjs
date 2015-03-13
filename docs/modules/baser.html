@@ -126,7 +126,7 @@
 								<p>基準も縦横のセンター・上下・左右に指定可能</p>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.0.10</p>
+									<dd><p>0.2.0</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.9</p>
@@ -162,7 +162,8 @@
 					<a name="bcboxalignheight" class="tsd-anchor"></a>
 					<h3>bc<wbr>Box<wbr>Align<wbr>Height</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">bc<wbr>Box<wbr>Align<wbr>Height<span class="tsd-signature-symbol">(</span>column<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, detailTarget<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, breakPoint<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;</span>0<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
+						<li class="tsd-signature tsd-kind-icon">bc<wbr>Box<wbr>Align<wbr>Height<span class="tsd-signature-symbol">(</span>columnOrKeyword<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, detailTarget<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Function</span>, breakPoint<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
+						<li class="tsd-signature tsd-kind-icon">bc<wbr>Box<wbr>Align<wbr>Height<span class="tsd-signature-symbol">(</span>columnOrKeyword<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
@@ -176,7 +177,7 @@
 								<p>TODO: 計算ロジックとDOMアクセスのロジックを分ける</p>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.0.15</p>
+									<dd><p>0.2.1</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.15</p>
@@ -186,16 +187,30 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>column:         <span class="tsd-signature-type">number</span></h5>
+									<h5>columnOrKeyword?:         <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
 								</li>
 								<li>
-									<h5>detailTarget:         <span class="tsd-signature-type">string</span></h5>
+									<h5>detailTarget?:         <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
 								</li>
 								<li>
-									<h5>callback:         <span class="tsd-signature-type">Function</span></h5>
+									<h5>callback?:         <span class="tsd-signature-type">Function</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
 								</li>
 								<li>
 									<h5>breakPoint?:         <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
+							</h4>
+						</li>
+						<li class="tsd-description"><aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcBoxAlignHeight.ts#L13">/Users/hirao/git/baserjs/src/jquery/bcBoxAlignHeight.ts:13</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>columnOrKeyword?:         <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
@@ -430,7 +445,7 @@
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.0.8</p>
+									<dd><p>0.1.0</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.8</p>
@@ -496,7 +511,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description"><aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcYoutube.ts#L32">/Users/hirao/git/baserjs/src/jquery/bcYoutube.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcYoutube.ts#L43">/Users/hirao/git/baserjs/src/jquery/bcYoutube.ts:43</a></li>
 								</ul>
 								</aside>        <div class="tsd-comment tsd-typography">
 								<div class="lead">
@@ -517,9 +532,20 @@
 										<pre><code class="lang-js">$(<span class="hljs-string">'.sample'</span>).bcYoutube();
                                 </code></pre>
 										<h3 id="result">Result</h3>
-										<p><div data-height="400" data-theme-id="9760" data-slug-hash="pboIt" data-default-tab="result" data-user="YusukeHirao" class='codepen'><pre><code>$(&#39;.sample&#39;).bcYoutube();</code></pre></p>
-										<p><p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a> by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
-							</div><script async src="//assets.codepen.io/assets/embed/ei.js"></script></p>
+										<p><div data-height="400"
+											data-theme-id="9760"
+											data-slug-hash="pboIt"
+											data-default-tab="result"
+											data-user="YusukeHirao"
+										class='codepen'></p>
+										<p><pre>
+                                <code>$(&#39;.sample&#39;).bcYoutube();</code>
+                                </pre></p>
+										<p><p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a>
+												by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>)
+											on <a href='http://codepen.io'>CodePen</a>.</p>
+							</div></p>
+							<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
 							</dd>
 							</dl>
 		</div>
@@ -637,7 +663,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>version</dt>
-						<dd><p>0.0.14</p>
+						<dd><p>0.2.0</p>
 						</dd>
 						<dt>since</dt>
 						<dd><p>0.0.14</p>

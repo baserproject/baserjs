@@ -19,37 +19,135 @@
 				<h2>コーポレートサイトにちょうどいいJavaScriptライブラリ</h2>
 
 				<section id="downloads">
-					<a href="https://github.com/baserproject/baserjs/zipball/rc" class="btn">Download v0.1.0-rc</a>
+					<a href="https://github.com/baserproject/baserjs/zipball/rc" class="btn">Download</a>
 					<a href="https://github.com/baserproject/baserjs" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
 				</section>
+
+
 			</div>
 		</header>
 
 		<div class="container">
 			<section id="main_content">
 
-<h3>How To Use</h3>
+<h2>How To Use</h2>
 <pre><code>&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"&gt;
 &lt;script src="baser.min.js"&gt;
 </code></pre>
 
 <h3>Bower Install</h3>
+<a href="http://badge.fury.io/bo/baserjs"><img src="https://badge.fury.io/bo/baserjs.svg" alt="Bower version"></a>
 <pre><code>$ bower install baserjs
 </code></pre>
 
-<h3>API Document</h3>
+<hr>
+
+<h2>API</h2>
+
+<p><a href="docs/index.html">API Document</a></p>
+
+<h3>機能一覧</h3>
+<table>
+	<thead>
+		<tr>
+			<th>メソッド名</th>
+			<th>機能</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>bcYoutube</td>
+			<td>YouTubeを埋め込む</td>
+		</tr>
+		<tr>
+			<td>bcScrollTo</td>
+			<td>要素のある位置までスクロールアニメーションする</td>
+		</tr>
+		<tr>
+			<td>bcRadio</td>
+			<td>WAI-ARIAに対応した装飾可能な汎用要素でラップしたラジオボタンに変更する</td>
+		</tr>
+		<tr>
+			<td>bcCheckbox</td>
+			<td>WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する</td>
+		</tr>
+		<tr>
+			<td>bcSelect</td>
+			<td>WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する</td>
+		</tr>
+		<tr>
+			<td>bcMaps</td>
+			<td>GoogleMapsを埋め込む</td>
+		</tr>
+		<tr>
+			<td>bcBoxAlignHeight</td>
+			<td>要素の高さを揃える</td>
+		</tr>
+		<tr>
+			<td>bcBoxLink</td>
+			<td>要素全体をリンク可能にする</td>
+		</tr>
+		<tr>
+			<td>bcExtendLink</td>
+			<td>リンク先の拡張子によってクラスやアイコン画像を付加する</td>
+		</tr>
+		<tr>
+			<td>bcRollover</td>
+			<td>マウスオーバー時に画像を変換する</td>
+		</tr>
+		<tr>
+			<td>bcShy</td>
+			<td>マウスオーバー時に要素を半透明にする</td>
+		</tr>
+		<tr>
+			<td>bcWink</td>
+			<td>マウスオーバー時に要素を一瞬透明にする</td>
+		</tr>
+		<tr>
+			<td>bcSplitList</td>
+			<td>リスト要素を指定の数で分割する</td>
+		</tr>
+		<tr>
+			<td>bcImageLoaded</td>
+			<td>要素内の画像の読み込みが完了したときに指定の関数を実行する</td>
+		</tr>
+		<tr>
+			<td>bcBackground</td>
+			<td>要素を背景化する（画像・ビデオ・iframe対応）</td>
+		</tr>
+		<tr>
+			<td>bcKeepAspectRatio</td>
+			<td>親要素の幅に合わせて、指定の縦横比を保ったまま高さを変更する</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>逆引きリファレンス</h3>
+
 <ul>
-	<li><a href="docs/index.html">baserJS</a></li>
-	<li><a href="docs/modules/baser">baser Module</a></li>
-	<li><a href="docs/modules/baser#bcbackground">bcBackground</a></li>
-	<li><a href="docs/modules/baser#bccheckbox">bcCheckbox</a></li>
-	<li><a href="docs/modules/baser#bcimageloaded">bcImageLoaded</a></li>
-	<li><a href="docs/modules/baser#bckeepaspectratio">bcKeepAspectRatio</a></li>
-	<li><a href="docs/modules/baser#bcmaps">bcMaps</a></li>
-	<li><a href="docs/modules/baser#bcradio">bcRadio</a></li>
-	<li><a href="docs/modules/baser#bcscrollto">bcScrollTo</a></li>
-	<li><a href="docs/modules/baser#bcselect">bcSelect</a></li>
-	<li><a href="docs/modules/baser#bcyoutube">bcYoutube</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/1cc0fa66152acd94e577" target="_blank">baserJSの導入方法</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/0c167cab002335148faf" target="_blank">baserJSの機能一覧</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/50f95d39f8d889026fc4" target="_blank">baserJSでYouTubeを埋め込む</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/b99b591fa9765763d508" target="_blank">baserJSで埋め込んだYouTubeを背景動画にする</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/13fa15d1be00785a3f37" target="_blank">baserJSで埋め込んだYouTubeをレスポンシブに対応させる</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/09428bef47c0e4305a06" target="_blank">baserJSでGoogleMapsを埋め込む</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/9738cf154336cb3f6df8" target="_blank">baserJSで埋め込んだGoogleMapsのピンにインフォウィンドウを表示させる</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/63f89c790ce24ada5c9b" target="_blank">baserJSでスクロール位置の移動をアニメーションさせる</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/073729b269f693f5d73d" target="_blank">baserJSでラジオボタンを装飾する</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/09bed0294ff84e68cbff" target="_blank">baserJSでチェックボックスを装飾する</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/e5f23e3e8e53eb3054fc" target="_blank">baserJSでセレクトボックスを装飾する</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/d9e4e7f75221bcd51334" target="_blank">baserJSでリンク可能エリアを先祖要素まで拡張する</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/215c1b41001ab39a241e" target="_blank">baserJSで要素の高さを揃える</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/c95710beb3d66d5694fd" target="_blank">baserJSで揃えた高さを解除する</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/9c7c771b5e5aaae5ba4a" target="_blank">baserJSで要素内の画像の読み込みを待つ</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/3ce20a83a19833617caf" target="_blank">baserJSでリンク先のファイルによってアイコンを出し分ける</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/477be59073ff32de4ada" target="_blank">baserJSでリスト要素を分割する</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/80464543aeae134f1527" target="_blank">baserJSで装飾可能にするフォーム要素に付加されるクラス名を変更する</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/779eb64a821b0fa04709" target="_blank">baserJSで装飾可能にしたセレクトボックスをiOSとAndroidに対応させる</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/e02be2cb82dfc5380758" target="_blank">baserJSでマウスオーバーすると一瞬透明になるエフェクトをかける</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/ec90e1d169bfa86775ed" target="_blank">baserJS利用時の baser.min.js.map について</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/2001af8c0493cd60eb9e" target="_blank">baserJSの内部モジュール一覧</a></li>
+	<li><a href="http://qiita.com/YusukeHirao/items/c80fe2b6d5576d954ff6" target="_blank">baserJSの開発環境</a></li>
 </ul>
 
 			</section>
