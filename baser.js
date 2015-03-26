@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.3.1 r214
- * update: 2015-03-13
+ * baserjs - v0.4.0-beta r215
+ * update: 2015-03-26
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -36,11 +36,11 @@
  */
 (function (factory) {
 	if (typeof define === 'function' && define.amd) {
-		// AMD
+		// AMD (Register as an anonymous module)
 		define(['jquery'], factory);
 	} else if (typeof exports === 'object') {
-		// CommonJS
-		factory(require('jquery'));
+		// Node/CommonJS
+		module.exports = factory(require('jquery'));
 	} else {
 		// Browser globals
 		factory(jQuery);
@@ -90,7 +90,7 @@
 
 			if (typeof options.expires === 'number') {
 				var days = options.expires, t = options.expires = new Date();
-				t.setTime(+t + days * 864e+5);
+				t.setMilliseconds(t.getMilliseconds() + days * 864e+5);
 			}
 
 			return (document.cookie = [
@@ -104,19 +104,20 @@
 
 		// Read
 
-		var result = key ? undefined : {};
+		var result = key ? undefined : {},
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all. Also prevents odd result when
+			// calling $.cookie().
+			cookies = document.cookie ? document.cookie.split('; ') : [],
+			i = 0,
+			l = cookies.length;
 
-		// To prevent the for loop in the first place assign an empty array
-		// in case there are no cookies at all. Also prevents odd result when
-		// calling $.cookie().
-		var cookies = document.cookie ? document.cookie.split('; ') : [];
+		for (; i < l; i++) {
+			var parts = cookies[i].split('='),
+				name = decode(parts.shift()),
+				cookie = parts.join('=');
 
-		for (var i = 0, l = cookies.length; i < l; i++) {
-			var parts = cookies[i].split('=');
-			var name = decode(parts.shift());
-			var cookie = parts.join('=');
-
-			if (key && key === name) {
+			if (key === name) {
 				// If second argument (value) is a function it's a converter...
 				result = read(cookie, value);
 				break;
@@ -134,10 +135,6 @@
 	config.defaults = {};
 
 	$.removeCookie = function (key, options) {
-		if ($.cookie(key) === undefined) {
-			return false;
-		}
-
 		// Must not alter options, thus extending a fresh object...
 		$.cookie(key, '', $.extend({}, options, { expires: -1 }));
 		return !$.cookie(key);
@@ -3670,7 +3667,8 @@ var baser;
                 align: 'center',
                 valign: 'center',
                 size: 'contain',
-                child: '>*:first'
+                child: '>*:first',
+                outer: false
             }, options);
             var $elem = $(elem);
             var $child = $elem.find(config.child);
@@ -3688,10 +3686,19 @@ var baser;
             });
             var css = {};
             var calc = function () {
-                var containerWidth = $elem.width();
-                var containerHeight = $elem.height();
-                var containerAspectRatio = containerWidth / containerHeight;
+                var containerWidth;
+                var containerHeight;
+                var containerAspectRatio;
                 var scale;
+                if (config.outer) {
+                    containerWidth = $elem.outerWidth();
+                    containerHeight = $elem.outerHeight();
+                }
+                else {
+                    containerWidth = $elem.width();
+                    containerHeight = $elem.height();
+                }
+                containerAspectRatio = containerWidth / containerHeight;
                 switch (config.size) {
                     case 'contain':
                         if (1 < containerAspectRatio) {
