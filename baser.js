@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.3.1 r214
- * update: 2015-03-13
+ * baserjs - v0.3.1 r215
+ * update: 2015-03-27
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -734,6 +734,106 @@ var baser;
             return DispacheEvent;
         })();
         ui.DispacheEvent = DispacheEvent;
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        /**
+         * 非同期逐次処理クラス
+         *
+         * @version 0.4.0
+         * @since 0.4.0
+         *
+         */
+        var Sequence = (function () {
+            function Sequence(tasks) {
+                this._tasks = [];
+                this._index = 0;
+                this._waitingTime = 0;
+                var i = 0;
+                var l = tasks.length;
+                for (; i < l; i++) {
+                    this._tasks.push(new Task(tasks[i]));
+                }
+            }
+            // TODO: ネイティブのPromiseを使う
+            Sequence.prototype.act = function (value, isLoop) {
+                var _this = this;
+                if (isLoop === void 0) { isLoop = false; }
+                var task = this._tasks[this._index];
+                var result = task.act(this, this._index, value);
+                var dfd;
+                var promise;
+                // Type like JQueryDeferred
+                if (isJQueryPromiseLikeObject(result)) {
+                    promise = result.promise();
+                }
+                else {
+                    dfd = $.Deferred();
+                    setTimeout(function () {
+                        dfd.resolve(result);
+                    }, this._waitingTime);
+                    // clear waiting time
+                    this._waitingTime = 0;
+                    // promised
+                    promise = dfd.promise();
+                }
+                promise.done(function (doneResult) {
+                    _this._index += 1;
+                    if (_this._index !== _this._tasks.length) {
+                        _this.act(doneResult, isLoop);
+                    }
+                });
+                return this;
+            };
+            Sequence.prototype.wait = function (watingTime) {
+                this._waitingTime = watingTime;
+            };
+            return Sequence;
+        })();
+        ui.Sequence = Sequence;
+        var Task = (function () {
+            function Task(func) {
+                this.status = 1 /* yet */;
+                this._func = func;
+            }
+            Task.prototype.act = function (sequence, sequenceIndex, value) {
+                var result = this._func.call(sequence, sequenceIndex, value);
+                this.status = 0 /* done */;
+                return result;
+            };
+            return Task;
+        })();
+        var TaskState;
+        (function (TaskState) {
+            TaskState[TaskState["done"] = 0] = "done";
+            TaskState[TaskState["yet"] = 1] = "yet";
+        })(TaskState || (TaskState = {}));
+        function isJQueryPromiseLikeObject(object) {
+            var props = [
+                'always',
+                'done',
+                'fail',
+                'pipe',
+                'progress',
+                'promise',
+                'state',
+                'then'
+            ];
+            if (object instanceof jQuery) {
+                return !!object.promise;
+            }
+            else {
+                while (props.length) {
+                    if (!(props.shift() in Object(object))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
 var __extends = this.__extends || function (d, b) {
@@ -3866,6 +3966,7 @@ var baser;
 /* UI
 ================================================================= */
 /// <reference path="baser/ui/EventDispacher.ts" />
+/// <reference path="baser/ui/Sequence.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />

@@ -206,6 +206,25 @@ declare module baser {
 declare module baser {
     module ui {
         /**
+         * 非同期逐次処理クラス
+         *
+         * @version 0.4.0
+         * @since 0.4.0
+         *
+         */
+        class Sequence {
+            private _tasks;
+            private _index;
+            private _waitingTime;
+            constructor(tasks: Function[]);
+            act(value: any, isLoop?: boolean): Sequence;
+            wait(watingTime: number): void;
+        }
+    }
+}
+declare module baser {
+    module ui {
+        /**
          * ブラウザの情報を管理するクラス
          *
          * @version 0.0.2

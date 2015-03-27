@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>baser.ui.Sequence</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+	<div id="anim"></div>
+</div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+test('Basic Test: iterator and value, this context', function (assert) {
+
+	var done = assert.async();
+
+	var s = new baser.ui.Sequence([
+		function (i, value) {
+			assert.strictEqual(i, 0, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			return value;
+		},
+		function (i, value) {
+			assert.strictEqual(i, 1, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			done();
+		}
+	]);
+
+	s.act('value');
+
+});
+
+test('Waiting Test', function (assert) {
+
+	var done = assert.async();
+
+	var WAIT_TIME = 1000;
+
+	var start;
+
+	var s = new baser.ui.Sequence([
+		function (i, value) {
+			start = Date.now();
+			assert.strictEqual(i, 0, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			this.wait(WAIT_TIME);
+			return value;
+		},
+		function (i, value) {
+			var end = Date.now();
+			assert.ok(end - start >= WAIT_TIME, 'waiting time: ' + (end - start));
+			assert.strictEqual(i, 1, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			done();
+		}
+	]);
+
+	s.act('value');
+
+});
+
+test('jQuery Deferred Test', function (assert) {
+
+	var done = assert.async();
+
+	var WAIT_TIME = 1000;
+
+	var start;
+
+	var s = new baser.ui.Sequence([
+		function (i, value) {
+			start = Date.now();
+			assert.strictEqual(i, 0, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			var dfd = $.Deferred();
+			setTimeout(function () {
+				dfd.resolve(value);
+			}, WAIT_TIME);
+			return dfd.promise();
+		},
+		function (i, value) {
+			var end = Date.now();
+			assert.ok(end - start >= WAIT_TIME, 'waiting time: ' + (end - start));
+			assert.strictEqual(i, 1, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			done();
+		}
+	]);
+
+	s.act('value');
+
+});
+
+test('jQuery Deferred Test2', function (assert) {
+
+	var done = assert.async();
+
+	var WAIT_TIME = 1000;
+
+	var start;
+
+	var s = new baser.ui.Sequence([
+		function (i, value) {
+			start = Date.now();
+			assert.strictEqual(i, 0, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			var dfd = $.Deferred();
+			setTimeout(function () {
+				dfd.resolve(value);
+			}, WAIT_TIME);
+			return dfd;
+		},
+		function (i, value) {
+			var end = Date.now();
+			assert.ok(end - start >= WAIT_TIME, 'waiting time: ' + (end - start));
+			assert.strictEqual(i, 1, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			done();
+		}
+	]);
+
+	s.act('value');
+
+});
+
+test('jQuery Animation Test1', function (assert) {
+
+	var done = assert.async();
+
+	var WAIT_TIME = 1000;
+
+	var start;
+
+	var $anim = $('#anim');
+
+	var s = new baser.ui.Sequence([
+		function (i, value) {
+			start = Date.now();
+			assert.strictEqual(i, 0, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			return $anim.fadeOut(WAIT_TIME);
+		},
+		function (i, value) {
+			var end = Date.now();
+			assert.ok(end - start >= WAIT_TIME, 'waiting time: ' + (end - start));
+			assert.strictEqual(i, 1, 'iterator');
+			assert.ok(value instanceof jQuery, 'value is jQuery Object');
+			assert.strictEqual(this, s, 'this context');
+			done();
+		}
+	]);
+
+	s.act('value');
+
+});
+
+test('jQuery Animation Test2', function (assert) {
+
+	var done = assert.async();
+
+	var WAIT_TIME = 1000;
+
+	var start;
+
+	var $anim = $('#anim');
+
+	var s = new baser.ui.Sequence([
+		function (i, value) {
+			start = Date.now();
+			assert.strictEqual(i, 0, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			return $anim.animate({
+				top: -500
+			}, {
+				duration: WAIT_TIME
+			});
+		},
+		function (i, value) {
+			var end = Date.now();
+			assert.ok(end - start >= WAIT_TIME, 'waiting time: ' + (end - start));
+			assert.strictEqual(i, 1, 'iterator');
+			assert.ok(value instanceof jQuery, 'value is jQuery Object');
+			assert.strictEqual(this, s, 'this context');
+			done();
+		}
+	]);
+
+	s.act('value');
+
+});
+
+test('jQuery Ajax Test', function (assert) {
+
+	var done = assert.async();
+
+	var s = new baser.ui.Sequence([
+		function (i, value) {
+			assert.strictEqual(i, 0, 'iterator');
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			return $.ajax({
+				url: 'ajax-test.json',
+				dataType: 'json'
+			});
+		},
+		function (i, value) {
+			assert.strictEqual(i, 1, 'iterator');
+			assert.deepEqual(value, { key: 'value' }, 'got JSON');
+			assert.strictEqual(this, s, 'this context');
+			done();
+		}
+	]);
+
+	s.act('value');
+
+});
+
+</script>
+
+</body>
+</html>
