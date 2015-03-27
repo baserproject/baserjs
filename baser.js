@@ -1,6 +1,6 @@
 /**
  * baserjs - v0.3.1 r215
- * update: 2015-03-27
+ * update: 2015-03-28
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -751,7 +751,11 @@ var baser;
             function Sequence(tasks) {
                 this._tasks = [];
                 this._index = 0;
+                this._promise = null;
+                this._resolver = null;
                 this._waitingTime = 0;
+                this._waitTimer = 0;
+                this._toExit = false;
                 var i = 0;
                 var l = tasks.length;
                 for (; i < l; i++) {
@@ -764,28 +768,46 @@ var baser;
                 if (isLoop === void 0) { isLoop = false; }
                 var task = this._tasks[this._index];
                 var result = task.act(this, this._index, value);
-                var dfd;
-                var promise;
                 // Type like JQueryDeferred
                 if (isJQueryPromiseLikeObject(result)) {
-                    promise = result.promise();
+                    this._promise = result.promise();
                 }
                 else {
-                    dfd = $.Deferred();
-                    setTimeout(function () {
-                        dfd.resolve(result);
+                    this._resolver = $.Deferred();
+                    this._waitTimer = setTimeout(function () {
+                        console.log('resolve');
+                        _this._resolver.resolve(result);
                     }, this._waitingTime);
-                    // clear waiting time
-                    this._waitingTime = 0;
+                    console.log('promise');
                     // promised
-                    promise = dfd.promise();
+                    this._promise = this._resolver.promise();
                 }
-                promise.done(function (doneResult) {
+                this._promise.done(function (doneResult) {
+                    console.log('done');
                     _this._index += 1;
-                    if (_this._index !== _this._tasks.length) {
+                    if (_this._index < _this._tasks.length || isLoop) {
                         _this.act(doneResult, isLoop);
                     }
+                }).fail(function () {
+                    console.warn('failed');
+                }).always(function () {
+                    console.log('always');
+                    clearTimeout(_this._waitTimer);
+                    _this._promise = null;
+                    _this._resolver = null;
+                    _this._waitTimer = null;
+                    _this._waitingTime = 0;
                 });
+                return this;
+            };
+            Sequence.prototype.loop = function (value) {
+                return this.act(value, true);
+            };
+            Sequence.prototype.exit = function () {
+                this._toExit = true;
+                if (this._waitTimer) {
+                    this._resolver.reject();
+                }
                 return this;
             };
             Sequence.prototype.wait = function (watingTime) {

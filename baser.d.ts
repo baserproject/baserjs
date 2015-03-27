@@ -215,9 +215,15 @@ declare module baser {
         class Sequence {
             private _tasks;
             private _index;
+            private _promise;
+            private _resolver;
             private _waitingTime;
+            private _waitTimer;
+            private _toExit;
             constructor(tasks: Function[]);
             act(value: any, isLoop?: boolean): Sequence;
+            loop(value: any): Sequence;
+            exit(): Sequence;
             wait(watingTime: number): void;
         }
     }
