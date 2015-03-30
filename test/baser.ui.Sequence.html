@@ -52,24 +52,25 @@ test('Basic Test: iterator and value, this context', function (assert) {
 
 test('Loop Test', function (assert) {
 
+	assert.expect(200);
+
 	var done = assert.async();
 
 	var s = new baser.ui.Sequence([
 		function (i, value) {
-			console.log(i);
-			assert.strictEqual(i, 0, 'iterator');
+			if (i >= 100) {
+				this.exit();
+				done();
+				return false;
+			}
 			assert.strictEqual(value, 'value', 'value');
 			assert.strictEqual(this, s, 'this context');
 			return value;
 		},
 		function (i, value) {
-			assert.strictEqual(i, 1, 'iterator');
 			assert.strictEqual(value, 'value', 'value');
 			assert.strictEqual(this, s, 'this context');
-			if (i > 100) {
-				this.exit();
-				done();
-			}
+			return value;
 		}
 	]);
 

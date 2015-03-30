@@ -13,6 +13,7 @@ module baser {
 
 			private _tasks: Task[] = [];
 			private _index: number = 0;
+			private _iterator: number = 0;
 			private _promise: JQueryPromise<any> = null;
 			private _resolver: JQueryDeferred<any> = null;
 			private _waitingTime: number = 0;
@@ -30,7 +31,7 @@ module baser {
 			// TODO: ネイティブのPromiseを使う
 			public act (value: any, isLoop: boolean = false): Sequence {
 				var task: Task = this._tasks[this._index];
-				var result: any = task.act(this, this._index, value);
+				var result: any = task.act(this, this._iterator, value);
 
 				// Type like JQueryDeferred
 				if (isJQueryPromiseLikeObject(result)) {
@@ -39,25 +40,26 @@ module baser {
 				} else {
 					this._resolver = $.Deferred<any>();
 					this._waitTimer = setTimeout( (): void => {
-						console.log('resolve');
 						this._resolver.resolve(result);
 					}, this._waitingTime);
-					console.log('promise');
 					// promised
 					this._promise = this._resolver.promise();
 				}
 				this._promise.done( (doneResult: any): void => {
-						console.log('done');
+					clearTimeout(this._waitTimer);
+					this._promise = null;
+					this._resolver = null;
+					this._waitTimer = null;
+					this._waitingTime = 0;
 					this._index += 1;
-					if (this._index < this._tasks.length || isLoop) {
+					this._iterator += 1;
+					if (!this._toExit && (this._index < this._tasks.length || isLoop)) {
+						if (this._index >= this._tasks.length && isLoop) {
+							this._index = 0;
+						}
 						this.act(doneResult, isLoop);
 					}
 				}).fail( (): void => {
-
-					console.warn('failed');
-
-				}).always( (): void => {
-						console.log('always');
 					clearTimeout(this._waitTimer);
 					this._promise = null;
 					this._resolver = null;
@@ -73,7 +75,7 @@ module baser {
 
 			public exit (): Sequence {
 				this._toExit = true;
-				if (this._waitTimer) {
+				if (this._resolver) {
 					this._resolver.reject();
 				}
 				return this;

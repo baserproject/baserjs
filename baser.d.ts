@@ -215,6 +215,7 @@ declare module baser {
         class Sequence {
             private _tasks;
             private _index;
+            private _iterator;
             private _promise;
             private _resolver;
             private _waitingTime;

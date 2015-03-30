@@ -1,6 +1,6 @@
 /**
  * baserjs - v0.3.1 r215
- * update: 2015-03-28
+ * update: 2015-03-30
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -751,6 +751,7 @@ var baser;
             function Sequence(tasks) {
                 this._tasks = [];
                 this._index = 0;
+                this._iterator = 0;
                 this._promise = null;
                 this._resolver = null;
                 this._waitingTime = 0;
@@ -767,7 +768,7 @@ var baser;
                 var _this = this;
                 if (isLoop === void 0) { isLoop = false; }
                 var task = this._tasks[this._index];
-                var result = task.act(this, this._index, value);
+                var result = task.act(this, this._iterator, value);
                 // Type like JQueryDeferred
                 if (isJQueryPromiseLikeObject(result)) {
                     this._promise = result.promise();
@@ -775,23 +776,26 @@ var baser;
                 else {
                     this._resolver = $.Deferred();
                     this._waitTimer = setTimeout(function () {
-                        console.log('resolve');
                         _this._resolver.resolve(result);
                     }, this._waitingTime);
-                    console.log('promise');
                     // promised
                     this._promise = this._resolver.promise();
                 }
                 this._promise.done(function (doneResult) {
-                    console.log('done');
+                    clearTimeout(_this._waitTimer);
+                    _this._promise = null;
+                    _this._resolver = null;
+                    _this._waitTimer = null;
+                    _this._waitingTime = 0;
                     _this._index += 1;
-                    if (_this._index < _this._tasks.length || isLoop) {
+                    _this._iterator += 1;
+                    if (!_this._toExit && (_this._index < _this._tasks.length || isLoop)) {
+                        if (_this._index >= _this._tasks.length && isLoop) {
+                            _this._index = 0;
+                        }
                         _this.act(doneResult, isLoop);
                     }
                 }).fail(function () {
-                    console.warn('failed');
-                }).always(function () {
-                    console.log('always');
                     clearTimeout(_this._waitTimer);
                     _this._promise = null;
                     _this._resolver = null;
@@ -805,7 +809,7 @@ var baser;
             };
             Sequence.prototype.exit = function () {
                 this._toExit = true;
-                if (this._waitTimer) {
+                if (this._resolver) {
                     this._resolver.reject();
                 }
                 return this;
