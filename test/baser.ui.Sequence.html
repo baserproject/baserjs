@@ -110,6 +110,39 @@ test('Waiting Test', function (assert) {
 
 });
 
+test('Loop & Wait Test', function (assert) {
+
+	assert.expect(20);
+
+	var done = assert.async();
+
+	var WAIT_TIME = 500;
+
+	var s = new baser.ui.Sequence([
+		function (i, value) {
+			if (i >= 10) {
+				this.exit();
+				done();
+				return false;
+			}
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			this.wait(WAIT_TIME);
+			return value;
+		},
+		function (i, value) {
+			assert.strictEqual(value, 'value', 'value');
+			assert.strictEqual(this, s, 'this context');
+			this.wait(WAIT_TIME);
+			return value;
+		}
+	]);
+
+	s.loop('value');
+
+});
+
+
 test('jQuery Deferred Test', function (assert) {
 
 	var done = assert.async();
