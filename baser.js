@@ -1,6 +1,6 @@
 /**
  * baserjs - v0.4.0-beta r215
- * update: 2015-03-26
+ * update: 2015-04-06
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -731,6 +731,132 @@ var baser;
             return DispacheEvent;
         })();
         ui.DispacheEvent = DispacheEvent;
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        /**
+         * 非同期逐次処理クラス
+         *
+         * @version 0.4.0
+         * @since 0.4.0
+         *
+         */
+        var Sequence = (function () {
+            function Sequence(tasks) {
+                this._tasks = [];
+                this._index = 0;
+                this._iterator = 0;
+                this._promise = null;
+                this._resolver = null;
+                this._waitingTime = 0;
+                this._waitTimer = 0;
+                this._toExit = false;
+                var i = 0;
+                var l = tasks.length;
+                for (; i < l; i++) {
+                    this._tasks.push(new Task(tasks[i]));
+                }
+            }
+            // TODO: ネイティブのPromiseを使う
+            Sequence.prototype.act = function (value, isLoop) {
+                var _this = this;
+                if (isLoop === void 0) { isLoop = false; }
+                var task = this._tasks[this._index];
+                var result = task.act(this, this._iterator, value);
+                // Type like JQueryDeferred
+                if (isJQueryPromiseLikeObject(result)) {
+                    this._promise = result.promise();
+                }
+                else {
+                    this._resolver = $.Deferred();
+                    this._waitTimer = setTimeout(function () {
+                        _this._resolver.resolve(result);
+                    }, this._waitingTime);
+                    // promised
+                    this._promise = this._resolver.promise();
+                }
+                this._promise.done(function (doneResult) {
+                    clearTimeout(_this._waitTimer);
+                    _this._promise = null;
+                    _this._resolver = null;
+                    _this._waitTimer = null;
+                    _this._waitingTime = 0;
+                    _this._index += 1;
+                    _this._iterator += 1;
+                    if (!_this._toExit && (_this._index < _this._tasks.length || isLoop)) {
+                        if (_this._index >= _this._tasks.length && isLoop) {
+                            _this._index = 0;
+                        }
+                        _this.act(doneResult, isLoop);
+                    }
+                }).fail(function () {
+                    clearTimeout(_this._waitTimer);
+                    _this._promise = null;
+                    _this._resolver = null;
+                    _this._waitTimer = null;
+                    _this._waitingTime = 0;
+                });
+                return this;
+            };
+            Sequence.prototype.loop = function (value) {
+                return this.act(value, true);
+            };
+            Sequence.prototype.exit = function () {
+                this._toExit = true;
+                if (this._resolver) {
+                    this._resolver.reject();
+                }
+                return this;
+            };
+            Sequence.prototype.wait = function (watingTime) {
+                this._waitingTime = watingTime;
+            };
+            return Sequence;
+        })();
+        ui.Sequence = Sequence;
+        var Task = (function () {
+            function Task(func) {
+                this.status = 1 /* yet */;
+                this._func = func;
+            }
+            Task.prototype.act = function (sequence, sequenceIndex, value) {
+                var result = this._func.call(sequence, sequenceIndex, value);
+                this.status = 0 /* done */;
+                return result;
+            };
+            return Task;
+        })();
+        var TaskState;
+        (function (TaskState) {
+            TaskState[TaskState["done"] = 0] = "done";
+            TaskState[TaskState["yet"] = 1] = "yet";
+        })(TaskState || (TaskState = {}));
+        function isJQueryPromiseLikeObject(object) {
+            var props = [
+                'always',
+                'done',
+                'fail',
+                'pipe',
+                'progress',
+                'promise',
+                'state',
+                'then'
+            ];
+            if (object instanceof jQuery) {
+                return !!object.promise;
+            }
+            else {
+                while (props.length) {
+                    if (!(props.shift() in Object(object))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
 var __extends = this.__extends || function (d, b) {
@@ -2953,12 +3079,22 @@ var baser;
                     $.getScript(protocol + Youtube.API_URL);
                     var y;
                     var intervalTimer;
+                    var listIndex;
                     intervalTimer = window.setInterval(function () {
                         if (!y && 'YT' in window && YT.Player) {
                             y = new YT.Player(playerID, {
                                 events: {
                                     onStateChange: function (e) {
                                         switch (e.data) {
+                                            case -1: {
+                                                _this.trigger('unstarted', [y]);
+                                                listIndex = y.getPlaylistIndex();
+                                                if (_this.currentCueIndex !== listIndex) {
+                                                    _this.trigger('changecue', [y]);
+                                                }
+                                                _this.currentCueIndex = listIndex;
+                                                break;
+                                            }
                                             case YT.PlayerState.BUFFERING: {
                                                 _this.trigger('buffering', [y]);
                                                 break;
@@ -2977,6 +3113,7 @@ var baser;
                                             }
                                             case YT.PlayerState.PLAYING: {
                                                 _this.trigger('playing', [y]);
+                                                _this.currentCueIndex = y.getPlaylistIndex();
                                                 break;
                                             }
                                             default: {
@@ -3873,6 +4010,7 @@ var baser;
 /* UI
 ================================================================= */
 /// <reference path="baser/ui/EventDispacher.ts" />
+/// <reference path="baser/ui/Sequence.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />

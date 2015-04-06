@@ -1692,6 +1692,14 @@ declare module baser {
                  */
                 movieId: string;
                 /**
+                 * 現在のキューのインデックス番号
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                currentCueIndex: number;
+                /**
                  * ムービーのオプション
                  *
                  * @version 0.0.7
