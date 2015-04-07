@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>baser.ui.element.Select</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture">
+	<select name="target" id="target">
+		<option value="value1">text1</option>
+		<option value="value2">text2</option>
+		<option value="value3">text3</option>
+	</select>
+	<select name="target-empty" id="empty"></select>
+	<input id="target-input" type="text">
+</div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+test('setValueメソッド / changeイベント発火あり', function() {
+	expect(1);
+
+	var $target = $('#target');
+
+	var target = new baser.ui.element.Select($target);
+
+	target.on('change', function (e) {
+		ok(true, 'チェンジイベント発火');
+	});
+
+	target.setValue('value2');
+
+});
+
+test('setValueメソッド / changeイベント発火なし', function() {
+	expect(0);
+
+	var $target = $('#target');
+
+	var target = new baser.ui.element.Select($target);
+
+	target.on('change', function (e) {
+		ok(true, 'チェンジイベント発火'); // 発火しないはず
+	});
+
+	target.setValue('value1'); // 現在と同じ値を設定
+
+});
+
+test('setValueメソッド / jQuery.changeイベント発火あり', function() {
+	expect(2);
+
+	var $target = $('#target');
+
+	var target = new baser.ui.element.Select($target);
+
+	target.$el.on('change', function (e) {
+		console.log(e);
+		ok(true, 'jQuery.changeイベント発火');
+	});
+
+	target.$el[0].addEventListener('change', function (e) {
+		console.log(e);
+		ok(true, 'DOMNative.changeイベント発火');
+	}, false, false);
+
+	target.setValue('value2');
+
+});
+
+</script>
+
+</body>
+</html>

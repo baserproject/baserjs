@@ -350,6 +350,26 @@ module baser {
 				}
 
 				/**
+				 * 値を設定する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				public setValue (value: string | number | boolean): void {
+					var valueString: string = String(value);
+					var currentValue: string = this.$el.val();
+					var e: Event;
+					if (currentValue !== valueString) {
+						this.$el.val(valueString);
+						this.trigger('change');
+						e = document.createEvent('UIEvent');
+						e.initEvent('change', true, true);
+						this.$el[0].dispatchEvent(e);
+					}
+				}
+
+				/**
 				 * 無効状態を設定する
 				 *
 				 * @version 0.4.0
