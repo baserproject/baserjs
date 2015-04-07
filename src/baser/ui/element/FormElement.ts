@@ -117,6 +117,15 @@ module baser {
 				static classNameStateBlur: string = 'blur';
 
 				/**
+				 * FormElement関連の要素の無効状態の時に付加されるクラス
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				static classNameStateDisabled: string = 'disabled';
+
+				/**
 				 * フォーカスがあたっている状態かどうか
 				 *
 				 * @since 0.1.0
@@ -167,9 +176,17 @@ module baser {
 				public $wrapper: JQuery;
 
 				/**
+				 * 無効状態
+				 *
+				 * @since 0.4.0
+				 *
+				 */
+				public disabled: boolean;
+
+				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.1.0
+				 * @version 0.4.0
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
@@ -241,6 +258,9 @@ module baser {
 					});
 
 					this._onblur();
+
+					// disabledかどうか
+					this.setDisabled(<boolean> $el.prop('disabled'));
 
 					// フォーム要素に登録
 					Form.elements.push(this);
@@ -327,6 +347,51 @@ module baser {
 						FormElement.classNameWrapper,
 						'',
 						FormElement.classNameStateFocus);
+				}
+
+				/**
+				 * 無効状態を設定する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				public setDisabled (isDisabled: boolean): void {
+					this.disabled = isDisabled;
+					this.$el.prop('disabled', isDisabled);
+					if (this.disabled) {
+						Element.addClassTo(
+							this.$el,
+							FormElement.classNameFormElementCommon,
+							'',
+							FormElement.classNameStateDisabled);
+						Element.addClassTo(
+							this.$label,
+							FormElement.classNameFormElementCommon,
+							FormElement.classNameLabel,
+							FormElement.classNameStateDisabled);
+						Element.addClassTo(
+							this.$wrapper,
+							FormElement.classNameWrapper,
+							'',
+							FormElement.classNameStateDisabled);
+					} else {
+						Element.removeClassFrom(
+							this.$el,
+							FormElement.classNameFormElementCommon,
+							'',
+							FormElement.classNameStateDisabled);
+						Element.removeClassFrom(
+							this.$label,
+							FormElement.classNameFormElementCommon,
+							FormElement.classNameLabel,
+							FormElement.classNameStateDisabled);
+						Element.removeClassFrom(
+							this.$wrapper,
+							FormElement.classNameWrapper,
+							'',
+							FormElement.classNameStateDisabled);
+					}
 				}
 
 			}

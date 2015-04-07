@@ -936,6 +936,14 @@ declare module baser {
                  */
                 static classNameStateBlur: string;
                 /**
+                 * FormElement関連の要素の無効状態の時に付加されるクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                static classNameStateDisabled: string;
+                /**
                  * フォーカスがあたっている状態かどうか
                  *
                  * @since 0.1.0
@@ -980,9 +988,16 @@ declare module baser {
                  */
                 $wrapper: JQuery;
                 /**
+                 * 無効状態
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                disabled: boolean;
+                /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.4.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1005,6 +1020,14 @@ declare module baser {
                  *
                  */
                 _onblur(): void;
+                /**
+                 * 無効状態を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                setDisabled(isDisabled: boolean): void;
             }
         }
     }

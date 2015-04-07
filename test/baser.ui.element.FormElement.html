@@ -12,6 +12,7 @@
 <div id="qunit"></div>
 <div id="qunit-fixture">
 	<input id="target" type="text">
+	<input id="target-disabled" type="text" disabled>
 </div>
 
 <!-- Libraries -->
@@ -27,12 +28,82 @@
 <script>
 "use strict";
 
-test('baser.ui.element.FormElementの後方互換テスト', function() {
+test('付加クラス', function() {
+	expect(10);
+
+	var $target = $('#target');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	ok(target.$el.parent('span').hasClass('-bc-form-element'), 'ラッパー要素のクラス');
+	ok(target.$el.parent('span').hasClass('-bc-wrapper'), 'ラッパー要素のクラス');
+	ok(target.$el.parent('span').hasClass('-bc-wrapper--blur'), 'ラッパー要素のクラス ブラー状態');
+	ok(target.$el.hasClass('-bc-element'), '本体のクラス');
+	ok(target.$el.hasClass('-bc-form-element'), '本体のクラス');
+	ok(target.$el.hasClass('-bc-form-element--blur'), '本体のクラス ブラー状態');
+
+	target.$el.on('focus', function () {
+		var $this = $(this);
+		ok(!$this.parent('span').hasClass('-bc-wrapper--blur'), 'ラッパー要素のクラス ブラー状態解除');
+		ok($this.parent('span').hasClass('-bc-wrapper--focus'), 'ラッパー要素のクラス フォーカス状態');
+		ok(!$this.hasClass('-bc-form-element--blur'), '本体のクラス ブラー状態解除');
+		ok($this.hasClass('-bc-form-element--focus'), '本体のクラス フォーカス状態');
+	});
+
+	target.$el.trigger('focus');
+
+});
+
+test('disabled 状態取得', function() {
+	expect(2);
+
+	var $target = $('#target-disabled');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	ok(target.disabled, 'disabled is true');
+	ok(target.$el.hasClass('-bc-form-element--disabled'), '本体のクラス 無効状態');
+
+	// フォーカスできない
+	target.$el.on('focus', function () {
+		ok(true); // このOKにたどりつかないはず
+	});
+
+	target.$el.trigger('focus');
+
+});
+
+test('disabled 状態変更', function() {
+	expect(5);
+
+	var $target = $('#target-disabled');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	ok(target.disabled, 'disabled is true');
+	ok(target.$el.hasClass('-bc-form-element--disabled'), '本体のクラス 無効状態');
+
+	target.setDisabled(false);
+
+	ok(!target.disabled, 'disabled is false after changed');
+
+	// フォーカスできる
+	target.$el.on('focus', function () {
+		var $this = $(this);
+		ok(true, 'focus success'); // このOKにたどりつける
+		ok(!$this.hasClass('-bc-form-element--disabled'), '本体のクラス 無効状態 解除');
+	});
+
+	target.$el.trigger('focus');
+
+});
+
+test('baser.ui.element.FormElementの後方互換テスト(v0.0.x)', function() {
 	expect(4);
 
 	var $target = $('#target');
 
-	// 設定は要素を new する以前に必要
+	// v0.0.xの設定 設定は要素を new する以前に必要
 	baser.ui.element.Element.classNameDefaultSeparatorForModifier = baser.ui.element.ClassNameSeparatorForBEM.HYPHEN;
 	baser.ui.element.FormElement.classNameWrapper = 'form-element-wrapper';
 
@@ -43,7 +114,8 @@ test('baser.ui.element.FormElementの後方互換テスト', function() {
 	ok(target.$el.parent().hasClass('-bc-form-element-wrapper'), 'ラッパー要素のクラス');
 
 	target.$el.on('focus', function() {
-		ok($(this).hasClass('-bc-form-element-focus'), 'focusクラス');
+		var $this = $(this);
+		ok($this.hasClass('-bc-form-element-focus'), 'focusクラス');
 	});
 
 	target.$el.trigger('focus');

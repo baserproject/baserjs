@@ -1,6 +1,6 @@
 /**
  * baserjs - v0.4.0-beta r215
- * update: 2015-04-06
+ * update: 2015-04-07
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1977,7 +1977,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.4.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -2053,6 +2053,8 @@ var baser;
                         _this._onblur();
                     });
                     this._onblur();
+                    // disabledかどうか
+                    this.setDisabled($el.prop('disabled'));
                     // フォーム要素に登録
                     element.Form.elements.push(this);
                 }
@@ -2087,6 +2089,27 @@ var baser;
                     element.Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
                     element.Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
                     element.Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
+                };
+                /**
+                 * 無効状態を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype.setDisabled = function (isDisabled) {
+                    this.disabled = isDisabled;
+                    this.$el.prop('disabled', isDisabled);
+                    if (this.disabled) {
+                        element.Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateDisabled);
+                        element.Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateDisabled);
+                        element.Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateDisabled);
+                    }
+                    else {
+                        element.Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateDisabled);
+                        element.Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateDisabled);
+                        element.Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateDisabled);
+                    }
                 };
                 /**
                  * オプションのデフォルト値
@@ -2141,6 +2164,14 @@ var baser;
                  *
                  */
                 FormElement.classNameStateBlur = 'blur';
+                /**
+                 * FormElement関連の要素の無効状態の時に付加されるクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.classNameStateDisabled = 'disabled';
                 return FormElement;
             })(element.Element);
             element.FormElement = FormElement;
@@ -3128,7 +3159,7 @@ var baser;
                         }
                         if (y && y.pauseVideo && y.playVideo) {
                             window.clearInterval(intervalTimer);
-                            _this.$el.trigger('embeddedyoutubeplay', [y]); // 廃止予定
+                            _this.$el.trigger('embeddedyoutubeplay', [y]); // TODO: 廃止予定(v1.0.0)
                             _this.trigger('embeded', [y]);
                             if (_this.movieOption.stopOnInactive) {
                                 $(window).on('blur', function () {
