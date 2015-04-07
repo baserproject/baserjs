@@ -288,7 +288,7 @@ module baser {
 						if (y && y.pauseVideo && y.playVideo) {
 							window.clearInterval(intervalTimer);
 
-							this.$el.trigger('embeddedyoutubeplay', [y]); // 廃止予定
+							this.$el.trigger('embeddedyoutubeplay', [y]); // TODO: 廃止予定(v1.0.0)
 							this.trigger('embeded', [y]);
 
 							if (this.movieOption.stopOnInactive) {
