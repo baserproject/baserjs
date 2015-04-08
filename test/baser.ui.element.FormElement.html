@@ -31,48 +31,50 @@
 <script>
 "use strict";
 
-test('付加クラス', function() {
+test('added class names', function() {
 	expect(10);
 
 	var $target = $('#target');
 
 	var target = new baser.ui.element.FormElement($target);
 
-	ok(target.$el.parent('span').hasClass('-bc-form-element'), 'ラッパー要素のクラス');
-	ok(target.$el.parent('span').hasClass('-bc-wrapper'), 'ラッパー要素のクラス');
-	ok(target.$el.parent('span').hasClass('-bc-wrapper--blur'), 'ラッパー要素のクラス ブラー状態');
-	ok(target.$el.hasClass('-bc-element'), '本体のクラス');
-	ok(target.$el.hasClass('-bc-form-element'), '本体のクラス');
-	ok(target.$el.hasClass('-bc-form-element--blur'), '本体のクラス ブラー状態');
+	ok(target.$el.parent('span').hasClass('-bc-form-element'), 'class name of wrapper');
+	ok(target.$el.parent('span').hasClass('-bc-wrapper'), 'class name of wrapper');
+	ok(target.$el.parent('span').hasClass('-bc-wrapper--blur'), 'class name of wrapper on blur');
+	ok(target.$el.hasClass('-bc-element'), 'class name of this element');
+	ok(target.$el.hasClass('-bc-form-element'), 'class name of this element');
+	ok(target.$el.hasClass('-bc-form-element--blur'), 'class name of this element on blur');
 
 	target.$el.on('focus', function () {
 		var $this = $(this);
-		ok(!$this.parent('span').hasClass('-bc-wrapper--blur'), 'ラッパー要素のクラス ブラー状態解除');
-		ok($this.parent('span').hasClass('-bc-wrapper--focus'), 'ラッパー要素のクラス フォーカス状態');
-		ok(!$this.hasClass('-bc-form-element--blur'), '本体のクラス ブラー状態解除');
-		ok($this.hasClass('-bc-form-element--focus'), '本体のクラス フォーカス状態');
+		ok(!$this.parent('span').hasClass('-bc-wrapper--blur'), 'removed check blur class name of wrapper');
+		ok($this.parent('span').hasClass('-bc-wrapper--focus'), 'class name of wrapper on focus');
+		ok(!$this.hasClass('-bc-form-element--blur'), 'removed check blur class name of this element');
+		ok($this.hasClass('-bc-form-element--focus'), 'class name of this element on focus');
 	});
 
 	target.$el.trigger('focus');
 
 });
 
-test('ラベルテスト', function() {
+test('wrapped label', function() {
+	expect(4);
 
 	var $target = $('#target-wrapped-label');
 
 	var target = new baser.ui.element.FormElement($target);
 
-	ok(target.$label.hasClass('-bc-form-element'), 'ラベル要素のクラス');
-	ok(target.$label.hasClass('-bc-form-element__label'), 'ラベル要素のクラス');
+	ok(target.$label.hasClass('-bc-form-element'), 'class name of label element');
+	ok(target.$label.hasClass('-bc-form-element__label'), 'class name of label element');
 
-	ok(target.isWrappedByLabel, 'ラベルがラップされている');
+	ok(target.isWrappedByLabel, 'label is wrapped');
 
-	equal(target.label, 'beforeLabelTextafterLabelText', 'ラベルのテキスト');
+	equal(target.label, 'beforeLabelTextafterLabelText', 'text of label');
 
 });
 
-test('ラベルテスト2', function() {
+test('wrapped label - optional label', function() {
+	expect(1);
 
 	var $target = $('#target-wrapped-label');
 
@@ -80,26 +82,28 @@ test('ラベルテスト2', function() {
 		label: 'labelFromOption'
 	});
 
-	equal(target.label, 'labelFromOption', 'ラベルのテキスト');
+	equal(target.label, 'labelFromOption', 'text of label');
 
 });
 
-test('ラベルテスト3', function() {
+test('leaved label', function() {
+	expect(4);
 
 	var $target = $('#target-with-label');
 
 	var target = new baser.ui.element.FormElement($target);
 
-	ok(target.$label.hasClass('-bc-form-element'), 'ラベル要素のクラス');
-	ok(target.$label.hasClass('-bc-form-element__label'), 'ラベル要素のクラス');
+	ok(target.$label.hasClass('-bc-form-element'), 'class name of label element');
+	ok(target.$label.hasClass('-bc-form-element__label'), 'class name of label element');
 
 	ok(!target.isWrappedByLabel, 'ラベルがラップされていない');
 
-	equal(target.label, 'withLabel', 'ラベルのテキスト');
+	equal(target.label, 'withLabel', 'text of label');
 
 });
 
-test('ラベルテスト4', function() {
+test('leaved label - optional label', function() {
+	expect(1);
 
 	var $target = $('#target-with-label');
 
@@ -107,11 +111,21 @@ test('ラベルテスト4', function() {
 		label: 'labelFromOption'
 	});
 
-	equal(target.label, 'labelFromOption', 'ラベルのテキスト');
+	equal(target.label, 'labelFromOption', 'text of label');
 
 });
 
-test('disabled 状態取得', function() {
+test('初期値', function() {
+
+	var $target = $('#target-default-value');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	equal(target.defaultValue, 'default-value', 'default value');
+
+});
+
+test('disabled - get', function() {
 	expect(2);
 
 	var $target = $('#target-disabled');
@@ -119,18 +133,18 @@ test('disabled 状態取得', function() {
 	var target = new baser.ui.element.FormElement($target);
 
 	ok(target.disabled, 'disabled is true');
-	ok(target.$el.hasClass('-bc-form-element--disabled'), '本体のクラス 無効状態');
+	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
 
-	// フォーカスできない
+	// フォーカスできないはず
 	target.$el.on('focus', function () {
-		ok(true); // このOKにたどりつかないはず
+		throw new Error('focused');
 	});
 
 	target.$el.trigger('focus');
 
 });
 
-test('disabled 状態変更', function() {
+test('disabled - change', function() {
 	expect(5);
 
 	var $target = $('#target-disabled');
@@ -138,7 +152,7 @@ test('disabled 状態変更', function() {
 	var target = new baser.ui.element.FormElement($target);
 
 	ok(target.disabled, 'disabled is true');
-	ok(target.$el.hasClass('-bc-form-element--disabled'), '本体のクラス 無効状態');
+	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
 
 	target.setDisabled(false);
 
@@ -148,14 +162,62 @@ test('disabled 状態変更', function() {
 	target.$el.on('focus', function () {
 		var $this = $(this);
 		ok(true, 'focus success'); // このOKにたどりつける
-		ok(!$this.hasClass('-bc-form-element--disabled'), '本体のクラス 無効状態 解除');
+		ok(!$this.hasClass('-bc-form-element--disabled'), 'class name of undisabled this element');
 	});
 
 	target.$el.trigger('focus');
 
 });
 
-test('baser.ui.element.FormElementの後方互換テスト(v0.0.x)', function() {
+test('disabled - change', function() {
+	expect(5);
+
+	var $target = $('#target-disabled');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	ok(target.disabled, 'disabled is true');
+	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
+
+	target.setDisabled(false);
+
+	ok(!target.disabled, 'disabled is false after changed');
+
+	// フォーカスできる
+	target.$el.on('focus', function () {
+		var $this = $(this);
+		ok(true, 'focus success'); // このOKにたどりつける
+		ok(!$this.hasClass('-bc-form-element--disabled'), 'class name of undisabled this element');
+	});
+
+	target.$el.trigger('focus');
+
+});
+
+test('setValue / change event', function() {
+	expect(3);
+
+	var $target = $('#target');
+
+	var target = new baser.ui.element.Select($target);
+
+	target.on('change', function (e) {
+		ok(true, 'fired baserJS change');
+	});
+
+	target.on('change', function (e) {
+		ok(true, 'fired jQuery change');
+	});
+
+	target.on('change', function (e) {
+		ok(true, 'fired DOM change');
+	});
+
+	target.setValue('value');
+
+});
+
+test('baser.ui.element.FormElement (v0.0.x)', function() {
 	expect(4);
 
 	var $target = $('#target');
@@ -166,13 +228,13 @@ test('baser.ui.element.FormElementの後方互換テスト(v0.0.x)', function() 
 
 	var target = new baser.ui.element.FormElement($target);
 
-	ok(target.$el.hasClass('-bc-form-element'), '本体のクラス');
-	ok(target.$el.hasClass('-bc-form-element-blur'), 'blurクラス');
-	ok(target.$el.parent().hasClass('-bc-form-element-wrapper'), 'ラッパー要素のクラス');
+	ok(target.$el.hasClass('-bc-form-element'), 'class name of this element');
+	ok(target.$el.hasClass('-bc-form-element-blur'), 'class name of this element on blur');
+	ok(target.$el.parent().hasClass('-bc-form-element-wrapper'), 'class name of wrapper');
 
 	target.$el.on('focus', function() {
 		var $this = $(this);
-		ok($this.hasClass('-bc-form-element-focus'), 'focusクラス');
+		ok($this.hasClass('-bc-form-element-focus'), 'class name of this element on focus');
 	});
 
 	target.$el.trigger('focus');

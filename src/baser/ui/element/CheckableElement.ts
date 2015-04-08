@@ -96,7 +96,7 @@ module baser {
 				constructor ($el: JQuery, options: CheckableElementOption) {
 					super($el, options);
 
-					var config: CheckableElementOption = $.extend(FormElement.defaultOption, CheckableElement.defaultOption, options);
+					var config: CheckableElementOption = $.extend({}, FormElement.defaultOption, CheckableElement.defaultOption, options);
 
 					this._checkedClass = config.checkedClass;
 

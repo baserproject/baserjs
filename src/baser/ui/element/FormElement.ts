@@ -194,7 +194,7 @@ module baser {
 
 					super($el);
 
-					var config: FormElementOption = $.extend(FormElement.defaultOption, options);
+					var config: FormElementOption = $.extend({}, FormElement.defaultOption, options);
 
 					// 共通のクラスを付加
 					this.addClass(FormElement.classNameFormElementCommon);
@@ -304,6 +304,11 @@ module baser {
 					this.$el.on('blur.bcFormElement', (): void => {
 						this._onblur();
 					});
+
+					this.$el.on('change.bcFormElement', (): void => {
+						this.trigger('change', null, this);
+					});
+
 				}
 
 				/**
@@ -399,12 +404,18 @@ module baser {
 					var valueString: string = String(value);
 					var currentValue: string = this.$el.val();
 					var e: Event;
+					var msE: MSEventObj;
 					if (currentValue !== valueString) {
 						this.$el.val(valueString);
-						this.trigger('change');
-						e = document.createEvent('Event');
-						e.initEvent('change', true, true);
-						this.$el[0].dispatchEvent(e);
+						if ('createEvent' in document) {
+							e = document.createEvent('Event');
+							e.initEvent('change', true, true);
+							this.$el[0].dispatchEvent(e);
+						} else {
+							// IE8
+							msE = document.createEventObject(window.event);
+							this.$el[0].fireEvent('change', msE);
+						}
 					}
 				}
 
