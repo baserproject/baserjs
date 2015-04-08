@@ -30,7 +30,7 @@ module baser {
 			 * @since 0.0.1
 			 *
 			 */
-			export class CheckableElement extends FormElement {
+			export class CheckableElement extends FormElement implements ICheckableElement {
 
 				/**
 				 * オプションのデフォルト値
@@ -131,10 +131,9 @@ module baser {
 				 *
 				 * @version 0.0.1
 				 * @since 0.0.1
-				 * @protected プロテクテッド想定
 				 *
 				 */
-				public _onchenge () {
+				protected _onchenge () {
 
 					this.checked = !this.checked;
 

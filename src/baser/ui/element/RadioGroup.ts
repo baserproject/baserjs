@@ -35,7 +35,7 @@ module baser {
 				 * @param name 紐づくname属性値
 				 *
 				 */
-				constructor(name: string) {
+				constructor (name: string) {
 
 					this.name = name;
 

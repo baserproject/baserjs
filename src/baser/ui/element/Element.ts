@@ -44,7 +44,7 @@ module baser {
 			 * @since 0.0.1
 			 *
 			 */
-			export class Element extends EventDispacher {
+			export class Element extends EventDispacher implements IElement {
 
 				/**
 				 * クラス名のデフォルトのプレフィックス

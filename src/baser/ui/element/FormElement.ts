@@ -55,7 +55,7 @@ module baser {
 			 * @since 0.0.1
 			 *
 			 */
-			export class FormElement extends Element {
+			export class FormElement extends Element implements IFormElement {
 
 				/**
 				 * オプションのデフォルト値
@@ -126,24 +126,6 @@ module baser {
 				static classNameStateDisabled: string = 'disabled';
 
 				/**
-				 * フォーカスがあたっている状態かどうか
-				 *
-				 * @since 0.1.0
-				 *
-				 */
-				public hasFocus: boolean = false;
-
-				/**
-				 * 削除予定
-				 * フォーカスがあたっている状態かどうか
-				 *
-				 * @deprecated
-				 * @since 0.0.1
-				 *
-				 */
-				public isFocus: boolean = false;
-
-				/**
 				 * ラベルのテキスト
 				 *
 				 * @since 0.0.1
@@ -152,12 +134,28 @@ module baser {
 				public label: string;
 
 				/**
-				 * ラベル要素のjQueryオブジェクト
+				 * フォーカスがあたっている状態かどうか
 				 *
-				 * @since 0.0.1
+				 * @since 0.1.0
 				 *
 				 */
-				public $label: JQuery;
+				public hasFocus: boolean = false;
+
+				/**
+				 * 無効状態
+				 *
+				 * @since 0.4.0
+				 *
+				 */
+				public disabled: boolean;
+
+				/**
+				 * 初期の値
+				 *
+				 * @since 0.4.0
+				 *
+				 */
+				public defaultValue: string;
 
 				/**
 				 * ラベル要素にラップされているかどうか
@@ -168,20 +166,20 @@ module baser {
 				public isWrappedByLabel: boolean;
 
 				/**
+				 * ラベル要素のjQueryオブジェクト
+				 *
+				 * @since 0.0.1
+				 *
+				 */
+				public $label: JQuery;
+
+				/**
 				 * ラッパー要素のjQueryオブジェクト
 				 *
 				 * @since 0.0.4
 				 *
 				 */
 				public $wrapper: JQuery;
-
-				/**
-				 * 無効状態
-				 *
-				 * @since 0.4.0
-				 *
-				 */
-				public disabled: boolean;
 
 				/**
 				 * コンストラクタ
@@ -201,20 +199,49 @@ module baser {
 					// 共通のクラスを付加
 					this.addClass(FormElement.classNameFormElementCommon);
 
-					// label要素の検索 & 生成
+					// ラベル要素の割り当て
+					this._asignLabel(config);
+
+					// ラップ要素の割り当て
+					this._createWrapper();
+
+					// イベントを登録
+					this._bindEvents();
+
+					// 初期状態を設定
+					this.defaultValue = this.$el.val();
+					this.setDisabled(<boolean> $el.prop('disabled'));
+					this._onblur();
+
+					// フォーム要素に登録
+					Form.elements.push(this);
+
+				}
+
+				/**
+				 * ラベル要素を割り当てる
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				private _asignLabel (config: FormElementOption): void {
 					var $label: JQuery;
+					var hasLabel: boolean;
 
 					// 祖先のlabel要素を検索
 					$label = this.$el.closest('label');
+					hasLabel = !!$label.length;
 
 					// labelでネストされていたかどうか
-					this.isWrappedByLabel = !!$label.length;
+					this.isWrappedByLabel = hasLabel;
 
-					if (!$label.length) {
+					if (!hasLabel) {
 						// for属性に関連づいたlabel要素を検索
 						$label = $('[for="' + this.id + '"]');
+						hasLabel = !!$label.length;
 					}
-					if (config.autoLabeling && !$label.length) {
+					if (config.autoLabeling && !hasLabel) {
 						// label(もしくは別の)要素の生成
 						this.label = this.$el.attr('title') || config.label || this.$el.attr('name');
 						$label = $('<' + config.labelTag.toLowerCase() + ' />');
@@ -229,12 +256,24 @@ module baser {
 							// labelを生成したのならfor属性にidを紐付ける
 							$label.attr('for', this.id);
 						}
+					} else {
+						this.label = config.label || $label.text();
 					}
-					this.$label = $label;
 
 					Element.addClassTo($label, FormElement.classNameFormElementCommon);
 					Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
 
+					this.$label = $label;
+				}
+
+				/**
+				 * ラップ要素を生成
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				private _createWrapper (): void {
 					var wrapperHtml: string = '<span />';
 					var $wrapper = $(wrapperHtml);
 
@@ -248,7 +287,16 @@ module baser {
 						this.$el.add(this.$label).wrapAll($wrapper);
 						this.$wrapper = this.$el.parent('span');
 					}
+				}
 
+				/**
+				 * イベントの登録
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				private _bindEvents (): void {
 					this.$el.on('focus.bcFormElement', (): void => {
 						this._onfocus();
 					});
@@ -256,15 +304,6 @@ module baser {
 					this.$el.on('blur.bcFormElement', (): void => {
 						this._onblur();
 					});
-
-					this._onblur();
-
-					// disabledかどうか
-					this.setDisabled(<boolean> $el.prop('disabled'));
-
-					// フォーム要素に登録
-					Form.elements.push(this);
-
 				}
 
 				/**
@@ -274,7 +313,7 @@ module baser {
 				 * @since 0.0.1
 				 *
 				 */
-				public _onfocus (): void {
+				protected _onfocus (): void {
 					this.hasFocus = true;
 					Element.addClassTo(
 						this.$el,
@@ -315,7 +354,7 @@ module baser {
 				 * @since 0.0.1
 				 *
 				 */
-				public _onblur (): void {
+				protected _onblur (): void {
 					this.hasFocus = false;
 					Element.addClassTo(
 						this.$el,
@@ -363,7 +402,7 @@ module baser {
 					if (currentValue !== valueString) {
 						this.$el.val(valueString);
 						this.trigger('change');
-						e = document.createEvent('UIEvent');
+						e = document.createEvent('Event');
 						e.initEvent('change', true, true);
 						this.$el[0].dispatchEvent(e);
 					}

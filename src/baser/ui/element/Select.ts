@@ -11,7 +11,7 @@ module baser {
 			 * @since 0.0.1
 			 *
 			 */
-			export class Select extends FormElement {
+			export class Select extends FormElement implements ISelect {
 
 				/**
 				 * Select要素のクラス
@@ -21,7 +21,6 @@ module baser {
 				 *
 				 */
 				static classNameSelect: string = 'form-select';
-
 
 				/**
 				 * Select要素の擬似要素のクラス
@@ -94,6 +93,14 @@ module baser {
 				 *
 				 */
 				static classNameStateUnselected: string = 'unselected';
+
+				/**
+				 * 初期の選択されているオプションのインデックス番号
+				 *
+				 * @since 0.4.0
+				 *
+				 */
+				public defaultSelectedIndex: number;
 
 				/**
 				 * 選択されたオプションを表示する表示領域のjQueryオブジェクト
@@ -302,7 +309,7 @@ module baser {
 				 * @since 0.0.1
 				 *
 				 */
-				public _onfocus () {
+				protected _onfocus () {
 					if (!this.hasFocus) {
 						// 全体のフォーカスを外す
 						$(document).trigger('click.bcSelect');
@@ -323,7 +330,7 @@ module baser {
 				 * @since 0.0.1
 				 *
 				 */
-				public _onblur () {
+				protected _onblur () {
 					// 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
 					if (this.$pseudo) {
 						super._onblur();

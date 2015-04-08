@@ -12,6 +12,9 @@
 <div id="qunit"></div>
 <div id="qunit-fixture">
 	<input id="target" type="text">
+	<label>beforeLabelText<input id="target-wrapped-label" type="text">afterLabelText</label>
+	<input id="target-with-label" type="text"><label for="target-with-label">withLabel</label>
+	<input id="target-default-value" type="text" value="default-value">
 	<input id="target-disabled" type="text" disabled>
 </div>
 
@@ -51,6 +54,60 @@ test('付加クラス', function() {
 	});
 
 	target.$el.trigger('focus');
+
+});
+
+test('ラベルテスト', function() {
+
+	var $target = $('#target-wrapped-label');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	ok(target.$label.hasClass('-bc-form-element'), 'ラベル要素のクラス');
+	ok(target.$label.hasClass('-bc-form-element__label'), 'ラベル要素のクラス');
+
+	ok(target.isWrappedByLabel, 'ラベルがラップされている');
+
+	equal(target.label, 'beforeLabelTextafterLabelText', 'ラベルのテキスト');
+
+});
+
+test('ラベルテスト2', function() {
+
+	var $target = $('#target-wrapped-label');
+
+	var target = new baser.ui.element.FormElement($target, {
+		label: 'labelFromOption'
+	});
+
+	equal(target.label, 'labelFromOption', 'ラベルのテキスト');
+
+});
+
+test('ラベルテスト3', function() {
+
+	var $target = $('#target-with-label');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	ok(target.$label.hasClass('-bc-form-element'), 'ラベル要素のクラス');
+	ok(target.$label.hasClass('-bc-form-element__label'), 'ラベル要素のクラス');
+
+	ok(!target.isWrappedByLabel, 'ラベルがラップされていない');
+
+	equal(target.label, 'withLabel', 'ラベルのテキスト');
+
+});
+
+test('ラベルテスト4', function() {
+
+	var $target = $('#target-with-label');
+
+	var target = new baser.ui.element.FormElement($target, {
+		label: 'labelFromOption'
+	});
+
+	equal(target.label, 'labelFromOption', 'ラベルのテキスト');
 
 });
 

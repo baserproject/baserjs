@@ -12,7 +12,7 @@ module baser {
 		 * @since 0.0.10
 		 *
 		 */
-		export class EventDispacher {
+		export class EventDispacher implements IEventDispacher {
 
 			/**
 			 * コンストラクタ
@@ -81,8 +81,7 @@ module baser {
 						eventHandler = types[type][i];
 						if (eventHandler.context === this) {
 							e = new DispacheEvent(type);
-							args.unshift(e);
-							eventHandler.handler.apply(context, args);
+							eventHandler.handler.apply(context, [e].concat(args));
 							if (e.isImmediatePropagationStopped()) {
 								break;
 							}
