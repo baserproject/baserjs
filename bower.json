@@ -33,6 +33,7 @@
     "typings"
   ],
   "dependencies": {
-    "jquery": ">= 1.11.1"
+    "jquery2": "jquery#2",
+    "jquery": "jquery#1"
   }
 }
