@@ -43,18 +43,14 @@ module baser {
 			/**
 			 * 対象の要素もしくは位置にスクロールを移動させる
 			 *
-			 * @version 0.0.8
+			 * @version 0.3.2
 			 * @since 0.0.8
-			 * @param {string|HTMLElement|JQuery|number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
+			 * @param {string | HTMLElement | JQuery | number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
 			 * @param {ScrollOptions} オプション
 			 * @return {Scroll} 自信のスクロールオブジェクト
 			 *
 			 */
-			public to (selector: string, options?: ScrollOptions): Scroll;
-			public to (selector: HTMLElement, options?: ScrollOptions): Scroll;
-			public to (selector: JQuery, options?: ScrollOptions): Scroll;
-			public to (selector: number, options?: ScrollOptions): Scroll;
-			public to (selector?: any, options?: ScrollOptions): Scroll {
+			public to (selector: string | HTMLElement | JQuery | number, options?: ScrollOptions): Scroll {
 				var ele: HTMLElement;
 				var x: number;
 				var y: number;
@@ -83,8 +79,8 @@ module baser {
 				}
 
 				// 第一引数が数値だった場合はその値のy軸へスクロール
-				if ($.isNumeric(selector)) {
-					offset += (parseFloat(selector) || 0);
+				if (typeof selector === 'number') {
+					offset += selector || 0;
 					this.targetX = 0;
 					this.targetY = offset;
 				} else if (selector) {
@@ -115,7 +111,9 @@ module baser {
 					if ($target.length) {
 						Timer.wait(Scroll.delayWhenURLHashTarget, (): void => {
 							window.scrollTo(0, 0);
-							this.to($target, offset);
+							this.to($target, {
+								offset: offset
+							});
 							return;
 						});
 					}

@@ -464,17 +464,14 @@ declare module baser {
             /**
              * 対象の要素もしくは位置にスクロールを移動させる
              *
-             * @version 0.0.8
+             * @version 0.3.2
              * @since 0.0.8
-             * @param {string|HTMLElement|JQuery|number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
+             * @param {string | HTMLElement | JQuery | number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
              * @param {ScrollOptions} オプション
              * @return {Scroll} 自信のスクロールオブジェクト
              *
              */
-            to(selector: string, options?: ScrollOptions): Scroll;
-            to(selector: HTMLElement, options?: ScrollOptions): Scroll;
-            to(selector: JQuery, options?: ScrollOptions): Scroll;
-            to(selector: number, options?: ScrollOptions): Scroll;
+            to(selector: string | HTMLElement | JQuery | number, options?: ScrollOptions): Scroll;
             private _scroll();
             private _getX();
             private _getY();
