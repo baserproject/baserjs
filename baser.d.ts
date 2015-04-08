@@ -132,6 +132,15 @@ declare module baser {
 }
 declare module baser {
     module ui {
+        interface IEventDispacher {
+            on(type: string, handler: Function): IEventDispacher;
+            off(type?: string): IEventDispacher;
+            trigger(type: string, args?: any[], context?: any): IEventDispacher;
+        }
+    }
+}
+declare module baser {
+    module ui {
         /**
          * イベント駆動できるクラス
          *
@@ -139,7 +148,7 @@ declare module baser {
          * @since 0.0.10
          *
          */
-        class EventDispacher {
+        class EventDispacher implements IEventDispacher {
             /**
              * コンストラクタ
              *
@@ -594,6 +603,19 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            interface IElement extends IEventDispacher {
+                id: string;
+                name: string;
+                $el: JQuery;
+                addClass(blockNames: string, elementNames?: string, modifierName?: string): void;
+                getBoolAttr(attrName: string): boolean;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
             /**
              * クラス名の形式
              *
@@ -627,7 +649,7 @@ declare module baser {
              * @since 0.0.1
              *
              */
-            class Element extends EventDispacher {
+            class Element extends EventDispacher implements IElement {
                 /**
                  * クラス名のデフォルトのプレフィックス
                  *
@@ -840,6 +862,23 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            interface IFormElement extends IElement {
+                label: string;
+                hasFocus: boolean;
+                disabled: boolean;
+                defaultValue: string;
+                isWrappedByLabel: boolean;
+                $label: JQuery;
+                $wrapper: JQuery;
+                setValue(value: string | number | boolean): void;
+                setDisabled(isDisabled: boolean): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
             /**
              * FormElementクラスのオプションハッシュのインターフェイス
              *
@@ -886,7 +925,7 @@ declare module baser {
              * @since 0.0.1
              *
              */
-            class FormElement extends Element {
+            class FormElement extends Element implements IFormElement {
                 /**
                  * オプションのデフォルト値
                  *
@@ -944,22 +983,6 @@ declare module baser {
                  */
                 static classNameStateDisabled: string;
                 /**
-                 * フォーカスがあたっている状態かどうか
-                 *
-                 * @since 0.1.0
-                 *
-                 */
-                hasFocus: boolean;
-                /**
-                 * 削除予定
-                 * フォーカスがあたっている状態かどうか
-                 *
-                 * @deprecated
-                 * @since 0.0.1
-                 *
-                 */
-                isFocus: boolean;
-                /**
                  * ラベルのテキスト
                  *
                  * @since 0.0.1
@@ -967,12 +990,26 @@ declare module baser {
                  */
                 label: string;
                 /**
-                 * ラベル要素のjQueryオブジェクト
+                 * フォーカスがあたっている状態かどうか
                  *
-                 * @since 0.0.1
+                 * @since 0.1.0
                  *
                  */
-                $label: JQuery;
+                hasFocus: boolean;
+                /**
+                 * 無効状態
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                disabled: boolean;
+                /**
+                 * 初期の値
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                defaultValue: string;
                 /**
                  * ラベル要素にラップされているかどうか
                  *
@@ -981,19 +1018,19 @@ declare module baser {
                  */
                 isWrappedByLabel: boolean;
                 /**
+                 * ラベル要素のjQueryオブジェクト
+                 *
+                 * @since 0.0.1
+                 *
+                 */
+                $label: JQuery;
+                /**
                  * ラッパー要素のjQueryオブジェクト
                  *
                  * @since 0.0.4
                  *
                  */
                 $wrapper: JQuery;
-                /**
-                 * 無効状態
-                 *
-                 * @since 0.4.0
-                 *
-                 */
-                disabled: boolean;
                 /**
                  * コンストラクタ
                  *
@@ -1005,13 +1042,37 @@ declare module baser {
                  */
                 constructor($el: JQuery, options: FormElementOption);
                 /**
+                 * ラベル要素を割り当てる
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _asignLabel(config);
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _createWrapper();
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _bindEvents();
+                /**
                  * フォーカスがあたった時の処理
                  *
                  * @version 0.1.0
                  * @since 0.0.1
                  *
                  */
-                _onfocus(): void;
+                protected _onfocus(): void;
                 /**
                  * フォーカスがはずれた時の処理
                  *
@@ -1019,7 +1080,15 @@ declare module baser {
                  * @since 0.0.1
                  *
                  */
-                _onblur(): void;
+                protected _onblur(): void;
+                /**
+                 * 値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                setValue(value: string | number | boolean): void;
                 /**
                  * 無効状態を設定する
                  *
@@ -1035,6 +1104,18 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            interface ISelect extends IFormElement {
+                defaultSelectedIndex: number;
+                $selected: JQuery;
+                $pseudo: JQuery;
+                $options: JQuery;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
             /**
              * セレクトボックスの拡張クラス
              *
@@ -1042,7 +1123,7 @@ declare module baser {
              * @since 0.0.1
              *
              */
-            class Select extends FormElement {
+            class Select extends FormElement implements ISelect {
                 /**
                  * Select要素のクラス
                  *
@@ -1116,6 +1197,13 @@ declare module baser {
                  */
                 static classNameStateUnselected: string;
                 /**
+                 * 初期の選択されているオプションのインデックス番号
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                defaultSelectedIndex: number;
+                /**
                  * 選択されたオプションを表示する表示領域のjQueryオブジェクト
                  *
                  * @since 0.0.1
@@ -1177,7 +1265,7 @@ declare module baser {
                  * @since 0.0.1
                  *
                  */
-                _onfocus(): void;
+                protected _onfocus(): void;
                 /**
                  * フォーカスがはずれた時の処理
                  *
@@ -1185,7 +1273,7 @@ declare module baser {
                  * @since 0.0.1
                  *
                  */
-                _onblur(): void;
+                protected _onblur(): void;
                 /**
                  * 要素の状態を更新する
                  *
@@ -1194,6 +1282,17 @@ declare module baser {
                  *
                  */
                 private _update();
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
+            interface ICheckableElement extends IFormElement {
+                checked: boolean;
+                defaultChecked: boolean;
+                update(): void;
             }
         }
     }
@@ -1224,7 +1323,7 @@ declare module baser {
              * @since 0.0.1
              *
              */
-            class CheckableElement extends FormElement {
+            class CheckableElement extends FormElement implements ICheckableElement {
                 /**
                  * オプションのデフォルト値
                  *
@@ -1292,10 +1391,9 @@ declare module baser {
                  *
                  * @version 0.0.1
                  * @since 0.0.1
-                 * @protected プロテクテッド想定
                  *
                  */
-                _onchenge(): void;
+                protected _onchenge(): void;
                 /**
                  * 要素の状態を更新する
                  *
@@ -1311,6 +1409,14 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            interface IRadio extends ICheckableElement {
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
             /**
              * ラジオボタンの拡張クラス
              *
@@ -1318,7 +1424,7 @@ declare module baser {
              * @since 0.0.1
              *
              */
-            class Radio extends CheckableElement {
+            class Radio extends CheckableElement implements IRadio {
                 /**
                  * Radio要素のクラス
                  *
@@ -1345,6 +1451,14 @@ declare module baser {
                  *
                  */
                 _onchenge(): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
+            interface ICheckbox extends ICheckableElement {
             }
         }
     }

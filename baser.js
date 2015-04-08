@@ -1,6 +1,6 @@
 /**
  * baserjs - v0.4.0-beta r215
- * update: 2015-04-07
+ * update: 2015-04-08
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -680,8 +680,7 @@ var baser;
                         eventHandler = types[type][i];
                         if (eventHandler.context === this) {
                             e = new DispacheEvent(type);
-                            args.unshift(e);
-                            eventHandler.handler.apply(context, args);
+                            eventHandler.handler.apply(context, [e].concat(args));
                             if (e.isImmediatePropagationStopped()) {
                                 break;
                             }
@@ -1984,7 +1983,6 @@ var baser;
                  *
                  */
                 function FormElement($el, options) {
-                    var _this = this;
                     _super.call(this, $el);
                     /**
                      * フォーカスがあたっている状態かどうか
@@ -1993,29 +1991,43 @@ var baser;
                      *
                      */
                     this.hasFocus = false;
-                    /**
-                     * 削除予定
-                     * フォーカスがあたっている状態かどうか
-                     *
-                     * @deprecated
-                     * @since 0.0.1
-                     *
-                     */
-                    this.isFocus = false;
-                    var config = $.extend(FormElement.defaultOption, options);
+                    var config = $.extend({}, FormElement.defaultOption, options);
                     // 共通のクラスを付加
                     this.addClass(FormElement.classNameFormElementCommon);
-                    // label要素の検索 & 生成
+                    // ラベル要素の割り当て
+                    this._asignLabel(config);
+                    // ラップ要素の割り当て
+                    this._createWrapper();
+                    // イベントを登録
+                    this._bindEvents();
+                    // 初期状態を設定
+                    this.defaultValue = this.$el.val();
+                    this.setDisabled($el.prop('disabled'));
+                    this._onblur();
+                    // フォーム要素に登録
+                    element.Form.elements.push(this);
+                }
+                /**
+                 * ラベル要素を割り当てる
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._asignLabel = function (config) {
                     var $label;
+                    var hasLabel;
                     // 祖先のlabel要素を検索
                     $label = this.$el.closest('label');
+                    hasLabel = !!$label.length;
                     // labelでネストされていたかどうか
-                    this.isWrappedByLabel = !!$label.length;
-                    if (!$label.length) {
+                    this.isWrappedByLabel = hasLabel;
+                    if (!hasLabel) {
                         // for属性に関連づいたlabel要素を検索
                         $label = $('[for="' + this.id + '"]');
+                        hasLabel = !!$label.length;
                     }
-                    if (config.autoLabeling && !$label.length) {
+                    if (config.autoLabeling && !hasLabel) {
                         // label(もしくは別の)要素の生成
                         this.label = this.$el.attr('title') || config.label || this.$el.attr('name');
                         $label = $('<' + config.labelTag.toLowerCase() + ' />');
@@ -2031,9 +2043,21 @@ var baser;
                             $label.attr('for', this.id);
                         }
                     }
-                    this.$label = $label;
+                    else {
+                        this.label = config.label || $label.text();
+                    }
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon);
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
+                    this.$label = $label;
+                };
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._createWrapper = function () {
                     var wrapperHtml = '<span />';
                     var $wrapper = $(wrapperHtml);
                     element.Element.addClassTo($wrapper, FormElement.classNameFormElementCommon);
@@ -2046,18 +2070,26 @@ var baser;
                         this.$el.add(this.$label).wrapAll($wrapper);
                         this.$wrapper = this.$el.parent('span');
                     }
+                };
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._bindEvents = function () {
+                    var _this = this;
                     this.$el.on('focus.bcFormElement', function () {
                         _this._onfocus();
                     });
                     this.$el.on('blur.bcFormElement', function () {
                         _this._onblur();
                     });
-                    this._onblur();
-                    // disabledかどうか
-                    this.setDisabled($el.prop('disabled'));
-                    // フォーム要素に登録
-                    element.Form.elements.push(this);
-                }
+                    this.$el.on('change.bcFormElement', function () {
+                        _this.trigger('change', null, _this);
+                    });
+                };
                 /**
                  * フォーカスがあたった時の処理
                  *
@@ -2089,6 +2121,32 @@ var baser;
                     element.Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
                     element.Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
                     element.Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
+                };
+                /**
+                 * 値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype.setValue = function (value) {
+                    var valueString = String(value);
+                    var currentValue = this.$el.val();
+                    var e;
+                    var msE;
+                    if (currentValue !== valueString) {
+                        this.$el.val(valueString);
+                        if ('createEvent' in document) {
+                            e = document.createEvent('Event');
+                            e.initEvent('change', true, true);
+                            this.$el[0].dispatchEvent(e);
+                        }
+                        else {
+                            // IE8
+                            msE = document.createEventObject(window.event);
+                            this.$el[0].fireEvent('change', msE);
+                        }
+                    }
                 };
                 /**
                  * 無効状態を設定する
@@ -2509,7 +2567,7 @@ var baser;
                 function CheckableElement($el, options) {
                     var _this = this;
                     _super.call(this, $el, options);
-                    var config = $.extend(element.FormElement.defaultOption, CheckableElement.defaultOption, options);
+                    var config = $.extend({}, element.FormElement.defaultOption, CheckableElement.defaultOption, options);
                     this._checkedClass = config.checkedClass;
                     this.checked = this.$el.prop('checked');
                     this.defaultChecked = this.$el.prop('defaultChecked');
@@ -2535,7 +2593,6 @@ var baser;
                  *
                  * @version 0.0.1
                  * @since 0.0.1
-                 * @protected プロテクテッド想定
                  *
                  */
                 CheckableElement.prototype._onchenge = function () {
@@ -4040,6 +4097,7 @@ var baser;
 /// <reference path="baser/utility/Mathematics.ts" />
 /* UI
 ================================================================= */
+/// <reference path="baser/ui/IEventDispacher.ts" />
 /// <reference path="baser/ui/EventDispacher.ts" />
 /// <reference path="baser/ui/Sequence.ts" />
 /// <reference path="baser/ui/Browser.ts" />
@@ -4051,12 +4109,18 @@ var baser;
 /// <reference path="baser/ui/Validation.ts" />
 /* UI/エレメント
 ================================================================= */
+/// <reference path="baser/ui/element/IElement.ts" />
 /// <reference path="baser/ui/element/Element.ts" />
 /// <reference path="baser/ui/element/Form.ts" />
+/// <reference path="baser/ui/element/IFormElement.ts" />
 /// <reference path="baser/ui/element/FormElement.ts" />
+/// <reference path="baser/ui/element/ISelect.ts" />
 /// <reference path="baser/ui/element/Select.ts" />
+/// <reference path="baser/ui/element/ICheckableElement.ts" />
 /// <reference path="baser/ui/element/CheckableElement.ts" />
+/// <reference path="baser/ui/element/IRadio.ts" />
 /// <reference path="baser/ui/element/Radio.ts" />
+/// <reference path="baser/ui/element/ICheckbox.ts" />
 /// <reference path="baser/ui/element/Checkbox.ts" />
 /// <reference path="baser/ui/element/RadioGroup.ts" />
 /// <reference path="baser/ui/element/Map.ts" />
