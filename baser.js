@@ -936,20 +936,26 @@ var baser;
             /**
              * ユーザーエージェント情報を取得する
              *
-             * @version 0.0.2
+             * @version 0.4.0
              * @since 0.0.1
              *
              */
             Browser.getUA = function () {
                 var ua = navigator.userAgent;
-                var result = {
-                    iOS: /ios/i.test(ua),
+                var bua = {
+                    iOS: false,
+                    android: /android/i.test(ua),
                     iPad: /ipad/i.test(ua),
                     iPhone: /iphone/i.test(ua),
                     iPod: /ipod/i.test(ua),
-                    android: /android/i.test(ua)
+                    safari: /safari/i.test(ua),
+                    chrome: /crios|chrome/i.test(ua)
                 };
-                return result;
+                bua.iOS = bua.iPad || bua.iPhone || bua.iPod || false;
+                if (bua.chrome) {
+                    bua.safari = false;
+                }
+                return bua;
             };
             /**
              * ブラウザ
@@ -962,7 +968,7 @@ var baser;
             /**
              * デバイス・OS・ブラウザの情報
              *
-             * @version 0.0.1
+             * @version 0.4.0
              * @since 0.0.1
              *
              */
@@ -1999,9 +2005,9 @@ var baser;
                     // ラップ要素の割り当て
                     this._createWrapper();
                     // 擬似要素生成
-                    this._createPsuedoElements();
+                    this._createPsuedoElements(config);
                     // イベントを登録
-                    this._bindEvents();
+                    this._bindEvents(config);
                     // 初期状態を設定
                     this.defaultValue = this.$el.val();
                     this.setDisabled($el.prop('disabled'));
@@ -2102,7 +2108,7 @@ var baser;
                  * @since 0.4.0
                  *
                  */
-                FormElement.prototype._createPsuedoElements = function () {
+                FormElement.prototype._createPsuedoElements = function (config) {
                     // void
                 };
                 /**
@@ -2112,7 +2118,7 @@ var baser;
                  * @since 0.4.0
                  *
                  */
-                FormElement.prototype._bindEvents = function () {
+                FormElement.prototype._bindEvents = function (config) {
                     var _this = this;
                     this.$el.on('focus.bcFormElement', function () {
                         _this._onfocus();
@@ -2296,36 +2302,16 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.3.1
+                 * @version 0.4.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
                  *
                  */
                 function Select($el, options) {
-                    _super.call(this, $el, options);
-                    /*this._onblur();*/
-                    /*this._update();*/
-                    /*if (Browser.spec.isTouchable) {
-                        if (Browser.spec.ua.iPhone) {
-                            this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
-                                this.$label.focus();
-                            });
-                            this.addClass(Select.classNameOsIOs);
-                            Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
-                            Element.addClassTo(this.$label, Select.classNameOsIOs);
-                        } else if (Browser.spec.ua.android) {
-                            this.addClass(Select.classNameOsAndroid);
-                            Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
-                            Element.addClassTo(this.$label, Select.classNameOsAndroid);
-                        } else {
-                            // iPhone Android 以外のタッチデバイス
-                            // タッチインターフェイスのあるWindows OS Chromeなども該当
-                            this._psuedoFocusEvent();
-                        }
-                    } else {
-                        this._psuedoFocusEvent();
-                    }*/
+                    var config = $.extend({}, element.FormElement.defaultOption, Select.defaultOption, options);
+                    _super.call(this, $el, config);
+                    this._update();
                 }
                 /**
                  * クラス名を設定する
@@ -2394,7 +2380,7 @@ var baser;
                  * @override
                  *
                  */
-                Select.prototype._createPsuedoElements = function () {
+                Select.prototype._createPsuedoElements = function (config) {
                     var _this = this;
                     this.$pseudo = $('<a />'); // Focusable
                     this.$pseudo.attr('href', '#');
@@ -2402,7 +2388,6 @@ var baser;
                     element.Element.addClassTo(this.$pseudo, element.FormElement.classNameFormElementCommon);
                     element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
                     this.$selected = $('<span />');
-                    this.$selected.text(this.label);
                     this.$selected.appendTo(this.$pseudo);
                     element.Element.addClassTo(this.$selected, element.FormElement.classNameFormElementCommon);
                     element.Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
@@ -2421,6 +2406,23 @@ var baser;
                         element.Element.addClassTo($psuedoOpt, element.FormElement.classNameFormElementCommon);
                         element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
                     });
+                    if (ui.Browser.spec.isTouchable) {
+                        if (ui.Browser.spec.ua.iPhone || ui.Browser.spec.ua.iPod) {
+                            this.addClass(Select.classNameOsIOs);
+                            element.Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
+                            element.Element.addClassTo(this.$label, Select.classNameOsIOs);
+                        }
+                        else if (ui.Browser.spec.ua.android) {
+                            this.addClass(Select.classNameOsAndroid);
+                            element.Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
+                            element.Element.addClassTo(this.$label, Select.classNameOsAndroid);
+                        }
+                    }
+                    if (config.useDefaultOptionList) {
+                        this.addClass(Select.classNameUseDefaultOptionList);
+                        element.Element.addClassTo(this.$wrapper, Select.classNameUseDefaultOptionList);
+                        element.Element.addClassTo(this.$label, Select.classNameUseDefaultOptionList);
+                    }
                 };
                 /**
                  * イベントの登録
@@ -2429,9 +2431,9 @@ var baser;
                  * @since 0.4.0
                  *
                  */
-                Select.prototype._bindEvents = function () {
+                Select.prototype._bindEvents = function (config) {
                     var _this = this;
-                    _super.prototype._bindEvents.call(this);
+                    _super.prototype._bindEvents.call(this, config);
                     /*
                     this.$el.on('focus.bcFormElement', (): void => {
                         this._onfocus();
@@ -2445,22 +2447,30 @@ var baser;
                         this.trigger('change', null, this);
                     });
                     */
-                    // TODO: 必要かどうか確認
-                    //this.$el.on('change.bcSelect', (): void => {
-                    //	this._onchange();
-                    //});
+                    // changeイベントが起こった場合に実行するルーチン
+                    // TODO: changeイベントが重複する問題を検討する
+                    this.$el.on('change.bcSelect', function () {
+                        _this._update();
+                        _this._onblur();
+                    });
+                    // 擬似option要素を選択した時に実行する
                     this.$options.on('click.bcSelect', 'li', function (e) {
                         var $li = $(e.target);
                         var index = $li.index();
-                        _this.$el.find('option').eq(index).prop('selected', true);
+                        _this.setIndex(index);
                         e.stopPropagation();
                         e.preventDefault();
-                        // 標準の select 要素に登録されたイベントを発火
-                        _this.$el.trigger('change');
                     });
                     this.$pseudo.on('click.bcSelect', function (e) {
                         e.preventDefault();
                     });
+                    if (!config.useDefaultOptionList) {
+                        this._psuedoFocusEvent();
+                    }
+                    else {
+                        // href属性を削除することでフォーカスがあたらなくなる
+                        this.$pseudo.removeAttr('href');
+                    }
                 };
                 /**
                  * オプションが開かれた後にスクロール位置を調整する
@@ -2501,30 +2511,23 @@ var baser;
                     this.$el.on('focus.bcSelect', function () {
                         _this.$pseudo.focus();
                     });
+                    // ドキュメントのどこかをクリックしたらフォーカスがはずれる
                     $(document).on('click.bcSelect', function () {
                         _this._onblur();
                     });
                     // 擬似セレクトボックスにフォーカス・またはクリックが起こった時に発火する
                     this.$pseudo.on('focus.bcSelect', function (e) {
                         _this._onfocus();
+                        // ドキュメントに伝達しない
                         e.stopPropagation();
                     });
                     this.$pseudo.on('click.bcSelect', function (e) {
                         _this._onfocus();
+                        // ドキュメントに伝達しない
                         e.stopPropagation();
+                        // href="#"なのでデフォルトイベントを抑制
                         e.preventDefault();
                     });
-                };
-                /**
-                 * チェンジイベントのハンドラ
-                 *
-                 * @version 0.0.1
-                 * @since 0.0.1
-                 *
-                 */
-                Select.prototype._onchange = function () {
-                    this._update();
-                    this._onblur();
                 };
                 /**
                  * フォーカスがあたった時の処理
@@ -2607,6 +2610,31 @@ var baser;
                     }
                 };
                 /**
+                 * 値をインデックス番号から設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype.setIndex = function (index) {
+                    var $targetOption = this.$el.find('option').eq(index);
+                    if ($targetOption.length && !$targetOption.prop('selected')) {
+                        $targetOption.prop('selected', true);
+                        this._fireChangeEvent();
+                    }
+                };
+                /**
+                 * オプションのデフォルト値
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.defaultOption = {
+                    useDefaultOptionList: ui.Browser.spec.isTouchable && ui.Browser.spec.ua.iPhone || ui.Browser.spec.ua.iPod || ui.Browser.spec.ua.android
+                };
+                /**
                  * Select要素のクラス
                  *
                  * @version 0.1.0
@@ -2662,6 +2690,14 @@ var baser;
                  *
                  */
                 Select.classNameOsAndroid = 'os-android';
+                /**
+                 * ブラウザデフォルトの選択リストを使用する場合に付加されるクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.classNameUseDefaultOptionList = 'use-default-option-list';
                 /**
                  * Select要素の擬似option要素の選択時に付加されるクラス
                  *

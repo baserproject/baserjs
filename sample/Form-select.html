@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Test - Form</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
 	<script src="../baser.js"></script>
 	<script>
 	$(function() {
@@ -12,33 +13,41 @@
 		var $output = $('#output');
 		var $button = $('button');
 
-		$select.each(function () {
-			var select = new baser.ui.element.Select($(this));
+		$select.each(function (i) {
+			var $this = $(this);
+
+			if (i === 1) {
+				var select = new baser.ui.element.Select($this, {
+					useDefaultOptionList: true
+				});
+			} else {
+				var select = new baser.ui.element.Select($this);
+			}
 
 			select.on('change', function () {
-				$output.text($output.text() + '\nbaser: ' + $select.val());
+				$output.text($output.text() + '\nbaser: ' + $this.val());
 			});
 
-			$select.on('change', function () {
-				$output.text($output.text() + '\njQuery: ' + $select.val());
+			$this.on('change', function () {
+				$output.text($output.text() + '\njQuery: ' + $this.val());
 			});
+
+			if (document.addEventListener) {
+				$this[0].addEventListener('change', function () {
+					$output.text($output.text() + '\nDOM: ' + $this.val());
+				}, false);
+			} else {
+				$this[0].attachEvent('onchange', function () {
+					$output.text($output.text() + '\nIE: ' + $this.val());
+				});
+			}
+
 			var c = 0;
 			$button.on('click', function () {
 				c++;
-				select.setValue('SET VALUE!! count: ' + c);
+				select.setValue(c);
 			});
 		});
-
-		if (document.addEventListener) {
-			$select[0].addEventListener('change', function () {
-				$output.text($output.text() + '\nDOM: ' + $select.val());
-			}, false);
-		} else {
-			$select[0].attachEvent('onchange', function () {
-				$output.text($output.text() + '\nIE: ' + $select.val());
-			});
-		}
-
 
 	});
 	</script>
@@ -51,23 +60,59 @@
   vertical-align: middle;
 }
 
+.-bc-form-element__label {
+	display: inline-block;
+}
+
 /* Select Body Element */
 .-bc-form-select {
-  display: none;
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	width: 1px;
+	height: 1px;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	opacity: 0.5;
+	background: #fff;
 }
+
+.-bc-use-default-option-list .-bc-form-select {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10000;
+	width: 100%;
+	height: 100%;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	opacity: 0.5;
+	background: #fff;
+}
+
+
 
 /* Pseudo Select Element */
 .-bc-pseudo-select {
 	position: relative;
-	background: #000;
-	color: #FFF;
 	padding: 10px 20px;
+	background: #333;
 }
+
 
 /* Pseudo Selected Display Element */
 .-bc-pseudo-select__selected-display {
 	position: relative;
-	z-index: 0;
+	z-index: 1;
+	color: #fff;
+	display: inline-block;
 }
 
 /* Pseudo Option List Element */
@@ -75,6 +120,7 @@
 	position: absolute;
 	display: none;
 	background: #333;
+	color: #fff;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -83,6 +129,9 @@
 }
 .-bc-pseudo-select--focus .-bc-pseudo-select__option-list {
 	display: block;
+}
+.-bc-use-default-option-list .-bc-pseudo-select__option-list {
+	display: none !important;
 }
 
 /* Pseudo Option Element */
@@ -98,15 +147,15 @@
 
 <label>
 	<select name="year">
-		<option value="2011">2001</option>
-		<option value="2012">2002</option>
-		<option value="2013">2003</option>
-		<option value="2014">2004</option>
-		<option value="2015">2005</option>
-		<option value="2016">2006</option>
-		<option value="2017">2007</option>
-		<option value="2018">2008</option>
-		<option value="2019">2009</option>
+		<option value="2001">2001</option>
+		<option value="2002">2002</option>
+		<option value="2003">2003</option>
+		<option value="2004">2004</option>
+		<option value="2005">2005</option>
+		<option value="2006">2006</option>
+		<option value="2007">2007</option>
+		<option value="2008">2008</option>
+		<option value="2009">2009</option>
 		<option value="2010">2010</option>
 		<option value="2011">2011</option>
 		<option value="2012">2012</option>
@@ -169,6 +218,15 @@
 <button>SET</button>
 
 <div><pre id="output"></pre></div>
+
+<script>
+document.write(navigator.userAgent);
+document.write(baser.ui.Browser.spec.ua.iOS ? '::iOS' : '');
+document.write(baser.ui.Browser.spec.ua.android ? '::android' : '');
+document.write(baser.ui.Browser.spec.ua.chrome ? '::chrome' : '');
+document.write(baser.ui.Browser.spec.ua.safari ? '::safari' : '');
+document.write(baser.ui.Browser.spec.ua.iPad ? '::iPad' : '');
+</script>
 
 </body>
 </html>

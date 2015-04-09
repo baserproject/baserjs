@@ -240,6 +240,15 @@ declare module baser {
 }
 declare module baser {
     module ui {
+        interface BrowserUserAgent {
+            iOS: boolean;
+            android: boolean;
+            iPad: boolean;
+            iPhone: boolean;
+            iPod: boolean;
+            safari: boolean;
+            chrome: boolean;
+        }
         /**
          * ブラウザの情報を管理するクラス
          *
@@ -259,13 +268,13 @@ declare module baser {
             /**
              * デバイス・OS・ブラウザの情報
              *
-             * @version 0.0.1
+             * @version 0.4.0
              * @since 0.0.1
              *
              */
             static spec: {
                 isTouchable: boolean;
-                ua: any;
+                ua: BrowserUserAgent;
             };
             /**
              * ページ遷移する
@@ -278,11 +287,11 @@ declare module baser {
             /**
              * ユーザーエージェント情報を取得する
              *
-             * @version 0.0.2
+             * @version 0.4.0
              * @since 0.0.1
              *
              */
-            static getUA(): any;
+            static getUA(): BrowserUserAgent;
             resizeEndInterval: number;
             scrollEndInterval: number;
             isResize: boolean;
@@ -1080,7 +1089,7 @@ declare module baser {
                  * @since 0.4.0
                  *
                  */
-                protected _createPsuedoElements(): void;
+                protected _createPsuedoElements(config: FormElementOption): void;
                 /**
                  * イベントの登録
                  *
@@ -1088,7 +1097,7 @@ declare module baser {
                  * @since 0.4.0
                  *
                  */
-                protected _bindEvents(): void;
+                protected _bindEvents(config: FormElementOption): void;
                 /**
                  * フォーカスがあたった時の処理
                  *
@@ -1149,6 +1158,22 @@ declare module baser {
     module ui {
         module element {
             /**
+             * Selectクラスのオプションハッシュのインターフェイス
+             *
+             * @version 0.4.0
+             * @since 0.4.0
+             *
+             */
+            interface SelectOption extends FormElementOption {
+                /**
+                 * 選択リストをブラウザデフォルトのものにするかどうか
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                useDefaultOptionList?: boolean;
+            }
+            /**
              * セレクトボックスの拡張クラス
              *
              * @version 0.1.0
@@ -1156,6 +1181,14 @@ declare module baser {
              *
              */
             class Select extends FormElement implements ISelect {
+                /**
+                 * オプションのデフォルト値
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                static defaultOption: SelectOption;
                 /**
                  * Select要素のクラス
                  *
@@ -1213,6 +1246,14 @@ declare module baser {
                  */
                 static classNameOsAndroid: string;
                 /**
+                 * ブラウザデフォルトの選択リストを使用する場合に付加されるクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                static classNameUseDefaultOptionList: string;
+                /**
                  * Select要素の擬似option要素の選択時に付加されるクラス
                  *
                  * @version 0.1.0
@@ -1259,13 +1300,13 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.3.1
+                 * @version 0.4.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
                  *
                  */
-                constructor($el: JQuery, options: CheckableElementOption);
+                constructor($el: JQuery, options: SelectOption);
                 /**
                  * クラス名を設定する
                  *
@@ -1309,7 +1350,7 @@ declare module baser {
                  * @override
                  *
                  */
-                protected _createPsuedoElements(): void;
+                protected _createPsuedoElements(config: SelectOption): void;
                 /**
                  * イベントの登録
                  *
@@ -1317,7 +1358,7 @@ declare module baser {
                  * @since 0.4.0
                  *
                  */
-                protected _bindEvents(): void;
+                protected _bindEvents(config: SelectOption): void;
                 /**
                  * オプションが開かれた後にスクロール位置を調整する
                  *
@@ -1334,14 +1375,6 @@ declare module baser {
                  *
                  */
                 private _psuedoFocusEvent();
-                /**
-                 * チェンジイベントのハンドラ
-                 *
-                 * @version 0.0.1
-                 * @since 0.0.1
-                 *
-                 */
-                private _onchange();
                 /**
                  * フォーカスがあたった時の処理
                  *
@@ -1375,6 +1408,15 @@ declare module baser {
                  *
                  */
                 setValue(value: string | number | boolean): void;
+                /**
+                 * 値をインデックス番号から設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                setIndex(index: number): void;
             }
         }
     }

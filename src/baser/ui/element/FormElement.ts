@@ -206,10 +206,10 @@ module baser {
 					this._createWrapper();
 
 					// 擬似要素生成
-					this._createPsuedoElements();
+					this._createPsuedoElements(config);
 
 					// イベントを登録
-					this._bindEvents();
+					this._bindEvents(config);
 
 					// 初期状態を設定
 					this.defaultValue = this.$el.val();
@@ -326,7 +326,7 @@ module baser {
 				 * @since 0.4.0
 				 *
 				 */
-				protected _createPsuedoElements (): void {
+				protected _createPsuedoElements (config: FormElementOption): void {
 					// void
 				}
 
@@ -337,7 +337,7 @@ module baser {
 				 * @since 0.4.0
 				 *
 				 */
-				protected _bindEvents (): void {
+				protected _bindEvents (config: FormElementOption): void {
 					this.$el.on('focus.bcFormElement', (): void => {
 						this._onfocus();
 					});

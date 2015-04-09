@@ -5,6 +5,26 @@ module baser {
 		export module element {
 
 			/**
+			 * Selectクラスのオプションハッシュのインターフェイス
+			 *
+			 * @version 0.4.0
+			 * @since 0.4.0
+			 *
+			 */
+			export interface SelectOption extends FormElementOption {
+
+				/**
+				 * 選択リストをブラウザデフォルトのものにするかどうか
+				 *
+				 * @since 0.4.0
+				 *
+				 */
+				useDefaultOptionList?: boolean;
+
+			}
+
+
+			/**
 			 * セレクトボックスの拡張クラス
 			 *
 			 * @version 0.1.0
@@ -12,6 +32,17 @@ module baser {
 			 *
 			 */
 			export class Select extends FormElement implements ISelect {
+
+				/**
+				 * オプションのデフォルト値
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				static defaultOption: SelectOption = {
+					useDefaultOptionList: Browser.spec.isTouchable && Browser.spec.ua.iPhone || Browser.spec.ua.iPod || Browser.spec.ua.android
+				};
 
 				/**
 				 * Select要素のクラス
@@ -77,6 +108,15 @@ module baser {
 				static classNameOsAndroid: string = 'os-android';
 
 				/**
+				 * ブラウザデフォルトの選択リストを使用する場合に付加されるクラス
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				static classNameUseDefaultOptionList: string = 'use-default-option-list';
+
+				/**
 				 * Select要素の擬似option要素の選択時に付加されるクラス
 				 *
 				 * @version 0.1.0
@@ -129,39 +169,19 @@ module baser {
 				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.3.1
+				 * @version 0.4.0
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
 				 *
 				 */
-				constructor ($el: JQuery, options: CheckableElementOption) {
+				constructor ($el: JQuery, options: SelectOption) {
 
-					super($el, options);
+					var config: SelectOption = $.extend({}, FormElement.defaultOption, Select.defaultOption, options);
 
-					/*this._onblur();*/
-					/*this._update();*/
+					super($el, config);
 
-					/*if (Browser.spec.isTouchable) {
-						if (Browser.spec.ua.iPhone) {
-							this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
-								this.$label.focus();
-							});
-							this.addClass(Select.classNameOsIOs);
-							Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
-							Element.addClassTo(this.$label, Select.classNameOsIOs);
-						} else if (Browser.spec.ua.android) {
-							this.addClass(Select.classNameOsAndroid);
-							Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
-							Element.addClassTo(this.$label, Select.classNameOsAndroid);
-						} else {
-							// iPhone Android 以外のタッチデバイス
-							// タッチインターフェイスのあるWindows OS Chromeなども該当
-							this._psuedoFocusEvent();
-						}
-					} else {
-						this._psuedoFocusEvent();
-					}*/
+					this._update();
 
 				}
 
@@ -235,7 +255,7 @@ module baser {
 				 * @override
 				 *
 				 */
-				protected _createPsuedoElements (): void {
+				protected _createPsuedoElements (config: SelectOption): void {
 					this.$pseudo = $('<a />'); // Focusable
 					this.$pseudo.attr('href', '#');
 					this.$pseudo.appendTo(this.$label);
@@ -243,7 +263,6 @@ module baser {
 					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
 
 					this.$selected = $('<span />');
-					this.$selected.text(this.label);
 					this.$selected.appendTo(this.$pseudo);
 					Element.addClassTo(this.$selected, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
@@ -263,6 +282,25 @@ module baser {
 						Element.addClassTo($psuedoOpt, FormElement.classNameFormElementCommon);
 						Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
 					});
+
+					if (Browser.spec.isTouchable) {
+						if (Browser.spec.ua.iPhone || Browser.spec.ua.iPod) {
+							this.addClass(Select.classNameOsIOs);
+							Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
+							Element.addClassTo(this.$label, Select.classNameOsIOs);
+						} else if (Browser.spec.ua.android) {
+							this.addClass(Select.classNameOsAndroid);
+							Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
+							Element.addClassTo(this.$label, Select.classNameOsAndroid);
+						}
+					}
+
+					if (config.useDefaultOptionList) {
+						this.addClass(Select.classNameUseDefaultOptionList);
+						Element.addClassTo(this.$wrapper, Select.classNameUseDefaultOptionList);
+						Element.addClassTo(this.$label, Select.classNameUseDefaultOptionList);
+					}
+
 				}
 
 				/**
@@ -272,8 +310,8 @@ module baser {
 				 * @since 0.4.0
 				 *
 				 */
-				protected _bindEvents (): void {
-					super._bindEvents();
+				protected _bindEvents (config: SelectOption): void {
+					super._bindEvents(config);
 					/*
 					this.$el.on('focus.bcFormElement', (): void => {
 						this._onfocus();
@@ -288,24 +326,33 @@ module baser {
 					});
 					*/
 
-					// TODO: 必要かどうか確認
-					//this.$el.on('change.bcSelect', (): void => {
-					//	this._onchange();
-					//});
+					// changeイベントが起こった場合に実行するルーチン
+					// TODO: changeイベントが重複する問題を検討する
+					this.$el.on('change.bcSelect', (): void => {
+						this._update();
+						this._onblur();
+					});
 
+					// 擬似option要素を選択した時に実行する
 					this.$options.on('click.bcSelect', 'li', (e: JQueryEventObject): void => {
 						var $li: JQuery = $(e.target);
 						var index: number = $li.index();
-						this.$el.find('option').eq(index).prop('selected', true);
+						this.setIndex(index);
 						e.stopPropagation();
 						e.preventDefault();
-						// 標準の select 要素に登録されたイベントを発火
-						this.$el.trigger('change');
 					});
 
 					this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
 						e.preventDefault();
 					});
+
+					if (!config.useDefaultOptionList) {
+						this._psuedoFocusEvent();
+					} else {
+						// href属性を削除することでフォーカスがあたらなくなる
+						this.$pseudo.removeAttr('href');
+					}
+
 				}
 
 				/**
@@ -316,11 +363,8 @@ module baser {
 				 *
 				 */
 				private _scrollToSelectedPosition (): void {
-
 					var $psuedoOptList: JQuery = this.$options.find('li');
-
 					var $psuedoOpt: JQuery;
-
 					this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
 						var $opt: JQuery = $(opt);
 						var isSelected: boolean = <boolean> $opt.prop('selected');
@@ -328,17 +372,13 @@ module baser {
 							$psuedoOpt = $psuedoOptList.eq(i);
 						}
 					});
-
 					// ポジションを正しく取得するために一度スクロール位置をリセットする
 					this.$options.scrollTop(0);
-
 					var optPos: JQueryCoordinates = $psuedoOpt.offset();
 					var cntPos: JQueryCoordinates = this.$options.offset();
-
 					if (optPos && cntPos) {
 						this.$options.scrollTop(optPos.top - cntPos.top);
 					}
-
 				}
 
 				/**
@@ -357,37 +397,24 @@ module baser {
 						this.$pseudo.focus();
 					});
 
+					// ドキュメントのどこかをクリックしたらフォーカスがはずれる
 					$(document).on('click.bcSelect', (): void => {
 						this._onblur();
 					});
 
 					// 擬似セレクトボックスにフォーカス・またはクリックが起こった時に発火する
-
 					this.$pseudo.on('focus.bcSelect', (e: JQueryEventObject): void => {
 						this._onfocus();
+						// ドキュメントに伝達しない
 						e.stopPropagation();
 					});
-
 					this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
 						this._onfocus();
+						// ドキュメントに伝達しない
 						e.stopPropagation();
+						// href="#"なのでデフォルトイベントを抑制
 						e.preventDefault();
 					});
-
-				}
-
-				/**
-				 * チェンジイベントのハンドラ
-				 *
-				 * @version 0.0.1
-				 * @since 0.0.1
-				 *
-				 */
-				private _onchange (): void {
-
-					this._update();
-
-					this._onblur();
 
 				}
 
@@ -470,6 +497,22 @@ module baser {
 				public setValue (value: string | number | boolean): void {
 					var valueString: string = String(value);
 					var $targetOption: JQuery = this.$el.find('option[value="' + valueString + '"]');
+					if ($targetOption.length && !$targetOption.prop('selected')) {
+						$targetOption.prop('selected', true);
+						this._fireChangeEvent();
+					}
+				}
+
+				/**
+				 * 値をインデックス番号から設定する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 * @override
+				 *
+				 */
+				public setIndex (index: number): void {
+					var $targetOption: JQuery = this.$el.find('option').eq(index);
 					if ($targetOption.length && !$targetOption.prop('selected')) {
 						$targetOption.prop('selected', true);
 						this._fireChangeEvent();
