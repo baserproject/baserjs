@@ -196,14 +196,17 @@ module baser {
 
 					var config: FormElementOption = $.extend({}, FormElement.defaultOption, options);
 
-					// 共通のクラスを付加
-					this.addClass(FormElement.classNameFormElementCommon);
+					// クラス名を設定す
+					this._setClassName();
 
 					// ラベル要素の割り当て
 					this._asignLabel(config);
 
 					// ラップ要素の割り当て
 					this._createWrapper();
+
+					// 擬似要素生成
+					this._createPsuedoElements();
 
 					// イベントを登録
 					this._bindEvents();
@@ -219,51 +222,78 @@ module baser {
 				}
 
 				/**
+				 * クラス名を設定する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				protected _setClassName (): void {
+					// 共通のクラスを付加
+					this.addClass(FormElement.classNameFormElementCommon);
+				}
+
+
+				/**
+				 * ラベル要素内のテキストを取得する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				protected _getLabelText (): string {
+					if (this.$label.length) {
+						return $.trim(this.$label.text());
+					} else {
+						return '';
+					}
+				}
+
+				/**
 				 * ラベル要素を割り当てる
 				 *
 				 * @version 0.4.0
 				 * @since 0.4.0
 				 *
 				 */
-				private _asignLabel (config: FormElementOption): void {
+				protected _asignLabel (config: FormElementOption): void {
 					var $label: JQuery;
 					var hasLabel: boolean;
 
 					// 祖先のlabel要素を検索
 					$label = this.$el.closest('label');
+
+					// label要素の存在
 					hasLabel = !!$label.length;
 
 					// labelでネストされていたかどうか
 					this.isWrappedByLabel = hasLabel;
 
+					// for属性に関連づいたlabel要素を取得
 					if (!hasLabel) {
-						// for属性に関連づいたlabel要素を検索
-						$label = $('[for="' + this.id + '"]');
+						$label = $('label[for="' + this.id + '"]');
 						hasLabel = !!$label.length;
 					}
+
+					// ラベルがないときにラベル要素を生成する
 					if (config.autoLabeling && !hasLabel) {
 						// label(もしくは別の)要素の生成
-						this.label = this.$el.attr('title') || config.label || this.$el.attr('name');
 						$label = $('<' + config.labelTag.toLowerCase() + ' />');
 						$label.insertAfter(this.$el);
 						if (config.labelClass) {
 							$label.addClass(config.labelClass);
 						}
-						if (this.label) {
-							$label.text(this.label);
-						}
 						if (config.labelTag.toLowerCase() === 'label') {
 							// labelを生成したのならfor属性にidを紐付ける
 							$label.attr('for', this.id);
 						}
-					} else {
-						this.label = config.label || $label.text();
 					}
 
 					Element.addClassTo($label, FormElement.classNameFormElementCommon);
 					Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
 
 					this.$label = $label;
+					this.label = config.label || this._getLabelText() ||  this.$el.attr('title') || this.$el.attr('name') || '';
 				}
 
 				/**
@@ -273,7 +303,7 @@ module baser {
 				 * @since 0.4.0
 				 *
 				 */
-				private _createWrapper (): void {
+				protected _createWrapper (): void {
 					var wrapperHtml: string = '<span />';
 					var $wrapper = $(wrapperHtml);
 
@@ -290,13 +320,24 @@ module baser {
 				}
 
 				/**
+				 * 擬似要素を生成する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				protected _createPsuedoElements (): void {
+					// void
+				}
+
+				/**
 				 * イベントの登録
 				 *
 				 * @version 0.4.0
 				 * @since 0.4.0
 				 *
 				 */
-				private _bindEvents (): void {
+				protected _bindEvents (): void {
 					this.$el.on('focus.bcFormElement', (): void => {
 						this._onfocus();
 					});
@@ -308,7 +349,6 @@ module baser {
 					this.$el.on('change.bcFormElement', (): void => {
 						this.trigger('change', null, this);
 					});
-
 				}
 
 				/**
@@ -394,6 +434,25 @@ module baser {
 				}
 
 				/**
+				 * changeイベントを発火する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				protected _fireChangeEvent () {
+					var e: Event;
+					if ('createEvent' in document) {
+						e = document.createEvent('Event');
+						e.initEvent('change', true, true);
+						this.$el[0].dispatchEvent(e);
+					} else {
+						// IE8
+						this.$el[0].fireEvent('onchange');
+					}
+				}
+
+				/**
 				 * 値を設定する
 				 *
 				 * @version 0.4.0
@@ -403,19 +462,9 @@ module baser {
 				public setValue (value: string | number | boolean): void {
 					var valueString: string = String(value);
 					var currentValue: string = this.$el.val();
-					var e: Event;
-					var msE: MSEventObj;
 					if (currentValue !== valueString) {
 						this.$el.val(valueString);
-						if ('createEvent' in document) {
-							e = document.createEvent('Event');
-							e.initEvent('change', true, true);
-							this.$el[0].dispatchEvent(e);
-						} else {
-							// IE8
-							msE = document.createEventObject(window.event);
-							this.$el[0].fireEvent('change', msE);
-						}
+						this._fireChangeEvent();
 					}
 				}
 

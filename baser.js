@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.4.0-beta r215
- * update: 2015-04-08
+ * baserjs - v0.4.0-beta r216
+ * update: 2015-04-10
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1992,12 +1992,14 @@ var baser;
                      */
                     this.hasFocus = false;
                     var config = $.extend({}, FormElement.defaultOption, options);
-                    // 共通のクラスを付加
-                    this.addClass(FormElement.classNameFormElementCommon);
+                    // クラス名を設定す
+                    this._setClassName();
                     // ラベル要素の割り当て
                     this._asignLabel(config);
                     // ラップ要素の割り当て
                     this._createWrapper();
+                    // 擬似要素生成
+                    this._createPsuedoElements();
                     // イベントを登録
                     this._bindEvents();
                     // 初期状態を設定
@@ -2007,6 +2009,32 @@ var baser;
                     // フォーム要素に登録
                     element.Form.elements.push(this);
                 }
+                /**
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._setClassName = function () {
+                    // 共通のクラスを付加
+                    this.addClass(FormElement.classNameFormElementCommon);
+                };
+                /**
+                 * ラベル要素内のテキストを取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._getLabelText = function () {
+                    if (this.$label.length) {
+                        return $.trim(this.$label.text());
+                    }
+                    else {
+                        return '';
+                    }
+                };
                 /**
                  * ラベル要素を割り当てる
                  *
@@ -2019,36 +2047,32 @@ var baser;
                     var hasLabel;
                     // 祖先のlabel要素を検索
                     $label = this.$el.closest('label');
+                    // label要素の存在
                     hasLabel = !!$label.length;
                     // labelでネストされていたかどうか
                     this.isWrappedByLabel = hasLabel;
+                    // for属性に関連づいたlabel要素を取得
                     if (!hasLabel) {
-                        // for属性に関連づいたlabel要素を検索
-                        $label = $('[for="' + this.id + '"]');
+                        $label = $('label[for="' + this.id + '"]');
                         hasLabel = !!$label.length;
                     }
+                    // ラベルがないときにラベル要素を生成する
                     if (config.autoLabeling && !hasLabel) {
                         // label(もしくは別の)要素の生成
-                        this.label = this.$el.attr('title') || config.label || this.$el.attr('name');
                         $label = $('<' + config.labelTag.toLowerCase() + ' />');
                         $label.insertAfter(this.$el);
                         if (config.labelClass) {
                             $label.addClass(config.labelClass);
-                        }
-                        if (this.label) {
-                            $label.text(this.label);
                         }
                         if (config.labelTag.toLowerCase() === 'label') {
                             // labelを生成したのならfor属性にidを紐付ける
                             $label.attr('for', this.id);
                         }
                     }
-                    else {
-                        this.label = config.label || $label.text();
-                    }
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon);
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
                     this.$label = $label;
+                    this.label = config.label || this._getLabelText() || this.$el.attr('title') || this.$el.attr('name') || '';
                 };
                 /**
                  * ラップ要素を生成
@@ -2070,6 +2094,16 @@ var baser;
                         this.$el.add(this.$label).wrapAll($wrapper);
                         this.$wrapper = this.$el.parent('span');
                     }
+                };
+                /**
+                 * 擬似要素を生成する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._createPsuedoElements = function () {
+                    // void
                 };
                 /**
                  * イベントの登録
@@ -2123,6 +2157,25 @@ var baser;
                     element.Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
                 };
                 /**
+                 * changeイベントを発火する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._fireChangeEvent = function () {
+                    var e;
+                    if ('createEvent' in document) {
+                        e = document.createEvent('Event');
+                        e.initEvent('change', true, true);
+                        this.$el[0].dispatchEvent(e);
+                    }
+                    else {
+                        // IE8
+                        this.$el[0].fireEvent('onchange');
+                    }
+                };
+                /**
                  * 値を設定する
                  *
                  * @version 0.4.0
@@ -2132,20 +2185,9 @@ var baser;
                 FormElement.prototype.setValue = function (value) {
                     var valueString = String(value);
                     var currentValue = this.$el.val();
-                    var e;
-                    var msE;
                     if (currentValue !== valueString) {
                         this.$el.val(valueString);
-                        if ('createEvent' in document) {
-                            e = document.createEvent('Event');
-                            e.initEvent('change', true, true);
-                            this.$el[0].dispatchEvent(e);
-                        }
-                        else {
-                            // IE8
-                            msE = document.createEventObject(window.event);
-                            this.$el[0].fireEvent('change', msE);
-                        }
+                        this._fireChangeEvent();
                     }
                 };
                 /**
@@ -2261,14 +2303,99 @@ var baser;
                  *
                  */
                 function Select($el, options) {
-                    var _this = this;
                     _super.call(this, $el, options);
+                    /*this._onblur();*/
+                    /*this._update();*/
+                    /*if (Browser.spec.isTouchable) {
+                        if (Browser.spec.ua.iPhone) {
+                            this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
+                                this.$label.focus();
+                            });
+                            this.addClass(Select.classNameOsIOs);
+                            Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
+                            Element.addClassTo(this.$label, Select.classNameOsIOs);
+                        } else if (Browser.spec.ua.android) {
+                            this.addClass(Select.classNameOsAndroid);
+                            Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
+                            Element.addClassTo(this.$label, Select.classNameOsAndroid);
+                        } else {
+                            // iPhone Android 以外のタッチデバイス
+                            // タッチインターフェイスのあるWindows OS Chromeなども該当
+                            this._psuedoFocusEvent();
+                        }
+                    } else {
+                        this._psuedoFocusEvent();
+                    }*/
+                }
+                /**
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype._setClassName = function () {
+                    _super.prototype._setClassName.call(this);
+                    // セレクトボックス用のクラス名を設定
                     this.addClass(Select.classNameSelect);
-                    element.Element.addClassTo(this.$wrapper, Select.classNameSelect + '-' + element.FormElement.classNameWrapper);
-                    var $elements = this.$label.children().detach();
+                };
+                /**
+                 * ラベル要素内のテキストを取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype._getLabelText = function () {
+                    var $labelClone;
+                    if (this.$label.length) {
+                        $labelClone = this.$label.clone();
+                        $labelClone.find('select').remove();
+                        return $.trim($labelClone.text());
+                    }
+                    else {
+                        return '';
+                    }
+                };
+                /**
+                 * ラベル要素を割り当てる
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype._asignLabel = function (config) {
+                    var $elements;
+                    _super.prototype._asignLabel.call(this, config);
+                    $elements = this.$label.children().detach();
                     this.$label.empty();
                     this.$label.append($elements);
                     element.Element.addClassTo(this.$label, Select.classNameSelect, element.FormElement.classNameLabel);
+                };
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype._createWrapper = function () {
+                    _super.prototype._createWrapper.call(this);
+                    element.Element.addClassTo(this.$wrapper, Select.classNameSelect + '-' + element.FormElement.classNameWrapper);
+                };
+                /**
+                 * 擬似セレクトボックス要素を生成する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype._createPsuedoElements = function () {
+                    var _this = this;
                     this.$pseudo = $('<a />'); // Focusable
                     this.$pseudo.attr('href', '#');
                     this.$pseudo.appendTo(this.$label);
@@ -2294,10 +2421,34 @@ var baser;
                         element.Element.addClassTo($psuedoOpt, element.FormElement.classNameFormElementCommon);
                         element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
                     });
-                    this._update();
-                    this.$el.on('change.bcSelect', function () {
-                        _this._onchange();
+                };
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype._bindEvents = function () {
+                    var _this = this;
+                    _super.prototype._bindEvents.call(this);
+                    /*
+                    this.$el.on('focus.bcFormElement', (): void => {
+                        this._onfocus();
                     });
+
+                    this.$el.on('blur.bcFormElement', (): void => {
+                        this._onblur();
+                    });
+
+                    this.$el.on('change.bcFormElement', (): void => {
+                        this.trigger('change', null, this);
+                    });
+                    */
+                    // TODO: 必要かどうか確認
+                    //this.$el.on('change.bcSelect', (): void => {
+                    //	this._onchange();
+                    //});
                     this.$options.on('click.bcSelect', 'li', function (e) {
                         var $li = $(e.target);
                         var index = $li.index();
@@ -2310,30 +2461,7 @@ var baser;
                     this.$pseudo.on('click.bcSelect', function (e) {
                         e.preventDefault();
                     });
-                    if (ui.Browser.spec.isTouchable) {
-                        if (ui.Browser.spec.ua.iPhone) {
-                            this.$pseudo.on('click.bcSelect', function (e) {
-                                _this.$label.focus();
-                            });
-                            this.addClass(Select.classNameOsIOs);
-                            element.Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
-                            element.Element.addClassTo(this.$label, Select.classNameOsIOs);
-                        }
-                        else if (ui.Browser.spec.ua.android) {
-                            this.addClass(Select.classNameOsAndroid);
-                            element.Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
-                            element.Element.addClassTo(this.$label, Select.classNameOsAndroid);
-                        }
-                        else {
-                            // iPhone Android 以外のタッチデバイス
-                            // タッチインターフェイスのあるWindows OS Chromeなども該当
-                            this._psuedoFocusEvent();
-                        }
-                    }
-                    else {
-                        this._psuedoFocusEvent();
-                    }
-                }
+                };
                 /**
                  * オプションが開かれた後にスクロール位置を調整する
                  *
@@ -2461,6 +2589,22 @@ var baser;
                             element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
                         }
                     });
+                };
+                /**
+                 * 値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype.setValue = function (value) {
+                    var valueString = String(value);
+                    var $targetOption = this.$el.find('option[value="' + valueString + '"]');
+                    if ($targetOption.length && !$targetOption.prop('selected')) {
+                        $targetOption.prop('selected', true);
+                        this._fireChangeEvent();
+                    }
                 };
                 /**
                  * Select要素のクラス

@@ -55,6 +55,11 @@ test('added class names', function() {
 
 	target.$el.trigger('focus');
 
+	console.log(target);
+	console.log(target.$wrapper.attr('class'));
+	console.log(target.$el.attr('class'));
+	console.log(target.$label.attr('class'));
+
 });
 
 test('wrapped label', function() {
@@ -96,7 +101,7 @@ test('leaved label', function() {
 	ok(target.$label.hasClass('-bc-form-element'), 'class name of label element');
 	ok(target.$label.hasClass('-bc-form-element__label'), 'class name of label element');
 
-	ok(!target.isWrappedByLabel, 'ラベルがラップされていない');
+	ok(!target.isWrappedByLabel, 'label is leaved');
 
 	equal(target.label, 'withLabel', 'text of label');
 
@@ -115,7 +120,7 @@ test('leaved label - optional label', function() {
 
 });
 
-test('初期値', function() {
+test('default value', function() {
 
 	var $target = $('#target-default-value');
 
@@ -197,23 +202,25 @@ test('disabled - change', function() {
 test('setValue / change event', function() {
 	expect(3);
 
+	var settingValue = 'setting-value';
+
 	var $target = $('#target');
 
 	var target = new baser.ui.element.Select($target);
 
 	target.on('change', function (e) {
-		ok(true, 'fired baserJS change');
+		equal(target.$el.val(), settingValue, 'fired baserJS change');
 	});
 
 	target.on('change', function (e) {
-		ok(true, 'fired jQuery change');
+		equal(target.$el.val(), settingValue, 'fired jQuery change');
 	});
 
 	target.on('change', function (e) {
-		ok(true, 'fired DOM change');
+		equal(target.$el.val(), settingValue, 'fired DOM change');
 	});
 
-	target.setValue('value');
+	target.setValue(settingValue);
 
 });
 

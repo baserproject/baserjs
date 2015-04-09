@@ -8,7 +8,37 @@
 	<script>
 	$(function() {
 
-		$('select').bcSelect();
+		var $select = $('select');
+		var $output = $('#output');
+		var $button = $('button');
+
+		$select.each(function () {
+			var select = new baser.ui.element.Select($(this));
+
+			select.on('change', function () {
+				$output.text($output.text() + '\nbaser: ' + $select.val());
+			});
+
+			$select.on('change', function () {
+				$output.text($output.text() + '\njQuery: ' + $select.val());
+			});
+			var c = 0;
+			$button.on('click', function () {
+				c++;
+				select.setValue('SET VALUE!! count: ' + c);
+			});
+		});
+
+		if (document.addEventListener) {
+			$select[0].addEventListener('change', function () {
+				$output.text($output.text() + '\nDOM: ' + $select.val());
+			}, false);
+		} else {
+			$select[0].attachEvent('onchange', function () {
+				$output.text($output.text() + '\nIE: ' + $select.val());
+			});
+		}
+
 
 	});
 	</script>
@@ -135,6 +165,10 @@
 		<option value="31">31</option>
 	</select>
 </label>
+
+<button>SET</button>
+
+<div><pre id="output"></pre></div>
 
 </body>
 </html>

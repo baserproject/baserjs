@@ -139,15 +139,103 @@ module baser {
 
 					super($el, options);
 
+					/*this._onblur();*/
+					/*this._update();*/
+
+					/*if (Browser.spec.isTouchable) {
+						if (Browser.spec.ua.iPhone) {
+							this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
+								this.$label.focus();
+							});
+							this.addClass(Select.classNameOsIOs);
+							Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
+							Element.addClassTo(this.$label, Select.classNameOsIOs);
+						} else if (Browser.spec.ua.android) {
+							this.addClass(Select.classNameOsAndroid);
+							Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
+							Element.addClassTo(this.$label, Select.classNameOsAndroid);
+						} else {
+							// iPhone Android 以外のタッチデバイス
+							// タッチインターフェイスのあるWindows OS Chromeなども該当
+							this._psuedoFocusEvent();
+						}
+					} else {
+						this._psuedoFocusEvent();
+					}*/
+
+				}
+
+				/**
+				 * クラス名を設定する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 * @override
+				 *
+				 */
+				protected _setClassName (): void {
+					super._setClassName();
+					// セレクトボックス用のクラス名を設定
 					this.addClass(Select.classNameSelect);
+				}
 
-					Element.addClassTo(this.$wrapper, Select.classNameSelect + '-' + FormElement.classNameWrapper);
+				/**
+				 * ラベル要素内のテキストを取得する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				protected _getLabelText (): string {
+					var $labelClone: JQuery;
+					if (this.$label.length) {
+						$labelClone = this.$label.clone();
+						$labelClone.find('select').remove();
+						return $.trim($labelClone.text());
+					} else {
+						return '';
+					}
+				}
 
-					var $elements: JQuery = this.$label.children().detach();
+				/**
+				 * ラベル要素を割り当てる
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 * @override
+				 *
+				 */
+				protected _asignLabel (config: FormElementOption): void {
+					var $elements: JQuery;
+					super._asignLabel(config);
+					$elements = this.$label.children().detach();
 					this.$label.empty();
 					this.$label.append($elements);
 					Element.addClassTo(this.$label, Select.classNameSelect, FormElement.classNameLabel);
+				}
 
+				/**
+				 * ラップ要素を生成
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 * @override
+				 *
+				 */
+				protected _createWrapper (): void {
+					super._createWrapper();
+					Element.addClassTo(this.$wrapper, Select.classNameSelect + '-' + FormElement.classNameWrapper);
+				}
+
+				/**
+				 * 擬似セレクトボックス要素を生成する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 * @override
+				 *
+				 */
+				protected _createPsuedoElements (): void {
 					this.$pseudo = $('<a />'); // Focusable
 					this.$pseudo.attr('href', '#');
 					this.$pseudo.appendTo(this.$label);
@@ -175,12 +263,35 @@ module baser {
 						Element.addClassTo($psuedoOpt, FormElement.classNameFormElementCommon);
 						Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
 					});
+				}
 
-					this._update();
-
-					this.$el.on('change.bcSelect', (): void => {
-						this._onchange();
+				/**
+				 * イベントの登録
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				protected _bindEvents (): void {
+					super._bindEvents();
+					/*
+					this.$el.on('focus.bcFormElement', (): void => {
+						this._onfocus();
 					});
+
+					this.$el.on('blur.bcFormElement', (): void => {
+						this._onblur();
+					});
+
+					this.$el.on('change.bcFormElement', (): void => {
+						this.trigger('change', null, this);
+					});
+					*/
+
+					// TODO: 必要かどうか確認
+					//this.$el.on('change.bcSelect', (): void => {
+					//	this._onchange();
+					//});
 
 					this.$options.on('click.bcSelect', 'li', (e: JQueryEventObject): void => {
 						var $li: JQuery = $(e.target);
@@ -195,28 +306,6 @@ module baser {
 					this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
 						e.preventDefault();
 					});
-
-					if (Browser.spec.isTouchable) {
-						if (Browser.spec.ua.iPhone) {
-							this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
-								this.$label.focus();
-							});
-							this.addClass(Select.classNameOsIOs);
-							Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
-							Element.addClassTo(this.$label, Select.classNameOsIOs);
-						} else if (Browser.spec.ua.android) {
-							this.addClass(Select.classNameOsAndroid);
-							Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
-							Element.addClassTo(this.$label, Select.classNameOsAndroid);
-						} else {
-							// iPhone Android 以外のタッチデバイス
-							// タッチインターフェイスのあるWindows OS Chromeなども該当
-							this._psuedoFocusEvent();
-						}
-					} else {
-						this._psuedoFocusEvent();
-					}
-
 				}
 
 				/**
@@ -368,6 +457,23 @@ module baser {
 						}
 					});
 
+				}
+
+				/**
+				 * 値を設定する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 * @override
+				 *
+				 */
+				public setValue (value: string | number | boolean): void {
+					var valueString: string = String(value);
+					var $targetOption: JQuery = this.$el.find('option[value="' + valueString + '"]');
+					if ($targetOption.length && !$targetOption.prop('selected')) {
+						$targetOption.prop('selected', true);
+						this._fireChangeEvent();
+					}
 				}
 
 			}

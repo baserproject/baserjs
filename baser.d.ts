@@ -1042,13 +1042,29 @@ declare module baser {
                  */
                 constructor($el: JQuery, options: FormElementOption);
                 /**
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _setClassName(): void;
+                /**
+                 * ラベル要素内のテキストを取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _getLabelText(): string;
+                /**
                  * ラベル要素を割り当てる
                  *
                  * @version 0.4.0
                  * @since 0.4.0
                  *
                  */
-                private _asignLabel(config);
+                protected _asignLabel(config: FormElementOption): void;
                 /**
                  * ラップ要素を生成
                  *
@@ -1056,7 +1072,15 @@ declare module baser {
                  * @since 0.4.0
                  *
                  */
-                private _createWrapper();
+                protected _createWrapper(): void;
+                /**
+                 * 擬似要素を生成する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _createPsuedoElements(): void;
                 /**
                  * イベントの登録
                  *
@@ -1064,7 +1088,7 @@ declare module baser {
                  * @since 0.4.0
                  *
                  */
-                private _bindEvents();
+                protected _bindEvents(): void;
                 /**
                  * フォーカスがあたった時の処理
                  *
@@ -1081,6 +1105,14 @@ declare module baser {
                  *
                  */
                 protected _onblur(): void;
+                /**
+                 * changeイベントを発火する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _fireChangeEvent(): void;
                 /**
                  * 値を設定する
                  *
@@ -1235,6 +1267,58 @@ declare module baser {
                  */
                 constructor($el: JQuery, options: CheckableElementOption);
                 /**
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _setClassName(): void;
+                /**
+                 * ラベル要素内のテキストを取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _getLabelText(): string;
+                /**
+                 * ラベル要素を割り当てる
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _asignLabel(config: FormElementOption): void;
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _createWrapper(): void;
+                /**
+                 * 擬似セレクトボックス要素を生成する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _createPsuedoElements(): void;
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _bindEvents(): void;
+                /**
                  * オプションが開かれた後にスクロール位置を調整する
                  *
                  * @version 0.1.0
@@ -1282,6 +1366,15 @@ declare module baser {
                  *
                  */
                 private _update();
+                /**
+                 * 値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                setValue(value: string | number | boolean): void;
             }
         }
     }

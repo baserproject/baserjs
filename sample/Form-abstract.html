@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test - Form</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="../baser.js"></script>
+	<script>
+	$(function() {
+
+		var $input = $('input');
+		var $output = $('#output');
+		var $button = $('button');
+
+		var input = new baser.ui.element.FormElement($input);
+
+		input.on('change', function () {
+			$output.text($output.text() + '\nbaser: ' + $input.val());
+		});
+
+		$input.on('change', function () {
+			$output.text($output.text() + '\njQuery: ' + $input.val());
+		});
+
+		if (document.addEventListener) {
+			$input[0].addEventListener('change', function () {
+				$output.text($output.text() + '\nDOM: ' + $input.val());
+			}, false);
+		} else {
+			$input[0].attachEvent('onchange', function () {
+				$output.text($output.text() + '\nIE: ' + $input.val());
+			});
+		}
+
+		var c = 0;
+		$button.on('click', function () {
+			c++;
+			input.setValue('SET VALUE!! count: ' + c);
+		});
+
+	});
+	</script>
+	<style>
+		.-bc-wrapper--focus input {
+			background: red;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+
+<label>
+	<input type="text">
+</label>
+
+<button>SET</button>
+
+<div><pre id="output"></pre></div>
+
+</body>
+</html>
