@@ -1113,6 +1113,14 @@ declare module baser {
                  */
                 protected _bindEvents(config: FormElementOption): void;
                 /**
+                 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _onSilentChange(): void;
+                /**
                  * フォーカスがあたった時の処理
                  *
                  * @version 0.1.0
@@ -1135,7 +1143,7 @@ declare module baser {
                  * @since 0.4.0
                  *
                  */
-                protected _fireChangeEvent(): void;
+                protected _fireChangeEvent(isSilent?: boolean): void;
                 /**
                  * 値を設定する
                  *
@@ -1164,6 +1172,9 @@ declare module baser {
                 $selected: JQuery;
                 $pseudo: JQuery;
                 $options: JQuery;
+                getIndex(): number;
+                next(isSilent: boolean): void;
+                prev(isSilent: boolean): void;
             }
         }
     }
@@ -1353,11 +1364,20 @@ declare module baser {
                  *
                  * @version 0.4.0
                  * @since 0.4.0
+                 * @override
                  *
                  */
                 protected _bindEvents(config: SelectOption): void;
                 /**
-                 * オプションが開かれた後にスクロール位置を調整する
+                 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _onSilentChange(): void;
+                /**
+                 * スクロール位置を調整する
                  *
                  * @version 0.1.0
                  * @since 0.1.0
@@ -1365,18 +1385,29 @@ declare module baser {
                  */
                 private _scrollToSelectedPosition();
                 /**
-                 * 擬似要素にフォーカスがあったった時のイベント伝達を制御する
+                 * 擬似要素にフォーカスがあったった時のイベントと伝達を制御する
                  *
-                 * @version 0.0.1
+                 * @version 0.4.0
                  * @since 0.0.1
                  *
                  */
                 private _psuedoFocusEvent();
                 /**
+                 * フォーカス時のキーボードイベント
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
+                 *
+                 */
+                private _bindKeybordEvent();
+                /**
                  * フォーカスがあたった時の処理
                  *
                  * @version 0.1.0
                  * @since 0.0.1
+                 * @override
                  *
                  */
                 protected _onfocus(): void;
@@ -1410,10 +1441,33 @@ declare module baser {
                  *
                  * @version 0.4.0
                  * @since 0.4.0
-                 * @override
                  *
                  */
-                setIndex(index: number): void;
+                setIndex(index: number, isSilent?: boolean): void;
+                /**
+                 * 現在の選択中のインデックス番号を取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                getIndex(): number;
+                /**
+                 * 次の項目を選択する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                next(isSilent: boolean): void;
+                /**
+                 * 前の項目を選択する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                prev(isSilent: boolean): void;
             }
         }
     }

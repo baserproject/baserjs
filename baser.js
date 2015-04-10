@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.4.0-beta r216
- * update: 2015-04-10
+ * baserjs - v0.4.0-beta r218
+ * update: 2015-04-11
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -2160,9 +2160,24 @@ var baser;
                     this.$el.on('blur.bcFormElement', function () {
                         _this._onblur();
                     });
-                    this.$el.on('change.bcFormElement', function () {
-                        _this.trigger('change', null, _this);
+                    this.$el.on('change.bcFormElement', function (e, arg) {
+                        if (arg && arg.isSilent) {
+                            _this._onSilentChange();
+                        }
+                        else {
+                            _this.trigger('change', null, _this);
+                        }
                     });
+                };
+                /**
+                 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._onSilentChange = function () {
+                    // void
                 };
                 /**
                  * フォーカスがあたった時の処理
@@ -2203,9 +2218,13 @@ var baser;
                  * @since 0.4.0
                  *
                  */
-                FormElement.prototype._fireChangeEvent = function () {
+                FormElement.prototype._fireChangeEvent = function (isSilent) {
+                    if (isSilent === void 0) { isSilent = false; }
                     var e;
-                    if ('createEvent' in document) {
+                    if (isSilent) {
+                        this.$el.trigger('change.bcFormElement', [{ isSilent: true }]);
+                    }
+                    else if ('createEvent' in document) {
                         e = document.createEvent('Event');
                         e.initEvent('change', true, true);
                         this.$el[0].dispatchEvent(e);
@@ -2382,8 +2401,8 @@ var baser;
                  */
                 Select.prototype._createPsuedoElements = function (config) {
                     var _this = this;
-                    this.$pseudo = $('<a />'); // Focusable
-                    this.$pseudo.attr('href', '#');
+                    this.$pseudo = $('<a />');
+                    this.$pseudo.attr('href', '#'); // Focusable
                     this.$pseudo.insertAfter(this.$el);
                     element.Element.addClassTo(this.$pseudo, element.FormElement.classNameFormElementCommon);
                     element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
@@ -2429,35 +2448,22 @@ var baser;
                  *
                  * @version 0.4.0
                  * @since 0.4.0
+                 * @override
                  *
                  */
                 Select.prototype._bindEvents = function (config) {
                     var _this = this;
                     _super.prototype._bindEvents.call(this, config);
-                    /*
-                    this.$el.on('focus.bcFormElement', (): void => {
-                        this._onfocus();
-                    });
-
-                    this.$el.on('blur.bcFormElement', (): void => {
-                        this._onblur();
-                    });
-
-                    this.$el.on('change.bcFormElement', (): void => {
-                        this.trigger('change', null, this);
-                    });
-                    */
                     // changeイベントが起こった場合に実行するルーチン
-                    // TODO: changeイベントが重複する問題を検討する
                     this.$el.on('change.bcSelect', function () {
                         _this._update();
-                        _this._onblur();
                     });
                     // 擬似option要素を選択した時に実行する
-                    this.$options.on('click.bcSelect', 'li', function (e) {
+                    this.$pseudo.on('click.bcSelect', 'li', function (e) {
                         var $li = $(e.target);
                         var index = $li.index();
                         _this.setIndex(index);
+                        _this._onblur();
                         e.stopPropagation();
                         e.preventDefault();
                     });
@@ -2473,7 +2479,17 @@ var baser;
                     }
                 };
                 /**
-                 * オプションが開かれた後にスクロール位置を調整する
+                 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype._onSilentChange = function () {
+                    this._update();
+                };
+                /**
+                 * スクロール位置を調整する
                  *
                  * @version 0.1.0
                  * @since 0.1.0
@@ -2498,9 +2514,9 @@ var baser;
                     }
                 };
                 /**
-                 * 擬似要素にフォーカスがあったった時のイベント伝達を制御する
+                 * 擬似要素にフォーカスがあったった時のイベントと伝達を制御する
                  *
-                 * @version 0.0.1
+                 * @version 0.4.0
                  * @since 0.0.1
                  *
                  */
@@ -2508,25 +2524,75 @@ var baser;
                     var _this = this;
                     this.$el.off('focus.bcFormElement');
                     this.$el.off('blur.bcFormElement');
-                    this.$el.on('focus.bcSelect', function () {
+                    // セレクトボックス本体にフォーカスがあたったら、
+                    // 擬似要素のほうへフォーカスを即座に移動させる
+                    this.$el.on('focus.bcSelect', function (e) {
                         _this.$pseudo.focus();
+                        e.stopPropagation();
+                        e.preventDefault();
                     });
-                    // ドキュメントのどこかをクリックしたらフォーカスがはずれる
-                    $(document).on('click.bcSelect', function () {
+                    // ドキュメントのどこかをフォーカスorクリックしたらフォーカスがはずれる
+                    // ※_onfocus()からも呼び出される
+                    $(document).on('click.bcSelect', function (e) {
                         _this._onblur();
                     });
-                    // 擬似セレクトボックスにフォーカス・またはクリックが起こった時に発火する
+                    // documentへ伝達するフォーカスは focusin イベント
+                    $(document).on('focusin', function (e) {
+                        _this._onblur();
+                    });
+                    // 擬似セレクトボックスにフォーカスorクリックが起こった時に発火する
                     this.$pseudo.on('focus.bcSelect', function (e) {
                         _this._onfocus();
                         // ドキュメントに伝達しない
                         e.stopPropagation();
-                    });
-                    this.$pseudo.on('click.bcSelect', function (e) {
+                    }).on('click.bcSelect', function (e) {
                         _this._onfocus();
                         // ドキュメントに伝達しない
                         e.stopPropagation();
                         // href="#"なのでデフォルトイベントを抑制
                         e.preventDefault();
+                    });
+                    // ドキュメントへのフォーカスorクリック伝達を抑制
+                    this.$label.on('click.bcSelect focus.bcSelect', function (e) {
+                        // ドキュメントに伝達しない
+                        e.stopPropagation();
+                    });
+                    this._bindKeybordEvent();
+                };
+                /**
+                 * フォーカス時のキーボードイベント
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
+                 *
+                 */
+                Select.prototype._bindKeybordEvent = function () {
+                    var _this = this;
+                    $(document).on('keydown', function (e) {
+                        if (_this.hasFocus) {
+                            switch (e.keyCode) {
+                                case 38: {
+                                    _this.prev(true);
+                                    _this._scrollToSelectedPosition();
+                                    e.preventDefault();
+                                    break;
+                                }
+                                case 40: {
+                                    _this.next(true);
+                                    _this._scrollToSelectedPosition();
+                                    e.preventDefault();
+                                    break;
+                                }
+                                case 13: {
+                                    _this._fireChangeEvent();
+                                    _this._onblur();
+                                    e.preventDefault();
+                                    break;
+                                }
+                            }
+                        }
                     });
                 };
                 /**
@@ -2534,18 +2600,19 @@ var baser;
                  *
                  * @version 0.1.0
                  * @since 0.0.1
+                 * @override
                  *
                  */
                 Select.prototype._onfocus = function () {
                     if (!this.hasFocus) {
                         // 全体のフォーカスを外す
-                        $(document).trigger('click.bcSelect');
+                        $(document).triggerHandler('click.bcSelect');
                         // 親クラスのフォーカスを実行
                         _super.prototype._onfocus.call(this);
                         // DOMのclassを制御
                         element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateFocus);
                         element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
-                        // オプションが開かれた後にスクロール位置を調整する
+                        // スクロール位置を調整する
                         this._scrollToSelectedPosition();
                     }
                 };
@@ -2614,15 +2681,57 @@ var baser;
                  *
                  * @version 0.4.0
                  * @since 0.4.0
-                 * @override
                  *
                  */
-                Select.prototype.setIndex = function (index) {
+                Select.prototype.setIndex = function (index, isSilent) {
+                    if (isSilent === void 0) { isSilent = false; }
                     var $targetOption = this.$el.find('option').eq(index);
                     if ($targetOption.length && !$targetOption.prop('selected')) {
                         $targetOption.prop('selected', true);
-                        this._fireChangeEvent();
+                        this._fireChangeEvent(isSilent);
                     }
+                };
+                /**
+                 * 現在の選択中のインデックス番号を取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype.getIndex = function () {
+                    var currentIndex = 0;
+                    this.$el.find('option').each(function (i, el) {
+                        var $opt = $(el);
+                        if ($opt.prop('selected')) {
+                            currentIndex = $opt.index();
+                        }
+                    });
+                    return currentIndex;
+                };
+                /**
+                 * 次の項目を選択する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype.next = function (isSilent) {
+                    var currentIndex = this.getIndex();
+                    var max = this.$el.find('option').length;
+                    var nextIndex = currentIndex + 1;
+                    this.setIndex(Math.min(nextIndex, max), isSilent);
+                };
+                /**
+                 * 前の項目を選択する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype.prev = function (isSilent) {
+                    var currentIndex = this.getIndex();
+                    var prevIndex = currentIndex - 1;
+                    this.setIndex(Math.max(prevIndex, 0), isSilent);
                 };
                 /**
                  * オプションのデフォルト値

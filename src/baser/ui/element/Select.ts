@@ -224,13 +224,11 @@ module baser {
 					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
 
 					this.$selected = $('<span />');
-					this.$selected.attr('tabindex', -1); // Unfocusable
 					this.$selected.appendTo(this.$pseudo);
 					Element.addClassTo(this.$selected, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
 
 					this.$options = $('<ul />');
-					this.$options.attr('tabindex', -1); // Unfocusable
 					this.$options.appendTo(this.$pseudo);
 					Element.addClassTo(this.$options, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
@@ -271,35 +269,23 @@ module baser {
 				 *
 				 * @version 0.4.0
 				 * @since 0.4.0
+				 * @override
 				 *
 				 */
 				protected _bindEvents (config: SelectOption): void {
 					super._bindEvents(config);
-					/*
-					this.$el.on('focus.bcFormElement', (): void => {
-						this._onfocus();
-					});
-
-					this.$el.on('blur.bcFormElement', (): void => {
-						this._onblur();
-					});
-
-					this.$el.on('change.bcFormElement', (): void => {
-						this.trigger('change', null, this);
-					});
-					*/
 
 					// changeイベントが起こった場合に実行するルーチン
 					this.$el.on('change.bcSelect', (): void => {
 						this._update();
-						this._onblur();
 					});
 
 					// 擬似option要素を選択した時に実行する
-					this.$options.on('click.bcSelect', 'li', (e: JQueryEventObject): void => {
+					this.$pseudo.on('click.bcSelect', 'li', (e: JQueryEventObject): void => {
 						var $li: JQuery = $(e.target);
 						var index: number = $li.index();
 						this.setIndex(index);
+						this._onblur();
 						e.stopPropagation();
 						e.preventDefault();
 					});
@@ -318,7 +304,18 @@ module baser {
 				}
 
 				/**
-				 * オプションが開かれた後にスクロール位置を調整する
+				 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				protected _onSilentChange (): void {
+					this._update();
+				}
+
+				/**
+				 * スクロール位置を調整する
 				 *
 				 * @version 0.1.0
 				 * @since 0.1.0
@@ -344,9 +341,9 @@ module baser {
 				}
 
 				/**
-				 * 擬似要素にフォーカスがあったった時のイベント伝達を制御する
+				 * 擬似要素にフォーカスがあったった時のイベントと伝達を制御する
 				 *
-				 * @version 0.0.1
+				 * @version 0.4.0
 				 * @since 0.0.1
 				 *
 				 */
@@ -394,6 +391,47 @@ module baser {
 						e.stopPropagation();
 					});
 
+					this._bindKeybordEvent();
+
+				}
+
+				/**
+				 * フォーカス時のキーボードイベント
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
+				 *
+				 */
+				private _bindKeybordEvent (): void {
+					$(document).on('keydown', (e: JQueryKeyEventObject): void => {
+						if (this.hasFocus) {
+							switch (e.keyCode) {
+								// keyUp
+								case 38: {
+									this.prev(true);
+									this._scrollToSelectedPosition();
+									e.preventDefault();
+									break;
+								}
+								// keyDown
+								case 40: {
+									this.next(true);
+									this._scrollToSelectedPosition();
+									e.preventDefault();
+									break;
+								}
+								// Return (Enter)
+								case 13: {
+									this._fireChangeEvent();
+									this._onblur();
+									e.preventDefault();
+									break;
+								}
+							}
+						}
+					});
 				}
 
 				/**
@@ -401,9 +439,10 @@ module baser {
 				 *
 				 * @version 0.1.0
 				 * @since 0.0.1
+				 * @override
 				 *
 				 */
-				protected _onfocus () {
+				protected _onfocus (): void {
 					if (!this.hasFocus) {
 						// 全体のフォーカスを外す
 						$(document).triggerHandler('click.bcSelect');
@@ -412,7 +451,7 @@ module baser {
 						// DOMのclassを制御
 						Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
 						Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
-						// オプションが開かれた後にスクロール位置を調整する
+						// スクロール位置を調整する
 						this._scrollToSelectedPosition();
 					}
 				}
@@ -424,7 +463,7 @@ module baser {
 				 * @since 0.0.1
 				 *
 				 */
-				protected _onblur () {
+				protected _onblur (): void {
 					// 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
 					if (this.$pseudo) {
 						super._onblur();
@@ -486,15 +525,59 @@ module baser {
 				 *
 				 * @version 0.4.0
 				 * @since 0.4.0
-				 * @override
 				 *
 				 */
-				public setIndex (index: number): void {
+				public setIndex (index: number, isSilent: boolean = false): void {
 					var $targetOption: JQuery = this.$el.find('option').eq(index);
 					if ($targetOption.length && !$targetOption.prop('selected')) {
 						$targetOption.prop('selected', true);
-						this._fireChangeEvent();
+						this._fireChangeEvent(isSilent);
 					}
+				}
+
+				/**
+				 * 現在の選択中のインデックス番号を取得する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				public getIndex (): number {
+					var currentIndex: number = 0;
+					this.$el.find('option').each( (i: number, el: HTMLElement): void => {
+						var $opt = $(el);
+						if ($opt.prop('selected')) {
+							currentIndex = $opt.index();
+						}
+					});
+					return currentIndex;
+				}
+
+				/**
+				 * 次の項目を選択する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				public next (isSilent: boolean): void {
+					var currentIndex: number = this.getIndex();
+					var max: number = this.$el.find('option').length;
+					var nextIndex: number = currentIndex + 1;
+					this.setIndex(Math.min(nextIndex, max), isSilent);
+				}
+
+				/**
+				 * 前の項目を選択する
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				public prev (isSilent: boolean): void {
+					var currentIndex: number = this.getIndex();
+					var prevIndex: number = currentIndex - 1;
+					this.setIndex(Math.max(prevIndex, 0), isSilent);
 				}
 
 			}

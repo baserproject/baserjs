@@ -408,9 +408,25 @@ module baser {
 						this._onblur();
 					});
 
-					this.$el.on('change.bcFormElement', (): void => {
-						this.trigger('change', null, this);
+					this.$el.on('change.bcFormElement', (e: JQueryEventObject, arg: any): void => {
+						if (arg && arg.isSilent) {
+							this._onSilentChange();
+						} else {
+							this.trigger('change', null, this);
+						}
 					});
+
+				}
+
+				/**
+				 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				protected _onSilentChange (): void {
+					// void
 				}
 
 				/**
@@ -502,9 +518,11 @@ module baser {
 				 * @since 0.4.0
 				 *
 				 */
-				protected _fireChangeEvent (): void {
+				protected _fireChangeEvent (isSilent: boolean = false): void {
 					var e: Event;
-					if ('createEvent' in document) {
+					if (isSilent) {
+						this.$el.trigger('change.bcFormElement', [{ isSilent: <boolean> true }]);
+					} else if ('createEvent' in document) {
 						e = document.createEvent('Event');
 						e.initEvent('change', true, true);
 						this.$el[0].dispatchEvent(e);

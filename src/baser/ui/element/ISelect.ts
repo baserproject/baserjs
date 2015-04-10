@@ -11,6 +11,10 @@ module baser {
 				$pseudo: JQuery;
 				$options: JQuery;
 
+				getIndex (): number;
+				next (isSilent: boolean): void;
+				prev (isSilent: boolean): void;
+
 			}
 
 		}
