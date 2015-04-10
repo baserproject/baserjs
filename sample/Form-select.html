@@ -55,7 +55,7 @@
 
 /* Wrapper Element */
 .-bc-form-select-wrapper {
-  position: relative;
+  position: relative; /* 必須 */
   display: inline-block;
   vertical-align: middle;
 }
@@ -69,72 +69,64 @@
 
 /* Select Body Element */
 .-bc-form-select {
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: -1;
-	width: 1px;
-	height: 1px;
-	appearance: none;
+	display: block; /* 必須 */
+	position: absolute; /* 必須 */
+	top: 0; /* 必須 */
+	left: 0; /* 必須 */
+	z-index: -1; /* 必須 */
+	width: 1px; /* 必須 */
+	height: 1px; /* 必須 */
+	appearance: none; /* 必須 */
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	-ms-appearance: none;
-	opacity: 0.5;
-	background: #fff;
+	opacity: 0; /* 必須 */
 }
 
 .-bc-use-default-option-list .-bc-form-select {
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 10000;
-	width: 100%;
-	height: 100%;
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	-ms-appearance: none;
-	opacity: 0.5;
-	background: #fff;
+	z-index: 10000; /* 推奨 他のz-indexにあわせて調整 */
+	width: 100%; /* 必須 */
+	height: 100%; /* 必須 */
 }
-
-
 
 /* Pseudo Select Element */
 .-bc-pseudo-select {
-	position: relative;
+	position: relative; /* 必須 */
 	padding: 10px 20px;
 	background: #333;
 }
-
 
 /* Pseudo Selected Display Element */
 .-bc-pseudo-select__selected-display {
 	position: relative;
 	z-index: 1;
 	color: #fff;
-	display: inline-block;
+	display: inline-block; /* 推奨 (Firefox対策) */
 }
 
 /* Pseudo Option List Element */
 .-bc-pseudo-select__option-list {
-	position: absolute;
-	display: none;
-	background: #333;
+	position: absolute; /* 推奨 */
+	top: auto; /* 推奨 */
+	left: auto; /* 推奨 */
+	display: none; /* 必須 */
+	background: blue;
 	color: #fff;
-	margin: 0;
+	margin: 0; /* 推奨 */
 	padding: 0;
-	list-style: none;
-	overflow: auto;
+	list-style: none; /* 推奨 */
+	overflow: auto; /* 推奨 (内部スクロールをさせるためには必須) */
 	height: 20em;
 }
-.-bc-pseudo-select--focus .-bc-pseudo-select__option-list {
+.-bc-pseudo-select__option-list:focus {
+	top: 200px;
 	display: block;
 }
+.-bc-pseudo-select--focus .-bc-pseudo-select__option-list {
+	display: block; /* 必須 */
+}
 .-bc-use-default-option-list .-bc-pseudo-select__option-list {
-	display: none !important;
+	display: none !important; /* 必須 */
 }
 
 /* Pseudo Option Element */
@@ -142,6 +134,14 @@
 	display: block;
 	margin: 0;
 	padding: 5px 20px;
+}
+
+.-bc-option-list__item--selected {
+	background: red;
+}
+
+.-bc-option-list__item:hover {
+	background: green;
 }
 
 	</style>
