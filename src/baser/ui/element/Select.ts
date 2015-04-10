@@ -176,8 +176,7 @@ module baser {
 				 *
 				 */
 				constructor ($el: JQuery, options: SelectOption) {
-					var config: SelectOption = $.extend({}, FormElement.defaultOption, Select.defaultOption, options);
-					super($el, config);
+					super($el, options);
 					this._update();
 				}
 

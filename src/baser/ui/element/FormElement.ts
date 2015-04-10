@@ -539,12 +539,12 @@ module baser {
 				 * @since 0.4.0
 				 *
 				 */
-				public setValue (value: string | number | boolean): void {
+				public setValue (value: string | number | boolean, isSilent: boolean = false): void {
 					var valueString: string = String(value);
 					var currentValue: string = this.$el.val();
 					if (currentValue !== valueString) {
 						this.$el.val(valueString);
-						this._fireChangeEvent();
+						this._fireChangeEvent(isSilent);
 					}
 				}
 
