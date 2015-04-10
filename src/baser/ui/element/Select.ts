@@ -217,18 +217,20 @@ module baser {
 				 *
 				 */
 				protected _createPsuedoElements (config: SelectOption): void {
-					this.$pseudo = $('<a />'); // Focusable
-					this.$pseudo.attr('href', '#');
+					this.$pseudo = $('<a />');
+					this.$pseudo.attr('href', '#'); // Focusable
 					this.$pseudo.insertAfter(this.$el);
 					Element.addClassTo(this.$pseudo, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
 
 					this.$selected = $('<span />');
+					this.$selected.attr('tabindex', -1);
 					this.$selected.appendTo(this.$pseudo);
 					Element.addClassTo(this.$selected, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
 
 					this.$options = $('<ul />');
+					this.$options.attr('tabindex', -1);
 					this.$options.appendTo(this.$pseudo);
 					Element.addClassTo(this.$options, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
@@ -288,7 +290,6 @@ module baser {
 					*/
 
 					// changeイベントが起こった場合に実行するルーチン
-					// TODO: changeイベントが重複する問題を検討する
 					this.$el.on('change.bcSelect', (): void => {
 						this._update();
 						this._onblur();
@@ -354,27 +355,43 @@ module baser {
 					this.$el.off('focus.bcFormElement');
 					this.$el.off('blur.bcFormElement');
 
-					this.$el.on('focus.bcSelect', (): void => {
+					// セレクトボックス本体にフォーカスがあたったら、
+					// 擬似要素のほうへフォーカスを即座に移動させる
+					this.$el.on('focus.bcSelect', (e: JQueryEventObject): void => {
 						this.$pseudo.focus();
+						e.stopPropagation();
+						e.preventDefault();
 					});
 
-					// ドキュメントのどこかをクリックしたらフォーカスがはずれる
-					$(document).on('click.bcSelect', (): void => {
+					// ドキュメントのどこかをフォーカスorクリックしたらフォーカスがはずれる
+					// ※_onfocus()からも呼び出される
+					$(document).on('click.bcSelect', (e: JQueryEventObject): void => {
+						this._onblur();
+					});
+					// documentへ伝達するフォーカスは focusin イベント
+					$(document).on('focusin', (e: JQueryEventObject): void => {
 						this._onblur();
 					});
 
-					// 擬似セレクトボックスにフォーカス・またはクリックが起こった時に発火する
-					this.$pseudo.on('focus.bcSelect', (e: JQueryEventObject): void => {
-						this._onfocus();
+					// 擬似セレクトボックスにフォーカスorクリックが起こった時に発火する
+					this.$pseudo
+						.on('focus.bcSelect', (e: JQueryEventObject): void => {
+							this._onfocus();
+							// ドキュメントに伝達しない
+							e.stopPropagation();
+						})
+						.on('click.bcSelect', (e: JQueryEventObject): void => {
+							this._onfocus();
+							// ドキュメントに伝達しない
+							e.stopPropagation();
+							// href="#"なのでデフォルトイベントを抑制
+							e.preventDefault();
+						});
+
+					// ドキュメントへのフォーカスorクリック伝達を抑制
+					this.$label.on('click.bcSelect focus.bcSelect', (e: JQueryEventObject): void => {
 						// ドキュメントに伝達しない
 						e.stopPropagation();
-					});
-					this.$pseudo.on('click.bcSelect', (e: JQueryEventObject): void => {
-						this._onfocus();
-						// ドキュメントに伝達しない
-						e.stopPropagation();
-						// href="#"なのでデフォルトイベントを抑制
-						e.preventDefault();
 					});
 
 				}
@@ -389,7 +406,7 @@ module baser {
 				protected _onfocus () {
 					if (!this.hasFocus) {
 						// 全体のフォーカスを外す
-						$(document).trigger('click.bcSelect');
+						$(document).triggerHandler('click.bcSelect');
 						// 親クラスのフォーカスを実行
 						super._onfocus();
 						// DOMのclassを制御
