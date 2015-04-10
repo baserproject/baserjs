@@ -38,7 +38,8 @@ module baser {
 				align: 'center',
 				valign: 'center',
 				size: 'contain',
-				child: '>*:first'
+				child: '>*:first',
+				outer: false
 			}, options);
 
 			var $elem: JQuery = $(elem);
@@ -62,11 +63,20 @@ module baser {
 			var css: any = {};
 
 			var calc: Function = function (): void {
-				var containerWidth: number = $elem.width();
-				var containerHeight: number = $elem.height();
-				var containerAspectRatio: number = containerWidth / containerHeight;
-
+				var containerWidth: number;
+				var containerHeight: number;
+				var containerAspectRatio: number;
 				var scale: number;
+
+				if (config.outer) {
+					containerWidth = $elem.outerWidth();
+					containerHeight = $elem.outerHeight();
+				} else {
+					containerWidth = $elem.width();
+					containerHeight = $elem.height();
+				}
+				containerAspectRatio = containerWidth / containerHeight;
+
 				// 画像の拡縮率の算出
 				// アス比が1以上なら横長/1以下なら縦長
 				// コンテナが横長

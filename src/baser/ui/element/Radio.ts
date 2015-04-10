@@ -11,7 +11,7 @@ module baser {
 			 * @since 0.0.1
 			 *
 			 */
-			export class Radio extends CheckableElement {
+			export class Radio extends CheckableElement implements IRadio {
 
 				/**
 				 * Radio要素のクラス

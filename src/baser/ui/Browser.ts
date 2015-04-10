@@ -4,6 +4,16 @@ module baser {
 
 		var flexibleWindowObject: any = window;
 
+		export interface BrowserUserAgent {
+			iOS: boolean;
+			android: boolean;
+			iPad: boolean;
+			iPhone: boolean;
+			iPod: boolean;
+			safari: boolean;
+			chrome: boolean;
+		}
+
 		/**
 		 * ブラウザの情報を管理するクラス
 		 *
@@ -25,13 +35,13 @@ module baser {
 			/**
 			 * デバイス・OS・ブラウザの情報
 			 *
-			 * @version 0.0.1
+			 * @version 0.4.0
 			 * @since 0.0.1
 			 *
 			 */
 			static spec: {
 				isTouchable: boolean;
-				ua: any;
+				ua: BrowserUserAgent;
 			} = {
 				isTouchable: flexibleWindowObject.ontouchstart !== undefined,
 				ua: Browser.getUA()
@@ -55,20 +65,26 @@ module baser {
 			/**
 			 * ユーザーエージェント情報を取得する
 			 *
-			 * @version 0.0.2
+			 * @version 0.4.0
 			 * @since 0.0.1
 			 *
 			 */
-			static getUA (): any {
+			static getUA (): BrowserUserAgent {
 				var ua: string = navigator.userAgent;
-				var result = {
-					iOS: <boolean> /ios/i.test(ua),
-					iPad: <boolean> /ipad/i.test(ua),
-					iPhone: <boolean> /iphone/i.test(ua),
-					iPod: <boolean> /ipod/i.test(ua),
-					android: <boolean> /android/i.test(ua)
+				var bua: BrowserUserAgent = {
+					iOS: false,
+					android: /android/i.test(ua),
+					iPad: /ipad/i.test(ua),
+					iPhone: /iphone/i.test(ua),
+					iPod: /ipod/i.test(ua),
+					safari: /safari/i.test(ua),
+					chrome: /crios|chrome/i.test(ua)
 				};
-				return result;
+				bua.iOS = bua.iPad || bua.iPhone || bua.iPod || false;
+				if (bua.chrome) {
+					bua.safari = false;
+				}
+				return bua;
 			}
 
 			public resizeEndInterval: number = 100;

@@ -10,7 +10,9 @@
 
 /* UI
 ================================================================= */
+/// <reference path="baser/ui/IEventDispacher.ts" />
 /// <reference path="baser/ui/EventDispacher.ts" />
+/// <reference path="baser/ui/Sequence.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />
@@ -21,12 +23,20 @@
 
 /* UI/エレメント
 ================================================================= */
+/// <reference path="baser/ui/element/IElement.ts" />
 /// <reference path="baser/ui/element/Element.ts" />
 /// <reference path="baser/ui/element/Form.ts" />
+/// <reference path="baser/ui/element/IFormElement.ts" />
 /// <reference path="baser/ui/element/FormElement.ts" />
+/// <reference path="baser/ui/element/ITextField.ts" />
+/// <reference path="baser/ui/element/TextField.ts" />
+/// <reference path="baser/ui/element/ISelect.ts" />
 /// <reference path="baser/ui/element/Select.ts" />
+/// <reference path="baser/ui/element/ICheckableElement.ts" />
 /// <reference path="baser/ui/element/CheckableElement.ts" />
+/// <reference path="baser/ui/element/IRadio.ts" />
 /// <reference path="baser/ui/element/Radio.ts" />
+/// <reference path="baser/ui/element/ICheckbox.ts" />
 /// <reference path="baser/ui/element/Checkbox.ts" />
 /// <reference path="baser/ui/element/RadioGroup.ts" />
 /// <reference path="baser/ui/element/Map.ts" />

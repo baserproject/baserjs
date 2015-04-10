@@ -117,6 +117,15 @@ module baser {
 				public movieId: string;
 
 				/**
+				 * 現在のキューのインデックス番号
+				 *
+				 * @version 0.4.0
+				 * @since 0.4.0
+				 *
+				 */
+				public currentCueIndex: number;
+
+				/**
 				 * ムービーのオプション
 				 *
 				 * @version 0.0.7
@@ -228,6 +237,7 @@ module baser {
 
 					var y: YT.Player;
 					var intervalTimer: number;
+					var listIndex: number;
 
 					intervalTimer = window.setInterval( () => {
 						if (!y && 'YT' in window && YT.Player) {
@@ -235,6 +245,15 @@ module baser {
 								events: {
 									onStateChange: (e: YT.EventArgs): void => {
 										switch (e.data) {
+											case -1: {
+												this.trigger('unstarted', [y]);
+												listIndex = y.getPlaylistIndex();
+												if (this.currentCueIndex !== listIndex) {
+													this.trigger('changecue', [y]);
+												}
+												this.currentCueIndex = listIndex;
+												break;
+											}
 											case YT.PlayerState.BUFFERING: {
 												this.trigger('buffering', [y]);
 												break;
@@ -253,6 +272,7 @@ module baser {
 											}
 											case YT.PlayerState.PLAYING: {
 												this.trigger('playing', [y]);
+												this.currentCueIndex = y.getPlaylistIndex();
 												break;
 											}
 											default: {
@@ -268,7 +288,7 @@ module baser {
 						if (y && y.pauseVideo && y.playVideo) {
 							window.clearInterval(intervalTimer);
 
-							this.$el.trigger('embeddedyoutubeplay', [y]); // 廃止予定
+							this.$el.trigger('embeddedyoutubeplay', [y]); // TODO: 廃止予定(v1.0.0)
 							this.trigger('embeded', [y]);
 
 							if (this.movieOption.stopOnInactive) {

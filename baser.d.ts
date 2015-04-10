@@ -132,6 +132,15 @@ declare module baser {
 }
 declare module baser {
     module ui {
+        interface IEventDispacher {
+            on(type: string, handler: Function): IEventDispacher;
+            off(type?: string): IEventDispacher;
+            trigger(type: string, args?: any[], context?: any): IEventDispacher;
+        }
+    }
+}
+declare module baser {
+    module ui {
         /**
          * イベント駆動できるクラス
          *
@@ -139,7 +148,7 @@ declare module baser {
          * @since 0.0.10
          *
          */
-        class EventDispacher {
+        class EventDispacher implements IEventDispacher {
             /**
              * コンストラクタ
              *
@@ -206,6 +215,41 @@ declare module baser {
 declare module baser {
     module ui {
         /**
+         * 非同期逐次処理クラス
+         *
+         * @version 0.4.0
+         * @since 0.4.0
+         *
+         */
+        class Sequence {
+            private _tasks;
+            private _index;
+            private _iterator;
+            private _promise;
+            private _resolver;
+            private _waitingTime;
+            private _waitTimer;
+            private _toExit;
+            constructor(tasks: Function[]);
+            act(value: any, isLoop?: boolean): Sequence;
+            loop(value: any): Sequence;
+            exit(): Sequence;
+            wait(watingTime: number): void;
+        }
+    }
+}
+declare module baser {
+    module ui {
+        interface BrowserUserAgent {
+            iOS: boolean;
+            android: boolean;
+            iPad: boolean;
+            iPhone: boolean;
+            iPod: boolean;
+            safari: boolean;
+            chrome: boolean;
+        }
+        /**
          * ブラウザの情報を管理するクラス
          *
          * @version 0.0.2
@@ -224,13 +268,13 @@ declare module baser {
             /**
              * デバイス・OS・ブラウザの情報
              *
-             * @version 0.0.1
+             * @version 0.4.0
              * @since 0.0.1
              *
              */
             static spec: {
                 isTouchable: boolean;
-                ua: any;
+                ua: BrowserUserAgent;
             };
             /**
              * ページ遷移する
@@ -243,11 +287,11 @@ declare module baser {
             /**
              * ユーザーエージェント情報を取得する
              *
-             * @version 0.0.2
+             * @version 0.4.0
              * @since 0.0.1
              *
              */
-            static getUA(): any;
+            static getUA(): BrowserUserAgent;
             resizeEndInterval: number;
             scrollEndInterval: number;
             isResize: boolean;
@@ -565,6 +609,19 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            interface IElement extends IEventDispacher {
+                id: string;
+                name: string;
+                $el: JQuery;
+                addClass(blockNames: string, elementNames?: string, modifierName?: string): void;
+                getBoolAttr(attrName: string): boolean;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
             /**
              * クラス名の形式
              *
@@ -598,7 +655,7 @@ declare module baser {
              * @since 0.0.1
              *
              */
-            class Element extends EventDispacher {
+            class Element extends EventDispacher implements IElement {
                 /**
                  * クラス名のデフォルトのプレフィックス
                  *
@@ -811,6 +868,23 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            interface IFormElement extends IElement {
+                label: string;
+                hasFocus: boolean;
+                disabled: boolean;
+                defaultValue: string;
+                isWrappedByLabel: boolean;
+                $label: JQuery;
+                $wrapper: JQuery;
+                setValue(value: string | number | boolean): void;
+                setDisabled(isDisabled: boolean): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
             /**
              * FormElementクラスのオプションハッシュのインターフェイス
              *
@@ -857,7 +931,7 @@ declare module baser {
              * @since 0.0.1
              *
              */
-            class FormElement extends Element {
+            class FormElement extends Element implements IFormElement {
                 /**
                  * オプションのデフォルト値
                  *
@@ -907,21 +981,13 @@ declare module baser {
                  */
                 static classNameStateBlur: string;
                 /**
-                 * フォーカスがあたっている状態かどうか
+                 * FormElement関連の要素の無効状態の時に付加されるクラス
                  *
-                 * @since 0.1.0
-                 *
-                 */
-                hasFocus: boolean;
-                /**
-                 * 削除予定
-                 * フォーカスがあたっている状態かどうか
-                 *
-                 * @deprecated
-                 * @since 0.0.1
+                 * @version 0.4.0
+                 * @since 0.4.0
                  *
                  */
-                isFocus: boolean;
+                static classNameStateDisabled: string;
                 /**
                  * ラベルのテキスト
                  *
@@ -930,12 +996,40 @@ declare module baser {
                  */
                 label: string;
                 /**
-                 * ラベル要素のjQueryオブジェクト
+                 * 前にあるラベルのテキスト
                  *
-                 * @since 0.0.1
+                 * @since 0.4.0
                  *
                  */
-                $label: JQuery;
+                labelBeforeText: string;
+                /**
+                 * 後ろにあるラベルのテキスト
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                labelAfterText: string;
+                /**
+                 * フォーカスがあたっている状態かどうか
+                 *
+                 * @since 0.1.0
+                 *
+                 */
+                hasFocus: boolean;
+                /**
+                 * 無効状態
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                disabled: boolean;
+                /**
+                 * 初期の値
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                defaultValue: string;
                 /**
                  * ラベル要素にラップされているかどうか
                  *
@@ -943,6 +1037,13 @@ declare module baser {
                  *
                  */
                 isWrappedByLabel: boolean;
+                /**
+                 * ラベル要素のjQueryオブジェクト
+                 *
+                 * @since 0.0.1
+                 *
+                 */
+                $label: JQuery;
                 /**
                  * ラッパー要素のjQueryオブジェクト
                  *
@@ -953,7 +1054,7 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.4.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -961,13 +1062,69 @@ declare module baser {
                  */
                 constructor($el: JQuery, options: FormElementOption);
                 /**
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _setClassName(): void;
+                /**
+                 * ラベル要素内のテキストを取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _setLabelText(config);
+                /**
+                 * ラベル要素を割り当てる
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _asignLabel(config);
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _createWrapper(): void;
+                /**
+                 * 擬似要素を生成する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _createPsuedoElements(config: FormElementOption): void;
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _bindEvents(config: FormElementOption): void;
+                /**
+                 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _onSilentChange(): void;
+                /**
                  * フォーカスがあたった時の処理
                  *
                  * @version 0.1.0
                  * @since 0.0.1
                  *
                  */
-                _onfocus(): void;
+                protected _onfocus(): void;
                 /**
                  * フォーカスがはずれた時の処理
                  *
@@ -975,7 +1132,42 @@ declare module baser {
                  * @since 0.0.1
                  *
                  */
-                _onblur(): void;
+                protected _onblur(): void;
+                /**
+                 * changeイベントを発火する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _fireChangeEvent(isSilent?: boolean): void;
+                /**
+                 * 値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                setValue(value: string | number | boolean, isSilent?: boolean): void;
+                /**
+                 * 無効状態を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                setDisabled(isDisabled: boolean): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
+            interface ITextField extends IFormElement {
+                isEmpty: boolean;
+                placeholder: string;
+                hasPlaceholder: boolean;
             }
         }
     }
@@ -984,13 +1176,217 @@ declare module baser {
     module ui {
         module element {
             /**
+             * TextFieldクラスのオプションハッシュのインターフェイス
+             *
+             * @version 0.4.0
+             * @since 0.4.0
+             *
+             */
+            interface TextFieldOption extends FormElementOption {
+            }
+            /**
+             * テキストフィールドの拡張クラス
+             *
+             * @version 0.4.0
+             * @since 0.4.0
+             *
+             */
+            class TextField extends FormElement implements ITextField {
+                /**
+                 * オプションのデフォルト値
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                static defaultOption: TextFieldOption;
+                /**
+                 * TextField要素のクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                static classNameTextField: string;
+                /**
+                 * 未入力状態に付加されるクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                static classNameStateUninput: string;
+                /**
+                 * プレースホルダー属性に対応しているかどうか
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                static supportPlaceholder: boolean;
+                /**
+                 * 空かどうか
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                isEmpty: boolean;
+                /**
+                 * プレースホルダーテキスト
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                placeholder: string;
+                /**
+                 * プレースホルダーをもっているかどうか
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                hasPlaceholder: boolean;
+                /**
+                 * コンストラクタ
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @param $el 管理するDOM要素のjQueryオブジェクト
+                 * @param options オプション
+                 *
+                 */
+                constructor($el: JQuery, options: TextFieldOption);
+                /**
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _setClassName(): void;
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _createWrapper(): void;
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _bindEvents(config: TextFieldOption): void;
+                /**
+                 * 要素の状態を更新する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _update();
+                /**
+                 * 入力されている状態を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _setStateInputted();
+                /**
+                 * 入力されていない状態を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _setStateUninputted();
+                /**
+                 * プレースホルダーと値が同じかどうか
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _equalPlaceholder();
+                /**
+                 * プレースホルダーの値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _setPlaceholderValue();
+                /**
+                 * 【IE用】カーソル（キャレット）を先頭に持っていく
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                private _msCaretMoveToTop();
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
+            interface ISelect extends IFormElement {
+                defaultSelectedIndex: number;
+                $selected: JQuery;
+                $pseudo: JQuery;
+                $options: JQuery;
+                getIndex(): number;
+                next(isSilent: boolean): void;
+                prev(isSilent: boolean): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
+            /**
+             * Selectクラスのオプションハッシュのインターフェイス
+             *
+             * @version 0.4.0
+             * @since 0.4.0
+             *
+             */
+            interface SelectOption extends FormElementOption {
+                /**
+                 * 選択リストをブラウザデフォルトのものにするかどうか
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                useDefaultOptionList?: boolean;
+            }
+            /**
              * セレクトボックスの拡張クラス
              *
              * @version 0.1.0
              * @since 0.0.1
              *
              */
-            class Select extends FormElement {
+            class Select extends FormElement implements ISelect {
+                /**
+                 * オプションのデフォルト値
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                static defaultOption: SelectOption;
                 /**
                  * Select要素のクラス
                  *
@@ -1048,6 +1444,14 @@ declare module baser {
                  */
                 static classNameOsAndroid: string;
                 /**
+                 * ブラウザデフォルトの選択リストを使用する場合に付加されるクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                static classNameUseDefaultOptionList: string;
+                /**
                  * Select要素の擬似option要素の選択時に付加されるクラス
                  *
                  * @version 0.1.0
@@ -1063,6 +1467,13 @@ declare module baser {
                  *
                  */
                 static classNameStateUnselected: string;
+                /**
+                 * 初期の選択されているオプションのインデックス番号
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                defaultSelectedIndex: number;
                 /**
                  * 選択されたオプションを表示する表示領域のjQueryオブジェクト
                  *
@@ -1087,15 +1498,59 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.3.1
+                 * @version 0.4.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
                  *
                  */
-                constructor($el: JQuery, options: CheckableElementOption);
+                constructor($el: JQuery, options: SelectOption);
                 /**
-                 * オプションが開かれた後にスクロール位置を調整する
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _setClassName(): void;
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _createWrapper(): void;
+                /**
+                 * 擬似セレクトボックス要素を生成する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _createPsuedoElements(config: SelectOption): void;
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                protected _bindEvents(config: SelectOption): void;
+                /**
+                 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                protected _onSilentChange(): void;
+                /**
+                 * スクロール位置を調整する
                  *
                  * @version 0.1.0
                  * @since 0.1.0
@@ -1103,29 +1558,32 @@ declare module baser {
                  */
                 private _scrollToSelectedPosition();
                 /**
-                 * 擬似要素にフォーカスがあったった時のイベント伝達を制御する
+                 * 擬似要素にフォーカスがあったった時のイベントと伝達を制御する
                  *
-                 * @version 0.0.1
+                 * @version 0.4.0
                  * @since 0.0.1
                  *
                  */
                 private _psuedoFocusEvent();
                 /**
-                 * チェンジイベントのハンドラ
+                 * フォーカス時のキーボードイベント
                  *
-                 * @version 0.0.1
-                 * @since 0.0.1
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
                  *
                  */
-                private _onchange();
+                private _bindKeybordEvent();
                 /**
                  * フォーカスがあたった時の処理
                  *
                  * @version 0.1.0
                  * @since 0.0.1
+                 * @override
                  *
                  */
-                _onfocus(): void;
+                protected _onfocus(): void;
                 /**
                  * フォーカスがはずれた時の処理
                  *
@@ -1133,7 +1591,7 @@ declare module baser {
                  * @since 0.0.1
                  *
                  */
-                _onblur(): void;
+                protected _onblur(): void;
                 /**
                  * 要素の状態を更新する
                  *
@@ -1142,6 +1600,58 @@ declare module baser {
                  *
                  */
                 private _update();
+                /**
+                 * 値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                setValue(value: string | number | boolean): void;
+                /**
+                 * 値をインデックス番号から設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                setIndex(index: number, isSilent?: boolean): void;
+                /**
+                 * 現在の選択中のインデックス番号を取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                getIndex(): number;
+                /**
+                 * 次の項目を選択する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                next(isSilent: boolean): void;
+                /**
+                 * 前の項目を選択する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                prev(isSilent: boolean): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
+            interface ICheckableElement extends IFormElement {
+                checked: boolean;
+                defaultChecked: boolean;
+                update(): void;
             }
         }
     }
@@ -1172,7 +1682,7 @@ declare module baser {
              * @since 0.0.1
              *
              */
-            class CheckableElement extends FormElement {
+            class CheckableElement extends FormElement implements ICheckableElement {
                 /**
                  * オプションのデフォルト値
                  *
@@ -1240,10 +1750,9 @@ declare module baser {
                  *
                  * @version 0.0.1
                  * @since 0.0.1
-                 * @protected プロテクテッド想定
                  *
                  */
-                _onchenge(): void;
+                protected _onchenge(): void;
                 /**
                  * 要素の状態を更新する
                  *
@@ -1259,6 +1768,14 @@ declare module baser {
 declare module baser {
     module ui {
         module element {
+            interface IRadio extends ICheckableElement {
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
             /**
              * ラジオボタンの拡張クラス
              *
@@ -1266,7 +1783,7 @@ declare module baser {
              * @since 0.0.1
              *
              */
-            class Radio extends CheckableElement {
+            class Radio extends CheckableElement implements IRadio {
                 /**
                  * Radio要素のクラス
                  *
@@ -1293,6 +1810,14 @@ declare module baser {
                  *
                  */
                 _onchenge(): void;
+            }
+        }
+    }
+}
+declare module baser {
+    module ui {
+        module element {
+            interface ICheckbox extends ICheckableElement {
             }
         }
     }
@@ -1662,6 +2187,14 @@ declare module baser {
                  *
                  */
                 movieId: string;
+                /**
+                 * 現在のキューのインデックス番号
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                currentCueIndex: number;
                 /**
                  * ムービーのオプション
                  *

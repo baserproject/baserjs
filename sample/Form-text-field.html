@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Test - Form</title>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
+	<script src="../baser.js"></script>
+	<script>
+	$(function() {
+
+		var $select = $('input');
+		var $output = $('#output');
+		var $button = $('button');
+
+		$select.each(function (i) {
+			var $this = $(this);
+
+			if (i === 1) {
+				var select = new baser.ui.element.TextField($this, {
+					useDefaultOptionList: true
+				});
+			} else {
+				var select = new baser.ui.element.TextField($this);
+			}
+
+			select.on('change', function () {
+				$output.text($output.text() + '\nbaser: ' + $this.val());
+			});
+
+			$this.on('change', function () {
+				$output.text($output.text() + '\njQuery: ' + $this.val());
+			});
+
+			if (document.addEventListener) {
+				$this[0].addEventListener('change', function () {
+					$output.text($output.text() + '\nDOM: ' + $this.val());
+				}, false);
+			} else {
+				$this[0].attachEvent('onchange', function () {
+					$output.text($output.text() + '\nIE: ' + $this.val());
+				});
+			}
+
+			var c = 0;
+			$button.on('click', function () {
+				c++;
+				select.setValue(c);
+			});
+		});
+
+	});
+	</script>
+	<style>
+	.-bc-form-element--uninput {
+		color: gray;
+	}
+	</style>
+</head>
+<body>
+
+<input type="text" placeholder="Input here!">
+
+<button>SET</button>
+
+<div><pre id="output"></pre></div>
+
+<script>
+document.write(navigator.userAgent);
+document.write(baser.ui.Browser.spec.ua.iOS ? '::iOS' : '');
+document.write(baser.ui.Browser.spec.ua.android ? '::android' : '');
+document.write(baser.ui.Browser.spec.ua.chrome ? '::chrome' : '');
+document.write(baser.ui.Browser.spec.ua.safari ? '::safari' : '');
+document.write(baser.ui.Browser.spec.ua.iPad ? '::iPad' : '');
+</script>
+
+</body>
+</html>

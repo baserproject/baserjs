@@ -2,13 +2,52 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Test - Form</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.js"></script>
 	<script src="../baser.js"></script>
 	<script>
 	$(function() {
 
-		$('select').bcSelect();
+		var $select = $('select');
+		var $output = $('#output');
+		var $button = $('button');
+
+		$select.each(function (i) {
+			var $this = $(this);
+
+			if (i === 1) {
+				var select = new baser.ui.element.Select($this, {
+					useDefaultOptionList: true
+				});
+			} else {
+				var select = new baser.ui.element.Select($this);
+			}
+
+			select.on('change', function () {
+				$output.text($output.text() + '\nbaser: ' + $this.val());
+			});
+
+			$this.on('change', function () {
+				$output.text($output.text() + '\njQuery: ' + $this.val());
+			});
+
+			if (document.addEventListener) {
+				$this[0].addEventListener('change', function () {
+					$output.text($output.text() + '\nDOM: ' + $this.val());
+				}, false);
+			} else {
+				$this[0].attachEvent('onchange', function () {
+					$output.text($output.text() + '\nIE: ' + $this.val());
+				});
+			}
+
+			var c = 0;
+			$button.on('click', function () {
+				c++;
+				select.setValue(c);
+			});
+		});
 
 	});
 	</script>
@@ -16,43 +55,78 @@
 
 /* Wrapper Element */
 .-bc-form-select-wrapper {
-  position: relative;
+  position: relative; /* 必須 */
   display: inline-block;
   vertical-align: middle;
 }
 
+.-bc-form-element__label {
+	display: inline-block;
+}
+.-bc-form-element__label:focus {
+}
+
+
 /* Select Body Element */
 .-bc-form-select {
-  display: none;
+	display: block; /* 必須 */
+	position: absolute; /* 必須 */
+	top: 0; /* 必須 */
+	left: 0; /* 必須 */
+	z-index: -1; /* 必須 */
+	width: 1px; /* 必須 */
+	height: 1px; /* 必須 */
+	appearance: none; /* 必須 */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	opacity: 0; /* 必須 */
+	filter: alpha(opacity=0); /* 必須 */
+	-ms-filter: "alpha(opacity=0)"; /* 必須 */
+}
+
+.-bc-use-default-option-list .-bc-form-select {
+	z-index: 10000; /* 推奨 他のz-indexにあわせて調整 */
+	width: 100%; /* 必須 */
+	height: 100%; /* 必須 */
 }
 
 /* Pseudo Select Element */
 .-bc-pseudo-select {
-	position: relative;
-	background: #000;
-	color: #FFF;
+	position: relative; /* 必須 */
 	padding: 10px 20px;
+	background: #333;
 }
 
 /* Pseudo Selected Display Element */
 .-bc-pseudo-select__selected-display {
 	position: relative;
-	z-index: 0;
+	z-index: 1;
+	color: #fff;
+	display: inline-block; /* 推奨 (Firefox対策) */
 }
 
 /* Pseudo Option List Element */
 .-bc-pseudo-select__option-list {
-	position: absolute;
-	display: none;
-	background: #333;
-	margin: 0;
+	position: absolute; /* 推奨 */
+	top: auto; /* 推奨 */
+	left: auto; /* 推奨 */
+	display: none; /* 必須 */
+	background: blue;
+	color: #fff;
+	margin: 0; /* 推奨 */
 	padding: 0;
-	list-style: none;
-	overflow: auto;
+	list-style: none; /* 推奨 */
+	overflow: hidden;
+}
+
+.-bc-pseudo-select--focus .-bc-pseudo-select__option-list {
+	display: block; /* 必須 */
+	overflow: auto; /* 推奨 (内部スクロールをさせるためには必須) */
 	height: 20em;
 }
-.-bc-pseudo-select--focus .-bc-pseudo-select__option-list {
-	display: block;
+.-bc-use-default-option-list .-bc-pseudo-select__option-list {
+	display: none !important; /* 必須 */
 }
 
 /* Pseudo Option Element */
@@ -62,27 +136,119 @@
 	padding: 5px 20px;
 }
 
+.-bc-option-list__item--selected {
+	background: red;
+}
+
+.-bc-option-list__item:hover {
+	background: green;
+}
+
+/* フォーカス実験 */
+.-bc-form-select:focus {
+	width: 100%;
+	height: 100%;
+	z-index: 10000;
+	opacity: 1;
+	filter: alpha(opacity=100);
+	-ms-filter: "alpha(opacity=100)";
+}
+.-bc-pseudo-select:focus {
+	background: orange;
+}
+.-bc-pseudo-select__option-list:focus {
+	top: 200px;
+	display: block !important;
+}
 	</style>
 </head>
 <body>
 
 <label>
-	<select name="month">
-		<option value="1">1月</option>
-		<option value="2">2月</option>
-		<option value="3">3月</option>
-		<option value="4">4月</option>
-		<option value="5">5月</option>
-		<option value="6">6月</option>
-		<option value="7">7月</option>
-		<option value="8">8月</option>
-		<option value="9">9月</option>
-		<option value="10">10月</option>
-		<option value="11">11月</option>
-		<option value="12">12月</option>
+	<select name="year">
+		<option value="2001">2001</option>
+		<option value="2002">2002</option>
+		<option value="2003">2003</option>
+		<option value="2004">2004</option>
+		<option value="2005">2005</option>
+		<option value="2006">2006</option>
+		<option value="2007">2007</option>
+		<option value="2008">2008</option>
+		<option value="2009">2009</option>
+		<option value="2010">2010</option>
+		<option value="2011">2011</option>
+		<option value="2012">2012</option>
 	</select>
+	年
 </label>
 
+<label>
+	<select name="month">
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		<option value="9">9</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+	</select>
+	月
+</label>
+
+<label>
+	<select name="date">
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		<option value="9">9</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+		<option value="13">13</option>
+		<option value="14">14</option>
+		<option value="15">15</option>
+		<option value="16">16</option>
+		<option value="17">17</option>
+		<option value="18">18</option>
+		<option value="19">19</option>
+		<option value="20">20</option>
+		<option value="21">21</option>
+		<option value="22">22</option>
+		<option value="23">23</option>
+		<option value="24">24</option>
+		<option value="25">25</option>
+		<option value="26">26</option>
+		<option value="27">27</option>
+		<option value="28">28</option>
+		<option value="29">29</option>
+		<option value="30">30</option>
+		<option value="31">31</option>
+	</select>
+	日
+</label>
+
+<button>SET</button>
+
+<div><pre id="output"></pre></div>
+
+<script>
+document.write(navigator.userAgent);
+document.write(baser.ui.Browser.spec.ua.iOS ? '::iOS' : '');
+document.write(baser.ui.Browser.spec.ua.android ? '::android' : '');
+document.write(baser.ui.Browser.spec.ua.chrome ? '::chrome' : '');
+document.write(baser.ui.Browser.spec.ua.safari ? '::safari' : '');
+document.write(baser.ui.Browser.spec.ua.iPad ? '::iPad' : '');
+</script>
 
 </body>
 </html>

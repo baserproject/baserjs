@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.3.2 r215
- * update: 2015-04-08
+ * baserjs - v0.4.0 r220
+ * update: 2015-04-11
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -36,11 +36,11 @@
  */
 (function (factory) {
 	if (typeof define === 'function' && define.amd) {
-		// AMD
+		// AMD (Register as an anonymous module)
 		define(['jquery'], factory);
 	} else if (typeof exports === 'object') {
-		// CommonJS
-		factory(require('jquery'));
+		// Node/CommonJS
+		module.exports = factory(require('jquery'));
 	} else {
 		// Browser globals
 		factory(jQuery);
@@ -90,7 +90,7 @@
 
 			if (typeof options.expires === 'number') {
 				var days = options.expires, t = options.expires = new Date();
-				t.setTime(+t + days * 864e+5);
+				t.setMilliseconds(t.getMilliseconds() + days * 864e+5);
 			}
 
 			return (document.cookie = [
@@ -104,19 +104,20 @@
 
 		// Read
 
-		var result = key ? undefined : {};
+		var result = key ? undefined : {},
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all. Also prevents odd result when
+			// calling $.cookie().
+			cookies = document.cookie ? document.cookie.split('; ') : [],
+			i = 0,
+			l = cookies.length;
 
-		// To prevent the for loop in the first place assign an empty array
-		// in case there are no cookies at all. Also prevents odd result when
-		// calling $.cookie().
-		var cookies = document.cookie ? document.cookie.split('; ') : [];
+		for (; i < l; i++) {
+			var parts = cookies[i].split('='),
+				name = decode(parts.shift()),
+				cookie = parts.join('=');
 
-		for (var i = 0, l = cookies.length; i < l; i++) {
-			var parts = cookies[i].split('=');
-			var name = decode(parts.shift());
-			var cookie = parts.join('=');
-
-			if (key && key === name) {
+			if (key === name) {
 				// If second argument (value) is a function it's a converter...
 				result = read(cookie, value);
 				break;
@@ -134,10 +135,6 @@
 	config.defaults = {};
 
 	$.removeCookie = function (key, options) {
-		if ($.cookie(key) === undefined) {
-			return false;
-		}
-
 		// Must not alter options, thus extending a fresh object...
 		$.cookie(key, '', $.extend({}, options, { expires: -1 }));
 		return !$.cookie(key);
@@ -683,8 +680,7 @@ var baser;
                         eventHandler = types[type][i];
                         if (eventHandler.context === this) {
                             e = new DispacheEvent(type);
-                            args.unshift(e);
-                            eventHandler.handler.apply(context, args);
+                            eventHandler.handler.apply(context, [e].concat(args));
                             if (e.isImmediatePropagationStopped()) {
                                 break;
                             }
@@ -734,6 +730,132 @@ var baser;
             return DispacheEvent;
         })();
         ui.DispacheEvent = DispacheEvent;
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        /**
+         * 非同期逐次処理クラス
+         *
+         * @version 0.4.0
+         * @since 0.4.0
+         *
+         */
+        var Sequence = (function () {
+            function Sequence(tasks) {
+                this._tasks = [];
+                this._index = 0;
+                this._iterator = 0;
+                this._promise = null;
+                this._resolver = null;
+                this._waitingTime = 0;
+                this._waitTimer = 0;
+                this._toExit = false;
+                var i = 0;
+                var l = tasks.length;
+                for (; i < l; i++) {
+                    this._tasks.push(new Task(tasks[i]));
+                }
+            }
+            // TODO: ネイティブのPromiseを使う
+            Sequence.prototype.act = function (value, isLoop) {
+                var _this = this;
+                if (isLoop === void 0) { isLoop = false; }
+                var task = this._tasks[this._index];
+                var result = task.act(this, this._iterator, value);
+                // Type like JQueryDeferred
+                if (isJQueryPromiseLikeObject(result)) {
+                    this._promise = result.promise();
+                }
+                else {
+                    this._resolver = $.Deferred();
+                    this._waitTimer = setTimeout(function () {
+                        _this._resolver.resolve(result);
+                    }, this._waitingTime);
+                    // promised
+                    this._promise = this._resolver.promise();
+                }
+                this._promise.done(function (doneResult) {
+                    clearTimeout(_this._waitTimer);
+                    _this._promise = null;
+                    _this._resolver = null;
+                    _this._waitTimer = null;
+                    _this._waitingTime = 0;
+                    _this._index += 1;
+                    _this._iterator += 1;
+                    if (!_this._toExit && (_this._index < _this._tasks.length || isLoop)) {
+                        if (_this._index >= _this._tasks.length && isLoop) {
+                            _this._index = 0;
+                        }
+                        _this.act(doneResult, isLoop);
+                    }
+                }).fail(function () {
+                    clearTimeout(_this._waitTimer);
+                    _this._promise = null;
+                    _this._resolver = null;
+                    _this._waitTimer = null;
+                    _this._waitingTime = 0;
+                });
+                return this;
+            };
+            Sequence.prototype.loop = function (value) {
+                return this.act(value, true);
+            };
+            Sequence.prototype.exit = function () {
+                this._toExit = true;
+                if (this._resolver) {
+                    this._resolver.reject();
+                }
+                return this;
+            };
+            Sequence.prototype.wait = function (watingTime) {
+                this._waitingTime = watingTime;
+            };
+            return Sequence;
+        })();
+        ui.Sequence = Sequence;
+        var Task = (function () {
+            function Task(func) {
+                this.status = 1 /* yet */;
+                this._func = func;
+            }
+            Task.prototype.act = function (sequence, sequenceIndex, value) {
+                var result = this._func.call(sequence, sequenceIndex, value);
+                this.status = 0 /* done */;
+                return result;
+            };
+            return Task;
+        })();
+        var TaskState;
+        (function (TaskState) {
+            TaskState[TaskState["done"] = 0] = "done";
+            TaskState[TaskState["yet"] = 1] = "yet";
+        })(TaskState || (TaskState = {}));
+        function isJQueryPromiseLikeObject(object) {
+            var props = [
+                'always',
+                'done',
+                'fail',
+                'pipe',
+                'progress',
+                'promise',
+                'state',
+                'then'
+            ];
+            if (object instanceof jQuery) {
+                return !!object.promise;
+            }
+            else {
+                while (props.length) {
+                    if (!(props.shift() in Object(object))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
 var __extends = this.__extends || function (d, b) {
@@ -814,20 +936,26 @@ var baser;
             /**
              * ユーザーエージェント情報を取得する
              *
-             * @version 0.0.2
+             * @version 0.4.0
              * @since 0.0.1
              *
              */
             Browser.getUA = function () {
                 var ua = navigator.userAgent;
-                var result = {
-                    iOS: /ios/i.test(ua),
+                var bua = {
+                    iOS: false,
+                    android: /android/i.test(ua),
                     iPad: /ipad/i.test(ua),
                     iPhone: /iphone/i.test(ua),
                     iPod: /ipod/i.test(ua),
-                    android: /android/i.test(ua)
+                    safari: /safari/i.test(ua),
+                    chrome: /crios|chrome/i.test(ua)
                 };
-                return result;
+                bua.iOS = bua.iPad || bua.iPhone || bua.iPod || false;
+                if (bua.chrome) {
+                    bua.safari = false;
+                }
+                return bua;
             };
             /**
              * ブラウザ
@@ -840,7 +968,7 @@ var baser;
             /**
              * デバイス・OS・ブラウザの情報
              *
-             * @version 0.0.1
+             * @version 0.4.0
              * @since 0.0.1
              *
              */
@@ -1095,16 +1223,6 @@ var baser;
             function Scroll() {
                 this.timer = new ui.Timer();
             }
-            /**
-             * 対象の要素もしくは位置にスクロールを移動させる
-             *
-             * @version 0.3.2
-             * @since 0.0.8
-             * @param {string | HTMLElement | JQuery | number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
-             * @param {ScrollOptions} オプション
-             * @return {Scroll} 自信のスクロールオブジェクト
-             *
-             */
             Scroll.prototype.to = function (selector, options) {
                 var _this = this;
                 var ele;
@@ -1132,8 +1250,8 @@ var baser;
                     });
                 }
                 // 第一引数が数値だった場合はその値のy軸へスクロール
-                if (typeof selector === 'number') {
-                    offset += selector || 0;
+                if ($.isNumeric(selector)) {
+                    offset += (parseFloat(selector) || 0);
                     this.targetX = 0;
                     this.targetY = offset;
                 }
@@ -1165,9 +1283,7 @@ var baser;
                     if ($target.length) {
                         ui.Timer.wait(Scroll.delayWhenURLHashTarget, function () {
                             window.scrollTo(0, 0);
-                            _this.to($target, {
-                                offset: offset
-                            });
+                            _this.to($target, offset);
                             return;
                         });
                     }
@@ -1866,14 +1982,13 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.4.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
                  *
                  */
                 function FormElement($el, options) {
-                    var _this = this;
                     _super.call(this, $el);
                     /**
                      * フォーカスがあたっている状態かどうか
@@ -1882,47 +1997,131 @@ var baser;
                      *
                      */
                     this.hasFocus = false;
-                    /**
-                     * 削除予定
-                     * フォーカスがあたっている状態かどうか
-                     *
-                     * @deprecated
-                     * @since 0.0.1
-                     *
-                     */
-                    this.isFocus = false;
-                    var config = $.extend(FormElement.defaultOption, options);
+                    var config = $.extend({}, FormElement.defaultOption, options);
+                    // クラス名を設定す
+                    this._setClassName();
+                    // ラベル要素の割り当て
+                    this._asignLabel(config);
+                    // ラベルテキストの設定
+                    this._setLabelText(config);
+                    // ラップ要素の割り当て
+                    this._createWrapper();
+                    // 擬似要素生成
+                    this._createPsuedoElements(config);
+                    // イベントを登録
+                    this._bindEvents(config);
+                    // 初期状態を設定
+                    this.defaultValue = this.$el.val();
+                    this.setDisabled($el.prop('disabled'));
+                    this._onblur();
+                    // フォーム要素に登録
+                    element.Form.elements.push(this);
+                }
+                /**
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._setClassName = function () {
                     // 共通のクラスを付加
                     this.addClass(FormElement.classNameFormElementCommon);
-                    // label要素の検索 & 生成
+                };
+                /**
+                 * ラベル要素内のテキストを取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._setLabelText = function (config) {
+                    var _this = this;
+                    var $labelContents = this.$label.contents();
+                    var $before = $();
+                    var $after = $();
+                    var isBefore = true;
+                    if (config.label) {
+                        this.$label.prepend(config.label);
+                        this.labelBeforeText = config.label;
+                        this.labelAfterText = '';
+                    }
+                    else {
+                        $labelContents.each(function (i, node) {
+                            if (node === _this.$el[0]) {
+                                isBefore = false;
+                                return;
+                            }
+                            if (isBefore) {
+                                $before = $before.add($(node));
+                            }
+                            else {
+                                $after = $after.add($(node));
+                            }
+                        });
+                        $before.text(function (i, text) {
+                            return $.trim(text);
+                        });
+                        $after.text(function (i, text) {
+                            return $.trim(text);
+                        });
+                        this.labelBeforeText = $before.text() || this.$el.attr('title') || '';
+                        this.labelAfterText = $after.text() || '';
+                        if (this.labelBeforeText) {
+                            this.$label.prepend($before);
+                        }
+                        if (this.labelAfterText) {
+                            this.$label.append($after);
+                        }
+                    }
+                    this.label = this.labelBeforeText + this.labelAfterText;
+                };
+                /**
+                 * ラベル要素を割り当てる
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._asignLabel = function (config) {
                     var $label;
+                    var hasLabel;
                     // 祖先のlabel要素を検索
                     $label = this.$el.closest('label');
+                    // label要素の存在
+                    hasLabel = !!$label.length;
                     // labelでネストされていたかどうか
-                    this.isWrappedByLabel = !!$label.length;
-                    if (!$label.length) {
-                        // for属性に関連づいたlabel要素を検索
-                        $label = $('[for="' + this.id + '"]');
+                    this.isWrappedByLabel = hasLabel;
+                    // for属性に関連づいたlabel要素を取得
+                    if (!hasLabel) {
+                        $label = $('label[for="' + this.id + '"]');
+                        hasLabel = !!$label.length;
                     }
-                    if (config.autoLabeling && !$label.length) {
+                    // ラベルがないときにラベル要素を生成する
+                    if (config.autoLabeling && !hasLabel) {
                         // label(もしくは別の)要素の生成
-                        this.label = this.$el.attr('title') || config.label || this.$el.attr('name');
                         $label = $('<' + config.labelTag.toLowerCase() + ' />');
                         $label.insertAfter(this.$el);
                         if (config.labelClass) {
                             $label.addClass(config.labelClass);
-                        }
-                        if (this.label) {
-                            $label.text(this.label);
                         }
                         if (config.labelTag.toLowerCase() === 'label') {
                             // labelを生成したのならfor属性にidを紐付ける
                             $label.attr('for', this.id);
                         }
                     }
-                    this.$label = $label;
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon);
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
+                    this.$label = $label;
+                };
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._createWrapper = function () {
                     var wrapperHtml = '<span />';
                     var $wrapper = $(wrapperHtml);
                     element.Element.addClassTo($wrapper, FormElement.classNameFormElementCommon);
@@ -1935,16 +2134,51 @@ var baser;
                         this.$el.add(this.$label).wrapAll($wrapper);
                         this.$wrapper = this.$el.parent('span');
                     }
+                };
+                /**
+                 * 擬似要素を生成する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._createPsuedoElements = function (config) {
+                    // void
+                };
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._bindEvents = function (config) {
+                    var _this = this;
                     this.$el.on('focus.bcFormElement', function () {
                         _this._onfocus();
                     });
                     this.$el.on('blur.bcFormElement', function () {
                         _this._onblur();
                     });
-                    this._onblur();
-                    // フォーム要素に登録
-                    element.Form.elements.push(this);
-                }
+                    this.$el.on('change.bcFormElement', function (e, arg) {
+                        if (arg && arg.isSilent) {
+                            _this._onSilentChange();
+                        }
+                        else {
+                            _this.trigger('change', null, _this);
+                        }
+                    });
+                };
+                /**
+                 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._onSilentChange = function () {
+                    // void
+                };
                 /**
                  * フォーカスがあたった時の処理
                  *
@@ -1976,6 +2210,66 @@ var baser;
                     element.Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
                     element.Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
                     element.Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
+                };
+                /**
+                 * changeイベントを発火する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype._fireChangeEvent = function (isSilent) {
+                    if (isSilent === void 0) { isSilent = false; }
+                    var e;
+                    if (isSilent) {
+                        this.$el.trigger('change.bcFormElement', [{ isSilent: true }]);
+                    }
+                    else if ('createEvent' in document) {
+                        e = document.createEvent('Event');
+                        e.initEvent('change', true, true);
+                        this.$el[0].dispatchEvent(e);
+                    }
+                    else {
+                        // IE8
+                        this.$el[0].fireEvent('onchange');
+                    }
+                };
+                /**
+                 * 値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype.setValue = function (value, isSilent) {
+                    if (isSilent === void 0) { isSilent = false; }
+                    var valueString = String(value);
+                    var currentValue = this.$el.val();
+                    if (currentValue !== valueString) {
+                        this.$el.val(valueString);
+                        this._fireChangeEvent(isSilent);
+                    }
+                };
+                /**
+                 * 無効状態を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.prototype.setDisabled = function (isDisabled) {
+                    this.disabled = isDisabled;
+                    this.$el.prop('disabled', isDisabled);
+                    if (this.disabled) {
+                        element.Element.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateDisabled);
+                        element.Element.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateDisabled);
+                        element.Element.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateDisabled);
+                    }
+                    else {
+                        element.Element.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateDisabled);
+                        element.Element.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateDisabled);
+                        element.Element.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateDisabled);
+                    }
                 };
                 /**
                  * オプションのデフォルト値
@@ -2030,9 +2324,253 @@ var baser;
                  *
                  */
                 FormElement.classNameStateBlur = 'blur';
+                /**
+                 * FormElement関連の要素の無効状態の時に付加されるクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                FormElement.classNameStateDisabled = 'disabled';
                 return FormElement;
             })(element.Element);
             element.FormElement = FormElement;
+        })(element = ui.element || (ui.element = {}));
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        var element;
+        (function (element) {
+            /**
+             * テキストフィールドの拡張クラス
+             *
+             * @version 0.4.0
+             * @since 0.4.0
+             *
+             */
+            var TextField = (function (_super) {
+                __extends(TextField, _super);
+                /**
+                 * コンストラクタ
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @param $el 管理するDOM要素のjQueryオブジェクト
+                 * @param options オプション
+                 *
+                 */
+                function TextField($el, options) {
+                    _super.call(this, $el, options);
+                    /**
+                     * プレースホルダーテキスト
+                     *
+                     * @version 0.4.0
+                     * @since 0.4.0
+                     *
+                     */
+                    this.placeholder = '';
+                    this.placeholder = this.$el.attr('placeholder') || '';
+                    this.hasPlaceholder = !!this.placeholder;
+                    this._update();
+                }
+                /**
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                TextField.prototype._setClassName = function () {
+                    _super.prototype._setClassName.call(this);
+                    // セレクトボックス用のクラス名を設定
+                    this.addClass(TextField.classNameTextField);
+                };
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                TextField.prototype._createWrapper = function () {
+                    _super.prototype._createWrapper.call(this);
+                    element.Element.addClassTo(this.$wrapper, TextField.classNameTextField + '-' + element.FormElement.classNameWrapper);
+                };
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                TextField.prototype._bindEvents = function (config) {
+                    var _this = this;
+                    _super.prototype._bindEvents.call(this, config);
+                    // keyupイベントが起こった場合に実行するルーチン
+                    $(document).on('keyup.bcTextField-' + this.id, function (e) {
+                        if (_this.hasFocus) {
+                            _this._update();
+                        }
+                    });
+                    // プレースホルダーをサポートしていない時のイベント処理
+                    if (!TextField.supportPlaceholder) {
+                        // フォーカスを当てた時・クリックをしたときにプレースホルダーと値が同じだった場合
+                        // カーソル（キャレット）を先頭に持っていく
+                        this.$el.on('focus.bcTextField click.bcTextField', function () {
+                            if (_this._equalPlaceholder()) {
+                                _this._msCaretMoveToTop();
+                            }
+                        });
+                        // キーボードを押した瞬間に、プレースホルダーと値が同じだった場合
+                        // プレースホルダーの値を消して、空にする
+                        // TODO: 文字以外のキーを押すと一瞬値が消える（クリティカルでないため保留）
+                        $(document).on('keydown.bcTextField-' + this.id, function (e) {
+                            if (_this.hasFocus) {
+                                if (_this._equalPlaceholder()) {
+                                    _this.$el.val('');
+                                }
+                            }
+                        });
+                    }
+                };
+                /**
+                 * 要素の状態を更新する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.prototype._update = function () {
+                    var currentValue = this.$el.val() || '';
+                    var isEmpty = !currentValue;
+                    if (TextField.supportPlaceholder) {
+                        if (isEmpty) {
+                            this._setStateUninputted();
+                        }
+                        else {
+                            this._setStateInputted();
+                        }
+                    }
+                    else {
+                        if (this._equalPlaceholder()) {
+                            this._setStateUninputted();
+                        }
+                        else {
+                            if (isEmpty) {
+                                this._setStateUninputted();
+                                this._setPlaceholderValue();
+                            }
+                            else {
+                                this._setStateInputted();
+                            }
+                        }
+                    }
+                };
+                /**
+                 * 入力されている状態を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.prototype._setStateInputted = function () {
+                    this.isEmpty = false;
+                    element.Element.removeClassFrom(this.$el, element.FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
+                    element.Element.removeClassFrom(this.$label, element.FormElement.classNameFormElementCommon, element.FormElement.classNameLabel, TextField.classNameStateUninput);
+                    element.Element.removeClassFrom(this.$wrapper, element.FormElement.classNameWrapper, '', TextField.classNameStateUninput);
+                };
+                /**
+                 * 入力されていない状態を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.prototype._setStateUninputted = function () {
+                    this.isEmpty = true;
+                    element.Element.addClassTo(this.$el, element.FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
+                    element.Element.addClassTo(this.$label, element.FormElement.classNameFormElementCommon, element.FormElement.classNameLabel, TextField.classNameStateUninput);
+                    element.Element.addClassTo(this.$wrapper, element.FormElement.classNameWrapper, '', TextField.classNameStateUninput);
+                };
+                /**
+                 * プレースホルダーと値が同じかどうか
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.prototype._equalPlaceholder = function () {
+                    var currentValue = this.$el.val() || '';
+                    return this.placeholder === currentValue;
+                };
+                /**
+                 * プレースホルダーの値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.prototype._setPlaceholderValue = function () {
+                    this.$el.val(this.placeholder);
+                    this._msCaretMoveToTop();
+                };
+                /**
+                 * 【IE用】カーソル（キャレット）を先頭に持っていく
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.prototype._msCaretMoveToTop = function () {
+                    // TODO: MS用の型を調査して定義
+                    var input = this.$el[0];
+                    var range = input.createTextRange();
+                    range.collapse();
+                    range.moveStart('character', 0);
+                    range.moveEnd('character', 0);
+                    range.select();
+                };
+                /**
+                 * オプションのデフォルト値
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.defaultOption = {};
+                /**
+                 * TextField要素のクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.classNameTextField = 'form-text-field';
+                /**
+                 * 未入力状態に付加されるクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.classNameStateUninput = 'uninput';
+                /**
+                 * プレースホルダー属性に対応しているかどうか
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                TextField.supportPlaceholder = $('<input />').prop('placeholder') !== undefined;
+                return TextField;
+            })(element.FormElement);
+            element.TextField = TextField;
         })(element = ui.element || (ui.element = {}));
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
@@ -2054,28 +2592,57 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.3.1
+                 * @version 0.4.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
                  *
                  */
                 function Select($el, options) {
-                    var _this = this;
                     _super.call(this, $el, options);
+                    this._update();
+                }
+                /**
+                 * クラス名を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype._setClassName = function () {
+                    _super.prototype._setClassName.call(this);
+                    // セレクトボックス用のクラス名を設定
                     this.addClass(Select.classNameSelect);
+                };
+                /**
+                 * ラップ要素を生成
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype._createWrapper = function () {
+                    _super.prototype._createWrapper.call(this);
                     element.Element.addClassTo(this.$wrapper, Select.classNameSelect + '-' + element.FormElement.classNameWrapper);
-                    var $elements = this.$label.children().detach();
-                    this.$label.empty();
-                    this.$label.append($elements);
-                    element.Element.addClassTo(this.$label, Select.classNameSelect, element.FormElement.classNameLabel);
-                    this.$pseudo = $('<a />'); // Focusable
-                    this.$pseudo.attr('href', '#');
-                    this.$pseudo.appendTo(this.$label);
+                };
+                /**
+                 * 擬似セレクトボックス要素を生成する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype._createPsuedoElements = function (config) {
+                    var _this = this;
+                    this.$pseudo = $('<a />');
+                    this.$pseudo.attr('href', '#'); // Focusable
+                    this.$pseudo.insertAfter(this.$el);
                     element.Element.addClassTo(this.$pseudo, element.FormElement.classNameFormElementCommon);
                     element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
                     this.$selected = $('<span />');
-                    this.$selected.text(this.label);
                     this.$selected.appendTo(this.$pseudo);
                     element.Element.addClassTo(this.$selected, element.FormElement.classNameFormElementCommon);
                     element.Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
@@ -2094,27 +2661,8 @@ var baser;
                         element.Element.addClassTo($psuedoOpt, element.FormElement.classNameFormElementCommon);
                         element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
                     });
-                    this._update();
-                    this.$el.on('change.bcSelect', function () {
-                        _this._onchange();
-                    });
-                    this.$options.on('click.bcSelect', 'li', function (e) {
-                        var $li = $(e.target);
-                        var index = $li.index();
-                        _this.$el.find('option').eq(index).prop('selected', true);
-                        e.stopPropagation();
-                        e.preventDefault();
-                        // 標準の select 要素に登録されたイベントを発火
-                        _this.$el.trigger('change');
-                    });
-                    this.$pseudo.on('click.bcSelect', function (e) {
-                        e.preventDefault();
-                    });
                     if (ui.Browser.spec.isTouchable) {
-                        if (ui.Browser.spec.ua.iPhone) {
-                            this.$pseudo.on('click.bcSelect', function (e) {
-                                _this.$label.focus();
-                            });
+                        if (ui.Browser.spec.ua.iPhone || ui.Browser.spec.ua.iPod) {
                             this.addClass(Select.classNameOsIOs);
                             element.Element.addClassTo(this.$wrapper, Select.classNameOsIOs);
                             element.Element.addClassTo(this.$label, Select.classNameOsIOs);
@@ -2124,18 +2672,60 @@ var baser;
                             element.Element.addClassTo(this.$wrapper, Select.classNameOsAndroid);
                             element.Element.addClassTo(this.$label, Select.classNameOsAndroid);
                         }
-                        else {
-                            // iPhone Android 以外のタッチデバイス
-                            // タッチインターフェイスのあるWindows OS Chromeなども該当
-                            this._psuedoFocusEvent();
-                        }
                     }
-                    else {
+                    if (config.useDefaultOptionList) {
+                        this.addClass(Select.classNameUseDefaultOptionList);
+                        element.Element.addClassTo(this.$wrapper, Select.classNameUseDefaultOptionList);
+                        element.Element.addClassTo(this.$label, Select.classNameUseDefaultOptionList);
+                    }
+                };
+                /**
+                 * イベントの登録
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype._bindEvents = function (config) {
+                    var _this = this;
+                    _super.prototype._bindEvents.call(this, config);
+                    // changeイベントが起こった場合に実行するルーチン
+                    this.$el.on('change.bcSelect', function () {
+                        _this._update();
+                    });
+                    // 擬似option要素を選択した時に実行する
+                    this.$pseudo.on('click.bcSelect', 'li', function (e) {
+                        var $li = $(e.target);
+                        var index = $li.index();
+                        _this.setIndex(index);
+                        _this._onblur();
+                        e.stopPropagation();
+                        e.preventDefault();
+                    });
+                    this.$pseudo.on('click.bcSelect', function (e) {
+                        e.preventDefault();
+                    });
+                    if (!config.useDefaultOptionList) {
                         this._psuedoFocusEvent();
                     }
-                }
+                    else {
+                        // href属性を削除することでフォーカスがあたらなくなる
+                        this.$pseudo.removeAttr('href');
+                    }
+                };
                 /**
-                 * オプションが開かれた後にスクロール位置を調整する
+                 * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype._onSilentChange = function () {
+                    this._update();
+                };
+                /**
+                 * スクロール位置を調整する
                  *
                  * @version 0.1.0
                  * @since 0.1.0
@@ -2160,9 +2750,9 @@ var baser;
                     }
                 };
                 /**
-                 * 擬似要素にフォーカスがあったった時のイベント伝達を制御する
+                 * 擬似要素にフォーカスがあったった時のイベントと伝達を制御する
                  *
-                 * @version 0.0.1
+                 * @version 0.4.0
                  * @since 0.0.1
                  *
                  */
@@ -2170,51 +2760,95 @@ var baser;
                     var _this = this;
                     this.$el.off('focus.bcFormElement');
                     this.$el.off('blur.bcFormElement');
-                    this.$el.on('focus.bcSelect', function () {
+                    // セレクトボックス本体にフォーカスがあたったら、
+                    // 擬似要素のほうへフォーカスを即座に移動させる
+                    this.$el.on('focus.bcSelect', function (e) {
                         _this.$pseudo.focus();
-                    });
-                    $(document).on('click.bcSelect', function () {
-                        _this._onblur();
-                    });
-                    // 擬似セレクトボックスにフォーカス・またはクリックが起こった時に発火する
-                    this.$pseudo.on('focus.bcSelect', function (e) {
-                        _this._onfocus();
-                        e.stopPropagation();
-                    });
-                    this.$pseudo.on('click.bcSelect', function (e) {
-                        _this._onfocus();
                         e.stopPropagation();
                         e.preventDefault();
                     });
+                    // ドキュメントのどこかをフォーカスorクリックしたらフォーカスがはずれる
+                    // ※_onfocus()からも呼び出される
+                    $(document).on('click.bcSelect', function (e) {
+                        _this._onblur();
+                    });
+                    // documentへ伝達するフォーカスは focusin イベント
+                    $(document).on('focusin', function (e) {
+                        _this._onblur();
+                    });
+                    // 擬似セレクトボックスにフォーカスorクリックが起こった時に発火する
+                    this.$pseudo.on('focus.bcSelect', function (e) {
+                        _this._onfocus();
+                        // ドキュメントに伝達しない
+                        e.stopPropagation();
+                    }).on('click.bcSelect', function (e) {
+                        _this._onfocus();
+                        // ドキュメントに伝達しない
+                        e.stopPropagation();
+                        // href="#"なのでデフォルトイベントを抑制
+                        e.preventDefault();
+                    });
+                    // ドキュメントへのフォーカスorクリック伝達を抑制
+                    this.$label.on('click.bcSelect focus.bcSelect', function (e) {
+                        // ドキュメントに伝達しない
+                        e.stopPropagation();
+                    });
+                    this._bindKeybordEvent();
                 };
                 /**
-                 * チェンジイベントのハンドラ
+                 * フォーカス時のキーボードイベント
                  *
-                 * @version 0.0.1
-                 * @since 0.0.1
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
                  *
                  */
-                Select.prototype._onchange = function () {
-                    this._update();
-                    this._onblur();
+                Select.prototype._bindKeybordEvent = function () {
+                    var _this = this;
+                    $(document).on('keydown', function (e) {
+                        if (_this.hasFocus) {
+                            switch (e.keyCode) {
+                                case 38: {
+                                    _this.prev(true);
+                                    _this._scrollToSelectedPosition();
+                                    e.preventDefault();
+                                    break;
+                                }
+                                case 40: {
+                                    _this.next(true);
+                                    _this._scrollToSelectedPosition();
+                                    e.preventDefault();
+                                    break;
+                                }
+                                case 13: {
+                                    _this._fireChangeEvent();
+                                    _this._onblur();
+                                    e.preventDefault();
+                                    break;
+                                }
+                            }
+                        }
+                    });
                 };
                 /**
                  * フォーカスがあたった時の処理
                  *
                  * @version 0.1.0
                  * @since 0.0.1
+                 * @override
                  *
                  */
                 Select.prototype._onfocus = function () {
                     if (!this.hasFocus) {
                         // 全体のフォーカスを外す
-                        $(document).trigger('click.bcSelect');
+                        $(document).triggerHandler('click.bcSelect');
                         // 親クラスのフォーカスを実行
                         _super.prototype._onfocus.call(this);
                         // DOMのclassを制御
                         element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateFocus);
                         element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
-                        // オプションが開かれた後にスクロール位置を調整する
+                        // スクロール位置を調整する
                         this._scrollToSelectedPosition();
                     }
                 };
@@ -2261,6 +2895,89 @@ var baser;
                             element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
                         }
                     });
+                };
+                /**
+                 * 値を設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 * @override
+                 *
+                 */
+                Select.prototype.setValue = function (value) {
+                    var valueString = String(value);
+                    var $targetOption = this.$el.find('option[value="' + valueString + '"]');
+                    if ($targetOption.length && !$targetOption.prop('selected')) {
+                        $targetOption.prop('selected', true);
+                        this._fireChangeEvent();
+                    }
+                };
+                /**
+                 * 値をインデックス番号から設定する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype.setIndex = function (index, isSilent) {
+                    if (isSilent === void 0) { isSilent = false; }
+                    var $targetOption = this.$el.find('option').eq(index);
+                    if ($targetOption.length && !$targetOption.prop('selected')) {
+                        $targetOption.prop('selected', true);
+                        this._fireChangeEvent(isSilent);
+                    }
+                };
+                /**
+                 * 現在の選択中のインデックス番号を取得する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype.getIndex = function () {
+                    var currentIndex = 0;
+                    this.$el.find('option').each(function (i, el) {
+                        var $opt = $(el);
+                        if ($opt.prop('selected')) {
+                            currentIndex = $opt.index();
+                        }
+                    });
+                    return currentIndex;
+                };
+                /**
+                 * 次の項目を選択する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype.next = function (isSilent) {
+                    var currentIndex = this.getIndex();
+                    var max = this.$el.find('option').length;
+                    var nextIndex = currentIndex + 1;
+                    this.setIndex(Math.min(nextIndex, max), isSilent);
+                };
+                /**
+                 * 前の項目を選択する
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.prototype.prev = function (isSilent) {
+                    var currentIndex = this.getIndex();
+                    var prevIndex = currentIndex - 1;
+                    this.setIndex(Math.max(prevIndex, 0), isSilent);
+                };
+                /**
+                 * オプションのデフォルト値
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.defaultOption = {
+                    useDefaultOptionList: ui.Browser.spec.isTouchable && ui.Browser.spec.ua.iPhone || ui.Browser.spec.ua.iPod || ui.Browser.spec.ua.android
                 };
                 /**
                  * Select要素のクラス
@@ -2319,6 +3036,14 @@ var baser;
                  */
                 Select.classNameOsAndroid = 'os-android';
                 /**
+                 * ブラウザデフォルトの選択リストを使用する場合に付加されるクラス
+                 *
+                 * @version 0.4.0
+                 * @since 0.4.0
+                 *
+                 */
+                Select.classNameUseDefaultOptionList = 'use-default-option-list';
+                /**
                  * Select要素の擬似option要素の選択時に付加されるクラス
                  *
                  * @version 0.1.0
@@ -2367,7 +3092,7 @@ var baser;
                 function CheckableElement($el, options) {
                     var _this = this;
                     _super.call(this, $el, options);
-                    var config = $.extend(element.FormElement.defaultOption, CheckableElement.defaultOption, options);
+                    var config = $.extend({}, element.FormElement.defaultOption, CheckableElement.defaultOption, options);
                     this._checkedClass = config.checkedClass;
                     this.checked = this.$el.prop('checked');
                     this.defaultChecked = this.$el.prop('defaultChecked');
@@ -2393,7 +3118,6 @@ var baser;
                  *
                  * @version 0.0.1
                  * @since 0.0.1
-                 * @protected プロテクテッド想定
                  *
                  */
                 CheckableElement.prototype._onchenge = function () {
@@ -2968,12 +3692,22 @@ var baser;
                     $.getScript(protocol + Youtube.API_URL);
                     var y;
                     var intervalTimer;
+                    var listIndex;
                     intervalTimer = window.setInterval(function () {
                         if (!y && 'YT' in window && YT.Player) {
                             y = new YT.Player(playerID, {
                                 events: {
                                     onStateChange: function (e) {
                                         switch (e.data) {
+                                            case -1: {
+                                                _this.trigger('unstarted', [y]);
+                                                listIndex = y.getPlaylistIndex();
+                                                if (_this.currentCueIndex !== listIndex) {
+                                                    _this.trigger('changecue', [y]);
+                                                }
+                                                _this.currentCueIndex = listIndex;
+                                                break;
+                                            }
                                             case YT.PlayerState.BUFFERING: {
                                                 _this.trigger('buffering', [y]);
                                                 break;
@@ -2992,6 +3726,7 @@ var baser;
                                             }
                                             case YT.PlayerState.PLAYING: {
                                                 _this.trigger('playing', [y]);
+                                                _this.currentCueIndex = y.getPlaylistIndex();
                                                 break;
                                             }
                                             default: {
@@ -3006,7 +3741,7 @@ var baser;
                         }
                         if (y && y.pauseVideo && y.playVideo) {
                             window.clearInterval(intervalTimer);
-                            _this.$el.trigger('embeddedyoutubeplay', [y]); // 廃止予定
+                            _this.$el.trigger('embeddedyoutubeplay', [y]); // TODO: 廃止予定(v1.0.0)
                             _this.trigger('embeded', [y]);
                             if (_this.movieOption.stopOnInactive) {
                                 $(window).on('blur', function () {
@@ -3682,7 +4417,8 @@ var baser;
                 align: 'center',
                 valign: 'center',
                 size: 'contain',
-                child: '>*:first'
+                child: '>*:first',
+                outer: false
             }, options);
             var $elem = $(elem);
             var $child = $elem.find(config.child);
@@ -3700,10 +4436,19 @@ var baser;
             });
             var css = {};
             var calc = function () {
-                var containerWidth = $elem.width();
-                var containerHeight = $elem.height();
-                var containerAspectRatio = containerWidth / containerHeight;
+                var containerWidth;
+                var containerHeight;
+                var containerAspectRatio;
                 var scale;
+                if (config.outer) {
+                    containerWidth = $elem.outerWidth();
+                    containerHeight = $elem.outerHeight();
+                }
+                else {
+                    containerWidth = $elem.width();
+                    containerHeight = $elem.height();
+                }
+                containerAspectRatio = containerWidth / containerHeight;
                 switch (config.size) {
                     case 'contain':
                         if (1 < containerAspectRatio) {
@@ -3877,7 +4622,9 @@ var baser;
 /// <reference path="baser/utility/Mathematics.ts" />
 /* UI
 ================================================================= */
+/// <reference path="baser/ui/IEventDispacher.ts" />
 /// <reference path="baser/ui/EventDispacher.ts" />
+/// <reference path="baser/ui/Sequence.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />
@@ -3887,12 +4634,20 @@ var baser;
 /// <reference path="baser/ui/Validation.ts" />
 /* UI/エレメント
 ================================================================= */
+/// <reference path="baser/ui/element/IElement.ts" />
 /// <reference path="baser/ui/element/Element.ts" />
 /// <reference path="baser/ui/element/Form.ts" />
+/// <reference path="baser/ui/element/IFormElement.ts" />
 /// <reference path="baser/ui/element/FormElement.ts" />
+/// <reference path="baser/ui/element/ITextField.ts" />
+/// <reference path="baser/ui/element/TextField.ts" />
+/// <reference path="baser/ui/element/ISelect.ts" />
 /// <reference path="baser/ui/element/Select.ts" />
+/// <reference path="baser/ui/element/ICheckableElement.ts" />
 /// <reference path="baser/ui/element/CheckableElement.ts" />
+/// <reference path="baser/ui/element/IRadio.ts" />
 /// <reference path="baser/ui/element/Radio.ts" />
+/// <reference path="baser/ui/element/ICheckbox.ts" />
 /// <reference path="baser/ui/element/Checkbox.ts" />
 /// <reference path="baser/ui/element/RadioGroup.ts" />
 /// <reference path="baser/ui/element/Map.ts" />

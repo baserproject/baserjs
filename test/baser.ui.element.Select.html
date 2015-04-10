@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>baser.ui.element.FormElement</title>
+<title>baser.ui.element.Select</title>
 <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
 
 </head>
@@ -11,12 +11,38 @@
 
 <div id="qunit"></div>
 <div id="qunit-fixture">
-	<input id="target" type="text">
-	<label>beforeLabelText<input id="target-wrapped-label" type="text">afterLabelText</label>
-	<input id="target-with-label" type="text"><label for="target-with-label">withLabel</label>
-	<input id="target-title-label" type="text" title="title-label">
-	<input id="target-default-value" type="text" value="default-value">
-	<input id="target-disabled" type="text" disabled>
+	<select id="target">
+		<option value="value1">text1</option>
+		<option value="value2">text2</option>
+		<option value="value3">text3</option>
+	</select>
+	<label>beforeLabelText<select id="target-wrapped-label">
+			<option value="value1">text1</option>
+			<option value="value2">text2</option>
+			<option value="value3">text3</option>
+		</select>afterLabelText</label>
+	<select id="target-with-label">
+		<option value="value1">text1</option>
+		<option value="value2">text2</option>
+		<option value="value3">text3</option>
+	</select>
+	<label for="target-with-label">withLabel</label>
+	<select id="target-title-label" title="title-label">
+		<option value="value1">text1</option>
+		<option value="value2">text2</option>
+		<option value="value3">text3</option>
+	</select>
+	<select id="target-default-value">
+		<option value="value1">value1</option>
+		<option value="default-value" selected>default-value</option>
+		<option value="value3">value3</option>
+	</select>
+	<select id="target-disabled" disabled>
+		<option value="value1">text1</option>
+		<option value="value2">text2</option>
+		<option value="value3">text3</option>
+	</select>
+	<select name="target-empty" id="empty"></select>
 </div>
 
 <!-- Libraries -->
@@ -37,7 +63,7 @@ test('added class names', function() {
 
 	var $target = $('#target');
 
-	var target = new baser.ui.element.FormElement($target);
+	var target = new baser.ui.element.Select($target);
 
 	ok(target.$el.parent('span').hasClass('-bc-form-element'), 'class name of wrapper');
 	ok(target.$el.parent('span').hasClass('-bc-wrapper'), 'class name of wrapper');
@@ -60,6 +86,9 @@ test('added class names', function() {
 	console.log(target.$wrapper.attr('class'));
 	console.log(target.$el.attr('class'));
 	console.log(target.$label.attr('class'));
+	console.log(target.$pseudo.attr('class'));
+	console.log(target.$selected.attr('class'));
+	console.log(target.$options.attr('class'));
 
 });
 
@@ -68,7 +97,7 @@ test('wrapped label', function() {
 
 	var $target = $('#target-wrapped-label');
 
-	var target = new baser.ui.element.FormElement($target);
+	var target = new baser.ui.element.Select($target);
 
 	ok(target.$label.hasClass('-bc-form-element'), 'class name of label element');
 	ok(target.$label.hasClass('-bc-form-element__label'), 'class name of label element');
@@ -84,7 +113,7 @@ test('wrapped label - optional label', function() {
 
 	var $target = $('#target-wrapped-label');
 
-	var target = new baser.ui.element.FormElement($target, {
+	var target = new baser.ui.element.Select($target, {
 		label: 'labelFromOption'
 	});
 
@@ -97,7 +126,7 @@ test('leaved label', function() {
 
 	var $target = $('#target-with-label');
 
-	var target = new baser.ui.element.FormElement($target);
+	var target = new baser.ui.element.Select($target);
 
 	ok(target.$label.hasClass('-bc-form-element'), 'class name of label element');
 	ok(target.$label.hasClass('-bc-form-element__label'), 'class name of label element');
@@ -113,7 +142,7 @@ test('leaved label - optional label', function() {
 
 	var $target = $('#target-with-label');
 
-	var target = new baser.ui.element.FormElement($target, {
+	var target = new baser.ui.element.Select($target, {
 		label: 'labelFromOption'
 	});
 
@@ -136,7 +165,7 @@ test('default value', function() {
 
 	var $target = $('#target-default-value');
 
-	var target = new baser.ui.element.FormElement($target);
+	var target = new baser.ui.element.Select($target);
 
 	equal(target.defaultValue, 'default-value', 'default value');
 
@@ -147,7 +176,7 @@ test('disabled - get', function() {
 
 	var $target = $('#target-disabled');
 
-	var target = new baser.ui.element.FormElement($target);
+	var target = new baser.ui.element.Select($target);
 
 	ok(target.disabled, 'disabled is true');
 	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
@@ -166,7 +195,7 @@ test('disabled - change', function() {
 
 	var $target = $('#target-disabled');
 
-	var target = new baser.ui.element.FormElement($target);
+	var target = new baser.ui.element.Select($target);
 
 	ok(target.disabled, 'disabled is true');
 	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
@@ -191,7 +220,7 @@ test('disabled - change', function() {
 
 	var $target = $('#target-disabled');
 
-	var target = new baser.ui.element.FormElement($target);
+	var target = new baser.ui.element.Select($target);
 
 	ok(target.disabled, 'disabled is true');
 	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
@@ -211,14 +240,14 @@ test('disabled - change', function() {
 
 });
 
-test('setValue / change event', function() {
-	expect(3);
+test('setValue (invalid value) / change event', function() {
+	expect(0);
 
 	var settingValue = 'setting-value';
 
 	var $target = $('#target');
 
-	var target = new baser.ui.element.FormElement($target);
+	var target = new baser.ui.element.Select($target);
 
 	target.on('change', function (e) {
 		equal(target.$el.val(), settingValue, 'fired baserJS change');
@@ -236,27 +265,28 @@ test('setValue / change event', function() {
 
 });
 
-test('baser.ui.element.FormElement (v0.0.x)', function() {
-	expect(4);
+test('setValue / change event', function() {
+	expect(3);
+
+	var settingValue = 'value2';
 
 	var $target = $('#target');
 
-	// v0.0.xの設定 設定は要素を new する以前に必要
-	baser.ui.element.Element.classNameDefaultSeparatorForModifier = baser.ui.element.ClassNameSeparatorForBEM.HYPHEN;
-	baser.ui.element.FormElement.classNameWrapper = 'form-element-wrapper';
+	var target = new baser.ui.element.Select($target);
 
-	var target = new baser.ui.element.FormElement($target);
-
-	ok(target.$el.hasClass('-bc-form-element'), 'class name of this element');
-	ok(target.$el.hasClass('-bc-form-element-blur'), 'class name of this element on blur');
-	ok(target.$el.parent().hasClass('-bc-form-element-wrapper'), 'class name of wrapper');
-
-	target.$el.on('focus', function() {
-		var $this = $(this);
-		ok($this.hasClass('-bc-form-element-focus'), 'class name of this element on focus');
+	target.on('change', function (e) {
+		equal(target.$el.val(), settingValue, 'fired baserJS change');
 	});
 
-	target.$el.trigger('focus');
+	target.on('change', function (e) {
+		equal(target.$el.val(), settingValue, 'fired jQuery change');
+	});
+
+	target.on('change', function (e) {
+		equal(target.$el.val(), settingValue, 'fired DOM change');
+	});
+
+	target.setValue(settingValue);
 
 });
 
