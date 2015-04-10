@@ -999,6 +999,20 @@ declare module baser {
                  */
                 label: string;
                 /**
+                 * 前にあるラベルのテキスト
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                labelBeforeText: string;
+                /**
+                 * 後ろにあるラベルのテキスト
+                 *
+                 * @since 0.4.0
+                 *
+                 */
+                labelAfterText: string;
+                /**
                  * フォーカスがあたっている状態かどうか
                  *
                  * @since 0.1.0
@@ -1065,7 +1079,7 @@ declare module baser {
                  * @since 0.4.0
                  *
                  */
-                protected _getLabelText(): string;
+                private _setLabelText(config);
                 /**
                  * ラベル要素を割り当てる
                  *
@@ -1073,7 +1087,7 @@ declare module baser {
                  * @since 0.4.0
                  *
                  */
-                protected _asignLabel(config: FormElementOption): void;
+                private _asignLabel(config);
                 /**
                  * ラップ要素を生成
                  *
@@ -1316,23 +1330,6 @@ declare module baser {
                  *
                  */
                 protected _setClassName(): void;
-                /**
-                 * ラベル要素内のテキストを取得する
-                 *
-                 * @version 0.4.0
-                 * @since 0.4.0
-                 *
-                 */
-                protected _getLabelText(): string;
-                /**
-                 * ラベル要素を割り当てる
-                 *
-                 * @version 0.4.0
-                 * @since 0.4.0
-                 * @override
-                 *
-                 */
-                protected _asignLabel(config: FormElementOption): void;
                 /**
                  * ラップ要素を生成
                  *

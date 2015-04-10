@@ -2002,6 +2002,8 @@ var baser;
                     this._setClassName();
                     // ラベル要素の割り当て
                     this._asignLabel(config);
+                    // ラベルテキストの設定
+                    this._setLabelText(config);
                     // ラップ要素の割り当て
                     this._createWrapper();
                     // 擬似要素生成
@@ -2033,13 +2035,46 @@ var baser;
                  * @since 0.4.0
                  *
                  */
-                FormElement.prototype._getLabelText = function () {
-                    if (this.$label.length) {
-                        return $.trim(this.$label.text());
+                FormElement.prototype._setLabelText = function (config) {
+                    var _this = this;
+                    var $labelContents = this.$label.contents();
+                    var $before = $();
+                    var $after = $();
+                    var isBefore = true;
+                    if (config.label) {
+                        this.$label.prepend(config.label);
+                        this.labelBeforeText = config.label;
+                        this.labelAfterText = '';
                     }
                     else {
-                        return '';
+                        $labelContents.each(function (i, node) {
+                            if (node === _this.$el[0]) {
+                                isBefore = false;
+                                return;
+                            }
+                            if (isBefore) {
+                                $before = $before.add($(node));
+                            }
+                            else {
+                                $after = $after.add($(node));
+                            }
+                        });
+                        $before.text(function (i, text) {
+                            return $.trim(text);
+                        });
+                        $after.text(function (i, text) {
+                            return $.trim(text);
+                        });
+                        this.labelBeforeText = $before.text() || this.$el.attr('title') || '';
+                        this.labelAfterText = $after.text() || '';
+                        if (this.labelBeforeText) {
+                            this.$label.prepend($before);
+                        }
+                        if (this.labelAfterText) {
+                            this.$label.append($after);
+                        }
                     }
+                    this.label = this.labelBeforeText + this.labelAfterText;
                 };
                 /**
                  * ラベル要素を割り当てる
@@ -2078,7 +2113,6 @@ var baser;
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon);
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
                     this.$label = $label;
-                    this.label = config.label || this._getLabelText() || this.$el.attr('title') || this.$el.attr('name') || '';
                 };
                 /**
                  * ラップ要素を生成
@@ -2327,40 +2361,6 @@ var baser;
                     this.addClass(Select.classNameSelect);
                 };
                 /**
-                 * ラベル要素内のテキストを取得する
-                 *
-                 * @version 0.4.0
-                 * @since 0.4.0
-                 *
-                 */
-                Select.prototype._getLabelText = function () {
-                    var $labelClone;
-                    if (this.$label.length) {
-                        $labelClone = this.$label.clone();
-                        $labelClone.find('select').remove();
-                        return $.trim($labelClone.text());
-                    }
-                    else {
-                        return '';
-                    }
-                };
-                /**
-                 * ラベル要素を割り当てる
-                 *
-                 * @version 0.4.0
-                 * @since 0.4.0
-                 * @override
-                 *
-                 */
-                Select.prototype._asignLabel = function (config) {
-                    var $elements;
-                    _super.prototype._asignLabel.call(this, config);
-                    $elements = this.$label.children().detach();
-                    this.$label.empty();
-                    this.$label.append($elements);
-                    element.Element.addClassTo(this.$label, Select.classNameSelect, element.FormElement.classNameLabel);
-                };
-                /**
                  * ラップ要素を生成
                  *
                  * @version 0.4.0
@@ -2384,7 +2384,7 @@ var baser;
                     var _this = this;
                     this.$pseudo = $('<a />'); // Focusable
                     this.$pseudo.attr('href', '#');
-                    this.$pseudo.appendTo(this.$label);
+                    this.$pseudo.insertAfter(this.$el);
                     element.Element.addClassTo(this.$pseudo, element.FormElement.classNameFormElementCommon);
                     element.Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
                     this.$selected = $('<span />');

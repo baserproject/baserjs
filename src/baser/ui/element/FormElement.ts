@@ -134,6 +134,22 @@ module baser {
 				public label: string;
 
 				/**
+				 * 前にあるラベルのテキスト
+				 *
+				 * @since 0.4.0
+				 *
+				 */
+				public labelBeforeText: string;
+
+				/**
+				 * 後ろにあるラベルのテキスト
+				 *
+				 * @since 0.4.0
+				 *
+				 */
+				public labelAfterText: string;
+
+				/**
 				 * フォーカスがあたっている状態かどうか
 				 *
 				 * @since 0.1.0
@@ -202,6 +218,9 @@ module baser {
 					// ラベル要素の割り当て
 					this._asignLabel(config);
 
+					// ラベルテキストの設定
+					this._setLabelText(config);
+
 					// ラップ要素の割り当て
 					this._createWrapper();
 
@@ -241,12 +260,55 @@ module baser {
 				 * @since 0.4.0
 				 *
 				 */
-				protected _getLabelText (): string {
-					if (this.$label.length) {
-						return $.trim(this.$label.text());
+				private _setLabelText (config: FormElementOption): void {
+					var $labelContents: JQuery = this.$label.contents();
+					var $before: JQuery = $();
+					var $after: JQuery = $();
+					var isBefore: boolean = true;
+
+					if (config.label) {
+
+						this.$label.prepend(config.label);
+						this.labelBeforeText = config.label;
+						this.labelAfterText = '';
+
 					} else {
-						return '';
+
+						$labelContents.each( (i: number, node: Node): void => {
+							if (node === this.$el[0]) {
+								isBefore = false;
+								return;
+							}
+							if (isBefore) {
+								$before = $before.add($(node));
+							} else {
+								$after = $after.add($(node));
+							}
+						});
+
+						$before.text( (i: number, text: string): string => {
+							return $.trim(text);
+						});
+
+						$after.text( (i: number, text: string): string => {
+							return $.trim(text);
+						});
+
+						this.labelBeforeText = $before.text() || this.$el.attr('title') || '';
+						this.labelAfterText = $after.text() || '';
+
+						if (this.labelBeforeText) {
+							this.$label.prepend($before);
+						}
+
+						if (this.labelAfterText) {
+							this.$label.append($after);
+						}
+
 					}
+
+					this.label = this.labelBeforeText + this.labelAfterText;
+
 				}
 
 				/**
@@ -256,7 +318,7 @@ module baser {
 				 * @since 0.4.0
 				 *
 				 */
-				protected _asignLabel (config: FormElementOption): void {
+				private _asignLabel (config: FormElementOption): void {
 					var $label: JQuery;
 					var hasLabel: boolean;
 
@@ -293,7 +355,7 @@ module baser {
 					Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
 
 					this.$label = $label;
-					this.label = config.label || this._getLabelText() ||  this.$el.attr('title') || this.$el.attr('name') || '';
+
 				}
 
 				/**
@@ -440,7 +502,7 @@ module baser {
 				 * @since 0.4.0
 				 *
 				 */
-				protected _fireChangeEvent () {
+				protected _fireChangeEvent (): void {
 					var e: Event;
 					if ('createEvent' in document) {
 						e = document.createEvent('Event');

@@ -14,6 +14,7 @@
 	<input id="target" type="text">
 	<label>beforeLabelText<input id="target-wrapped-label" type="text">afterLabelText</label>
 	<input id="target-with-label" type="text"><label for="target-with-label">withLabel</label>
+	<input id="target-title-label" type="text" title="title-label">
 	<input id="target-default-value" type="text" value="default-value">
 	<input id="target-disabled" type="text" disabled>
 </div>
@@ -120,6 +121,17 @@ test('leaved label - optional label', function() {
 
 });
 
+test('title label - optional label', function() {
+	expect(1);
+
+	var $target = $('#target-title-label');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	equal(target.label, 'title-label', 'text of label');
+
+});
+
 test('default value', function() {
 
 	var $target = $('#target-default-value');
@@ -206,7 +218,7 @@ test('setValue / change event', function() {
 
 	var $target = $('#target');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.ui.element.FormElement($target);
 
 	target.on('change', function (e) {
 		equal(target.$el.val(), settingValue, 'fired baserJS change');

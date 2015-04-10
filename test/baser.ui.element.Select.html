@@ -27,6 +27,11 @@
 		<option value="value3">text3</option>
 	</select>
 	<label for="target-with-label">withLabel</label>
+	<select id="target-title-label" title="title-label">
+		<option value="value1">text1</option>
+		<option value="value2">text2</option>
+		<option value="value3">text3</option>
+	</select>
 	<select id="target-default-value">
 		<option value="value1">value1</option>
 		<option value="default-value" selected>default-value</option>
@@ -142,6 +147,17 @@ test('leaved label - optional label', function() {
 	});
 
 	equal(target.label, 'labelFromOption', 'text of label');
+
+});
+
+test('title label - optional label', function() {
+	expect(1);
+
+	var $target = $('#target-title-label');
+
+	var target = new baser.ui.element.FormElement($target);
+
+	equal(target.label, 'title-label', 'text of label');
 
 });
 
@@ -273,30 +289,6 @@ test('setValue / change event', function() {
 	target.setValue(settingValue);
 
 });
-
-//test('baser.ui.element.Select (v0.0.x)', function() {
-//	expect(4);
-//
-//	var $target = $('#target');
-//
-//	// v0.0.xの設定 設定は要素を new する以前に必要
-//	baser.ui.element.Element.classNameDefaultSeparatorForModifier = baser.ui.element.ClassNameSeparatorForBEM.HYPHEN;
-//	baser.ui.element.Select.classNameWrapper = 'form-element-wrapper';
-//
-//	var target = new baser.ui.element.Select($target);
-//
-//	ok(target.$el.hasClass('-bc-form-element'), 'class name of this element');
-//	ok(target.$el.hasClass('-bc-form-element-blur'), 'class name of this element on blur');
-//	ok(target.$el.parent().hasClass('-bc-form-element-wrapper'), 'class name of wrapper');
-//
-//	target.$el.on('focus', function() {
-//		var $this = $(this);
-//		ok($this.hasClass('-bc-form-element-focus'), 'class name of this element on focus');
-//	});
-//
-//	target.$el.trigger('focus');
-//
-//});
 
 </script>
 

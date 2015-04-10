@@ -176,13 +176,9 @@ module baser {
 				 *
 				 */
 				constructor ($el: JQuery, options: SelectOption) {
-
 					var config: SelectOption = $.extend({}, FormElement.defaultOption, Select.defaultOption, options);
-
 					super($el, config);
-
 					this._update();
-
 				}
 
 				/**
@@ -197,41 +193,6 @@ module baser {
 					super._setClassName();
 					// セレクトボックス用のクラス名を設定
 					this.addClass(Select.classNameSelect);
-				}
-
-				/**
-				 * ラベル要素内のテキストを取得する
-				 *
-				 * @version 0.4.0
-				 * @since 0.4.0
-				 *
-				 */
-				protected _getLabelText (): string {
-					var $labelClone: JQuery;
-					if (this.$label.length) {
-						$labelClone = this.$label.clone();
-						$labelClone.find('select').remove();
-						return $.trim($labelClone.text());
-					} else {
-						return '';
-					}
-				}
-
-				/**
-				 * ラベル要素を割り当てる
-				 *
-				 * @version 0.4.0
-				 * @since 0.4.0
-				 * @override
-				 *
-				 */
-				protected _asignLabel (config: FormElementOption): void {
-					var $elements: JQuery;
-					super._asignLabel(config);
-					$elements = this.$label.children().detach();
-					this.$label.empty();
-					this.$label.append($elements);
-					Element.addClassTo(this.$label, Select.classNameSelect, FormElement.classNameLabel);
 				}
 
 				/**
@@ -258,7 +219,7 @@ module baser {
 				protected _createPsuedoElements (config: SelectOption): void {
 					this.$pseudo = $('<a />'); // Focusable
 					this.$pseudo.attr('href', '#');
-					this.$pseudo.appendTo(this.$label);
+					this.$pseudo.insertAfter(this.$el);
 					Element.addClassTo(this.$pseudo, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
 
