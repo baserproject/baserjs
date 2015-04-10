@@ -224,13 +224,13 @@ module baser {
 					Element.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
 
 					this.$selected = $('<span />');
-					this.$selected.attr('tabindex', -1);
+					this.$selected.attr('tabindex', -1); // Unfocusable
 					this.$selected.appendTo(this.$pseudo);
 					Element.addClassTo(this.$selected, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
 
 					this.$options = $('<ul />');
-					this.$options.attr('tabindex', -1);
+					this.$options.attr('tabindex', -1); // Unfocusable
 					this.$options.appendTo(this.$pseudo);
 					Element.addClassTo(this.$options, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
