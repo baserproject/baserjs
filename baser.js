@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.4.0 r220
- * update: 2015-04-11
+ * baserjs - v0.4.0 r221
+ * update: 2015-04-13
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1223,6 +1223,16 @@ var baser;
             function Scroll() {
                 this.timer = new ui.Timer();
             }
+            /**
+             * 対象の要素もしくは位置にスクロールを移動させる
+             *
+             * @version 0.3.2
+             * @since 0.0.8
+             * @param {string | HTMLElement | JQuery | number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
+             * @param {ScrollOptions} オプション
+             * @return {Scroll} 自信のスクロールオブジェクト
+             *
+             */
             Scroll.prototype.to = function (selector, options) {
                 var _this = this;
                 var ele;
@@ -1250,8 +1260,8 @@ var baser;
                     });
                 }
                 // 第一引数が数値だった場合はその値のy軸へスクロール
-                if ($.isNumeric(selector)) {
-                    offset += (parseFloat(selector) || 0);
+                if (typeof selector === 'number') {
+                    offset += selector || 0;
                     this.targetX = 0;
                     this.targetY = offset;
                 }
@@ -1283,7 +1293,9 @@ var baser;
                     if ($target.length) {
                         ui.Timer.wait(Scroll.delayWhenURLHashTarget, function () {
                             window.scrollTo(0, 0);
-                            _this.to($target, offset);
+                            _this.to($target, {
+                                offset: offset
+                            });
                             return;
                         });
                     }
