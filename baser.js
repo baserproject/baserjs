@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.4.0 r221
+ * baserjs - v0.4.1 r227
  * update: 2015-04-13
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1994,7 +1994,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -2009,19 +2009,23 @@ var baser;
                      *
                      */
                     this.hasFocus = false;
-                    var config = $.extend({}, FormElement.defaultOption, options);
+                    // IE6・7は反映させない
+                    if (!$el[0].querySelector) {
+                        return;
+                    }
+                    this._config = $.extend({}, FormElement.defaultOption, options);
                     // クラス名を設定す
                     this._setClassName();
                     // ラベル要素の割り当て
-                    this._asignLabel(config);
+                    this._asignLabel();
                     // ラベルテキストの設定
-                    this._setLabelText(config);
+                    this._setLabelText();
                     // ラップ要素の割り当て
                     this._createWrapper();
                     // 擬似要素生成
-                    this._createPsuedoElements(config);
+                    this._createPsuedoElements();
                     // イベントを登録
-                    this._bindEvents(config);
+                    this._bindEvents();
                     // 初期状態を設定
                     this.defaultValue = this.$el.val();
                     this.setDisabled($el.prop('disabled'));
@@ -2043,19 +2047,19 @@ var baser;
                 /**
                  * ラベル要素内のテキストを取得する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
-                FormElement.prototype._setLabelText = function (config) {
+                FormElement.prototype._setLabelText = function () {
                     var _this = this;
                     var $labelContents = this.$label.contents();
                     var $before = $();
                     var $after = $();
                     var isBefore = true;
-                    if (config.label) {
-                        this.$label.prepend(config.label);
-                        this.labelBeforeText = config.label;
+                    if (this._config.label) {
+                        this.$label.prepend(this._config.label);
+                        this.labelBeforeText = this._config.label;
                         this.labelAfterText = '';
                     }
                     else {
@@ -2091,11 +2095,11 @@ var baser;
                 /**
                  * ラベル要素を割り当てる
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
-                FormElement.prototype._asignLabel = function (config) {
+                FormElement.prototype._asignLabel = function () {
                     var $label;
                     var hasLabel;
                     // 祖先のlabel要素を検索
@@ -2110,14 +2114,14 @@ var baser;
                         hasLabel = !!$label.length;
                     }
                     // ラベルがないときにラベル要素を生成する
-                    if (config.autoLabeling && !hasLabel) {
+                    if (this._config.autoLabeling && !hasLabel) {
                         // label(もしくは別の)要素の生成
-                        $label = $('<' + config.labelTag.toLowerCase() + ' />');
+                        $label = $('<' + this._config.labelTag.toLowerCase() + ' />');
                         $label.insertAfter(this.$el);
-                        if (config.labelClass) {
-                            $label.addClass(config.labelClass);
+                        if (this._config.labelClass) {
+                            $label.addClass(this._config.labelClass);
                         }
-                        if (config.labelTag.toLowerCase() === 'label') {
+                        if (this._config.labelTag.toLowerCase() === 'label') {
                             // labelを生成したのならfor属性にidを紐付ける
                             $label.attr('for', this.id);
                         }
@@ -2150,24 +2154,26 @@ var baser;
                 /**
                  * 擬似要素を生成する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
-                FormElement.prototype._createPsuedoElements = function (config) {
+                FormElement.prototype._createPsuedoElements = function () {
                     // void
                 };
                 /**
                  * イベントの登録
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
-                FormElement.prototype._bindEvents = function (config) {
+                FormElement.prototype._bindEvents = function () {
                     var _this = this;
                     this.$el.on('focus.bcFormElement', function () {
-                        _this._onfocus();
+                        if (!_this.disabled) {
+                            _this._onfocus();
+                        }
                     });
                     this.$el.on('blur.bcFormElement', function () {
                         _this._onblur();
@@ -2249,7 +2255,7 @@ var baser;
                 /**
                  * 値を設定する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
@@ -2257,7 +2263,7 @@ var baser;
                     if (isSilent === void 0) { isSilent = false; }
                     var valueString = String(value);
                     var currentValue = this.$el.val();
-                    if (currentValue !== valueString) {
+                    if (!this.disabled && currentValue !== valueString) {
                         this.$el.val(valueString);
                         this._fireChangeEvent(isSilent);
                     }
@@ -2368,14 +2374,14 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
                  *
                  */
                 function TextField($el, options) {
-                    _super.call(this, $el, options);
+                    _super.call(this, $el, $.extend({}, TextField.defaultOption, options));
                     /**
                      * プレースホルダーテキスト
                      *
@@ -2384,6 +2390,10 @@ var baser;
                      *
                      */
                     this.placeholder = '';
+                    // IE6・7は反映させない
+                    if (!$el[0].querySelector) {
+                        return;
+                    }
                     this.placeholder = this.$el.attr('placeholder') || '';
                     this.hasPlaceholder = !!this.placeholder;
                     this._update();
@@ -2416,14 +2426,14 @@ var baser;
                 /**
                  * イベントの登録
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  * @override
                  *
                  */
-                TextField.prototype._bindEvents = function (config) {
+                TextField.prototype._bindEvents = function () {
                     var _this = this;
-                    _super.prototype._bindEvents.call(this, config);
+                    _super.prototype._bindEvents.call(this);
                     // keyupイベントが起こった場合に実行するルーチン
                     $(document).on('keyup.bcTextField-' + this.id, function (e) {
                         if (_this.hasFocus) {
@@ -2604,14 +2614,18 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
                  *
                  */
                 function Select($el, options) {
-                    _super.call(this, $el, options);
+                    _super.call(this, $el, $.extend({}, Select.defaultOption, options));
+                    // IE6・7は反映させない
+                    if (!$el[0].querySelector) {
+                        return;
+                    }
                     this._update();
                 }
                 /**
@@ -2642,12 +2656,12 @@ var baser;
                 /**
                  * 擬似セレクトボックス要素を生成する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  * @override
                  *
                  */
-                Select.prototype._createPsuedoElements = function (config) {
+                Select.prototype._createPsuedoElements = function () {
                     var _this = this;
                     this.$pseudo = $('<a />');
                     this.$pseudo.attr('href', '#'); // Focusable
@@ -2658,21 +2672,23 @@ var baser;
                     this.$selected.appendTo(this.$pseudo);
                     element.Element.addClassTo(this.$selected, element.FormElement.classNameFormElementCommon);
                     element.Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
-                    this.$options = $('<ul />');
-                    this.$options.appendTo(this.$pseudo);
-                    element.Element.addClassTo(this.$options, element.FormElement.classNameFormElementCommon);
-                    element.Element.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
-                    this.$el.find('option').each(function (i, opt) {
-                        var $opt = $(opt);
-                        var value = $opt.val();
-                        var text = $opt.text();
-                        var $psuedoOpt = $('<li />');
-                        $psuedoOpt.appendTo(_this.$options);
-                        $psuedoOpt.data('value', value);
-                        $psuedoOpt.text(text);
-                        element.Element.addClassTo($psuedoOpt, element.FormElement.classNameFormElementCommon);
-                        element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
-                    });
+                    if (!this._config.useDefaultOptionList) {
+                        this.$options = $('<ul />');
+                        this.$options.appendTo(this.$pseudo);
+                        element.Element.addClassTo(this.$options, element.FormElement.classNameFormElementCommon);
+                        element.Element.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
+                        this.$el.find('option').each(function (i, opt) {
+                            var $opt = $(opt);
+                            var value = $opt.val();
+                            var text = $opt.text();
+                            var $psuedoOpt = $('<li />');
+                            $psuedoOpt.appendTo(_this.$options);
+                            $psuedoOpt.data('value', value);
+                            $psuedoOpt.text(text);
+                            element.Element.addClassTo($psuedoOpt, element.FormElement.classNameFormElementCommon);
+                            element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
+                        });
+                    }
                     if (ui.Browser.spec.isTouchable) {
                         if (ui.Browser.spec.ua.iPhone || ui.Browser.spec.ua.iPod) {
                             this.addClass(Select.classNameOsIOs);
@@ -2685,7 +2701,7 @@ var baser;
                             element.Element.addClassTo(this.$label, Select.classNameOsAndroid);
                         }
                     }
-                    if (config.useDefaultOptionList) {
+                    if (this._config.useDefaultOptionList) {
                         this.addClass(Select.classNameUseDefaultOptionList);
                         element.Element.addClassTo(this.$wrapper, Select.classNameUseDefaultOptionList);
                         element.Element.addClassTo(this.$label, Select.classNameUseDefaultOptionList);
@@ -2694,14 +2710,14 @@ var baser;
                 /**
                  * イベントの登録
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  * @override
                  *
                  */
-                Select.prototype._bindEvents = function (config) {
+                Select.prototype._bindEvents = function () {
                     var _this = this;
-                    _super.prototype._bindEvents.call(this, config);
+                    _super.prototype._bindEvents.call(this);
                     // changeイベントが起こった場合に実行するルーチン
                     this.$el.on('change.bcSelect', function () {
                         _this._update();
@@ -2710,15 +2726,15 @@ var baser;
                     this.$pseudo.on('click.bcSelect', 'li', function (e) {
                         var $li = $(e.target);
                         var index = $li.index();
-                        _this.setIndex(index);
                         _this._onblur();
+                        _this.setIndex(index);
                         e.stopPropagation();
                         e.preventDefault();
                     });
                     this.$pseudo.on('click.bcSelect', function (e) {
                         e.preventDefault();
                     });
-                    if (!config.useDefaultOptionList) {
+                    if (!this._config.useDefaultOptionList) {
                         this._psuedoFocusEvent();
                     }
                     else {
@@ -2744,21 +2760,26 @@ var baser;
                  *
                  */
                 Select.prototype._scrollToSelectedPosition = function () {
-                    var $psuedoOptList = this.$options.find('li');
+                    var $psuedoOptList;
                     var $psuedoOpt;
-                    this.$el.find('option').each(function (i, opt) {
-                        var $opt = $(opt);
-                        var isSelected = $opt.prop('selected');
-                        if (isSelected) {
-                            $psuedoOpt = $psuedoOptList.eq(i);
+                    var optPos;
+                    var cntPos;
+                    if (this.$options) {
+                        $psuedoOptList = this.$options.find('li');
+                        this.$el.find('option').each(function (i, opt) {
+                            var $opt = $(opt);
+                            var isSelected = $opt.prop('selected');
+                            if (isSelected) {
+                                $psuedoOpt = $psuedoOptList.eq(i);
+                            }
+                        });
+                        // ポジションを正しく取得するために一度スクロール位置をリセットする
+                        this.$options.scrollTop(0);
+                        optPos = $psuedoOpt.offset();
+                        cntPos = this.$options.offset();
+                        if (optPos && cntPos) {
+                            this.$options.scrollTop(optPos.top - cntPos.top);
                         }
-                    });
-                    // ポジションを正しく取得するために一度スクロール位置をリセットする
-                    this.$options.scrollTop(0);
-                    var optPos = $psuedoOpt.offset();
-                    var cntPos = this.$options.offset();
-                    if (optPos && cntPos) {
-                        this.$options.scrollTop(optPos.top - cntPos.top);
                     }
                 };
                 /**
@@ -2775,7 +2796,9 @@ var baser;
                     // セレクトボックス本体にフォーカスがあたったら、
                     // 擬似要素のほうへフォーカスを即座に移動させる
                     this.$el.on('focus.bcSelect', function (e) {
-                        _this.$pseudo.focus();
+                        if (!_this.disabled) {
+                            _this.$pseudo.focus();
+                        }
                         e.stopPropagation();
                         e.preventDefault();
                     });
@@ -2790,11 +2813,18 @@ var baser;
                     });
                     // 擬似セレクトボックスにフォーカスorクリックが起こった時に発火する
                     this.$pseudo.on('focus.bcSelect', function (e) {
-                        _this._onfocus();
+                        if (!_this.disabled) {
+                            _this._onfocus();
+                        }
+                        else {
+                            _this.$pseudo.blur();
+                        }
                         // ドキュメントに伝達しない
                         e.stopPropagation();
                     }).on('click.bcSelect', function (e) {
-                        _this._onfocus();
+                        if (!_this.disabled) {
+                            _this._onfocus();
+                        }
                         // ドキュメントに伝達しない
                         e.stopPropagation();
                         // href="#"なのでデフォルトイベントを抑制
@@ -2834,7 +2864,9 @@ var baser;
                                     break;
                                 }
                                 case 13: {
-                                    _this._fireChangeEvent();
+                                    if (_this._currentIndex !== _this.getIndex()) {
+                                        _this._fireChangeEvent();
+                                    }
                                     _this._onblur();
                                     e.preventDefault();
                                     break;
@@ -2846,7 +2878,7 @@ var baser;
                 /**
                  * フォーカスがあたった時の処理
                  *
-                 * @version 0.1.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @override
                  *
@@ -2862,6 +2894,8 @@ var baser;
                         element.Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', element.FormElement.classNameStateBlur);
                         // スクロール位置を調整する
                         this._scrollToSelectedPosition();
+                        // 一覧を開いた時のインデックス番号を記録する
+                        this._currentIndex = this.getIndex();
                     }
                 };
                 /**
@@ -2882,31 +2916,35 @@ var baser;
                 /**
                  * 要素の状態を更新する
                  *
-                 * @version 0.1.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  *
                  */
                 Select.prototype._update = function () {
                     var _this = this;
-                    var $selectedOption = this.$el.find(':selected');
-                    var $psuedoOptList = this.$options.find('li');
-                    this.$el.find('option').each(function (i, opt) {
-                        var $opt = $(opt);
-                        var isSelected = $opt.prop('selected');
-                        var $psuedoOpt = $psuedoOptList.eq(i);
-                        if (isSelected) {
-                            _this.$selected.text($opt.text());
-                        }
-                        $psuedoOpt.attr('aria-selected', '' + isSelected);
-                        if (isSelected) {
-                            element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
-                            element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
-                        }
-                        else {
-                            element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
-                            element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
-                        }
-                    });
+                    var $selectedOption;
+                    var $psuedoOptList;
+                    if (this.$options) {
+                        $selectedOption = this.$el.find(':selected');
+                        $psuedoOptList = this.$options.find('li');
+                        this.$el.find('option').each(function (i, opt) {
+                            var $opt = $(opt);
+                            var isSelected = $opt.prop('selected');
+                            var $psuedoOpt = $psuedoOptList.eq(i);
+                            if (isSelected) {
+                                _this.$selected.text($opt.text());
+                            }
+                            $psuedoOpt.attr('aria-selected', '' + isSelected);
+                            if (isSelected) {
+                                element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+                                element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
+                            }
+                            else {
+                                element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
+                                element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+                            }
+                        });
+                    }
                 };
                 /**
                  * 値を設定する
@@ -2927,7 +2965,7 @@ var baser;
                 /**
                  * 値をインデックス番号から設定する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
@@ -2980,6 +3018,23 @@ var baser;
                     var currentIndex = this.getIndex();
                     var prevIndex = currentIndex - 1;
                     this.setIndex(Math.max(prevIndex, 0), isSilent);
+                };
+                /**
+                 * 無効状態を設定する
+                 *
+                 * @version 0.4.1
+                 * @since 0.4.1
+                 * @override
+                 *
+                 */
+                Select.prototype.setDisabled = function (isDisabled) {
+                    _super.prototype.setDisabled.call(this, isDisabled);
+                    if (this.disabled) {
+                        this.$pseudo.attr('tabindex', -1);
+                    }
+                    else {
+                        this.$pseudo.removeAttr('tabindex');
+                    }
                 };
                 /**
                  * オプションのデフォルト値
@@ -3095,7 +3150,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.1
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -3103,9 +3158,12 @@ var baser;
                  */
                 function CheckableElement($el, options) {
                     var _this = this;
-                    _super.call(this, $el, options);
-                    var config = $.extend({}, element.FormElement.defaultOption, CheckableElement.defaultOption, options);
-                    this._checkedClass = config.checkedClass;
+                    _super.call(this, $el, $.extend({}, CheckableElement.defaultOption, options));
+                    // IE6・7は反映させない
+                    if (!$el[0].querySelector) {
+                        return;
+                    }
+                    this._checkedClass = this._config.checkedClass;
                     this.checked = this.$el.prop('checked');
                     this.defaultChecked = this.$el.prop('defaultChecked');
                     this._update();
@@ -3220,7 +3278,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -3228,6 +3286,10 @@ var baser;
                  */
                 function Radio($el, options) {
                     _super.call(this, $el, options);
+                    // IE6・7は反映させない
+                    if (!$el[0].querySelector) {
+                        return;
+                    }
                     this.addClass(Radio.classNameRadio);
                     element.Element.addClassTo(this.$label, Radio.classNameRadio, element.FormElement.classNameLabel);
                     element.Element.addClassTo(this.$wrapper, Radio.classNameRadio + '-' + element.FormElement.classNameWrapper);
@@ -3281,7 +3343,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -3289,6 +3351,10 @@ var baser;
                  */
                 function Checkbox($el, options) {
                     _super.call(this, $el, options);
+                    // IE6・7は反映させない
+                    if (!$el[0].querySelector) {
+                        return;
+                    }
                     this.addClass(Checkbox.classNameCheckbox);
                     element.Element.addClassTo(this.$label, Checkbox.classNameCheckbox, element.FormElement.classNameLabel);
                     element.Element.addClassTo(this.$wrapper, Checkbox.classNameCheckbox + '-' + element.FormElement.classNameWrapper);

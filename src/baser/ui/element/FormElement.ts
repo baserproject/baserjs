@@ -415,7 +415,7 @@ module baser {
 				protected _bindEvents (): void {
 					this.$el.on('focus.bcFormElement', (): void => {
 						if (!this.disabled) {
-						this._onfocus();
+							this._onfocus();
 						}
 					});
 

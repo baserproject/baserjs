@@ -1052,9 +1052,16 @@ declare module baser {
                  */
                 $wrapper: JQuery;
                 /**
+                 * オプション情報
+                 *
+                 * @since 0.4.1
+                 *
+                 */
+                protected _config: FormElementOption;
+                /**
                  * コンストラクタ
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1072,19 +1079,19 @@ declare module baser {
                 /**
                  * ラベル要素内のテキストを取得する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
-                private _setLabelText(config);
+                private _setLabelText();
                 /**
                  * ラベル要素を割り当てる
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
-                private _asignLabel(config);
+                private _asignLabel();
                 /**
                  * ラップ要素を生成
                  *
@@ -1096,19 +1103,19 @@ declare module baser {
                 /**
                  * 擬似要素を生成する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
-                protected _createPsuedoElements(config: FormElementOption): void;
+                protected _createPsuedoElements(): void;
                 /**
                  * イベントの登録
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
-                protected _bindEvents(config: FormElementOption): void;
+                protected _bindEvents(): void;
                 /**
                  * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
                  *
@@ -1144,7 +1151,7 @@ declare module baser {
                 /**
                  * 値を設定する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
@@ -1249,9 +1256,16 @@ declare module baser {
                  */
                 hasPlaceholder: boolean;
                 /**
+                 * オプション情報
+                 *
+                 * @since 0.4.1
+                 *
+                 */
+                protected _config: TextFieldOption;
+                /**
                  * コンストラクタ
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1279,12 +1293,12 @@ declare module baser {
                 /**
                  * イベントの登録
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  * @override
                  *
                  */
-                protected _bindEvents(config: TextFieldOption): void;
+                protected _bindEvents(): void;
                 /**
                  * 要素の状態を更新する
                  *
@@ -1496,9 +1510,23 @@ declare module baser {
                  */
                 $options: JQuery;
                 /**
+                 * オプション情報
+                 *
+                 * @since 0.4.1
+                 *
+                 */
+                protected _config: SelectOption;
+                /**
+                 * 現在選択されているインデックス
+                 *
+                 * @since 0.4.1
+                 *
+                 */
+                private _currentIndex;
+                /**
                  * コンストラクタ
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1526,21 +1554,21 @@ declare module baser {
                 /**
                  * 擬似セレクトボックス要素を生成する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  * @override
                  *
                  */
-                protected _createPsuedoElements(config: SelectOption): void;
+                protected _createPsuedoElements(): void;
                 /**
                  * イベントの登録
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  * @override
                  *
                  */
-                protected _bindEvents(config: SelectOption): void;
+                protected _bindEvents(): void;
                 /**
                  * 他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理
                  *
@@ -1578,7 +1606,7 @@ declare module baser {
                 /**
                  * フォーカスがあたった時の処理
                  *
-                 * @version 0.1.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @override
                  *
@@ -1595,7 +1623,7 @@ declare module baser {
                 /**
                  * 要素の状態を更新する
                  *
-                 * @version 0.1.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  *
                  */
@@ -1612,7 +1640,7 @@ declare module baser {
                 /**
                  * 値をインデックス番号から設定する
                  *
-                 * @version 0.4.0
+                 * @version 0.4.1
                  * @since 0.4.0
                  *
                  */
@@ -1641,6 +1669,15 @@ declare module baser {
                  *
                  */
                 prev(isSilent: boolean): void;
+                /**
+                 * 無効状態を設定する
+                 *
+                 * @version 0.4.1
+                 * @since 0.4.1
+                 * @override
+                 *
+                 */
+                setDisabled(isDisabled: boolean): void;
             }
         }
     }
@@ -1728,9 +1765,16 @@ declare module baser {
                  */
                 private _checkedClass;
                 /**
+                 * オプション情報
+                 *
+                 * @since 0.4.1
+                 *
+                 */
+                protected _config: CheckableElementOption;
+                /**
                  * コンストラクタ
                  *
-                 * @version 0.0.1
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1795,7 +1839,7 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -1844,7 +1888,7 @@ declare module baser {
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.1.0
+                 * @version 0.4.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
