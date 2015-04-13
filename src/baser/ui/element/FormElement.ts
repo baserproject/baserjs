@@ -414,7 +414,9 @@ module baser {
 				 */
 				protected _bindEvents (): void {
 					this.$el.on('focus.bcFormElement', (): void => {
+						if (!this.disabled) {
 						this._onfocus();
+						}
 					});
 
 					this.$el.on('blur.bcFormElement', (): void => {
@@ -548,14 +550,14 @@ module baser {
 				/**
 				 * 値を設定する
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 *
 				 */
 				public setValue (value: string | number | boolean, isSilent: boolean = false): void {
 					var valueString: string = String(value);
 					var currentValue: string = this.$el.val();
-					if (currentValue !== valueString) {
+					if (!this.disabled && currentValue !== valueString) {
 						this.$el.val(valueString);
 						this._fireChangeEvent(isSilent);
 					}

@@ -369,7 +369,9 @@ module baser {
 					// セレクトボックス本体にフォーカスがあたったら、
 					// 擬似要素のほうへフォーカスを即座に移動させる
 					this.$el.on('focus.bcSelect', (e: JQueryEventObject): void => {
+						if (!this.disabled) {
 						this.$pseudo.focus();
+						}
 						e.stopPropagation();
 						e.preventDefault();
 					});
@@ -387,12 +389,18 @@ module baser {
 					// 擬似セレクトボックスにフォーカスorクリックが起こった時に発火する
 					this.$pseudo
 						.on('focus.bcSelect', (e: JQueryEventObject): void => {
+							if (!this.disabled) {
 							this._onfocus();
+							} else {
+								this.$pseudo.blur();
+							}
 							// ドキュメントに伝達しない
 							e.stopPropagation();
 						})
 						.on('click.bcSelect', (e: JQueryEventObject): void => {
+							if (!this.disabled) {
 							this._onfocus();
+							}
 							// ドキュメントに伝達しない
 							e.stopPropagation();
 							// href="#"なのでデフォルトイベントを抑制
@@ -592,6 +600,23 @@ module baser {
 					var currentIndex: number = this.getIndex();
 					var prevIndex: number = currentIndex - 1;
 					this.setIndex(Math.max(prevIndex, 0), isSilent);
+				}
+
+				/**
+				 * 無効状態を設定する
+				 *
+				 * @version 0.4.1
+				 * @since 0.4.1
+				 * @override
+				 *
+				 */
+				public setDisabled (isDisabled: boolean): void {
+					super.setDisabled(isDisabled);
+					if (this.disabled) {
+						this.$pseudo.attr('tabindex', -1);
+					} else {
+						this.$pseudo.removeAttr('tabindex');
+					}
 				}
 
 			}
