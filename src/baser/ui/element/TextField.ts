@@ -95,16 +95,26 @@ module baser {
 				public hasPlaceholder: boolean;
 
 				/**
+				 * オプション情報
+				 *
+				 * @since 0.4.1
+				 *
+				 */
+				protected _config: TextFieldOption;
+
+				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
 				 *
 				 */
 				constructor ($el: JQuery, options: TextFieldOption) {
-					super($el, options);
+
+					super($el, $.extend({}, TextField.defaultOption, options));
+
 					// IE6・7は反映させない
 					if (!$el[0].querySelector) {
 						return;
@@ -146,13 +156,13 @@ module baser {
 				/**
 				 * イベントの登録
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 * @override
 				 *
 				 */
-				protected _bindEvents (config: TextFieldOption): void {
-					super._bindEvents(config);
+				protected _bindEvents (): void {
+					super._bindEvents();
 
 					// keyupイベントが起こった場合に実行するルーチン
 					$(document).on('keyup.bcTextField-' + this.id, (e: JQueryKeyEventObject): void => {

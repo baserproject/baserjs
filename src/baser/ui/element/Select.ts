@@ -167,20 +167,31 @@ module baser {
 				public $options: JQuery;
 
 				/**
+				 * オプション情報
+				 *
+				 * @since 0.4.1
+				 *
+				 */
+				protected _config: SelectOption;
+
+				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
 				 *
 				 */
 				constructor ($el: JQuery, options: SelectOption) {
-					super($el, options);
+
+					super($el, $.extend({}, Select.defaultOption, options));
+
 					// IE6・7は反映させない
 					if (!$el[0].querySelector) {
 						return;
 					}
+
 					this._update();
 				}
 
@@ -214,12 +225,12 @@ module baser {
 				/**
 				 * 擬似セレクトボックス要素を生成する
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 * @override
 				 *
 				 */
-				protected _createPsuedoElements (config: SelectOption): void {
+				protected _createPsuedoElements (): void {
 					this.$pseudo = $('<a />');
 					this.$pseudo.attr('href', '#'); // Focusable
 					this.$pseudo.insertAfter(this.$el);
@@ -259,7 +270,7 @@ module baser {
 						}
 					}
 
-					if (config.useDefaultOptionList) {
+					if (this._config.useDefaultOptionList) {
 						this.addClass(Select.classNameUseDefaultOptionList);
 						Element.addClassTo(this.$wrapper, Select.classNameUseDefaultOptionList);
 						Element.addClassTo(this.$label, Select.classNameUseDefaultOptionList);
@@ -270,13 +281,13 @@ module baser {
 				/**
 				 * イベントの登録
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 * @override
 				 *
 				 */
-				protected _bindEvents (config: SelectOption): void {
-					super._bindEvents(config);
+				protected _bindEvents (): void {
+					super._bindEvents();
 
 					// changeイベントが起こった場合に実行するルーチン
 					this.$el.on('change.bcSelect', (): void => {
@@ -297,7 +308,7 @@ module baser {
 						e.preventDefault();
 					});
 
-					if (!config.useDefaultOptionList) {
+					if (!this._config.useDefaultOptionList) {
 						this._psuedoFocusEvent();
 					} else {
 						// href属性を削除することでフォーカスがあたらなくなる

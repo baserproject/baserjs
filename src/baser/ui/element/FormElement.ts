@@ -198,9 +198,17 @@ module baser {
 				public $wrapper: JQuery;
 
 				/**
+				 * オプション情報
+				 *
+				 * @since 0.4.1
+				 *
+				 */
+				protected _config: FormElementOption;
+
+				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
@@ -210,29 +218,30 @@ module baser {
 
 					super($el);
 
-					var config: FormElementOption = $.extend({}, FormElement.defaultOption, options);
 					// IE6・7は反映させない
 					if (!$el[0].querySelector) {
 						return;
 					}
 
+					this._config = $.extend({}, FormElement.defaultOption, options);
+
 					// クラス名を設定す
 					this._setClassName();
 
 					// ラベル要素の割り当て
-					this._asignLabel(config);
+					this._asignLabel();
 
 					// ラベルテキストの設定
-					this._setLabelText(config);
+					this._setLabelText();
 
 					// ラップ要素の割り当て
 					this._createWrapper();
 
 					// 擬似要素生成
-					this._createPsuedoElements(config);
+					this._createPsuedoElements();
 
 					// イベントを登録
-					this._bindEvents(config);
+					this._bindEvents();
 
 					// 初期状態を設定
 					this.defaultValue = this.$el.val();
@@ -260,20 +269,20 @@ module baser {
 				/**
 				 * ラベル要素内のテキストを取得する
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 *
 				 */
-				private _setLabelText (config: FormElementOption): void {
+				private _setLabelText (): void {
 					var $labelContents: JQuery = this.$label.contents();
 					var $before: JQuery = $();
 					var $after: JQuery = $();
 					var isBefore: boolean = true;
 
-					if (config.label) {
+					if (this._config.label) {
 
-						this.$label.prepend(config.label);
-						this.labelBeforeText = config.label;
+						this.$label.prepend(this._config.label);
+						this.labelBeforeText = this._config.label;
 						this.labelAfterText = '';
 
 					} else {
@@ -318,11 +327,11 @@ module baser {
 				/**
 				 * ラベル要素を割り当てる
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 *
 				 */
-				private _asignLabel (config: FormElementOption): void {
+				private _asignLabel (): void {
 					var $label: JQuery;
 					var hasLabel: boolean;
 
@@ -342,14 +351,14 @@ module baser {
 					}
 
 					// ラベルがないときにラベル要素を生成する
-					if (config.autoLabeling && !hasLabel) {
+					if (this._config.autoLabeling && !hasLabel) {
 						// label(もしくは別の)要素の生成
-						$label = $('<' + config.labelTag.toLowerCase() + ' />');
+						$label = $('<' + this._config.labelTag.toLowerCase() + ' />');
 						$label.insertAfter(this.$el);
-						if (config.labelClass) {
-							$label.addClass(config.labelClass);
+						if (this._config.labelClass) {
+							$label.addClass(this._config.labelClass);
 						}
-						if (config.labelTag.toLowerCase() === 'label') {
+						if (this._config.labelTag.toLowerCase() === 'label') {
 							// labelを生成したのならfor属性にidを紐付ける
 							$label.attr('for', this.id);
 						}
@@ -388,22 +397,22 @@ module baser {
 				/**
 				 * 擬似要素を生成する
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 *
 				 */
-				protected _createPsuedoElements (config: FormElementOption): void {
+				protected _createPsuedoElements (): void {
 					// void
 				}
 
 				/**
 				 * イベントの登録
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 *
 				 */
-				protected _bindEvents (config: FormElementOption): void {
+				protected _bindEvents (): void {
 					this.$el.on('focus.bcFormElement', (): void => {
 						this._onfocus();
 					});

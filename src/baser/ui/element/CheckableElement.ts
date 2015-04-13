@@ -85,24 +85,32 @@ module baser {
 				private _checkedClass: string;
 
 				/**
+				 * オプション情報
+				 *
+				 * @since 0.4.1
+				 *
+				 */
+				protected _config: CheckableElementOption;
+
+				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.1
+				 * @version 0.4.1
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
 				 *
 				 */
 				constructor ($el: JQuery, options: CheckableElementOption) {
-					super($el, options);
 
-					var config: CheckableElementOption = $.extend({}, FormElement.defaultOption, CheckableElement.defaultOption, options);
+					super($el, $.extend({}, CheckableElement.defaultOption, options));
+
 					// IE6・7は反映させない
 					if (!$el[0].querySelector) {
 						return;
 					}
 
-					this._checkedClass = config.checkedClass;
+					this._checkedClass = this._config.checkedClass;
 
 					this.checked = this.$el.prop('checked');
 					this.defaultChecked = this.$el.prop('defaultChecked');
