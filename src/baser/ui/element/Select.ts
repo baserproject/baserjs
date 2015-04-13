@@ -525,17 +525,22 @@ module baser {
 					var $selectedOption: JQuery
 					var $psuedoOptList: JQuery;
 
-					if (this.$options) {
-						$selectedOption = this.$el.find(':selected');
-						$psuedoOptList = this.$options.find('li');
+					$selectedOption = this.$el.find(':selected');
 
-						this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
-							var $opt: JQuery = $(opt);
-							var isSelected: boolean = <boolean> $opt.prop('selected');
-							var $psuedoOpt: JQuery = $psuedoOptList.eq(i);
-							if (isSelected) {
-								this.$selected.text($opt.text());
-							}
+					if (this.$options) {
+						$psuedoOptList = this.$options.find('li');
+					}
+
+					this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
+						var $opt: JQuery = $(opt);
+						var isSelected: boolean;
+						var $psuedoOpt: JQuery;
+						isSelected = <boolean> $opt.prop('selected');
+						if (isSelected) {
+							this.$selected.text($opt.text());
+						}
+						if (this.$options) {
+							$psuedoOpt = $psuedoOptList.eq(i);
 							$psuedoOpt.attr('aria-selected', <string> '' + isSelected);
 							if (isSelected) {
 								Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
@@ -544,8 +549,8 @@ module baser {
 								Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
 								Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
 							}
-						});
-					}
+						}
+					});
 
 				}
 

@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.4.1 r227
+ * baserjs - v0.4.1 r228
  * update: 2015-04-13
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -2924,16 +2924,20 @@ var baser;
                     var _this = this;
                     var $selectedOption;
                     var $psuedoOptList;
+                    $selectedOption = this.$el.find(':selected');
                     if (this.$options) {
-                        $selectedOption = this.$el.find(':selected');
                         $psuedoOptList = this.$options.find('li');
-                        this.$el.find('option').each(function (i, opt) {
-                            var $opt = $(opt);
-                            var isSelected = $opt.prop('selected');
-                            var $psuedoOpt = $psuedoOptList.eq(i);
-                            if (isSelected) {
-                                _this.$selected.text($opt.text());
-                            }
+                    }
+                    this.$el.find('option').each(function (i, opt) {
+                        var $opt = $(opt);
+                        var isSelected;
+                        var $psuedoOpt;
+                        isSelected = $opt.prop('selected');
+                        if (isSelected) {
+                            _this.$selected.text($opt.text());
+                        }
+                        if (_this.$options) {
+                            $psuedoOpt = $psuedoOptList.eq(i);
                             $psuedoOpt.attr('aria-selected', '' + isSelected);
                             if (isSelected) {
                                 element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
@@ -2943,8 +2947,8 @@ var baser;
                                 element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
                                 element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
                             }
-                        });
-                    }
+                        }
+                    });
                 };
                 /**
                  * 値を設定する
