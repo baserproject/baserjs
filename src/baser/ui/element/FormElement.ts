@@ -211,6 +211,10 @@ module baser {
 					super($el);
 
 					var config: FormElementOption = $.extend({}, FormElement.defaultOption, options);
+					// IE6・7は反映させない
+					if (!$el[0].querySelector) {
+						return;
+					}
 
 					// クラス名を設定す
 					this._setClassName();

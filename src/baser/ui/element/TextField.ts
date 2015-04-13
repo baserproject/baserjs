@@ -105,6 +105,10 @@ module baser {
 				 */
 				constructor ($el: JQuery, options: TextFieldOption) {
 					super($el, options);
+					// IE6・7は反映させない
+					if (!$el[0].querySelector) {
+						return;
+					}
 
 					this.placeholder = this.$el.attr('placeholder') || '';
 					this.hasPlaceholder = !!this.placeholder;

@@ -25,7 +25,7 @@ module baser {
 				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.1.0
+				 * @version 0.4.1
 				 * @since 0.0.1
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options オプション
@@ -34,6 +34,11 @@ module baser {
 				constructor ($el: JQuery, options: CheckableElementOption) {
 
 					super($el, options);
+
+					// IE6・7は反映させない
+					if (!$el[0].querySelector) {
+						return;
+					}
 
 					this.addClass(Radio.classNameRadio);
 					Element.addClassTo(this.$label, Radio.classNameRadio, FormElement.classNameLabel);

@@ -97,6 +97,10 @@ module baser {
 					super($el, options);
 
 					var config: CheckableElementOption = $.extend({}, FormElement.defaultOption, CheckableElement.defaultOption, options);
+					// IE6・7は反映させない
+					if (!$el[0].querySelector) {
+						return;
+					}
 
 					this._checkedClass = config.checkedClass;
 

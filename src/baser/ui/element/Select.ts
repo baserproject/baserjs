@@ -177,6 +177,10 @@ module baser {
 				 */
 				constructor ($el: JQuery, options: SelectOption) {
 					super($el, options);
+					// IE6・7は反映させない
+					if (!$el[0].querySelector) {
+						return;
+					}
 					this._update();
 				}
 
