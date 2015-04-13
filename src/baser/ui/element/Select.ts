@@ -242,21 +242,23 @@ module baser {
 					Element.addClassTo(this.$selected, FormElement.classNameFormElementCommon);
 					Element.addClassTo(this.$selected, Select.classNamePseudoSelect, Select.classNamePseudoSelectedDisplay);
 
-					this.$options = $('<ul />');
-					this.$options.appendTo(this.$pseudo);
-					Element.addClassTo(this.$options, FormElement.classNameFormElementCommon);
-					Element.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
-					this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
-						var $opt: JQuery = $(opt);
-						var value: string = $opt.val();
-						var text: string = $opt.text();
-						var $psuedoOpt: JQuery = $('<li />');
-						$psuedoOpt.appendTo(this.$options);
-						$psuedoOpt.data('value', value);
-						$psuedoOpt.text(text);
-						Element.addClassTo($psuedoOpt, FormElement.classNameFormElementCommon);
-						Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
-					});
+					if (!this._config.useDefaultOptionList) {
+						this.$options = $('<ul />');
+						this.$options.appendTo(this.$pseudo);
+						Element.addClassTo(this.$options, FormElement.classNameFormElementCommon);
+						Element.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
+						this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
+							var $opt: JQuery = $(opt);
+							var value: string = $opt.val();
+							var text: string = $opt.text();
+							var $psuedoOpt: JQuery = $('<li />');
+							$psuedoOpt.appendTo(this.$options);
+							$psuedoOpt.data('value', value);
+							$psuedoOpt.text(text);
+							Element.addClassTo($psuedoOpt, FormElement.classNameFormElementCommon);
+							Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption);
+						});
+					}
 
 					if (Browser.spec.isTouchable) {
 						if (Browser.spec.ua.iPhone || Browser.spec.ua.iPod) {
@@ -298,8 +300,8 @@ module baser {
 					this.$pseudo.on('click.bcSelect', 'li', (e: JQueryEventObject): void => {
 						var $li: JQuery = $(e.target);
 						var index: number = $li.index();
-						this.setIndex(index);
 						this._onblur();
+						this.setIndex(index);
 						e.stopPropagation();
 						e.preventDefault();
 					});
@@ -336,21 +338,26 @@ module baser {
 				 *
 				 */
 				private _scrollToSelectedPosition (): void {
-					var $psuedoOptList: JQuery = this.$options.find('li');
+					var $psuedoOptList: JQuery;
 					var $psuedoOpt: JQuery;
-					this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
-						var $opt: JQuery = $(opt);
-						var isSelected: boolean = <boolean> $opt.prop('selected');
-						if (isSelected) {
-							$psuedoOpt = $psuedoOptList.eq(i);
+					var optPos: JQueryCoordinates;
+					var cntPos: JQueryCoordinates;
+					if (this.$options) {
+						$psuedoOptList = this.$options.find('li');
+						this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
+							var $opt: JQuery = $(opt);
+							var isSelected: boolean = <boolean> $opt.prop('selected');
+							if (isSelected) {
+								$psuedoOpt = $psuedoOptList.eq(i);
+							}
+						});
+						// ポジションを正しく取得するために一度スクロール位置をリセットする
+						this.$options.scrollTop(0);
+						optPos = $psuedoOpt.offset();
+						cntPos = this.$options.offset();
+						if (optPos && cntPos) {
+							this.$options.scrollTop(optPos.top - cntPos.top);
 						}
-					});
-					// ポジションを正しく取得するために一度スクロール位置をリセットする
-					this.$options.scrollTop(0);
-					var optPos: JQueryCoordinates = $psuedoOpt.offset();
-					var cntPos: JQueryCoordinates = this.$options.offset();
-					if (optPos && cntPos) {
-						this.$options.scrollTop(optPos.top - cntPos.top);
 					}
 				}
 
@@ -370,7 +377,7 @@ module baser {
 					// 擬似要素のほうへフォーカスを即座に移動させる
 					this.$el.on('focus.bcSelect', (e: JQueryEventObject): void => {
 						if (!this.disabled) {
-						this.$pseudo.focus();
+							this.$pseudo.focus();
 						}
 						e.stopPropagation();
 						e.preventDefault();
@@ -390,7 +397,7 @@ module baser {
 					this.$pseudo
 						.on('focus.bcSelect', (e: JQueryEventObject): void => {
 							if (!this.disabled) {
-							this._onfocus();
+								this._onfocus();
 							} else {
 								this.$pseudo.blur();
 							}
@@ -399,7 +406,7 @@ module baser {
 						})
 						.on('click.bcSelect', (e: JQueryEventObject): void => {
 							if (!this.disabled) {
-							this._onfocus();
+								this._onfocus();
 							}
 							// ドキュメントに伝達しない
 							e.stopPropagation();
@@ -497,31 +504,36 @@ module baser {
 				/**
 				 * 要素の状態を更新する
 				 *
-				 * @version 0.1.0
+				 * @version 0.4.1
 				 * @since 0.0.1
 				 *
 				 */
 				private _update (): void {
 
-					var $selectedOption: JQuery = this.$el.find(':selected');
-					var $psuedoOptList: JQuery = this.$options.find('li');
+					var $selectedOption: JQuery
+					var $psuedoOptList: JQuery;
 
-					this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
-						var $opt: JQuery = $(opt);
-						var isSelected: boolean = <boolean> $opt.prop('selected');
-						var $psuedoOpt: JQuery = $psuedoOptList.eq(i);
-						if (isSelected) {
-							this.$selected.text($opt.text());
-						}
-						$psuedoOpt.attr('aria-selected', <string> '' + isSelected);
-						if (isSelected) {
-							Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
-							Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
-						} else {
-							Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
-							Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
-						}
-					});
+					if (this.$options) {
+						$selectedOption = this.$el.find(':selected');
+						$psuedoOptList = this.$options.find('li');
+
+						this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
+							var $opt: JQuery = $(opt);
+							var isSelected: boolean = <boolean> $opt.prop('selected');
+							var $psuedoOpt: JQuery = $psuedoOptList.eq(i);
+							if (isSelected) {
+								this.$selected.text($opt.text());
+							}
+							$psuedoOpt.attr('aria-selected', <string> '' + isSelected);
+							if (isSelected) {
+								Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+								Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
+							} else {
+								Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
+								Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+							}
+						});
+					}
 
 				}
 
