@@ -175,6 +175,14 @@ module baser {
 				protected _config: SelectOption;
 
 				/**
+				 * 現在選択されているインデックス
+				 *
+				 * @since 0.4.1
+				 *
+				 */
+				private _currentIndex: number;
+
+				/**
 				 * コンストラクタ
 				 *
 				 * @version 0.4.1
@@ -453,7 +461,9 @@ module baser {
 								}
 								// Return (Enter)
 								case 13: {
-									this._fireChangeEvent();
+									if (this._currentIndex !== this.getIndex()) {
+										this._fireChangeEvent();
+									}
 									this._onblur();
 									e.preventDefault();
 									break;
@@ -466,7 +476,7 @@ module baser {
 				/**
 				 * フォーカスがあたった時の処理
 				 *
-				 * @version 0.1.0
+				 * @version 0.4.1
 				 * @since 0.0.1
 				 * @override
 				 *
@@ -482,6 +492,8 @@ module baser {
 						Element.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
 						// スクロール位置を調整する
 						this._scrollToSelectedPosition();
+						// 一覧を開いた時のインデックス番号を記録する
+						this._currentIndex = this.getIndex();
 					}
 				}
 
@@ -557,7 +569,7 @@ module baser {
 				/**
 				 * 値をインデックス番号から設定する
 				 *
-				 * @version 0.4.0
+				 * @version 0.4.1
 				 * @since 0.4.0
 				 *
 				 */
