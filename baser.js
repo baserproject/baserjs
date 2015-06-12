@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.5.0-rc r234
+ * baserjs - v0.5.0-rc r235
  * update: 2015-06-12
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -4220,14 +4220,19 @@ var baser;
     // jQueryのインスタンスメソッドとしてprototypeに登録
     $.fn.bcBoxAlignHeight = bcBoxAlignHeight;
 })(baser || (baser = {}));
+// @version 0.5.0
+// @since 0.1.0
 $.fn.bcBoxLink = function () {
     this.on('click', function (e) {
         var $elem = $(this);
         var $link = $elem.find('a, area').eq(0);
         var href = $link.prop('href');
-        var isBlank = $link.prop('target') === '_blank';
-        baser.ui.Browser.jumpTo(href, isBlank);
-        e.preventDefault();
+        var isBlank;
+        if ($link.length && href) {
+            isBlank = $link.prop('target') === '_blank';
+            baser.ui.Browser.jumpTo(href, isBlank);
+            e.preventDefault();
+        }
     });
     return this;
 };
