@@ -176,7 +176,7 @@ declare module baser {
             /**
              * イベントハンドラを発火させる
              *
-             * @version 0.3.0
+             * @version 0.5.0
              * @since 0.0.10
              *
              */
@@ -2182,6 +2182,50 @@ declare module baser {
                  *
                  */
                 showinfo?: boolean;
+                /**
+                 * 初期状態でミュートするかどうか
+                 *
+                 * @since 0.5.0
+                 *
+                 */
+                mute?: boolean;
+            }
+            /**
+             * Youtubeインスタンスの muteControllerメソッドのオプション
+             *
+             * @version 0.5.0
+             * @since 0.5.0
+             *
+             */
+            interface YoutubeMuteControllerOptions {
+                /**
+                 * コントローラが実行されるイベントタイプ
+                 *
+                 * @since 0.5.0
+                 *
+                 */
+                eventType?: string;
+                /**
+                 * 適用要素に付加されるミュート状態のクラス名
+                 *
+                 * @since 0.5.0
+                 *
+                 */
+                mutedClass?: string;
+                /**
+                 * 適用要素に付加されるミュートでない状態クラス名
+                 *
+                 * @since 0.5.0
+                 *
+                 */
+                unmutedClass?: string;
+                /**
+                 * 適用要素に付加されるクラス名
+                 *
+                 * @since 0.5.0
+                 *
+                 */
+                baseClass?: string;
             }
             /**
              * YouTube要素
@@ -2248,6 +2292,36 @@ declare module baser {
                  */
                 movieOption: YoutubeOption;
                 /**
+                 * プレイヤーオブジェクト
+                 *
+                 * @version 0.5.0
+                 * @since 0.5.0
+                 *
+                 */
+                player: YT.Player;
+                /**
+                 * プレイヤーが有効になっているかどうか
+                 *
+                 * @version 0.5.0
+                 * @since 0.5.0
+                 *
+                 */
+                isEmbeded: boolean;
+                /**
+                 * ミュートされているかどうか
+                 *
+                 * `this.player.isMuted()` を利用すれば判定はできるが
+                 * `this.player.mute()` もしくは `this.player.unMute()` 実行直後では
+                 * `this.player.isMuted()` の判定が不安定なため
+                 * （APIの実行完了を監視しなければならないが、そのためのイベントが存在しない）
+                 * 独自にインスタンスプロパティとして保持する
+                 *
+                 * @version 0.5.0
+                 * @since 0.5.0
+                 *
+                 */
+                private _isMuted;
+                /**
                  * コンストラクタ
                  *
                  * @version 0.0.7
@@ -2261,7 +2335,7 @@ declare module baser {
                  *
                  * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
                  *
-                 * @version 0.3.0
+                 * @version 0.5.0
                  * @since 0.0.7
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @return {booelan} 初期化が成功したかどうか
@@ -2269,6 +2343,9 @@ declare module baser {
                  */
                 private _init(options?);
                 reload(options?: YoutubeOption): void;
+                mute(): void;
+                unMute(): void;
+                muteController($el: any, options: YoutubeMuteControllerOptions): void;
             }
         }
     }

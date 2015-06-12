@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.4.1 r228
- * update: 2015-04-13
+ * baserjs - v0.5.0-rc r234
+ * update: 2015-06-12
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -663,21 +663,20 @@ var baser;
             /**
              * イベントハンドラを発火させる
              *
-             * @version 0.3.0
+             * @version 0.5.0
              * @since 0.0.10
              *
              */
             EventDispacher.prototype.trigger = function (type, args, context) {
                 if (args === void 0) { args = []; }
+                var handlers;
                 var eventHandler;
                 var e;
                 context = context || this;
-                var i = 0;
-                var l;
                 if (types[type]) {
-                    l = types[type].length;
-                    for (; i < l; i++) {
-                        eventHandler = types[type][i];
+                    handlers = types[type].slice(); // clone
+                    while (handlers.length) {
+                        eventHandler = handlers.shift();
                         if (eventHandler.context === this) {
                             e = new DispacheEvent(type);
                             eventHandler.handler.apply(context, [e].concat(args));
@@ -3701,6 +3700,14 @@ var baser;
                  */
                 function Youtube($el, options) {
                     _super.call(this, $el);
+                    /**
+                     * プレイヤーが有効になっているかどうか
+                     *
+                     * @version 0.5.0
+                     * @since 0.5.0
+                     *
+                     */
+                    this.isEmbeded = false;
                     if (this._init(options)) {
                         Youtube.movies.push(this);
                         this.$el.addClass(Youtube.className);
@@ -3712,7 +3719,7 @@ var baser;
                  *
                  * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
                  *
-                 * @version 0.3.0
+                 * @version 0.5.0
                  * @since 0.0.7
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @return {booelan} 初期化が成功したかどうか
@@ -3730,7 +3737,8 @@ var baser;
                         stopOnInactive: false,
                         controls: false,
                         loop: true,
-                        showinfo: false
+                        showinfo: false,
+                        mute: false
                     }, options);
                     this.$el.empty();
                     var ids = id.split(/\s*,\s*/);
@@ -3772,43 +3780,42 @@ var baser;
                         $mov.data('height', height);
                     }
                     $.getScript(protocol + Youtube.API_URL);
-                    var y;
                     var intervalTimer;
                     var listIndex;
                     intervalTimer = window.setInterval(function () {
-                        if (!y && 'YT' in window && YT.Player) {
-                            y = new YT.Player(playerID, {
+                        if (!_this.player && 'YT' in window && YT.Player) {
+                            _this.player = new YT.Player(playerID, {
                                 events: {
                                     onStateChange: function (e) {
                                         switch (e.data) {
                                             case -1: {
-                                                _this.trigger('unstarted', [y]);
-                                                listIndex = y.getPlaylistIndex();
+                                                _this.trigger('unstarted', [_this.player]);
+                                                listIndex = _this.player.getPlaylistIndex();
                                                 if (_this.currentCueIndex !== listIndex) {
-                                                    _this.trigger('changecue', [y]);
+                                                    _this.trigger('changecue', [_this.player]);
                                                 }
                                                 _this.currentCueIndex = listIndex;
                                                 break;
                                             }
                                             case YT.PlayerState.BUFFERING: {
-                                                _this.trigger('buffering', [y]);
+                                                _this.trigger('buffering', [_this.player]);
                                                 break;
                                             }
                                             case YT.PlayerState.CUED: {
-                                                _this.trigger('cued', [y]);
+                                                _this.trigger('cued', [_this.player]);
                                                 break;
                                             }
                                             case YT.PlayerState.ENDED: {
-                                                _this.trigger('ended', [y]);
+                                                _this.trigger('ended', [_this.player]);
                                                 break;
                                             }
                                             case YT.PlayerState.PAUSED: {
-                                                _this.trigger('paused', [y]);
+                                                _this.trigger('paused', [_this.player]);
                                                 break;
                                             }
                                             case YT.PlayerState.PLAYING: {
-                                                _this.trigger('playing', [y]);
-                                                _this.currentCueIndex = y.getPlaylistIndex();
+                                                _this.trigger('playing', [_this.player]);
+                                                _this.currentCueIndex = _this.player.getPlaylistIndex();
                                                 break;
                                             }
                                             default: {
@@ -3821,23 +3828,78 @@ var baser;
                                 }
                             });
                         }
-                        if (y && y.pauseVideo && y.playVideo) {
+                        if (_this.player && _this.player.pauseVideo && _this.player.playVideo) {
                             window.clearInterval(intervalTimer);
-                            _this.$el.trigger('embeddedyoutubeplay', [y]); // TODO: 廃止予定(v1.0.0)
-                            _this.trigger('embeded', [y]);
+                            _this.isEmbeded = true;
+                            _this._isMuted = _this.player.isMuted();
+                            if (_this.movieOption.mute) {
+                                _this.mute();
+                            }
                             if (_this.movieOption.stopOnInactive) {
                                 $(window).on('blur', function () {
-                                    y.pauseVideo();
+                                    _this.player.pauseVideo();
                                 }).on('focus', function () {
-                                    y.playVideo();
+                                    _this.player.playVideo();
                                 });
                             }
+                            _this.$el.trigger('embeddedyoutubeplay', [_this.player]); // TODO: 廃止予定(v1.0.0)
+                            _this.trigger('embeded', [_this.player]);
                         }
                     }, 300);
                     return true;
                 };
                 Youtube.prototype.reload = function (options) {
                     this._init(options);
+                };
+                Youtube.prototype.mute = function () {
+                    this.player.mute();
+                    this._isMuted = true;
+                };
+                Youtube.prototype.unMute = function () {
+                    this.player.unMute();
+                    this._isMuted = false;
+                };
+                Youtube.prototype.muteController = function ($el, options) {
+                    var _this = this;
+                    var defaults = {
+                        eventType: 'click',
+                        mutedClass: 'is-muted',
+                        unmutedClass: 'is-unmuted',
+                        baseClass: 'youtube-mute-ctrl'
+                    };
+                    var conf = $.extend(defaults, options);
+                    element.Element.addClassTo($el, conf.baseClass);
+                    var update = function () {
+                        if (_this._isMuted) {
+                            element.Element.addClassTo($el, conf.baseClass, '', conf.mutedClass);
+                            element.Element.removeClassFrom($el, conf.baseClass, '', conf.unmutedClass);
+                        }
+                        else {
+                            element.Element.addClassTo($el, conf.baseClass, '', conf.unmutedClass);
+                            element.Element.removeClassFrom($el, conf.baseClass, '', conf.mutedClass);
+                        }
+                    };
+                    var bindCtrl = function () {
+                        $el.on(conf.eventType, function (e) {
+                            if (_this._isMuted) {
+                                _this.unMute();
+                            }
+                            else {
+                                _this.mute();
+                            }
+                            update();
+                        });
+                        update();
+                    };
+                    if (this.isEmbeded) {
+                        bindCtrl();
+                    }
+                    else {
+                        this.on('embeded', function (e, ytp) {
+                            _this.off(e.type);
+                            bindCtrl();
+                        });
+                    }
                 };
                 /**
                  * 管理対象の要素に付加するclass属性値のプレフィックス

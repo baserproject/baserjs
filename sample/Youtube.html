@@ -9,8 +9,11 @@
 	$(function() {
 
 		var yt = $('.youtube').bcYoutube({
-			controls: true
+			controls: false,
+			mute: true
 		}).data(baser.ui.element.Youtube.className);
+		
+		yt.muteController($('.mute-ctrl'));
 
 		yt.on('buffering', function (e, ytplayer) { console.log(e.type, ytplayer) });
 		yt.on('cued', function (e, ytplayer) { console.log(e.type, ytplayer) });
@@ -22,7 +25,12 @@
 	});
 	</script>
 	<style>
-
+		.mute-ctrl.-bc-youtube-mute-ctrl--is-muted:before {
+			content: "UNMUTE";
+		}
+		.mute-ctrl.-bc-youtube-mute-ctrl--is-unmuted:before {
+			content: "MUTE";
+		}
 	</style>
 </head>
 <body>
@@ -32,6 +40,8 @@
 		<h1>Youtube</h1>
 
 		<h2>sample1</h2>
+		
+		<button class="mute-ctrl"></button>
 
 		<div class="youtube" data-id="WHvuHj5ssEc" data-width="1920" data-height="1080"></div>
 

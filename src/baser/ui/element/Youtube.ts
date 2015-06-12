@@ -60,6 +60,56 @@ module baser {
 				 *
 				 */
 				showinfo?: boolean;
+
+				/**
+				 * 初期状態でミュートするかどうか
+				 *
+				 * @since 0.5.0
+				 *
+				 */
+				mute?: boolean;
+			}
+
+			/**
+			 * Youtubeインスタンスの muteControllerメソッドのオプション
+			 *
+			 * @version 0.5.0
+			 * @since 0.5.0
+			 *
+			 */
+			export interface YoutubeMuteControllerOptions {
+
+				/**
+				 * コントローラが実行されるイベントタイプ
+				 *
+				 * @since 0.5.0
+				 *
+				 */
+				eventType?: string;
+
+				/**
+				 * 適用要素に付加されるミュート状態のクラス名
+				 *
+				 * @since 0.5.0
+				 *
+				 */
+				mutedClass?: string;
+
+				/**
+				 * 適用要素に付加されるミュートでない状態クラス名
+				 *
+				 * @since 0.5.0
+				 *
+				 */
+				unmutedClass?: string;
+
+				/**
+				 * 適用要素に付加されるクラス名
+				 *
+				 * @since 0.5.0
+				 *
+				 */
+				baseClass?: string;
 			}
 
 			/**
@@ -135,6 +185,39 @@ module baser {
 				public movieOption: YoutubeOption;
 
 				/**
+				 * プレイヤーオブジェクト
+				 *
+				 * @version 0.5.0
+				 * @since 0.5.0
+				 *
+				 */
+				public player: YT.Player;
+				
+				/**
+				 * プレイヤーが有効になっているかどうか
+				 *
+				 * @version 0.5.0
+				 * @since 0.5.0
+				 *
+				 */
+				public isEmbeded: boolean = false;
+
+				/**
+				 * ミュートされているかどうか
+				 * 
+				 * `this.player.isMuted()` を利用すれば判定はできるが
+				 * `this.player.mute()` もしくは `this.player.unMute()` 実行直後では
+				 * `this.player.isMuted()` の判定が不安定なため
+				 * （APIの実行完了を監視しなければならないが、そのためのイベントが存在しない）
+				 * 独自にインスタンスプロパティとして保持する
+				 *
+				 * @version 0.5.0
+				 * @since 0.5.0
+				 *
+				 */
+				private _isMuted: boolean;
+
+				/**
 				 * コンストラクタ
 				 *
 				 * @version 0.0.7
@@ -159,7 +242,7 @@ module baser {
 				 *
 				 * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
 				 *
-				 * @version 0.3.0
+				 * @version 0.5.0
 				 * @since 0.0.7
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @return {booelan} 初期化が成功したかどうか
@@ -179,7 +262,8 @@ module baser {
 						stopOnInactive: <boolean> false,
 						controls: <boolean> false,
 						loop: <boolean> true,
-						showinfo: <boolean> false
+						showinfo: <boolean> false,
+						mute: <boolean> false
 					}, options);
 
 					this.$el.empty();
@@ -235,44 +319,43 @@ module baser {
 
 					$.getScript(protocol + Youtube.API_URL);
 
-					var y: YT.Player;
 					var intervalTimer: number;
 					var listIndex: number;
 
 					intervalTimer = window.setInterval( () => {
-						if (!y && 'YT' in window && YT.Player) {
-							y = new YT.Player(playerID, {
+						if (!this.player && 'YT' in window && YT.Player) {
+							this.player = new YT.Player(playerID, {
 								events: {
 									onStateChange: (e: YT.EventArgs): void => {
 										switch (e.data) {
 											case -1: {
-												this.trigger('unstarted', [y]);
-												listIndex = y.getPlaylistIndex();
+												this.trigger('unstarted', [this.player]);
+												listIndex = this.player.getPlaylistIndex();
 												if (this.currentCueIndex !== listIndex) {
-													this.trigger('changecue', [y]);
+													this.trigger('changecue', [this.player]);
 												}
 												this.currentCueIndex = listIndex;
 												break;
 											}
 											case YT.PlayerState.BUFFERING: {
-												this.trigger('buffering', [y]);
+												this.trigger('buffering', [this.player]);
 												break;
 											}
 											case YT.PlayerState.CUED: {
-												this.trigger('cued', [y]);
+												this.trigger('cued', [this.player]);
 												break;
 											}
 											case YT.PlayerState.ENDED: {
-												this.trigger('ended', [y]);
+												this.trigger('ended', [this.player]);
 												break;
 											}
 											case YT.PlayerState.PAUSED: {
-												this.trigger('paused', [y]);
+												this.trigger('paused', [this.player]);
 												break;
 											}
 											case YT.PlayerState.PLAYING: {
-												this.trigger('playing', [y]);
-												this.currentCueIndex = y.getPlaylistIndex();
+												this.trigger('playing', [this.player]);
+												this.currentCueIndex = this.player.getPlaylistIndex();
 												break;
 											}
 											default: {
@@ -285,19 +368,27 @@ module baser {
 								}
 							});
 						}
-						if (y && y.pauseVideo && y.playVideo) {
+						if (this.player && this.player.pauseVideo && this.player.playVideo) {
 							window.clearInterval(intervalTimer);
 
-							this.$el.trigger('embeddedyoutubeplay', [y]); // TODO: 廃止予定(v1.0.0)
-							this.trigger('embeded', [y]);
+							this.isEmbeded = true;
+							this._isMuted = this.player.isMuted();
+
+							if (this.movieOption.mute) {
+								this.mute();
+							}
 
 							if (this.movieOption.stopOnInactive) {
 								$(window).on('blur', () => {
-									y.pauseVideo();
+									this.player.pauseVideo();
 								}).on('focus', () => {
-									y.playVideo();
+									this.player.playVideo();
 								});
 							}
+
+							this.$el.trigger('embeddedyoutubeplay', [this.player]); // TODO: 廃止予定(v1.0.0)
+							this.trigger('embeded', [this.player]);
+
 						}
 					}, 300);
 
@@ -307,6 +398,56 @@ module baser {
 
 				public reload (options?: YoutubeOption): void {
 					this._init(options);
+				}
+				
+				public mute (): void {
+					this.player.mute();
+					this._isMuted = true;
+				}
+				
+				public unMute (): void {
+					this.player.unMute();
+					this._isMuted = false;
+				}
+
+				public muteController ($el, options: YoutubeMuteControllerOptions): void {
+					var defaults: YoutubeMuteControllerOptions = {
+						eventType: <string> 'click',
+						mutedClass: <string> 'is-muted',
+						unmutedClass: <string> 'is-unmuted',
+						baseClass: <string> 'youtube-mute-ctrl'
+					};
+					var conf: YoutubeMuteControllerOptions = $.extend(defaults, options);
+					Element.addClassTo($el, conf.baseClass);
+					var update: () => void = (): void => {
+						if (this._isMuted) {
+							Element.addClassTo($el, conf.baseClass, '', conf.mutedClass);
+							Element.removeClassFrom($el, conf.baseClass, '', conf.unmutedClass);
+						} else {
+							Element.addClassTo($el, conf.baseClass, '', conf.unmutedClass);
+							Element.removeClassFrom($el, conf.baseClass, '', conf.mutedClass);
+						}
+					};
+					var bindCtrl: () => void = (): void => {
+						$el.on(conf.eventType, (e: JQueryEventObject): any => {
+							if (this._isMuted) {
+								this.unMute();
+							} else {
+								this.mute();
+							}
+							update();	
+						});
+						update();
+					};
+					if (this.isEmbeded) {
+						bindCtrl();
+					} else {
+						this.on('embeded', (e: DispacheEvent, ytp: YT.Player): void => {
+							this.off(e.type);
+							bindCtrl();
+						});	
+					}
+
 				}
 
 			}

@@ -59,26 +59,24 @@ module baser {
 			/**
 			 * イベントハンドラを発火させる
 			 *
-			 * @version 0.3.0
+			 * @version 0.5.0
 			 * @since 0.0.10
 			 *
 			 */
 			public trigger (type: string, args: any[] = [], context?: any): EventDispacher {
 
+				var handlers: EventHandler[];
 				var eventHandler: EventHandler;
 				var e: DispacheEvent;
 
 				context = context || this;
 
-				var i: number = 0;
-				var l: number;
-
 				if (types[type]) {
 
-					l = types[type].length;
+					handlers = types[type].slice(); // clone
 
-					for (; i < l; i++) {
-						eventHandler = types[type][i];
+					while (handlers.length) {
+						eventHandler = handlers.shift();
 						if (eventHandler.context === this) {
 							e = new DispacheEvent(type);
 							eventHandler.handler.apply(context, [e].concat(args));
