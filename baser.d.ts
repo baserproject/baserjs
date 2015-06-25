@@ -1038,6 +1038,13 @@ declare module baser {
                  */
                 isWrappedByLabel: boolean;
                 /**
+                 * for属性に基づくラベル要素に属しているかどうか
+                 *
+                 * @since 0.5.1
+                 *
+                 */
+                hasLabelByForAttr: boolean;
+                /**
                  * ラベル要素のjQueryオブジェクト
                  *
                  * @since 0.0.1
@@ -1087,7 +1094,7 @@ declare module baser {
                 /**
                  * ラベル要素を割り当てる
                  *
-                 * @version 0.4.1
+                 * @version 0.5.1
                  * @since 0.4.0
                  *
                  */
@@ -1095,7 +1102,7 @@ declare module baser {
                 /**
                  * ラップ要素を生成
                  *
-                 * @version 0.4.0
+                 * @version 0.5.1
                  * @since 0.4.0
                  *
                  */

@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.5.0-rc r235
- * update: 2015-06-12
+ * baserjs - v0.5.1-rc r237
+ * update: 2015-06-25
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -2094,13 +2094,14 @@ var baser;
                 /**
                  * ラベル要素を割り当てる
                  *
-                 * @version 0.4.1
+                 * @version 0.5.1
                  * @since 0.4.0
                  *
                  */
                 FormElement.prototype._asignLabel = function () {
                     var $label;
                     var hasLabel;
+                    this.hasLabelByForAttr = false;
                     // 祖先のlabel要素を検索
                     $label = this.$el.closest('label');
                     // label要素の存在
@@ -2111,6 +2112,7 @@ var baser;
                     if (!hasLabel) {
                         $label = $('label[for="' + this.id + '"]');
                         hasLabel = !!$label.length;
+                        this.hasLabelByForAttr = hasLabel;
                     }
                     // ラベルがないときにラベル要素を生成する
                     if (this._config.autoLabeling && !hasLabel) {
@@ -2125,6 +2127,11 @@ var baser;
                             $label.attr('for', this.id);
                         }
                     }
+                    // console.log({
+                    // 	hasLabel: hasLabel,
+                    // 	isWrappedByLabel: this.isWrappedByLabel,
+                    // 	hasLabelByForAttr: this.hasLabelByForAttr
+                    // });
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon);
                     element.Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
                     this.$label = $label;
@@ -2132,7 +2139,7 @@ var baser;
                 /**
                  * ラップ要素を生成
                  *
-                 * @version 0.4.0
+                 * @version 0.5.1
                  * @since 0.4.0
                  *
                  */
@@ -2144,6 +2151,10 @@ var baser;
                     if (this.isWrappedByLabel) {
                         this.$label.wrapAll($wrapper);
                         this.$wrapper = this.$label.parent('span');
+                    }
+                    else if (this.hasLabelByForAttr) {
+                        this.$el.wrapAll($wrapper);
+                        this.$wrapper = this.$el.parent('span');
                     }
                     else {
                         this.$el.add(this.$label).wrapAll($wrapper);

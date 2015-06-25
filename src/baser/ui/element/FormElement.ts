@@ -182,6 +182,14 @@ module baser {
 				public isWrappedByLabel: boolean;
 
 				/**
+				 * for属性に基づくラベル要素に属しているかどうか
+				 *
+				 * @since 0.5.1
+				 *
+				 */
+				public hasLabelByForAttr: boolean;
+				
+				/**
 				 * ラベル要素のjQueryオブジェクト
 				 *
 				 * @since 0.0.1
@@ -327,13 +335,15 @@ module baser {
 				/**
 				 * ラベル要素を割り当てる
 				 *
-				 * @version 0.4.1
+				 * @version 0.5.1
 				 * @since 0.4.0
 				 *
 				 */
 				private _asignLabel (): void {
 					var $label: JQuery;
 					var hasLabel: boolean;
+					
+					this.hasLabelByForAttr = false;
 
 					// 祖先のlabel要素を検索
 					$label = this.$el.closest('label');
@@ -348,6 +358,7 @@ module baser {
 					if (!hasLabel) {
 						$label = $('label[for="' + this.id + '"]');
 						hasLabel = !!$label.length;
+						this.hasLabelByForAttr = hasLabel;
 					}
 
 					// ラベルがないときにラベル要素を生成する
@@ -363,6 +374,12 @@ module baser {
 							$label.attr('for', this.id);
 						}
 					}
+					
+					// console.log({
+					// 	hasLabel: hasLabel,
+					// 	isWrappedByLabel: this.isWrappedByLabel,
+					// 	hasLabelByForAttr: this.hasLabelByForAttr
+					// });
 
 					Element.addClassTo($label, FormElement.classNameFormElementCommon);
 					Element.addClassTo($label, FormElement.classNameFormElementCommon, FormElement.classNameLabel);
@@ -374,7 +391,7 @@ module baser {
 				/**
 				 * ラップ要素を生成
 				 *
-				 * @version 0.4.0
+				 * @version 0.5.1
 				 * @since 0.4.0
 				 *
 				 */
@@ -388,6 +405,9 @@ module baser {
 					if (this.isWrappedByLabel) {
 						this.$label.wrapAll($wrapper);
 						this.$wrapper = this.$label.parent('span');
+					} else if (this.hasLabelByForAttr) {
+						this.$el.wrapAll($wrapper);
+						this.$wrapper = this.$el.parent('span');
 					} else {
 						this.$el.add(this.$label).wrapAll($wrapper);
 						this.$wrapper = this.$el.parent('span');
