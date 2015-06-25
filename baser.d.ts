@@ -1966,7 +1966,7 @@ declare module baser {
             /**
              * MapOptionクラスのオプションハッシュのインターフェイス
              *
-             * @version 0.0.9
+             * @version 0.6.0
              * @since 0.0.9
              *
              */
@@ -2011,6 +2011,15 @@ declare module baser {
                  *
                  */
                 styles?: google.maps.MapTypeStyle[];
+                /**
+                 * 複数ピンを置いたときに地図内に収まるように
+                 * ズームと中心を調整するかどうか
+                 *
+                 * @version 0.6.0
+                 * @since 0.6.0
+                 *
+                 */
+                fitBounds?: boolean;
             }
             /**
              * マップ要素
@@ -2103,9 +2112,17 @@ declare module baser {
                  */
                 mapOption: MapOption;
                 /**
+                 * バウンズオブジェクト
+                 *
+                 * @version 0.6.0
+                 * @since 0.6.0
+                 *
+                 */
+                markerBounds: google.maps.LatLngBounds;
+                /**
                  * コンストラクタ
                  *
-                 * @version 0.0.9
+                 * @version 0.6.0
                  * @since 0.0.6
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options マップオプション
@@ -2115,7 +2132,7 @@ declare module baser {
                 /**
                  * 初期化
                  *
-                 * @version 0.2.0
+                 * @version 0.6.0
                  * @since 0.0.6
                  *
                  */
@@ -2123,14 +2140,28 @@ declare module baser {
                 /**
                  * レンダリング
                  *
-                 * @version 0.2.1
+                 * @version 0.6.0
                  * @since 0.2.0
                  * @param mapCenterLat 緯度
                  * @param mapCenterLng 経度
                  *
                  */
                 private _render(mapCenterLat, mapCenterLng);
+                /**
+                 * 再読み込み・再設定
+                 *
+                 * @version 0.6.0
+                 * @since 0.2.0
+                 *
+                 */
                 reload(options?: MapOption): void;
+                /**
+                 * 住所文字列から座標を非同期で取得
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
                 static getLatLngByAddress(address: string, callback: (lat: number, lng: number) => void): void;
             }
         }

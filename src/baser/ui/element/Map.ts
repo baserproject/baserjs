@@ -7,7 +7,7 @@ module baser {
 			/**
 			 * MapOptionクラスのオプションハッシュのインターフェイス
 			 *
-			 * @version 0.0.9
+			 * @version 0.6.0
 			 * @since 0.0.9
 			 *
 			 */
@@ -57,6 +57,16 @@ module baser {
 				 *
 				 */
 				styles?: google.maps.MapTypeStyle[];
+
+				/**
+				 * 複数ピンを置いたときに地図内に収まるように
+				 * ズームと中心を調整するかどうか
+				 *
+				 * @version 0.6.0
+				 * @since 0.6.0
+				 *
+				 */
+				fitBounds?: boolean;
 
 			}
 
@@ -162,9 +172,18 @@ module baser {
 				public mapOption: MapOption;
 
 				/**
+				 * バウンズオブジェクト
+				 *
+				 * @version 0.6.0
+				 * @since 0.6.0
+				 *
+				 */
+				public markerBounds: google.maps.LatLngBounds;
+
+				/**
 				 * コンストラクタ
 				 *
-				 * @version 0.0.9
+				 * @version 0.6.0
 				 * @since 0.0.6
 				 * @param $el 管理するDOM要素のjQueryオブジェクト
 				 * @param options マップオプション
@@ -177,7 +196,7 @@ module baser {
 					this.$el.addClass(Map.className);
 
 					if ('google' in window && google.maps) {
-						this.mapOption = options;
+						this.mapOption = $.extend({}, options);
 						this._init();
 					} else {
 						if (console && console.warn) {
@@ -194,11 +213,19 @@ module baser {
 				/**
 				 * 初期化
 				 *
-				 * @version 0.2.0
+				 * @version 0.6.0
 				 * @since 0.0.6
 				 *
 				 */
 				private _init (): void {
+
+					// data-*属性からの継承
+					this.mapOption = <MapOption> $.extend(this.mapOption, {
+						zoom: this.$el.data('zoom'),
+						fitBounds: this.$el.data('fit-bounds')
+					});
+					
+					this.markerBounds = new google.maps.LatLngBounds();
 
 					var mapCenterLat: number = <number>this.$el.data('lat') || Map.defaultLat;
 					var mapCenterLng: number = <number>this.$el.data('lng') || Map.defaultLng;
@@ -219,7 +246,7 @@ module baser {
 				/**
 				 * レンダリング
 				 *
-				 * @version 0.2.1
+				 * @version 0.6.0
 				 * @since 0.2.0
 				 * @param mapCenterLat 緯度
 				 * @param mapCenterLng 経度
@@ -257,18 +284,40 @@ module baser {
 						disableAutoPan: <boolean> true
 					});
 
-					this.gmap = new google.maps.Map(this.$el[0], this.mapOption);
+					this.gmap = new google.maps.Map(this.$el[0], $.extend({}, this.mapOption, {
+						fitBounds: google.maps.Map.prototype.fitBounds
+					}));
 
 					$.each(coordinates, (i: number, coordinate: Coordinate ): void => {
-						coordinate.markTo(this);
+						coordinate.markTo(this, (coordinate: Coordinate): void => {
+							if (this.mapOption.fitBounds) {
+								this.markerBounds.extend(coordinate.position);
+								this.gmap.fitBounds(this.markerBounds);
+							}
+						});
 					});
+					
 				}
 
+				/**
+				 * 再読み込み・再設定
+				 *
+				 * @version 0.6.0
+				 * @since 0.2.0
+				 *
+				 */
 				public reload (options?: MapOption): void {
-					this.mapOption = options;
+					this.mapOption = options ?  $.extend({}, options) : this.mapOption;
 					this._init();
 				}
 
+				/**
+				 * 住所文字列から座標を非同期で取得
+				 *
+				 * @version 0.2.0
+				 * @since 0.2.0
+				 *
+				 */
 				static getLatLngByAddress (address: string, callback: (lat: number, lng: number) => void): void {
 					var geocoder: google.maps.Geocoder = new google.maps.Geocoder();
 					geocoder.geocode(<google.maps.GeocoderRequest> {
@@ -304,7 +353,7 @@ module baser {
 			/**
 			 * 座標要素
 			 *
-			 * @version 0.0.6
+			 * @version 0.6.0
 			 * @since 0.0.6
 			 *
 			 */
@@ -315,9 +364,17 @@ module baser {
 				public $el: JQuery;
 				public lat: number;
 				public lng: number;
+				public position: google.maps.LatLng; // @since 0.6.0
 				public marker: google.maps.Marker;
-				public promiseLatLng: JQueryPromise<void>;
+				private _promiseLatLng: JQueryPromise<void>; // @since 0.6.0
 
+				/**
+				 * コンストラクタ
+				 *
+				 * @version 0.6.0
+				 * @since 0.0.6
+				 *
+				 */
 				constructor ($el: JQuery) {
 
 					var address: string = $el.data('address');
@@ -330,29 +387,48 @@ module baser {
 						Map.getLatLngByAddress(address, (lat: number, lng: number): void => {
 							this.lat = lat;
 							this.lng = lng;
+							this.position = new google.maps.LatLng(this.lat, this.lng);
 							dfd.resolve();
 						});
 					} else {
 						this.lat = <number> $el.data('lat');
 						this.lng = <number> $el.data('lng');
+						this.position = new google.maps.LatLng(this.lat, this.lng);
 						dfd.resolve();
 					}
 
-					this.promiseLatLng = dfd.promise();
+					this._promiseLatLng = dfd.promise();
 
 				}
 
-				public markTo (map: Map): void {
-					this.promiseLatLng.done((): void => {
+				/**
+				 * ピンをマップに立てる
+				 *
+				 * @version 0.6.0
+				 * @since 0.0.6
+				 *
+				 */
+				public markTo (map: Map, callback?: (coordinate: Coordinate) => void): void {
+					this._promiseLatLng.done((): void => {
 						this._markTo(map);
+						if (callback) {
+							callback(this);
+						}
 					});
 				}
 
+				/**
+				 * ピンをマップに立てる
+				 *
+				 * @version 0.6.0
+				 * @since 0.0.6
+				 *
+				 */
 				private _markTo (map: Map): void {
 					this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
 					this.icon = this.$el.data('icon') || null;
 					this.marker = new google.maps.Marker({
-						position: new google.maps.LatLng(this.lat, this.lng),
+						position: this.position,
 						title: this.title,
 						icon: this.icon,
 						map: map.gmap

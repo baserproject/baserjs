@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.5.1-rc r237
+ * baserjs - v0.6.0-rc r238
  * update: 2015-06-25
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -3476,7 +3476,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.9
+                 * @version 0.6.0
                  * @since 0.0.6
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options マップオプション
@@ -3486,7 +3486,7 @@ var baser;
                     _super.call(this, $el);
                     this.$el.addClass(Map.className);
                     if ('google' in window && google.maps) {
-                        this.mapOption = options;
+                        this.mapOption = $.extend({}, options);
                         this._init();
                     }
                     else {
@@ -3500,12 +3500,18 @@ var baser;
                 /**
                  * 初期化
                  *
-                 * @version 0.2.0
+                 * @version 0.6.0
                  * @since 0.0.6
                  *
                  */
                 Map.prototype._init = function () {
                     var _this = this;
+                    // data-*属性からの継承
+                    this.mapOption = $.extend(this.mapOption, {
+                        zoom: this.$el.data('zoom'),
+                        fitBounds: this.$el.data('fit-bounds')
+                    });
+                    this.markerBounds = new google.maps.LatLngBounds();
                     var mapCenterLat = this.$el.data('lat') || Map.defaultLat;
                     var mapCenterLng = this.$el.data('lng') || Map.defaultLng;
                     var mapCenterAddress = this.$el.data('address') || '';
@@ -3522,7 +3528,7 @@ var baser;
                 /**
                  * レンダリング
                  *
-                 * @version 0.2.1
+                 * @version 0.6.0
                  * @since 0.2.0
                  * @param mapCenterLat 緯度
                  * @param mapCenterLng 経度
@@ -3555,15 +3561,36 @@ var baser;
                     this.info = new google.maps.InfoWindow({
                         disableAutoPan: true
                     });
-                    this.gmap = new google.maps.Map(this.$el[0], this.mapOption);
+                    this.gmap = new google.maps.Map(this.$el[0], $.extend({}, this.mapOption, {
+                        fitBounds: google.maps.Map.prototype.fitBounds
+                    }));
                     $.each(coordinates, function (i, coordinate) {
-                        coordinate.markTo(_this);
+                        coordinate.markTo(_this, function (coordinate) {
+                            if (_this.mapOption.fitBounds) {
+                                _this.markerBounds.extend(coordinate.position);
+                                _this.gmap.fitBounds(_this.markerBounds);
+                            }
+                        });
                     });
                 };
+                /**
+                 * 再読み込み・再設定
+                 *
+                 * @version 0.6.0
+                 * @since 0.2.0
+                 *
+                 */
                 Map.prototype.reload = function (options) {
-                    this.mapOption = options;
+                    this.mapOption = options ? $.extend({}, options) : this.mapOption;
                     this._init();
                 };
+                /**
+                 * 住所文字列から座標を非同期で取得
+                 *
+                 * @version 0.2.0
+                 * @since 0.2.0
+                 *
+                 */
                 Map.getLatLngByAddress = function (address, callback) {
                     var geocoder = new google.maps.Geocoder();
                     geocoder.geocode({
@@ -3633,11 +3660,18 @@ var baser;
             /**
              * 座標要素
              *
-             * @version 0.0.6
+             * @version 0.6.0
              * @since 0.0.6
              *
              */
             var Coordinate = (function () {
+                /**
+                 * コンストラクタ
+                 *
+                 * @version 0.6.0
+                 * @since 0.0.6
+                 *
+                 */
                 function Coordinate($el) {
                     var _this = this;
                     var address = $el.data('address');
@@ -3647,28 +3681,47 @@ var baser;
                         Map.getLatLngByAddress(address, function (lat, lng) {
                             _this.lat = lat;
                             _this.lng = lng;
+                            _this.position = new google.maps.LatLng(_this.lat, _this.lng);
                             dfd.resolve();
                         });
                     }
                     else {
                         this.lat = $el.data('lat');
                         this.lng = $el.data('lng');
+                        this.position = new google.maps.LatLng(this.lat, this.lng);
                         dfd.resolve();
                     }
-                    this.promiseLatLng = dfd.promise();
+                    this._promiseLatLng = dfd.promise();
                 }
-                Coordinate.prototype.markTo = function (map) {
+                /**
+                 * ピンをマップに立てる
+                 *
+                 * @version 0.6.0
+                 * @since 0.0.6
+                 *
+                 */
+                Coordinate.prototype.markTo = function (map, callback) {
                     var _this = this;
-                    this.promiseLatLng.done(function () {
+                    this._promiseLatLng.done(function () {
                         _this._markTo(map);
+                        if (callback) {
+                            callback(_this);
+                        }
                     });
                 };
+                /**
+                 * ピンをマップに立てる
+                 *
+                 * @version 0.6.0
+                 * @since 0.0.6
+                 *
+                 */
                 Coordinate.prototype._markTo = function (map) {
                     var _this = this;
                     this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
                     this.icon = this.$el.data('icon') || null;
                     this.marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(this.lat, this.lng),
+                        position: this.position,
                         title: this.title,
                         icon: this.icon,
                         map: map.gmap
