@@ -111,6 +111,35 @@ module baser {
 
 			}
 
+			/**
+			 * クエリーストリングをハッシュにして返す
+			 *
+			 * @version 0.7.0
+			 * @since 0.7.0
+			 *
+			 */
+			static parseQueryString (queryString: string): { [index: string]: string } {
+				var params: { [index: string]: string } = {};
+				var queries: string[];
+				queryString = queryString.replace(/^\?/, '');
+				if (queryString) {
+					queries = queryString.split(/&/g);
+					$.each(queries, function (i: number, query: string) {
+						var keyValue: string[] = query.split('=');
+						var key: string;
+						var value: string;
+						if (keyValue) {
+							key = keyValue[0];
+							value = keyValue[1];
+							if (key) {
+								params[key] = value;
+							}
+						}
+					});
+				}
+				return params;
+			}
+
 		}
 
 	}
