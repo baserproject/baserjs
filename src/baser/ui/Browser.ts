@@ -70,12 +70,12 @@ module baser {
 				host: window.location.host,
 				hostname: window.location.hostname,
 				href: window.location.href,
-				origin: '',
+				origin: Browser.getOrigin(window.location),
 				pathname: window.location.pathname,
 				port: window.location.port,
 				protocol: window.location.protocol,
 				search: window.location.search,
-				queries: {}
+				queries: utility.String.parseQueryString(window.location.search)
 			};
 
 			/**
@@ -116,6 +116,25 @@ module baser {
 					bua.safari = false;
 				}
 				return bua;
+			}
+
+			/**
+			 * Location.origin を取得するヘルパー
+			 *
+			 * @version 0.7.0
+			 * @since 0.7.0
+			 *
+			 */
+			static getOrigin (locationalObject: any): string {
+				var port: string = '';
+				if ('origin' in locationalObject) {
+					return locationalObject.origin;
+				} else {
+					if (locationalObject.port) {
+						port = ':' + locationalObject.port;
+					}
+					return locationalObject.protocol + '//' + location.hostname + port;
+				}
 			}
 
 			public resizeEndInterval: number = 100;
