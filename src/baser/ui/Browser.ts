@@ -46,6 +46,37 @@ module baser {
 				isTouchable: flexibleWindowObject.ontouchstart !== undefined,
 				ua: Browser.getUA()
 			};
+			
+			/**
+			 * URL情報
+			 *
+			 * @version 0.7.0
+			 * @since 0.7.0
+			 *
+			 */
+			static location: {
+				hash: string;
+				host: string;
+				hostname: string;
+				href: string;
+				origin: string;
+				pathname: string;
+				port: string;
+				protocol: string;
+				search: string;
+				queries: { [ index: string ]: string };
+			} = {
+				hash: window.location.hash,
+				host: window.location.host,
+				hostname: window.location.hostname,
+				href: window.location.href,
+				origin: '',
+				pathname: window.location.pathname,
+				port: window.location.port,
+				protocol: window.location.protocol,
+				search: window.location.search,
+				queries: {}
+			};
 
 			/**
 			 * ページ遷移する
