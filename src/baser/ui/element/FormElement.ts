@@ -555,6 +555,7 @@ module baser {
 				 */
 				protected _fireChangeEvent (isSilent: boolean = false): void {
 					var e: Event;
+					var legacyElement: any;
 					if (isSilent) {
 						this.$el.trigger('change.bcFormElement', [{ isSilent: <boolean> true }]);
 					} else if ('createEvent' in document) {
@@ -563,7 +564,8 @@ module baser {
 						this.$el[0].dispatchEvent(e);
 					} else {
 						// IE8
-						this.$el[0].fireEvent('onchange');
+						legacyElement = this.$el[0];
+						legacyElement.fireEvent('onchange');
 					}
 				}
 
