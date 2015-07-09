@@ -4,8 +4,6 @@ module baser {
 
 		type LinkElement = HTMLAnchorElement | HTMLAreaElement;
 
-		var flexibleWindowObject: any = window;
-				
 		export interface BrowserUserAgent {
 			iOS: boolean;
 			android: boolean;
@@ -45,7 +43,7 @@ module baser {
 				isTouchable: boolean;
 				ua: BrowserUserAgent;
 			} = {
-				isTouchable: flexibleWindowObject.ontouchstart !== undefined,
+				isTouchable: 'ontouchstart' in window,
 				ua: Browser.getUA()
 			};
 			
