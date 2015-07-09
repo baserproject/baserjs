@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.6.0-rc r238
- * update: 2015-06-25
+ * baserjs - v0.7.0-beta r244
+ * update: 2015-07-09
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -143,10 +143,10 @@
 }));
 
 /*!
- * jQuery Mousewheel 3.1.12
+ * jQuery Mousewheel 3.1.13
  *
- * Copyright 2014 jQuery Foundation and other contributors
- * Released under the MIT license.
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license
  * http://jquery.org/license
  */
 
@@ -453,6 +453,25 @@ var baser;
                 str = str.toLowerCase();
                 var rFalsy = /^\s*(?:false|null|undefined|0|0?(?:\.0+)?)?\s*$/i;
                 return rFalsy.test(str);
+            };
+            /**
+             * 最初に登場する文字列の部分を分割する
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            String.divide = function (str, separator) {
+                var splited = str.split(separator);
+                var prefix;
+                var suffix;
+                if (splited) {
+                    prefix = splited.shift();
+                    if (splited.length) {
+                        suffix = splited.join(separator);
+                    }
+                }
+                return [prefix, suffix];
             };
             return String;
         })();
@@ -857,6 +876,133 @@ var baser;
         }
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        /**
+         * URLの情報を管理するクラス
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        var Locational = (function () {
+            /**
+             * コンストラクタ
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            function Locational(originalLocation) {
+                // ex) http:
+                this.protocol = originalLocation.protocol;
+                // ex) www.sample.com:80
+                this.host = originalLocation.host;
+                // ex) www.sample.com
+                this.hostname = originalLocation.hostname;
+                // ex) 80
+                this.port = originalLocation.port;
+                // /path/dir/file.ext
+                this.pathname = originalLocation.pathname;
+                // ?key=value&key2=value
+                this.search = originalLocation.search;
+                // #hash
+                this.hash = originalLocation.hash;
+                this.update();
+            }
+            /**
+             * クエリーストリングをハッシュにして返す
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            Locational.parseQueryString = function (queryString) {
+                var params = {};
+                var queries;
+                if (queryString) {
+                    queries = queryString.split(/&/g);
+                    $.each(queries, function (i, query) {
+                        var keyValue = baser.utility.String.divide(query, '=');
+                        var key = keyValue[0];
+                        var value = keyValue[1];
+                        if (key) {
+                            if (/\[\]$/.test(key)) {
+                                key = key.replace(/\[\]$/, '');
+                                if (params[key] && params[key].push) {
+                                    params[key].push(value);
+                                }
+                                else {
+                                    params[key] = [value];
+                                }
+                            }
+                            else {
+                                params[key] = value;
+                            }
+                        }
+                    });
+                }
+                return params;
+            };
+            Locational.prototype.update = function () {
+                // ex) http://www.sample.com:80
+                this.origin = this.protocol + '//' + this.host;
+                // ex) /path/dir/file.ext?key=value&key2=value#hash
+                this.path = this.pathname + this.search + this.hash;
+                // ex) http://www.sample.com:80/path/dir/file.ext?key=value&key2=value#hash
+                this.href = this.origin + this.path;
+                // ex) key=value&key2=value
+                this.query = this.search.replace(/^\?/, '');
+                // ex) { "key": "value", "key2": "value" }
+                this.params = Locational.parseQueryString(this.query);
+                return this;
+            };
+            Locational.prototype.addParam = function (key, value) {
+                var _this = this;
+                var eqAndValue = '';
+                if (typeof value === 'string' || !value) {
+                    if (value !== undefined) {
+                        eqAndValue = '=' + value;
+                    }
+                    if (this.search) {
+                        this.search += '&' + key + eqAndValue;
+                    }
+                    else {
+                        this.search = '?' + key + eqAndValue;
+                    }
+                }
+                else {
+                    $.each(value, function (i, val) {
+                        if (val !== undefined) {
+                            eqAndValue = '=' + val;
+                        }
+                        if (_this.search) {
+                            _this.search += '&' + key + '[]' + eqAndValue;
+                        }
+                        else {
+                            _this.search = '?' + key + '[]' + eqAndValue;
+                        }
+                    });
+                }
+                this.update();
+                return this;
+            };
+            Locational.prototype.removeParam = function (key) {
+                this.search = this.search.replace(new RegExp(key + '(?:\\[\\])?(?:=[^&]*)?(&|$)', 'g'), '');
+                this.update();
+                return this;
+            };
+            Locational.prototype.toString = function () {
+                this.update();
+                return this.href;
+            };
+            return Locational;
+        })();
+        ui.Locational = Locational;
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -877,6 +1023,13 @@ var baser;
          */
         var Browser = (function (_super) {
             __extends(Browser, _super);
+            /**
+             * コンストラクタ
+             *
+             * @version 0.0.2
+             * @since 0.0.2
+             *
+             */
             function Browser() {
                 var _this = this;
                 _super.call(this);
@@ -919,17 +1072,24 @@ var baser;
             /**
              * ページ遷移する
              *
-             * @version 0.1.0
+             * @version 0.7.0
              * @since 0.1.0
              *
              */
             Browser.jumpTo = function (path, isBlank) {
                 if (isBlank === void 0) { isBlank = false; }
-                if (!isBlank) {
-                    window.location.href = path;
+                var href;
+                if (typeof path === 'string') {
+                    href = path;
                 }
                 else {
-                    window.open(path, null);
+                    href = path.href;
+                }
+                if (!isBlank) {
+                    window.location.href = href;
+                }
+                else {
+                    window.open(href, null);
                 }
             };
             /**
@@ -955,6 +1115,30 @@ var baser;
                     bua.safari = false;
                 }
                 return bua;
+            };
+            /**
+             * 現在のURLのパラメータをリンク先へ引き継がせる
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            Browser.inheritParams = function (targetParam) {
+                var $target = $('a, area').filter('[href]');
+                var thisLocation = new ui.Locational(location);
+                if (!(targetParam in thisLocation.params)) {
+                    return;
+                }
+                var query = targetParam;
+                var value = thisLocation.params[targetParam];
+                $target.each(function (i, elem) {
+                    var targetElem = elem;
+                    var loc = new ui.Locational(targetElem);
+                    if (thisLocation.host === loc.host) {
+                        loc.addParam(query, value);
+                        targetElem.href = loc.href;
+                    }
+                });
             };
             /**
              * ブラウザ
@@ -2249,6 +2433,7 @@ var baser;
                 FormElement.prototype._fireChangeEvent = function (isSilent) {
                     if (isSilent === void 0) { isSilent = false; }
                     var e;
+                    var legacyElement;
                     if (isSilent) {
                         this.$el.trigger('change.bcFormElement', [{ isSilent: true }]);
                     }
@@ -2259,7 +2444,8 @@ var baser;
                     }
                     else {
                         // IE8
-                        this.$el[0].fireEvent('onchange');
+                        legacyElement = this.$el[0];
+                        legacyElement.fireEvent('onchange');
                     }
                 };
                 /**
@@ -4838,6 +5024,7 @@ var baser;
 /// <reference path="baser/ui/IEventDispacher.ts" />
 /// <reference path="baser/ui/EventDispacher.ts" />
 /// <reference path="baser/ui/Sequence.ts" />
+/// <reference path="baser/ui/Locational.ts" />
 /// <reference path="baser/ui/Browser.ts" />
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />

@@ -49,6 +49,14 @@ declare module baser {
              *
              */
             static isFalsy(str: string): boolean;
+            /**
+             * 最初に登場する文字列の部分を分割する
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            static divide(str: string, separator: string): string[];
         }
     }
 }
@@ -240,6 +248,94 @@ declare module baser {
 }
 declare module baser {
     module ui {
+        interface queryHash {
+            [key: string]: queryHash | string | string[];
+        }
+        /**
+         * URLの情報を管理するクラス
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        class Locational {
+            /**
+             * クエリーストリングをハッシュにして返す
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            static parseQueryString(queryString: string): {
+                [index: string]: string | string[];
+            };
+            /**
+             * #hash
+             */
+            hash: string;
+            /**
+             * ex) www.sample.com:80
+             */
+            host: string;
+            /**
+             * ex) www.sample.com
+             */
+            hostname: string;
+            /**
+             * ex) http://www.sample.com:80/path/dir/file.ext?key=value&key2=value#hash
+             */
+            href: string;
+            /**
+             * ex) http://www.sample.com:80
+             */
+            origin: string;
+            /**
+             * ex) /path/dir/file.ext?key=value&key2=value#hash
+             */
+            path: string;
+            /**
+             * /path/dir/file.ext
+             */
+            pathname: string;
+            /**
+             * ex) 80
+             */
+            port: string;
+            /**
+             * ex) http:
+             */
+            protocol: string;
+            /**
+             * ?key=value&key2=value
+             */
+            search: string;
+            /**
+             * ex) key=value&key2=value
+             */
+            query: string;
+            /**
+             * ex) { "key": "value", "key2": "value" }
+             */
+            params: {
+                [index: string]: string | string[];
+            };
+            /**
+             * コンストラクタ
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            constructor(originalLocation: Location | HTMLAnchorElement | HTMLAreaElement);
+            update(): Locational;
+            addParam(key: string, value?: string | string[]): Locational;
+            removeParam(key: string): Locational;
+            toString(): string;
+        }
+    }
+}
+declare module baser {
+    module ui {
         interface BrowserUserAgent {
             iOS: boolean;
             android: boolean;
@@ -279,11 +375,11 @@ declare module baser {
             /**
              * ページ遷移する
              *
-             * @version 0.1.0
+             * @version 0.7.0
              * @since 0.1.0
              *
              */
-            static jumpTo(path: string, isBlank?: boolean): void;
+            static jumpTo(path: string | Locational, isBlank?: boolean): void;
             /**
              * ユーザーエージェント情報を取得する
              *
@@ -292,10 +388,25 @@ declare module baser {
              *
              */
             static getUA(): BrowserUserAgent;
+            /**
+             * 現在のURLのパラメータをリンク先へ引き継がせる
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            static inheritParams(targetParam: string): void;
             resizeEndInterval: number;
             scrollEndInterval: number;
             isResize: boolean;
             isScroll: boolean;
+            /**
+             * コンストラクタ
+             *
+             * @version 0.0.2
+             * @since 0.0.2
+             *
+             */
             constructor();
         }
     }
