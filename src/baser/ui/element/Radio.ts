@@ -21,7 +21,7 @@ module baser.ui.element {
 		/**
 		 * コンストラクタ
 		 *
-		 * @version 0.4.1
+		 * @version 0.7.0
 		 * @since 0.0.1
 		 * @param $el 管理するDOM要素のjQueryオブジェクト
 		 * @param options オプション
@@ -41,17 +41,17 @@ module baser.ui.element {
 			Element.addClassTo(this.$wrapper, Radio.classNameRadio + '-' + FormElement.classNameWrapper);
 
 			// ラジオボタングループに登録
-			if (!Form.radioGroups[this.name]) {
-				Form.radioGroups[this.name] = new RadioGroup(this.name);
+			if (!RadioGroup.groups[this.name]) {
+				RadioGroup.groups[this.name] = new RadioGroup(this.name);
 			}
-			Form.radioGroups[this.name].add(this);
+			RadioGroup.groups[this.name].add(this);
 
 		}
 
 		/**
 		 * チェンジイベントのハンドラ
 		 *
-		 * @version 0.0.1
+		 * @version 0.7.0
 		 * @since 0.0.1
 		 *
 		 */
@@ -60,7 +60,7 @@ module baser.ui.element {
 			super._onchenge();
 
 			// 同じname属性のラジオボタン要素も同時に変更をする
-			Form.radioGroups[this.name].update(this);
+			RadioGroup.groups[this.name].update(this);
 
 		}
 

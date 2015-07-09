@@ -9,6 +9,14 @@ module baser.ui.element {
 	export class RadioGroup {
 
 		/**
+		 * ラジオボタンのグループを保管するオブジェクト
+		 *
+		 * @since 0.7.0
+		 *
+		 */
+		static groups: { [index: string]: RadioGroup } = {};
+
+		/**
 		 * ラジオボタンのリスト
 		 *
 		 * @since 0.0.1

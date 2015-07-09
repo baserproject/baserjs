@@ -122,6 +122,15 @@ module baser.ui.element {
 		static classNameStateDisabled: string = 'disabled';
 
 		/**
+		 * フォーム関連要素リスト
+		 *
+		 * @version 0.7.0
+		 * @since 0.7.0
+		 *
+		 */
+		static elements: FormElement[] = [];
+
+		/**
 		 * ラベルのテキスト
 		 *
 		 * @since 0.0.1
@@ -212,7 +221,7 @@ module baser.ui.element {
 		/**
 		 * コンストラクタ
 		 *
-		 * @version 0.4.1
+		 * @version 0.7.0
 		 * @since 0.0.1
 		 * @param $el 管理するDOM要素のjQueryオブジェクト
 		 * @param options オプション
@@ -253,7 +262,7 @@ module baser.ui.element {
 			this._onblur();
 
 			// フォーム要素に登録
-			Form.elements.push(this);
+			FormElement.elements.push(this);
 
 		}
 
