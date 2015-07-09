@@ -1,14 +1,6 @@
-module baser {
+module baser.ui.element {
 
-	export module ui {
-
-		export module element {
-
-			export interface ICheckbox extends ICheckableElement {
-
-			}
-
-		}
+	export interface ICheckbox extends ICheckableElement {
 
 	}
 

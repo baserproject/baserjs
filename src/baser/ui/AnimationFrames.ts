@@ -1,90 +1,86 @@
-module baser {
+module baser.ui {
 
-	export module ui {
+	/**
+	 * アニメーションフレームを管理するクラス
+	 *
+	 * @version 0.0.10
+	 * @since 0.0.10
+	 *
+	 */
+	export class AnimationFrames {
 
 		/**
-		 * アニメーションフレームを管理するクラス
+		 * フレームレート
 		 *
 		 * @version 0.0.10
 		 * @since 0.0.10
 		 *
 		 */
-		export class AnimationFrames {
+		static FRAME_RATE = 60;
 
-			/**
-			 * フレームレート
-			 *
-			 * @version 0.0.10
-			 * @since 0.0.10
-			 *
-			 */
-			static FRAME_RATE = 60;
+		/**
+		 * フレーム毎に実行するコールバック
+		 *
+		 * @version 0.0.10
+		 * @since 0.0.10
+		 *
+		 */
+		public callback: Function;
 
-			/**
-			 * フレーム毎に実行するコールバック
-			 *
-			 * @version 0.0.10
-			 * @since 0.0.10
-			 *
-			 */
-			public callback: Function;
+		/**
+		 * フレームのリクエストID
+		 *
+		 * @version 0.0.10
+		 * @since 0.0.10
+		 *
+		 */
+		public requestId: number;
 
-			/**
-			 * フレームのリクエストID
-			 *
-			 * @version 0.0.10
-			 * @since 0.0.10
-			 *
-			 */
-			public requestId: number;
+		/**
+		 * フレーム毎のに実行するコールバックを登録する
+		 *
+		 * @version 0.0.10
+		 * @since 0.0.10
+		 * @return {number} リクエストIDを返す
+		 *
+		 */
+		constructor (callback: Function) {
+			this.callback = callback;
+		}
 
-			/**
-			 * フレーム毎のに実行するコールバックを登録する
-			 *
-			 * @version 0.0.10
-			 * @since 0.0.10
-			 * @return {number} リクエストIDを返す
-			 *
-			 */
-			constructor (callback: Function) {
-				this.callback = callback;
-			}
-
-			public start (context?: any) {
-				var interval: number;
-				context = context || this;
-				if ('requestAnimationFrame' in window) {
-					this.requestId = requestAnimationFrame( (): void => {
-						cancelAnimationFrame(this.requestId);
-						this.callback.call(context);
-						this.start(context);
-					});
-				} else {
-					interval = 1000 / AnimationFrames.FRAME_RATE;
-					this.requestId = window.setTimeout( (): void => {
-						window.clearTimeout(this.requestId);
-						this.callback.call(context);
-						this.start(context);
-					}, interval);
-				}
-			}
-
-			/**
-			 * リクエストしたコールバックを停止する
-			 *
-			 * @version 0.0.10
-			 * @since 0.0.10
-			 * @return {number} リクエストIDを返す
-			 *
-			 */
-			public stop (): void {
-				if ('cancelAnimationFrame' in window) {
+		public start (context?: any) {
+			var interval: number;
+			context = context || this;
+			if ('requestAnimationFrame' in window) {
+				this.requestId = requestAnimationFrame( (): void => {
 					cancelAnimationFrame(this.requestId);
-				} else {
+					this.callback.call(context);
+					this.start(context);
+				});
+			} else {
+				interval = 1000 / AnimationFrames.FRAME_RATE;
+				this.requestId = window.setTimeout( (): void => {
 					window.clearTimeout(this.requestId);
-				}
+					this.callback.call(context);
+					this.start(context);
+				}, interval);
 			}
+		}
 
+		/**
+		 * リクエストしたコールバックを停止する
+		 *
+		 * @version 0.0.10
+		 * @since 0.0.10
+		 * @return {number} リクエストIDを返す
+		 *
+		 */
+		public stop (): void {
+			if ('cancelAnimationFrame' in window) {
+				cancelAnimationFrame(this.requestId);
+			} else {
+				window.clearTimeout(this.requestId);
+			}
 		}
 
 	}

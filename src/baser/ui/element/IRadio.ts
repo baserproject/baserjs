@@ -1,14 +1,6 @@
-module baser {
+module baser.ui.element {
 
-	export module ui {
-
-		export module element {
-
-			export interface IRadio extends ICheckableElement {
-
-			}
-
-		}
+	export interface IRadio extends ICheckableElement {
 
 	}
 

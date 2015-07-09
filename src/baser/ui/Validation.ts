@@ -1,19 +1,14 @@
-module baser {
+module baser.ui {
 
-	export module ui {
-
-		/**
-		 * フォームのバリデーションを担うクラス
-		 *
-		 * @version 0.0.x
-		 * @since 0.0.x
-		 *
-		 */
-		export class Validation {
-
-		}
+	/**
+	 * フォームのバリデーションを担うクラス
+	 *
+	 * @version 0.0.x
+	 * @since 0.0.x
+	 *
+	 */
+	export class Validation {
 
 	}
-
 
 }
