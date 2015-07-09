@@ -20,6 +20,7 @@
 /// <reference path="baser/ui/Sequence.ts" />
 /// <reference path="baser/ui/Locational.ts" />
 /// <reference path="baser/ui/Browser.ts" />
+/// <reference path="baser/ui/BreakPoints.ts" />
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />
 /// <reference path="baser/ui/Scroll.ts" />
