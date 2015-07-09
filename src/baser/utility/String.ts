@@ -112,32 +112,23 @@ module baser {
 			}
 
 			/**
-			 * クエリーストリングをハッシュにして返す
+			 * 最初に登場する文字列の部分を分割する
 			 *
 			 * @version 0.7.0
 			 * @since 0.7.0
 			 *
 			 */
-			static parseQueryString (queryString: string): { [index: string]: string } {
-				var params: { [index: string]: string } = {};
-				var queries: string[];
-				queryString = queryString.replace(/^\?/, '');
-				if (queryString) {
-					queries = queryString.split(/&/g);
-					$.each(queries, function (i: number, query: string) {
-						var keyValue: string[] = query.split('=');
-						var key: string;
-						var value: string;
-						if (keyValue) {
-							key = keyValue[0];
-							value = keyValue[1];
-							if (key) {
-								params[key] = value;
-							}
-						}
-					});
+			static divide (str: string, separator: string): string[] {
+				var splited: string[] = str.split(separator);
+				var prefix: string;
+				var suffix: string;
+				if (splited) {
+					prefix = splited.shift();
+					if (splited.length) {
+						suffix = splited.join(separator);
+					}
 				}
-				return params;
+				return [prefix, suffix];
 			}
 
 		}

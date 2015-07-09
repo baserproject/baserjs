@@ -2,8 +2,10 @@ module baser {
 
 	export module ui {
 
-		var flexibleWindowObject: any = window;
+		type LinkElement = HTMLAnchorElement | HTMLAreaElement;
 
+		var flexibleWindowObject: any = window;
+				
 		export interface BrowserUserAgent {
 			iOS: boolean;
 			android: boolean;
@@ -48,48 +50,23 @@ module baser {
 			};
 			
 			/**
-			 * URL情報
-			 *
-			 * @version 0.7.0
-			 * @since 0.7.0
-			 *
-			 */
-			static location: {
-				hash: string;
-				host: string;
-				hostname: string;
-				href: string;
-				origin: string;
-				pathname: string;
-				port: string;
-				protocol: string;
-				search: string;
-				queries: { [ index: string ]: string };
-			} = {
-				hash: window.location.hash,
-				host: window.location.host,
-				hostname: window.location.hostname,
-				href: window.location.href,
-				origin: Browser.getOrigin(window.location),
-				pathname: window.location.pathname,
-				port: window.location.port,
-				protocol: window.location.protocol,
-				search: window.location.search,
-				queries: utility.String.parseQueryString(window.location.search)
-			};
-
-			/**
 			 * ページ遷移する
 			 *
-			 * @version 0.1.0
+			 * @version 0.7.0
 			 * @since 0.1.0
 			 *
 			 */
-			static jumpTo (path: string, isBlank: boolean = false): void {
-				if (!isBlank) {
-					window.location.href = path;
+			static jumpTo (path: string | Locational, isBlank: boolean = false): void {
+				var href: string;
+				if (typeof path === 'string') {
+					href = path;
 				} else {
-					window.open(path, null);
+					href = path.href;
+				}
+				if (!isBlank) {
+					window.location.href = href;
+				} else {
+					window.open(href, null);
 				}
 			}
 
@@ -117,24 +94,30 @@ module baser {
 				}
 				return bua;
 			}
-
+			
 			/**
-			 * Location.origin を取得するヘルパー
+			 * 現在のURLのパラメータをリンク先へ引き継がせる
 			 *
 			 * @version 0.7.0
 			 * @since 0.7.0
 			 *
 			 */
-			static getOrigin (locationalObject: any): string {
-				var port: string = '';
-				if ('origin' in locationalObject) {
-					return locationalObject.origin;
-				} else {
-					if (locationalObject.port) {
-						port = ':' + locationalObject.port;
-					}
-					return locationalObject.protocol + '//' + location.hostname + port;
+			static inheritParams (targetParam: string): void {
+				var $target: JQuery = $('a, area').filter('[href]');
+				var thisLocation: Locational = new Locational(location);
+				if (!(targetParam in thisLocation.params)) {
+					return;
 				}
+				var query: string = targetParam;
+				var value: string | string[] = thisLocation.params[targetParam];
+				$target.each( (i: number, elem: Element): any => {
+					var targetElem: LinkElement = <LinkElement> elem;
+					var loc: Locational = new Locational(targetElem);
+					if (thisLocation.host === loc.host) {
+						loc.addParam(query, value);
+						targetElem.href = loc.href;
+					}
+				});
 			}
 
 			public resizeEndInterval: number = 100;
@@ -142,6 +125,13 @@ module baser {
 			public isResize: boolean = false;
 			public isScroll: boolean = false;
 
+			/**
+			 * コンストラクタ
+			 *
+			 * @version 0.0.2
+			 * @since 0.0.2
+			 *
+			 */
 			constructor () {
 
 				super();
