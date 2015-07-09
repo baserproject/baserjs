@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.7.0-beta r244
+ * baserjs - v0.7.0-beta r248
  * update: 2015-07-09
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -630,124 +630,145 @@ var baser;
 })(baser || (baser = {}));
 var baser;
 (function (baser) {
-    var eventHandlers = {};
-    var types = {};
     var ui;
     (function (ui) {
-        /**
-         * イベント駆動できるクラス
-         *
-         * @version 0.0.10
-         * @since 0.0.10
-         *
-         */
-        var EventDispacher = (function () {
+        var event;
+        (function (event) {
             /**
-             * コンストラクタ
+             * イベント駆動できるクラス
              *
              * @version 0.0.10
              * @since 0.0.10
              *
              */
-            function EventDispacher() {
-                // void
-            }
-            /**
-             * イベントハンドラを登録する
-             *
-             * @version 0.0.10
-             * @since 0.0.10
-             *
-             */
-            EventDispacher.prototype.on = function (type, handler) {
-                var eventHandler = new EventHandler(this, type, handler);
-                eventHandlers[eventHandler.id] = eventHandler;
-                if (!types[type]) {
-                    types[type] = [];
+            var EventDispacher = (function () {
+                /**
+                 * コンストラクタ
+                 *
+                 * @version 0.0.10
+                 * @since 0.0.10
+                 *
+                 */
+                function EventDispacher() {
+                    // void
                 }
-                types[type].push(eventHandler);
-                return this;
-            };
-            /**
-             * イベントハンドラを削除する
-             *
-             * @version 0.0.10
-             * @since 0.0.10
-             *
-             */
-            EventDispacher.prototype.off = function (type) {
-                delete types[type];
-                return this;
-            };
-            /**
-             * イベントハンドラを発火させる
-             *
-             * @version 0.5.0
-             * @since 0.0.10
-             *
-             */
-            EventDispacher.prototype.trigger = function (type, args, context) {
-                if (args === void 0) { args = []; }
-                var handlers;
-                var eventHandler;
-                var e;
-                context = context || this;
-                if (types[type]) {
-                    handlers = types[type].slice(); // clone
-                    while (handlers.length) {
-                        eventHandler = handlers.shift();
-                        if (eventHandler.context === this) {
-                            e = new DispacheEvent(type);
-                            eventHandler.handler.apply(context, [e].concat(args));
-                            if (e.isImmediatePropagationStopped()) {
-                                break;
+                /**
+                 * イベントハンドラを登録する
+                 *
+                 * @version 0.0.10
+                 * @since 0.0.10
+                 *
+                 */
+                EventDispacher.prototype.on = function (type, handler) {
+                    var eventHandler = new event.EventHandler(this, type, handler);
+                    EventDispacher.eventHandlers[eventHandler.id] = eventHandler;
+                    if (!EventDispacher.types[type]) {
+                        EventDispacher.types[type] = [];
+                    }
+                    EventDispacher.types[type].push(eventHandler);
+                    return this;
+                };
+                /**
+                 * イベントハンドラを削除する
+                 *
+                 * @version 0.0.10
+                 * @since 0.0.10
+                 *
+                 */
+                EventDispacher.prototype.off = function (type) {
+                    delete EventDispacher.types[type];
+                    return this;
+                };
+                /**
+                 * イベントハンドラを発火させる
+                 *
+                 * @version 0.5.0
+                 * @since 0.0.10
+                 *
+                 */
+                EventDispacher.prototype.trigger = function (type, args, context) {
+                    if (args === void 0) { args = []; }
+                    var handlers;
+                    var eventHandler;
+                    var e;
+                    context = context || this;
+                    if (EventDispacher.types[type]) {
+                        handlers = EventDispacher.types[type].slice(); // clone
+                        while (handlers.length) {
+                            eventHandler = handlers.shift();
+                            if (eventHandler.context === this) {
+                                e = new event.DispacheEvent(type);
+                                eventHandler.handler.apply(context, [e].concat(args));
+                                if (e.isImmediatePropagationStopped()) {
+                                    break;
+                                }
                             }
                         }
                     }
+                    return this;
+                };
+                EventDispacher.eventHandlers = {};
+                EventDispacher.types = {};
+                return EventDispacher;
+            })();
+            event.EventDispacher = EventDispacher;
+        })(event = ui.event || (ui.event = {}));
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        var event;
+        (function (event) {
+            /**
+             * イベントオブジェクトのクラス
+             *
+             * @version 0.3.0
+             * @since 0.0.10
+             *
+             */
+            var DispacheEvent = (function () {
+                function DispacheEvent(type) {
+                    this._isImmediatePropagationStopped = false;
+                    this.type = type;
                 }
-                return this;
-            };
-            return EventDispacher;
-        })();
-        ui.EventDispacher = EventDispacher;
-        /**
-         * イベントハンドラのラッパークラス
-         *
-         * @version 0.0.10
-         * @since 0.0.10
-         *
-         */
-        var EventHandler = (function () {
-            function EventHandler(context, type, handler) {
-                this.context = context;
-                this.id = baser.utility.String.UID();
-                this.type = type;
-                this.handler = handler;
-            }
-            return EventHandler;
-        })();
-        ui.EventHandler = EventHandler;
-        /**
-         * イベントオブジェクトのクラス
-         *
-         * @version 0.3.0
-         * @since 0.0.10
-         *
-         */
-        var DispacheEvent = (function () {
-            function DispacheEvent(type) {
-                this._isImmediatePropagationStopped = false;
-                this.type = type;
-            }
-            DispacheEvent.prototype.isImmediatePropagationStopped = function () {
-                return this._isImmediatePropagationStopped;
-            };
-            DispacheEvent.prototype.stopImmediatePropagation = function () {
-                this._isImmediatePropagationStopped = true;
-            };
-            return DispacheEvent;
-        })();
-        ui.DispacheEvent = DispacheEvent;
+                DispacheEvent.prototype.isImmediatePropagationStopped = function () {
+                    return this._isImmediatePropagationStopped;
+                };
+                DispacheEvent.prototype.stopImmediatePropagation = function () {
+                    this._isImmediatePropagationStopped = true;
+                };
+                return DispacheEvent;
+            })();
+            event.DispacheEvent = DispacheEvent;
+        })(event = ui.event || (ui.event = {}));
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        var event;
+        (function (event) {
+            /**
+             * イベントハンドラのラッパークラス
+             *
+             * @version 0.0.10
+             * @since 0.0.10
+             *
+             */
+            var EventHandler = (function () {
+                function EventHandler(context, type, handler) {
+                    this.context = context;
+                    this.id = baser.utility.String.UID();
+                    this.type = type;
+                    this.handler = handler;
+                }
+                return EventHandler;
+            })();
+            event.EventHandler = EventHandler;
+        })(event = ui.event || (ui.event = {}));
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
 var baser;
@@ -1013,7 +1034,6 @@ var baser;
 (function (baser) {
     var ui;
     (function (ui) {
-        var flexibleWindowObject = window;
         /**
          * ブラウザの情報を管理するクラス
          *
@@ -1156,11 +1176,11 @@ var baser;
              *
              */
             Browser.spec = {
-                isTouchable: flexibleWindowObject.ontouchstart !== undefined,
+                isTouchable: 'ontouchstart' in window,
                 ua: Browser.getUA()
             };
             return Browser;
-        })(ui.EventDispacher);
+        })(ui.event.EventDispacher);
         ui.Browser = Browser;
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
@@ -2079,7 +2099,7 @@ var baser;
                  */
                 Element.classNameDefaultSeparatorForModifier = 1 /* DOUBLE_HYPHEN */;
                 return Element;
-            })(ui.EventDispacher);
+            })(ui.event.EventDispacher);
             element.Element = Element;
         })(element = ui.element || (ui.element = {}));
     })(ui = baser.ui || (baser.ui = {}));
@@ -5019,10 +5039,14 @@ var baser;
 /// <reference path="baser/utility/String.ts" />
 /// <reference path="baser/utility/Array.ts" />
 /// <reference path="baser/utility/Mathematics.ts" />
+/* UI/イベント
+================================================================= */
+/// <reference path="baser/ui/event/IEventDispacher.ts" />
+/// <reference path="baser/ui/event/EventDispacher.ts" />
+/// <reference path="baser/ui/event/DispacheEvent.ts" />
+/// <reference path="baser/ui/event/EventHandler.ts" />
 /* UI
 ================================================================= */
-/// <reference path="baser/ui/IEventDispacher.ts" />
-/// <reference path="baser/ui/EventDispacher.ts" />
 /// <reference path="baser/ui/Sequence.ts" />
 /// <reference path="baser/ui/Locational.ts" />
 /// <reference path="baser/ui/Browser.ts" />

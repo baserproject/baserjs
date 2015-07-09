@@ -8,6 +8,13 @@
 /// <reference path="baser/utility/Array.ts" />
 /// <reference path="baser/utility/Mathematics.ts" />
 
+/* UI/イベント
+================================================================= */
+/// <reference path="baser/ui/event/IEventDispacher.ts" />
+/// <reference path="baser/ui/event/EventDispacher.ts" />
+/// <reference path="baser/ui/event/DispacheEvent.ts" />
+/// <reference path="baser/ui/event/EventHandler.ts" />
+
 /* UI
 ================================================================= */
 /// <reference path="baser/ui/Sequence.ts" />
@@ -19,13 +26,6 @@
 /// <reference path="baser/ui/Dimension.ts" />
 /// <reference path="baser/ui/Box.ts" />
 /// <reference path="baser/ui/Validation.ts" />
-
-/* UI/イベント
-================================================================= */
-/// <reference path="baser/ui/event/IEventDispacher.ts" />
-/// <reference path="baser/ui/event/EventDispacher.ts" />
-/// <reference path="baser/ui/event/DispacheEvent.ts" />
-/// <reference path="baser/ui/event/EventHandler.ts" />
 
 /* UI/エレメント
 ================================================================= */
