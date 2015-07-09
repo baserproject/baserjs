@@ -5,7 +5,7 @@ module baser {
 	 *
 	 * TODO: 計算ロジックとDOMアクセスのロジックを分ける
 	 *
-	 * @version 0.2.1
+	 * @version 0.7.0
 	 * @since 0.0.15
 	 *
 	 */
@@ -17,10 +17,10 @@ module baser {
 
 			var column: number = <number> +columnOrKeyword;
 
-			baser.ui.Box.boot();
+			baser.ui.element.Box.boot();
 
 			var $detailTarget: JQuery;
-			var settings = baser.ui.Box.settings;
+			var settings = baser.ui.element.Box.settings;
 
 			// 要素群の高さを揃え、setsに追加
 			if (detailTarget) {
@@ -28,11 +28,11 @@ module baser {
 				if ($detailTarget.length) {
 					this.each(function () {
 						var $split: JQuery = $(this).find(detailTarget);
-						baser.ui.Box.push($split, column, callback, breakPoint);
+						baser.ui.element.Box.push($split, column, callback, breakPoint);
 					});
 				}
 			} else {
-				baser.ui.Box.push(this, column, callback, breakPoint);
+				baser.ui.element.Box.push(this, column, callback, breakPoint);
 			}
 
 		} else {
@@ -45,7 +45,7 @@ module baser {
 
 					this.each(function () {
 
-						baser.ui.Box.destory($(this));
+						baser.ui.element.Box.destory($(this));
 
 					});
 

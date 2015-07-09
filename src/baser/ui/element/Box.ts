@@ -1,9 +1,9 @@
-module baser.ui {
+module baser.ui.element {
 
 	/**
 	 * Box管理を担うクラス
 	 *
-	 * @version 0.2.2
+	 * @version 0.7.0
 	 * @since 0.0.15
 	 *
 	 */

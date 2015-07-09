@@ -23,7 +23,6 @@
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />
 /// <reference path="baser/ui/Scroll.ts" />
-/// <reference path="baser/ui/Box.ts" />
 
 /* UI/エレメント
 ================================================================= */
@@ -42,6 +41,7 @@
 /// <reference path="baser/ui/element/ICheckbox.ts" />
 /// <reference path="baser/ui/element/Checkbox.ts" />
 /// <reference path="baser/ui/element/RadioGroup.ts" />
+/// <reference path="baser/ui/element/Box.ts" />
 /// <reference path="baser/ui/element/Map.ts" />
 /// <reference path="baser/ui/element/Youtube.ts" />
 
