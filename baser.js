@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.7.0-beta r248
+ * baserjs - v0.7.0-beta r249
  * update: 2015-07-09
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1565,35 +1565,6 @@ var baser;
     var ui;
     (function (ui) {
         /**
-         * 要素の寸法(幅・高さ)を管理するクラス
-         *
-         * @version 0.0.9
-         * @since 0.0.9
-         *
-         */
-        var Dimension = (function () {
-            /**
-             * コンストラクタ
-             *
-             * @version 0.0.9
-             * @since 0.0.9
-             *
-             */
-            function Dimension(el) {
-                if (el) {
-                    this.el = el;
-                }
-            }
-            return Dimension;
-        })();
-        ui.Dimension = Dimension;
-    })(ui = baser.ui || (baser.ui = {}));
-})(baser || (baser = {}));
-var baser;
-(function (baser) {
-    var ui;
-    (function (ui) {
-        /**
          * Box管理を担うクラス
          *
          * @version 0.2.2
@@ -1754,25 +1725,6 @@ var baser;
             return Box;
         })();
         ui.Box = Box;
-    })(ui = baser.ui || (baser.ui = {}));
-})(baser || (baser = {}));
-var baser;
-(function (baser) {
-    var ui;
-    (function (ui) {
-        /**
-         * フォームのバリデーションを担うクラス
-         *
-         * @version 0.0.x
-         * @since 0.0.x
-         *
-         */
-        var Validation = (function () {
-            function Validation() {
-            }
-            return Validation;
-        })();
-        ui.Validation = Validation;
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
 var baser;
@@ -2111,81 +2063,6 @@ var baser;
         var element;
         (function (element) {
             /**
-             * フォーム要素を扱う静的クラス
-             *
-             * @version 0.1.0
-             * @since 0.0.1
-             *
-             */
-            var Form = (function () {
-                function Form() {
-                }
-                /**
-                 * ラジオボタンを拡張する
-                 *
-                 * @version 0.0.1
-                 * @since 0.0.1
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Form.radio = function ($elem, options) {
-                    var radio = new element.Radio($elem, options);
-                    return $elem;
-                };
-                /**
-                 * チェックボックスを拡張する
-                 *
-                 * @version 0.0.1
-                 * @since 0.0.1
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Form.checkbox = function ($elem, options) {
-                    var checkbox = new element.Checkbox($elem, options);
-                    return $elem;
-                };
-                /**
-                 * セレクトボックスを拡張する
-                 *
-                 * @version 0.0.1
-                 * @since 0.0.1
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Form.select = function ($elem, options) {
-                    var select = new element.Select($elem, options);
-                    return $elem;
-                };
-                /**
-                 * 管理対象要素リスト
-                 *
-                 * @since 0.0.1
-                 *
-                 */
-                Form.elements = [];
-                /**
-                 * ラジオボタンのname属性値で紐付いたブループを管理するリスト
-                 *
-                 * @since 0.0.1
-                 *
-                 */
-                Form.radioGroups = {};
-                return Form;
-            })();
-            element.Form = Form;
-        })(element = ui.element || (ui.element = {}));
-    })(ui = baser.ui || (baser.ui = {}));
-})(baser || (baser = {}));
-var baser;
-(function (baser) {
-    var ui;
-    (function (ui) {
-        var element;
-        (function (element) {
-            /**
              * フォーム要素の抽象クラス
              *
              * @version 0.1.0
@@ -2197,7 +2074,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.1
+                 * @version 0.7.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -2234,7 +2111,7 @@ var baser;
                     this.setDisabled($el.prop('disabled'));
                     this._onblur();
                     // フォーム要素に登録
-                    element.Form.elements.push(this);
+                    FormElement.elements.push(this);
                 }
                 /**
                  * クラス名を設定する
@@ -2566,6 +2443,14 @@ var baser;
                  *
                  */
                 FormElement.classNameStateDisabled = 'disabled';
+                /**
+                 * フォーム関連要素リスト
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                FormElement.elements = [];
                 return FormElement;
             })(element.Element);
             element.FormElement = FormElement;
@@ -3498,7 +3383,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.1
+                 * @version 0.7.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -3514,22 +3399,22 @@ var baser;
                     element.Element.addClassTo(this.$label, Radio.classNameRadio, element.FormElement.classNameLabel);
                     element.Element.addClassTo(this.$wrapper, Radio.classNameRadio + '-' + element.FormElement.classNameWrapper);
                     // ラジオボタングループに登録
-                    if (!element.Form.radioGroups[this.name]) {
-                        element.Form.radioGroups[this.name] = new element.RadioGroup(this.name);
+                    if (!element.RadioGroup.groups[this.name]) {
+                        element.RadioGroup.groups[this.name] = new element.RadioGroup(this.name);
                     }
-                    element.Form.radioGroups[this.name].add(this);
+                    element.RadioGroup.groups[this.name].add(this);
                 }
                 /**
                  * チェンジイベントのハンドラ
                  *
-                 * @version 0.0.1
+                 * @version 0.7.0
                  * @since 0.0.1
                  *
                  */
                 Radio.prototype._onchenge = function () {
                     _super.prototype._onchenge.call(this);
                     // 同じname属性のラジオボタン要素も同時に変更をする
-                    element.Form.radioGroups[this.name].update(this);
+                    element.RadioGroup.groups[this.name].update(this);
                 };
                 /**
                  * Radio要素のクラス
@@ -3658,6 +3543,13 @@ var baser;
                         }
                     }
                 };
+                /**
+                 * ラジオボタンのグループを保管するオブジェクト
+                 *
+                 * @since 0.7.0
+                 *
+                 */
+                RadioGroup.groups = {};
                 return RadioGroup;
             })();
             element.RadioGroup = RadioGroup;
@@ -4209,7 +4101,6 @@ var baser;
         })(element = ui.element || (ui.element = {}));
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
-this.baser = baser;
 var baser;
 (function (baser) {
     /**
@@ -4341,7 +4232,7 @@ var baser;
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたラジオボタンに変更する
      *
-     * @version 0.0.1
+     * @version 0.7.0
      * @since 0.0.1
      *
      * * * *
@@ -4354,7 +4245,7 @@ var baser;
     function bcRadio(options) {
         return this.each(function (i, elem) {
             var $elem = $(elem);
-            baser.ui.element.Form.radio($elem, options);
+            new baser.ui.element.Radio($elem, options);
         });
     }
     $.fn.bcRadio = bcRadio;
@@ -4364,7 +4255,7 @@ var baser;
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する
      *
-     * @version 0.0.1
+     * @version 0.7.0
      * @since 0.0.1
      *
      * * * *
@@ -4377,7 +4268,7 @@ var baser;
     function bcCheckbox(options) {
         return this.each(function (i, elem) {
             var $elem = $(elem);
-            baser.ui.element.Form.checkbox($elem, options);
+            new baser.ui.element.Checkbox($elem, options);
         });
     }
     $.fn.bcCheckbox = bcCheckbox;
@@ -4387,7 +4278,7 @@ var baser;
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する
      *
-     * @version 0.0.1
+     * @version 0.7.0
      * @since 0.0.1
      *
      * * * *
@@ -4400,7 +4291,7 @@ var baser;
     function bcSelect(options) {
         return this.each(function (i, elem) {
             var $elem = $(elem);
-            baser.ui.element.Form.select($elem, options);
+            new baser.ui.element.Select($elem, options);
         });
     }
     $.fn.bcSelect = bcSelect;
@@ -5053,14 +4944,11 @@ var baser;
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />
 /// <reference path="baser/ui/Scroll.ts" />
-/// <reference path="baser/ui/Dimension.ts" />
 /// <reference path="baser/ui/Box.ts" />
-/// <reference path="baser/ui/Validation.ts" />
 /* UI/エレメント
 ================================================================= */
 /// <reference path="baser/ui/element/IElement.ts" />
 /// <reference path="baser/ui/element/Element.ts" />
-/// <reference path="baser/ui/element/Form.ts" />
 /// <reference path="baser/ui/element/IFormElement.ts" />
 /// <reference path="baser/ui/element/FormElement.ts" />
 /// <reference path="baser/ui/element/ITextField.ts" />
@@ -5076,9 +4964,6 @@ var baser;
 /// <reference path="baser/ui/element/RadioGroup.ts" />
 /// <reference path="baser/ui/element/Map.ts" />
 /// <reference path="baser/ui/element/Youtube.ts" />
-/* baserJSコア
-================================================================= */
-/// <reference path="baser.ts" />
 /* jQueryプラグイン
 ================================================================= */
 /// <reference path="jquery/bcYoutube.ts" />

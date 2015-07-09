@@ -621,49 +621,6 @@ declare module baser.ui {
 }
 declare module baser.ui {
     /**
-     * 要素の寸法(幅・高さ)を管理するクラス
-     *
-     * @version 0.0.9
-     * @since 0.0.9
-     *
-     */
-    class Dimension {
-        /**
-         * 幅
-         *
-         * @version 0.0.9
-         * @since 0.0.9
-         *
-         */
-        private _width;
-        /**
-         * 高さ
-         *
-         * @version 0.0.9
-         * @since 0.0.9
-         *
-         */
-        private _height;
-        /**
-         * 管理する要素
-         *
-         * @version 0.0.9
-         * @since 0.0.9
-         *
-         */
-        el: Element;
-        /**
-         * コンストラクタ
-         *
-         * @version 0.0.9
-         * @since 0.0.9
-         *
-         */
-        constructor(el?: Element);
-    }
-}
-declare module baser.ui {
-    /**
      * Box管理を担うクラス
      *
      * @version 0.2.2
@@ -683,17 +640,6 @@ declare module baser.ui {
         static watchTimer: number;
         static isBooted: boolean;
         static settings: any;
-    }
-}
-declare module baser.ui {
-    /**
-     * フォームのバリデーションを担うクラス
-     *
-     * @version 0.0.x
-     * @since 0.0.x
-     *
-     */
-    class Validation {
     }
 }
 declare module baser.ui.element {
@@ -887,63 +833,6 @@ declare module baser.ui.element {
     }
 }
 declare module baser.ui.element {
-    /**
-     * フォーム要素を扱う静的クラス
-     *
-     * @version 0.1.0
-     * @since 0.0.1
-     *
-     */
-    class Form {
-        /**
-         * 管理対象要素リスト
-         *
-         * @since 0.0.1
-         *
-         */
-        static elements: Element[];
-        /**
-         * ラジオボタンのname属性値で紐付いたブループを管理するリスト
-         *
-         * @since 0.0.1
-         *
-         */
-        static radioGroups: {
-            [index: string]: RadioGroup;
-        };
-        /**
-         * ラジオボタンを拡張する
-         *
-         * @version 0.0.1
-         * @since 0.0.1
-         * @param $elem 管理するDOM要素のjQueryオブジェクト
-         * @param options オプション
-         *
-         */
-        static radio($elem: JQuery, options?: CheckableElementOption): JQuery;
-        /**
-         * チェックボックスを拡張する
-         *
-         * @version 0.0.1
-         * @since 0.0.1
-         * @param $elem 管理するDOM要素のjQueryオブジェクト
-         * @param options オプション
-         *
-         */
-        static checkbox($elem: JQuery, options?: CheckableElementOption): JQuery;
-        /**
-         * セレクトボックスを拡張する
-         *
-         * @version 0.0.1
-         * @since 0.0.1
-         * @param $elem 管理するDOM要素のjQueryオブジェクト
-         * @param options オプション
-         *
-         */
-        static select($elem: JQuery, options?: FormElementOption): JQuery;
-    }
-}
-declare module baser.ui.element {
     interface IFormElement extends IElement {
         label: string;
         hasFocus: boolean;
@@ -1061,6 +950,14 @@ declare module baser.ui.element {
          */
         static classNameStateDisabled: string;
         /**
+         * フォーム関連要素リスト
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static elements: FormElement[];
+        /**
          * ラベルのテキスト
          *
          * @since 0.0.1
@@ -1140,7 +1037,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.4.1
+         * @version 0.7.0
          * @since 0.0.1
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @param options オプション
@@ -1886,7 +1783,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.4.1
+         * @version 0.7.0
          * @since 0.0.1
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @param options オプション
@@ -1896,7 +1793,7 @@ declare module baser.ui.element {
         /**
          * チェンジイベントのハンドラ
          *
-         * @version 0.0.1
+         * @version 0.7.0
          * @since 0.0.1
          *
          */
@@ -1944,6 +1841,15 @@ declare module baser.ui.element {
      *
      */
     class RadioGroup {
+        /**
+         * ラジオボタンのグループを保管するオブジェクト
+         *
+         * @since 0.7.0
+         *
+         */
+        static groups: {
+            [index: string]: RadioGroup;
+        };
         /**
          * ラジオボタンのリスト
          *

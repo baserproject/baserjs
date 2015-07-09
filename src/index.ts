@@ -23,9 +23,7 @@
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />
 /// <reference path="baser/ui/Scroll.ts" />
-/// <reference path="baser/ui/Dimension.ts" />
 /// <reference path="baser/ui/Box.ts" />
-/// <reference path="baser/ui/Validation.ts" />
 
 /* UI/エレメント
 ================================================================= */
@@ -46,10 +44,6 @@
 /// <reference path="baser/ui/element/RadioGroup.ts" />
 /// <reference path="baser/ui/element/Map.ts" />
 /// <reference path="baser/ui/element/Youtube.ts" />
-
-/* baserJSコア
-================================================================= */
-/// <reference path="baser.ts" />
 
 /* jQueryプラグイン
 ================================================================= */
