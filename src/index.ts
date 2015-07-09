@@ -10,8 +10,6 @@
 
 /* UI
 ================================================================= */
-/// <reference path="baser/ui/IEventDispacher.ts" />
-/// <reference path="baser/ui/EventDispacher.ts" />
 /// <reference path="baser/ui/Sequence.ts" />
 /// <reference path="baser/ui/Locational.ts" />
 /// <reference path="baser/ui/Browser.ts" />
@@ -21,6 +19,13 @@
 /// <reference path="baser/ui/Dimension.ts" />
 /// <reference path="baser/ui/Box.ts" />
 /// <reference path="baser/ui/Validation.ts" />
+
+/* UI/イベント
+================================================================= */
+/// <reference path="baser/ui/event/IEventDispacher.ts" />
+/// <reference path="baser/ui/event/EventDispacher.ts" />
+/// <reference path="baser/ui/event/DispacheEvent.ts" />
+/// <reference path="baser/ui/event/EventHandler.ts" />
 
 /* UI/エレメント
 ================================================================= */
