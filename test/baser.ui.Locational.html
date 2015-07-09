@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>baser.ui.Locational</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+test('baser.ui.Locational コンストラクタ のテスト', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '?notrycatch&noglobals&key=Z&key%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D',
+		hash: '#hogehoge'
+	});
+
+	equal(loc.origin, 'http://baserproject.github.io:80', 'origin');
+	equal(loc.path, '/baserjs/test/baser.ui.Locational.html?notrycatch&noglobals&key=Z&key%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D#hogehoge', 'path');
+	equal(loc.href, 'http://baserproject.github.io:80/baserjs/test/baser.ui.Locational.html?notrycatch&noglobals&key=Z&key%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D#hogehoge', 'href');
+	equal(loc.query, 'notrycatch&noglobals&key=Z&key%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D', 'query');
+	deepEqual(loc.params, {
+		notrycatch: undefined,
+		noglobals: undefined,
+		key: 'Z',
+		'key%5B%5D': 'asdf',
+		'a%5B%5D': '123%2C234234%2C234234key%5B%5D'
+	}, 'params');
+
+});
+
+test('baser.ui.Locational コンストラクタ のテスト2', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '?notrycatch&noglobals&key=Z&key=234&key%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D',
+		hash: '#hogehoge'
+	});
+
+	deepEqual(loc.params, {
+		notrycatch: undefined,
+		noglobals: undefined,
+		key: '234',
+		'key%5B%5D': 'asdf',
+		'a%5B%5D': '123%2C234234%2C234234key%5B%5D'
+	}, 'params');
+
+});
+
+test('baser.ui.Locational コンストラクタ のテスト3', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '?notrycatch&noglobals&key=Z&key[]=234&key%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D',
+		hash: '#hogehoge'
+	});
+
+	deepEqual(loc.params, {
+		notrycatch: undefined,
+		noglobals: undefined,
+		key: [
+			'234'
+		],
+		'key%5B%5D': 'asdf',
+		'a%5B%5D': '123%2C234234%2C234234key%5B%5D'
+	}, 'params');
+
+});
+
+test('baser.ui.Locational コンストラクタ のテスト4', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '?notrycatch&noglobals&key=Z&key[]=234&key[]=%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D',
+		hash: '#hogehoge'
+	});
+
+	deepEqual(loc.params, {
+		notrycatch: undefined,
+		noglobals: undefined,
+		key: [
+			'234',
+			'%5B%5D=asdf'
+		],
+		'a%5B%5D': '123%2C234234%2C234234key%5B%5D'
+	}, 'params');
+
+});
+
+test('baser.ui.Locational addParam のテスト', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '?notrycatch&noglobals&key=Z&key%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D',
+		hash: '#hogehoge'
+	});
+	
+	loc.addParam('smartphone', 'on');
+
+	deepEqual(loc.params, {
+		notrycatch: undefined,
+		noglobals: undefined,
+		key: 'Z',
+		'key%5B%5D': 'asdf',
+		'a%5B%5D': '123%2C234234%2C234234key%5B%5D',
+		smartphone: 'on'
+	}, 'params');
+
+});
+
+test('baser.ui.Locational addParam のテスト2', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '',
+		hash: '#hogehoge'
+	});
+	
+	loc.addParam('smartphone', 'on');
+
+	equal(loc.search, '?smartphone=on', 'search');
+	deepEqual(loc.params, {
+		smartphone: 'on'
+	}, 'params');
+
+});
+
+test('baser.ui.Locational addParam のテスト3', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '',
+		hash: '#hogehoge'
+	});
+	
+	loc.addParam('smartphone');
+
+	equal(loc.search, '?smartphone', 'search');
+	deepEqual(loc.params, {
+		smartphone: undefined
+	}, 'params');
+
+});
+
+test('baser.ui.Locational addParam のテスト4', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '',
+		hash: '#hogehoge'
+	});
+	
+	loc.addParam('smartphone', null);
+
+	equal(loc.search, '?smartphone=null', 'search');
+	deepEqual(loc.params, {
+		smartphone: 'null'
+	}, 'params');
+
+});
+
+test('baser.ui.Locational addParam のテスト5', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '',
+		hash: '#hogehoge'
+	});
+	
+	loc.addParam('smartphone', '');
+
+	equal(loc.search, '?smartphone=', 'search');
+	deepEqual(loc.params, {
+		smartphone: ''
+	}, 'params');
+
+});
+
+
+test('baser.ui.Locational addParam のテスト6', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '',
+		hash: '#hogehoge'
+	});
+	
+	loc.addParam('smartphone', [1, 2, 3]);
+
+	equal(loc.search, '?smartphone[]=1&smartphone[]=2&smartphone[]=3', 'search');
+	deepEqual(loc.params, {
+		smartphone: [
+			'1', '2', '3'
+		]
+	}, 'params');
+
+});
+
+test('baser.ui.Locational removeParam のテスト', function() {
+
+	var loc = new baser.ui.Locational({
+		protocol: 'http:',
+		host: 'baserproject.github.io:80',
+		hostname: 'baserproject.github.io',
+		port: '80',
+		pathname: '/baserjs/test/baser.ui.Locational.html',
+		search: '?notrycatch&noglobals&key=Z&key[]=234&key[]=%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D&key=1',
+		hash: '#hogehoge'
+	});
+	
+	loc.removeParam('key');
+
+	equal(loc.query, 'notrycatch&noglobals&a%5B%5D=123%2C234234%2C234234key%5B%5D&', 'query');
+	deepEqual(loc.params, {
+		notrycatch: undefined,
+		noglobals: undefined,
+		'a%5B%5D': '123%2C234234%2C234234key%5B%5D'
+	}, 'params');
+
+});
+
+</script>
+
+</body>
+</html>
