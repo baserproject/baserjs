@@ -5,19 +5,26 @@ module baser.ui {
 	}
 
 	/**
-	 * ブレークポイントが変化したらコールバックを発火する
+	 * ブレークポイントの変化に応じた処理をする管理することができるクラス
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
 	 *
 	 */
-	export class BreakPoints<T> {
+	export class BreakPoints<T> extends event.EventDispacher {
 		
 		public currentPoint: number = 0;
 		public breakPoints: number[] = [];
 		private _values: BreakPointsOption<any> = {};
 		
-		constructor (breakPoints: BreakPointsOption<T>, callback: { (value: T, breakPoint: number, windowWidth: number): void } ) {
+		/**
+		 * コンストラクタ
+		 * 
+		 * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+		 * @param callback 変化に応じたコールバック
+		 */
+		constructor (breakPoints: BreakPointsOption<T>, callback?: { (value: T, breakPoint: number, windowWidth: number): void } ) {
+			super();
 			this._setBreakPoints<T>(breakPoints);
 			Browser.browser.on('resizeend', (): void => {
 				var i: number = 0;
@@ -31,14 +38,23 @@ module baser.ui {
 						if (this.currentPoint !== overPoint) {
 							this.currentPoint = overPoint;
 							value = <T> this._values[overPoint + ''];
-							callback(value, overPoint, wW);
-							break;
+							if (callback) {
+								callback(value, overPoint, wW);
+							}
+							this.trigger('breakpoint', [value, overPoint, wW], this);
+							this.trigger('breakpoint:' + overPoint, [value, wW], this);
 						}
+						break;
 					}
 				}
 			});
 		}
 		
+		/**
+		 * ブレークポイントの登録処理
+		 * 
+		 * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+		 */
 		private _setBreakPoints<T> (breakPoints: BreakPointsOption<T>): void {
 			var breakPointStr: string;
 			var breakPoint: number;
@@ -57,7 +73,12 @@ module baser.ui {
 			
 			this.breakPoints.sort( (a: number, b: number): any => { return a - b; } );
 		}
-		
+
+		/**
+		 * ブレークポイントを追加する
+		 * 
+		 * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+		 */
 		public add<T> (breakPoints: BreakPointsOption<T>): void {
 			this._setBreakPoints<T>(breakPoints);
 		}
