@@ -29,10 +29,16 @@
 					<div id="tsd-filter">
 						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
 						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-private" checked />
-							<label class="tsd-widget" for="tsd-filter-private">Private</label>
 							<input type="checkbox" id="tsd-filter-externals" checked />
 							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
@@ -82,22 +88,30 @@
 					</dl>
 				</div>
 			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">AnimationFrames</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Constructor methods</h3>
+							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.animationframes.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-external"><a href="baser.ui.animationframes.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.animationframes.html#static-frame_rate" class="tsd-kind-icon">FRAME_<wbr>RATE</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.animationframes.html#callback" class="tsd-kind-icon">callback</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.animationframes.html#requestid" class="tsd-kind-icon">request<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.animationframes.html#frame_rate" class="tsd-kind-icon">FRAME_<wbr>RATE</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
@@ -109,20 +123,23 @@
 						</section>
 					</div>
 				</section>
-				</section>            <section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Constructor methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-external">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.animationframes.html" class="tsd-signature-type">AnimationFrames</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Animation<wbr>Frames<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.animationframes.html" class="tsd-signature-type">AnimationFrames</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/AnimationFrames.ts#L49">ui/AnimationFrames.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/AnimationFrames.ts#L37">baser/ui/AnimationFrames.ts:37</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>フレーム毎のに実行するコールバックを登録する</p>
 								</div>
@@ -138,46 +155,27 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>callback:         <span class="tsd-signature-type">Function</span></h5>
+									<h5>callback: <span class="tsd-signature-type">Function</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.animationframes.html" class="tsd-signature-type">AnimationFrames</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="baser.ui.animationframes.html" class="tsd-signature-type">AnimationFrames</a></h4>
 							<p>リクエストIDを返す</p>
 						</li>
 					</ul>
-				</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external">
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-frame_rate" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> FRAME_<wbr>RATE</h3>
-					<div class="tsd-signature tsd-kind-icon">FRAME_<wbr>RATE<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/AnimationFrames.ts#L21">ui/AnimationFrames.ts:21</a></li>
-						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>フレームレート</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>version</dt>
-							<dd><p>0.0.10</p>
-							</dd>
-							<dt>since</dt>
-							<dd><p>0.0.10</p>
-							</dd>
-						</dl>
-					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
 					<a name="callback" class="tsd-anchor"></a>
 					<h3>callback</h3>
-					<div class="tsd-signature tsd-kind-icon">callback<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">Function</span></div>
+					<div class="tsd-signature tsd-kind-icon">callback<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/AnimationFrames.ts#L30">ui/AnimationFrames.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/AnimationFrames.ts#L28">baser/ui/AnimationFrames.ts:28</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>フレーム毎に実行するコールバック</p>
 						</div>
@@ -190,15 +188,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
 					<a name="requestid" class="tsd-anchor"></a>
 					<h3>request<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">request<wbr>Id<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">number</span></div>
+					<div class="tsd-signature tsd-kind-icon">request<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/AnimationFrames.ts#L39">ui/AnimationFrames.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/AnimationFrames.ts#L37">baser/ui/AnimationFrames.ts:37</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>フレームのリクエストID</p>
 						</div>
@@ -211,40 +211,70 @@
 							</dd>
 						</dl>
 					</div>
-				</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="frame_rate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> FRAME_<wbr>RATE</h3>
+					<div class="tsd-signature tsd-kind-icon">FRAME_<wbr>RATE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/AnimationFrames.ts#L19">baser/ui/AnimationFrames.ts:19</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>フレームレート</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.0.10</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.0.10</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="start" class="tsd-anchor"></a>
 					<h3>start</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span></li>
+						<li class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">(</span>context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/AnimationFrames.ts#L53">ui/AnimationFrames.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/AnimationFrames.ts#L51">baser/ui/AnimationFrames.ts:51</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>context?:         <span class="tsd-signature-type">any</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> context: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="stop" class="tsd-anchor"></a>
 					<h3>stop</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">stop<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+						<li class="tsd-signature tsd-kind-icon">stop<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/AnimationFrames.ts#L80">ui/AnimationFrames.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/AnimationFrames.ts#L78">baser/ui/AnimationFrames.ts:78</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>リクエストしたコールバックを停止する</p>
 								</div>
@@ -257,9 +287,12 @@
 									</dd>
 								</dl>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<p>リクエストIDを返す</p>
 						</li>
 					</ul>
-			</section></section>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
@@ -270,41 +303,68 @@
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
-					<li class=" tsd-kind-container tsd-is-external">
+					<li class="current tsd-kind-module tsd-is-external">
 						<a href="../modules/baser.html">baser</a>
+						<ul>
+							<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/baser.ui.html">ui</a>
+								<ul>
+									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+										<a href="../modules/baser.ui.element.html">element</a>
+									</li>
+									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+										<a href="../modules/baser.ui.event.html">event</a>
+									</li>
+								</ul>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/baser.utility.html">utility</a>
+							</li>
+						</ul>
 					</li>
-					<li class="current tsd-kind-container tsd-parent-kind-container tsd-is-external">
+					<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.ui.html">baser.ui</a>
+						<ul>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/baser.ui.element.html">element</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/baser.ui.event.html">event</a>
+							</li>
+						</ul>
 					</li>
-					<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.ui.element.html">baser.ui.element</a>
 					</li>
-					<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/baser.ui.event.html">baser.ui.event</a>
+					</li>
+					<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.utility.html">baser.utility</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-container tsd-is-external">
-						<a href="../interfaces/baser.ui.scrolloptions.html" class="tsd-kind-icon">Scroll<wbr>Options</a>
+					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-external">
+						<a href="../enums/baser.ui.taskstate.html" class="tsd-kind-icon">Task<wbr>State</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class="current tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.animationframes.html" class="tsd-kind-icon">Animation<wbr>Frames</a>
 						<ul>
-							<li class=" tsd-kind-constructor-method tsd-parent-kind-class tsd-is-external">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-external">
 								<a href="baser.ui.animationframes.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.animationframes.html#static-frame_rate" class="tsd-kind-icon">FRAME_<wbr>RATE</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="baser.ui.animationframes.html#callback" class="tsd-kind-icon">callback</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="baser.ui.animationframes.html#requestid" class="tsd-kind-icon">request<wbr>Id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.animationframes.html#frame_rate" class="tsd-kind-icon">FRAME_<wbr>RATE</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="baser.ui.animationframes.html#start" class="tsd-kind-icon">start</a>
@@ -316,35 +376,41 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.box.html" class="tsd-kind-icon">Box</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter tsd-is-external">
+						<a href="baser.ui.breakpoints.html" class="tsd-kind-icon">Break<wbr>Points</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.browser.html" class="tsd-kind-icon">Browser</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.dimension.html" class="tsd-kind-icon">Dimension</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
+						<a href="baser.ui.locational.html" class="tsd-kind-icon">Locational</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.dispacheevent.html" class="tsd-kind-icon">Dispache<wbr>Event</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.eventdispacher.html" class="tsd-kind-icon">Event<wbr>Dispacher</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.eventhandler.html" class="tsd-kind-icon">Event<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.scroll.html" class="tsd-kind-icon">Scroll</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
+						<a href="baser.ui.sequence.html" class="tsd-kind-icon">Sequence</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
+						<a href="baser.ui.task.html" class="tsd-kind-icon">Task</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.timer.html" class="tsd-kind-icon">Timer</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.validation.html" class="tsd-kind-icon">Validation</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-external">
+						<a href="../interfaces/baser.ui.breakpointsoption.html" class="tsd-kind-icon">Break<wbr>Points<wbr>Option</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-						<a href="../modules/baser.ui.html#flexiblewindowobject" class="tsd-kind-icon">flexible<wbr>Window<wbr>Object</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.browseruseragent.html" class="tsd-kind-icon">Browser<wbr>User<wbr>Agent</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.scrolloptions.html" class="tsd-kind-icon">Scroll<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/baser.ui.html#linkelement" class="tsd-kind-icon">Link<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/baser.ui.html#isjquerypromiselikeobject" class="tsd-kind-icon">isJQuery<wbr>Promise<wbr>Like<wbr>Object</a>
 					</li>
 				</ul>
 			</nav>
@@ -356,50 +422,56 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li>&nbsp;</li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
@@ -410,14 +482,5 @@
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
 <script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
-<script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-56482699-1', 'auto');
-        ga('send', 'pageview');
-    </script>
 </body>
 </html>

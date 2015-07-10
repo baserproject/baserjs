@@ -29,10 +29,16 @@
 					<div id="tsd-filter">
 						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
 						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-private" checked />
-							<label class="tsd-widget" for="tsd-filter-private">Private</label>
 							<input type="checkbox" id="tsd-filter-externals" checked />
 							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
@@ -98,14 +104,23 @@
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../interfaces/baser.ui.event.ieventdispacher.html" class="tsd-signature-type">IEventDispacher</a></li>
+					<li><a href="../interfaces/baser.ui.element.ielement.html" class="tsd-signature-type">IElement</a></li>
+					<li><a href="../interfaces/baser.ui.element.iformelement.html" class="tsd-signature-type">IFormElement</a></li>
+					<li><a href="../interfaces/baser.ui.element.iselect.html" class="tsd-signature-type">ISelect</a></li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Constructor methods</h3>
+							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external"><a href="baser.ui.element.select.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite tsd-is-external"><a href="baser.ui.element.select.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
@@ -117,63 +132,111 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.select.html#_pseudo" class="tsd-kind-icon">$pseudo</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.select.html#_selected" class="tsd-kind-icon">$selected</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#_wrapper" class="tsd-kind-icon">$wrapper</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#static-classnameosandroid" class="tsd-kind-icon">class<wbr>Name<wbr>OsAndroid</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#static-classnameosios" class="tsd-kind-icon">class<wbr>Name<wbr>OsIOs</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#static-classnamepseudoselect" class="tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Select</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#static-classnamepseudoselecteddisplay" class="tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Selected<wbr>Display</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#static-classnameselect" class="tsd-kind-icon">class<wbr>Name<wbr>Select</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#static-classnameselectoption" class="tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#static-classnameselectoptionlist" class="tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option<wbr>List</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#static-classnamestateselected" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Selected</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#static-classnamestateunselected" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Unselected</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external"><a href="baser.ui.element.select.html#_config" class="tsd-kind-icon">_config</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.element.select.html#_currentindex" class="tsd-kind-icon">_current<wbr>Index</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.select.html#defaultselectedindex" class="tsd-kind-icon">default<wbr>Selected<wbr>Index</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#defaultvalue" class="tsd-kind-icon">default<wbr>Value</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#disabled" class="tsd-kind-icon">disabled</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#hasfocus" class="tsd-kind-icon">has<wbr>Focus</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#haslabelbyforattr" class="tsd-kind-icon">has<wbr>Label<wbr>ByFor<wbr>Attr</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#isfocus" class="tsd-kind-icon">is<wbr>Focus</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#iswrappedbylabel" class="tsd-kind-icon">is<wbr>Wrapped<wbr>ByLabel</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#label" class="tsd-kind-icon">label</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#labelaftertext" class="tsd-kind-icon">label<wbr>After<wbr>Text</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#labelbeforetext" class="tsd-kind-icon">label<wbr>Before<wbr>Text</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamedefaultcase" class="tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Case</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamedefaultprefix" class="tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Prefix</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamedefaultseparatorforelement" class="tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Separator<wbr>For<wbr>Element</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamedefaultseparatorformodifier" class="tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Separator<wbr>For<wbr>Modifier</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnameelementcommon" class="tsd-kind-icon">class<wbr>Name<wbr>Element<wbr>Common</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnameformelementcommon" class="tsd-kind-icon">class<wbr>Name<wbr>Form<wbr>Element<wbr>Common</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamelabel" class="tsd-kind-icon">class<wbr>Name<wbr>Label</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnameosandroid" class="tsd-kind-icon">class<wbr>Name<wbr>OsAndroid</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnameosios" class="tsd-kind-icon">class<wbr>Name<wbr>OsIOs</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamepseudoselect" class="tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Select</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamepseudoselecteddisplay" class="tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Selected<wbr>Display</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnameselect" class="tsd-kind-icon">class<wbr>Name<wbr>Select</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnameselectoption" class="tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnameselectoptionlist" class="tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option<wbr>List</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamestateblur" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Blur</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamestatedisabled" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Disabled</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamestatefocus" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Focus</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamestateselected" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Selected</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamestateunselected" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Unselected</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnameusedefaultoptionlist" class="tsd-kind-icon">class<wbr>Name<wbr>Use<wbr>Default<wbr>Option<wbr>List</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#classnamewrapper" class="tsd-kind-icon">class<wbr>Name<wbr>Wrapper</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#elements" class="tsd-kind-icon">elements</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#eventhandlers" class="tsd-kind-icon">event<wbr>Handlers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#types" class="tsd-kind-icon">types</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external"><a href="baser.ui.element.select.html#_onblur" class="tsd-kind-icon">_onblur</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.element.select.html#_onchange" class="tsd-kind-icon">_onchange</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external"><a href="baser.ui.element.select.html#_onfocus" class="tsd-kind-icon">_onfocus</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external"><a href="baser.ui.element.select.html#_bindevents" class="tsd-kind-icon">_bind<wbr>Events</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.element.select.html#_bindkeybordevent" class="tsd-kind-icon">_bind<wbr>Keybord<wbr>Event</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external"><a href="baser.ui.element.select.html#_createpsuedoelements" class="tsd-kind-icon">_create<wbr>Psuedo<wbr>Elements</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external"><a href="baser.ui.element.select.html#_createwrapper" class="tsd-kind-icon">_create<wbr>Wrapper</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external"><a href="baser.ui.element.select.html#_firechangeevent" class="tsd-kind-icon">_fire<wbr>Change<wbr>Event</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external"><a href="baser.ui.element.select.html#_onsilentchange" class="tsd-kind-icon">_on<wbr>Silent<wbr>Change</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external"><a href="baser.ui.element.select.html#_onblur" class="tsd-kind-icon">_onblur</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external"><a href="baser.ui.element.select.html#_onfocus" class="tsd-kind-icon">_onfocus</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.element.select.html#_psuedofocusevent" class="tsd-kind-icon">_psuedo<wbr>Focus<wbr>Event</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.element.select.html#_scrolltoselectedposition" class="tsd-kind-icon">_scroll<wbr>ToSelected<wbr>Position</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external"><a href="baser.ui.element.select.html#_setclassname" class="tsd-kind-icon">_set<wbr>Class<wbr>Name</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="baser.ui.element.select.html#_update" class="tsd-kind-icon">_update</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#addclass" class="tsd-kind-icon">add<wbr>Class</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#getboolattr" class="tsd-kind-icon">get<wbr>Bool<wbr>Attr</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.select.html#getindex" class="tsd-kind-icon">get<wbr>Index</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.select.html#next" class="tsd-kind-icon">next</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#off" class="tsd-kind-icon">off</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#on" class="tsd-kind-icon">on</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.select.html#prev" class="tsd-kind-icon">prev</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external"><a href="baser.ui.element.select.html#setdisabled" class="tsd-kind-icon">set<wbr>Disabled</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="baser.ui.element.select.html#setindex" class="tsd-kind-icon">set<wbr>Index</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external"><a href="baser.ui.element.select.html#setvalue" class="tsd-kind-icon">set<wbr>Value</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="baser.ui.element.select.html#trigger" class="tsd-kind-icon">trigger</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#addclassto" class="tsd-kind-icon">add<wbr>Class<wbr>To</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#createclassname" class="tsd-kind-icon">create<wbr>Class<wbr>Name</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#getboolattr-1" class="tsd-kind-icon">get<wbr>Bool<wbr>Attr</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#removecssproperty" class="tsd-kind-icon">removeCSSProperty</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#removecsspropertyfromdomelement" class="tsd-kind-icon">removeCSSProperty<wbr>FromDOMElement</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#removeclassfrom" class="tsd-kind-icon">remove<wbr>Class<wbr>From</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external">
+							<h3>Object literals</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-object-literal tsd-parent-kind-class tsd-is-overwrite tsd-is-static tsd-is-external"><a href="baser.ui.element.select.html#defaultoption" class="tsd-kind-icon">default<wbr>Option</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
-				</section>            <section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Constructor methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>$el<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-signature-type">CheckableElementOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.element.select.html" class="tsd-signature-type">Select</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Select<span class="tsd-signature-symbol">(</span>$el<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/baser.ui.element.selectoption.html" class="tsd-signature-type">SelectOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.element.select.html" class="tsd-signature-type">Select</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<p>Overwrites         <a href="baser.ui.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.eventdispacher.html#constructor">constructor</a>
-								</p>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L131">ui/element/Select.ts:131</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L178">baser/ui/element/Select.ts:178</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>コンストラクタ</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.2.1</p>
+									<dd><p>0.4.1</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.1</p>
@@ -183,7 +246,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>$el:         <span class="tsd-signature-type">JQuery</span></h5>
+									<h5>$el: <span class="tsd-signature-type">JQuery</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>管理するDOM要素のjQueryオブジェクト</p>
@@ -191,7 +254,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>options:         <a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-signature-type">CheckableElementOption</a></h5>
+									<h5>options: <a href="../interfaces/baser.ui.element.selectoption.html" class="tsd-signature-type">SelectOption</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>オプション</p>
@@ -199,23 +262,24 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.element.select.html" class="tsd-signature-type">Select</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="baser.ui.element.select.html" class="tsd-signature-type">Select</a></h4>
 						</li>
 					</ul>
-				</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external">
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="_el" class="tsd-anchor"></a>
 					<h3>$el</h3>
-					<div class="tsd-signature tsd-kind-icon">$el<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">JQuery</span></div>
+					<div class="tsd-signature tsd-kind-icon">$el<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JQuery</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from         <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#_el">$el</a>
-						</p>
+						<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#_el">$el</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Element.ts#L99">ui/element/Element.ts:99</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L95">baser/ui/element/Element.ts:95</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>管理するDOM要素のjQueryオブジェクト</p>
 						</div>
@@ -225,17 +289,18 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="_label" class="tsd-anchor"></a>
 					<h3>$label</h3>
-					<div class="tsd-signature tsd-kind-icon">$label<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">JQuery</span></div>
+					<div class="tsd-signature tsd-kind-icon">$label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JQuery</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from         <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_label">$label</a>
-						</p>
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_label">$label</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/FormElement.ts#L151">ui/element/FormElement.ts:151</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L203">baser/ui/element/FormElement.ts:203</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>ラベル要素のjQueryオブジェクト</p>
 						</div>
@@ -245,15 +310,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
 					<a name="_options" class="tsd-anchor"></a>
 					<h3>$options</h3>
-					<div class="tsd-signature tsd-kind-icon">$options<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">JQuery</span></div>
+					<div class="tsd-signature tsd-kind-icon">$options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JQuery</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L120">ui/element/Select.ts:120</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L162">baser/ui/element/Select.ts:162</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>オプション要素の擬似要素のjQueryコレクション</p>
 						</div>
@@ -263,15 +330,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
 					<a name="_pseudo" class="tsd-anchor"></a>
 					<h3>$pseudo</h3>
-					<div class="tsd-signature tsd-kind-icon">$pseudo<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">JQuery</span></div>
+					<div class="tsd-signature tsd-kind-icon">$pseudo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JQuery</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L112">ui/element/Select.ts:112</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L154">baser/ui/element/Select.ts:154</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>デザイン適応要の擬似要素のjQueryオブジェクト</p>
 						</div>
@@ -281,15 +350,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
 					<a name="_selected" class="tsd-anchor"></a>
 					<h3>$selected</h3>
-					<div class="tsd-signature tsd-kind-icon">$selected<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">JQuery</span></div>
+					<div class="tsd-signature tsd-kind-icon">$selected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JQuery</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L104">ui/element/Select.ts:104</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L146">baser/ui/element/Select.ts:146</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>選択されたオプションを表示する表示領域のjQueryオブジェクト</p>
 						</div>
@@ -299,17 +370,18 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="_wrapper" class="tsd-anchor"></a>
 					<h3>$wrapper</h3>
-					<div class="tsd-signature tsd-kind-icon">$wrapper<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">JQuery</span></div>
+					<div class="tsd-signature tsd-kind-icon">$wrapper<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JQuery</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from         <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_wrapper">$wrapper</a>
-						</p>
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_wrapper">$wrapper</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/FormElement.ts#L167">ui/element/FormElement.ts:167</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L211">baser/ui/element/FormElement.ts:211</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>ラッパー要素のjQueryオブジェクト</p>
 						</div>
@@ -319,15 +391,456 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-classnameosandroid" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> class<wbr>Name<wbr>OsAndroid</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>OsAndroid<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+					<a name="_config" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _config</h3>
+					<div class="tsd-signature tsd-kind-icon">_config<span class="tsd-signature-symbol">:</span> <a href="../interfaces/baser.ui.element.selectoption.html" class="tsd-signature-type">SelectOption</a></div>
+					<aside class="tsd-sources">
+						<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_config">_config</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L170">baser/ui/element/Select.ts:170</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>オプション情報</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.4.1</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
+					<a name="_currentindex" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _current<wbr>Index</h3>
+					<div class="tsd-signature tsd-kind-icon">_current<wbr>Index<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L78">ui/element/Select.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L178">baser/ui/element/Select.ts:178</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>現在選択されているインデックス</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.4.1</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+					<a name="defaultselectedindex" class="tsd-anchor"></a>
+					<h3>default<wbr>Selected<wbr>Index</h3>
+					<div class="tsd-signature tsd-kind-icon">default<wbr>Selected<wbr>Index<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L138">baser/ui/element/Select.ts:138</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>初期の選択されているオプションのインデックス番号</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="defaultvalue" class="tsd-anchor"></a>
+					<h3>default<wbr>Value</h3>
+					<div class="tsd-signature tsd-kind-icon">default<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#defaultvalue">defaultValue</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L179">baser/ui/element/FormElement.ts:179</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>初期の値</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="disabled" class="tsd-anchor"></a>
+					<h3>disabled</h3>
+					<div class="tsd-signature tsd-kind-icon">disabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#disabled">disabled</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L171">baser/ui/element/FormElement.ts:171</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>無効状態</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="hasfocus" class="tsd-anchor"></a>
+					<h3>has<wbr>Focus</h3>
+					<div class="tsd-signature tsd-kind-icon">has<wbr>Focus<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#hasfocus">hasFocus</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L163">baser/ui/element/FormElement.ts:163</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>フォーカスがあたっている状態かどうか</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="haslabelbyforattr" class="tsd-anchor"></a>
+					<h3>has<wbr>Label<wbr>ByFor<wbr>Attr</h3>
+					<div class="tsd-signature tsd-kind-icon">has<wbr>Label<wbr>ByFor<wbr>Attr<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#haslabelbyforattr">hasLabelByForAttr</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L195">baser/ui/element/FormElement.ts:195</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>for属性に基づくラベル要素に属しているかどうか</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.5.1</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="id" class="tsd-anchor"></a>
+					<h3>id</h3>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#id">id</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L103">baser/ui/element/Element.ts:103</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>管理するDOM要素のid属性値</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.0.1</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="iswrappedbylabel" class="tsd-anchor"></a>
+					<h3>is<wbr>Wrapped<wbr>ByLabel</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Wrapped<wbr>ByLabel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#iswrappedbylabel">isWrappedByLabel</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L187">baser/ui/element/FormElement.ts:187</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>ラベル要素にラップされているかどうか</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.0.4</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="label" class="tsd-anchor"></a>
+					<h3>label</h3>
+					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#label">label</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L139">baser/ui/element/FormElement.ts:139</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>ラベルのテキスト</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.0.1</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="labelaftertext" class="tsd-anchor"></a>
+					<h3>label<wbr>After<wbr>Text</h3>
+					<div class="tsd-signature tsd-kind-icon">label<wbr>After<wbr>Text<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#labelaftertext">labelAfterText</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L155">baser/ui/element/FormElement.ts:155</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>後ろにあるラベルのテキスト</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="labelbeforetext" class="tsd-anchor"></a>
+					<h3>label<wbr>Before<wbr>Text</h3>
+					<div class="tsd-signature tsd-kind-icon">label<wbr>Before<wbr>Text<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#labelbeforetext">labelBeforeText</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L147">baser/ui/element/FormElement.ts:147</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>前にあるラベルのテキスト</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#name">name</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L111">baser/ui/element/Element.ts:111</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>管理するDOM要素のname属性値</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.0.1</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnamedefaultcase" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Default<wbr>Case</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Case<span class="tsd-signature-symbol">:</span> <a href="../enums/baser.ui.element.elementclassnamecase.html" class="tsd-signature-type">ElementClassNameCase</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#classnamedefaultcase">classNameDefaultCase</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L70">baser/ui/element/Element.ts:70</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>クラス名のデフォルトの単語繋ぎの形式</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnamedefaultprefix" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Default<wbr>Prefix</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Prefix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#classnamedefaultprefix">classNameDefaultPrefix</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L52">baser/ui/element/Element.ts:52</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>クラス名のデフォルトのプレフィックス</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnamedefaultseparatorforelement" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Default<wbr>Separator<wbr>For<wbr>Element</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Separator<wbr>For<wbr>Element<span class="tsd-signature-symbol">:</span> <a href="../enums/baser.ui.element.classnameseparatorforbem.html" class="tsd-signature-type">ClassNameSeparatorForBEM</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#classnamedefaultseparatorforelement">classNameDefaultSeparatorForElement</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L79">baser/ui/element/Element.ts:79</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>BEMのエレメントのクラス名の繋ぎ文字</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnamedefaultseparatorformodifier" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Default<wbr>Separator<wbr>For<wbr>Modifier</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Separator<wbr>For<wbr>Modifier<span class="tsd-signature-symbol">:</span> <a href="../enums/baser.ui.element.classnameseparatorforbem.html" class="tsd-signature-type">ClassNameSeparatorForBEM</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#classnamedefaultseparatorformodifier">classNameDefaultSeparatorForModifier</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L88">baser/ui/element/Element.ts:88</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>BEMのモディファイアのクラス名の繋ぎ文字</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnameelementcommon" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Element<wbr>Common</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Element<wbr>Common<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#classnameelementcommon">classNameElementCommon</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L61">baser/ui/element/Element.ts:61</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>インスタンスに付加するデフォルトのクラス名</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnameformelementcommon" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Form<wbr>Element<wbr>Common</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Form<wbr>Element<wbr>Common<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#classnameformelementcommon">classNameFormElementCommon</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L77">baser/ui/element/FormElement.ts:77</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>FormElement関連の要素の共通のクラス</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnamelabel" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Label</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#classnamelabel">classNameLabel</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L95">baser/ui/element/FormElement.ts:95</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>FormElement関連のラベル要素の共通のクラス</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnameosandroid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>OsAndroid</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>OsAndroid<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L103">baser/ui/element/Select.ts:103</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Androidの場合に付加されるクラス</p>
 						</div>
@@ -340,15 +853,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-classnameosios" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> class<wbr>Name<wbr>OsIOs</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>OsIOs<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnameosios" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>OsIOs</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>OsIOs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L69">ui/element/Select.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L94">baser/ui/element/Select.ts:94</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>iOSの場合に付加されるクラス</p>
 						</div>
@@ -361,15 +876,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-classnamepseudoselect" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> class<wbr>Name<wbr>Pseudo<wbr>Select</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Select<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnamepseudoselect" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Pseudo<wbr>Select</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Select<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L33">ui/element/Select.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L58">baser/ui/element/Select.ts:58</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Select要素の擬似要素のクラス</p>
 						</div>
@@ -382,15 +899,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-classnamepseudoselecteddisplay" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> class<wbr>Name<wbr>Pseudo<wbr>Selected<wbr>Display</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Selected<wbr>Display<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnamepseudoselecteddisplay" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Pseudo<wbr>Selected<wbr>Display</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Selected<wbr>Display<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L42">ui/element/Select.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L67">baser/ui/element/Select.ts:67</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Select要素の選択した値を表示する擬似要素のクラス</p>
 						</div>
@@ -403,15 +922,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-classnameselect" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> class<wbr>Name<wbr>Select</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Select<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnameselect" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Select</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Select<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L23">ui/element/Select.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L49">baser/ui/element/Select.ts:49</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Select要素のクラス</p>
 						</div>
@@ -424,15 +945,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-classnameselectoption" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> class<wbr>Name<wbr>Select<wbr>Option</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnameselectoption" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Select<wbr>Option</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L60">ui/element/Select.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L85">baser/ui/element/Select.ts:85</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Select要素のoption要素のクラス</p>
 						</div>
@@ -445,15 +968,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-classnameselectoptionlist" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> class<wbr>Name<wbr>Select<wbr>Option<wbr>List</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option<wbr>List<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnameselectoptionlist" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Select<wbr>Option<wbr>List</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option<wbr>List<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L51">ui/element/Select.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L76">baser/ui/element/Select.ts:76</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Select要素のoption要素をのクラス</p>
 						</div>
@@ -466,15 +991,89 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-classnamestateselected" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> class<wbr>Name<wbr>State<wbr>Selected</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Selected<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnamestateblur" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>State<wbr>Blur</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Blur<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#classnamestateblur">classNameStateBlur</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L113">baser/ui/element/FormElement.ts:113</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>FormElement関連の要素のフォーカスがはずれた時に付加されるクラス</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnamestatedisabled" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>State<wbr>Disabled</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Disabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#classnamestatedisabled">classNameStateDisabled</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L122">baser/ui/element/FormElement.ts:122</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>FormElement関連の要素の無効状態の時に付加されるクラス</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnamestatefocus" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>State<wbr>Focus</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Focus<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#classnamestatefocus">classNameStateFocus</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L104">baser/ui/element/FormElement.ts:104</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>FormElement関連の要素のフォーカス時に付加されるクラス</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.1.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnamestateselected" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>State<wbr>Selected</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Selected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L87">ui/element/Select.ts:87</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L121">baser/ui/element/Select.ts:121</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Select要素の擬似option要素の選択時に付加されるクラス</p>
 						</div>
@@ -487,15 +1086,17 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-					<a name="static-classnamestateunselected" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagstatic">static</span> class<wbr>Name<wbr>State<wbr>Unselected</h3>
-					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Unselected<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnamestateunselected" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>State<wbr>Unselected</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Unselected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L96">ui/element/Select.ts:96</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L130">baser/ui/element/Select.ts:130</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Select要素の擬似option要素の選択がはずれた時に付加されるクラス</p>
 						</div>
@@ -508,145 +1109,332 @@
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-					<a name="hasfocus" class="tsd-anchor"></a>
-					<h3>has<wbr>Focus</h3>
-					<div class="tsd-signature tsd-kind-icon">has<wbr>Focus<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">boolean</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+					<a name="classnameusedefaultoptionlist" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Use<wbr>Default<wbr>Option<wbr>List</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Use<wbr>Default<wbr>Option<wbr>List<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from         <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#hasfocus">hasFocus</a>
-						</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/FormElement.ts#L125">ui/element/FormElement.ts:125</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L112">baser/ui/element/Select.ts:112</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>フォーカスがあたっている状態かどうか</p>
+							<p>ブラウザデフォルトの選択リストを使用する場合に付加されるクラス</p>
 						</div>
 						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="classnamewrapper" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> class<wbr>Name<wbr>Wrapper</h3>
+					<div class="tsd-signature tsd-kind-icon">class<wbr>Name<wbr>Wrapper<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#classnamewrapper">classNameWrapper</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L86">baser/ui/element/FormElement.ts:86</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>FormElement関連のラッパー要素の共通のクラス</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.1.0</p>
+							</dd>
 							<dt>since</dt>
 							<dd><p>0.1.0</p>
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-					<a name="id" class="tsd-anchor"></a>
-					<h3>id</h3>
-					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="elements" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> elements</h3>
+					<div class="tsd-signature tsd-kind-icon">elements<span class="tsd-signature-symbol">:</span> <a href="baser.ui.element.formelement.html" class="tsd-signature-type">FormElement</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from         <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#id">id</a>
-						</p>
+						<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#elements">elements</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Element.ts#L107">ui/element/Element.ts:107</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L131">baser/ui/element/FormElement.ts:131</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
+					</aside>
+					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>管理するDOM要素のid属性値</p>
+							<p>フォーム関連要素リスト</p>
 						</div>
 						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.7.0</p>
+							</dd>
 							<dt>since</dt>
-							<dd><p>0.0.1</p>
+							<dd><p>0.7.0</p>
 							</dd>
 						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-					<a name="isfocus" class="tsd-anchor"></a>
-					<h3>is<wbr>Focus</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Focus<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">boolean</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="eventhandlers" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> event<wbr>Handlers</h3>
+					<div class="tsd-signature tsd-kind-icon">event<wbr>Handlers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from         <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#isfocus">isFocus</a>
-						</p>
+						<p>Inherited from <a href="baser.ui.event.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.event.eventdispacher.html#eventhandlers">eventHandlers</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/FormElement.ts#L135">ui/element/FormElement.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/event/EventDispacher.ts#L12">baser/ui/event/EventDispacher.ts:12</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>削除予定
-							フォーカスがあたっている状態かどうか</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>deprecated</dt>
-							<dd></dd>
-							<dt>since</dt>
-							<dd><p>0.0.1</p>
-							</dd>
-						</dl>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-index-signature">
+								<h5><span class="tsd-signature-symbol">[</span>index: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="baser.ui.event.eventhandler.html" class="tsd-signature-type">EventHandler</a></h5>
+							</li>
+						</ul>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-					<a name="iswrappedbylabel" class="tsd-anchor"></a>
-					<h3>is<wbr>Wrapped<wbr>ByLabel</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Wrapped<wbr>ByLabel<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">boolean</span></div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="types" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> types</h3>
+					<div class="tsd-signature tsd-kind-icon">types<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from         <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#iswrappedbylabel">isWrappedByLabel</a>
-						</p>
+						<p>Inherited from <a href="baser.ui.event.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.event.eventdispacher.html#types">types</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/FormElement.ts#L159">ui/element/FormElement.ts:159</a></li>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/event/EventDispacher.ts#L13">baser/ui/event/EventDispacher.ts:13</a></li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>ラベル要素にラップされているかどうか</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>since</dt>
-							<dd><p>0.0.4</p>
-							</dd>
-						</dl>
-					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-					<a name="label" class="tsd-anchor"></a>
-					<h3>label</h3>
-					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from         <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#label">label</a>
-						</p>
-						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/FormElement.ts#L143">ui/element/FormElement.ts:143</a></li>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-index-signature">
+								<h5><span class="tsd-signature-symbol">[</span>index: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="baser.ui.event.eventhandler.html" class="tsd-signature-type">EventHandler</a><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
 						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>ラベルのテキスト</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>since</dt>
-							<dd><p>0.0.1</p>
-							</dd>
-						</dl>
 					</div>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from         <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#name">name</a>
-						</p>
-						<ul>
-							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Element.ts#L115">ui/element/Element.ts:115</a></li>
-						</ul>
-						</aside>        <div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>管理するDOM要素のname属性値</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>since</dt>
-							<dd><p>0.0.1</p>
-							</dd>
-						</dl>
-					</div>
-				</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external">
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
-					<a name="_onblur" class="tsd-anchor"></a>
-					<h3>_onblur</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">_onblur<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+					<a name="_bindevents" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _bind<wbr>Events</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_bind<wbr>Events<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<p>Overwrites         <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_onblur">_onblur</a>
-								</p>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_bindevents">_bindEvents</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L322">ui/element/Select.ts:322</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L294">baser/ui/element/Select.ts:294</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>イベントの登録</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.1</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>override</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+					<a name="_bindkeybordevent" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _bind<wbr>Keybord<wbr>Event</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_bind<wbr>Keybord<wbr>Event<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L439">baser/ui/element/Select.ts:439</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>フォーカス時のキーボードイベント</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+										<p>TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+					<a name="_createpsuedoelements" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _create<wbr>Psuedo<wbr>Elements</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_create<wbr>Psuedo<wbr>Elements<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_createpsuedoelements">_createPsuedoElements</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L236">baser/ui/element/Select.ts:236</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>擬似セレクトボックス要素を生成する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.1</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>override</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+					<a name="_createwrapper" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _create<wbr>Wrapper</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_create<wbr>Wrapper<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_createwrapper">_createWrapper</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L223">baser/ui/element/Select.ts:223</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>ラップ要素を生成</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>override</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+					<a name="_firechangeevent" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _fire<wbr>Change<wbr>Event</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_fire<wbr>Change<wbr>Event<span class="tsd-signature-symbol">(</span>isSilent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_firechangeevent">_fireChangeEvent</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/FormElement.ts#L561">baser/ui/element/FormElement.ts:561</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>changeイベントを発火する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> isSilent: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+					<a name="_onsilentchange" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _on<wbr>Silent<wbr>Change</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_on<wbr>Silent<wbr>Change<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_onsilentchange">_onSilentChange</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L332">baser/ui/element/Select.ts:332</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>他のオブジェクトにchangeイベントを発火・伝達せずに実行されるチェンジ処理</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+					<a name="_onblur" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _onblur</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_onblur<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_onblur">_onblur</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L502">baser/ui/element/Select.ts:502</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>フォーカスがはずれた時の処理</p>
 								</div>
@@ -659,102 +1447,89 @@
 									</dd>
 								</dl>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
-					<a name="_onchange" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _onchange</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">_onchange<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L286">ui/element/Select.ts:286</a></li>
-								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>チェンジイベントのハンドラ</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>version</dt>
-									<dd><p>0.0.1</p>
-									</dd>
-									<dt>since</dt>
-									<dd><p>0.0.1</p>
-									</dd>
-								</dl>
-							</div>
-						</li>
-					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
 					<a name="_onfocus" class="tsd-anchor"></a>
-					<h3>_onfocus</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">_onfocus<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _onfocus</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_onfocus<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<p>Overwrites         <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_onfocus">_onfocus</a>
-								</p>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_onfocus">_onfocus</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L301">ui/element/Select.ts:301</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L479">baser/ui/element/Select.ts:479</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>フォーカスがあたった時の処理</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.1.0</p>
+									<dd><p>0.4.1</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.1</p>
 									</dd>
+									<dt>override</dt>
+									<dd></dd>
 								</dl>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
 					<a name="_psuedofocusevent" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _psuedo<wbr>Focus<wbr>Event</h3>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _psuedo<wbr>Focus<wbr>Event</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">_psuedo<wbr>Focus<wbr>Event<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+						<li class="tsd-signature tsd-kind-icon">_psuedo<wbr>Focus<wbr>Event<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L251">ui/element/Select.ts:251</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L374">baser/ui/element/Select.ts:374</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>擬似要素にフォーカスがあったった時のイベント伝達を制御する</p>
+									<p>擬似要素にフォーカスがあったった時のイベントと伝達を制御する</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.0.1</p>
+									<dd><p>0.4.0</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.1</p>
 									</dd>
 								</dl>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
 					<a name="_scrolltoselectedposition" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _scroll<wbr>ToSelected<wbr>Position</h3>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _scroll<wbr>ToSelected<wbr>Position</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">_scroll<wbr>ToSelected<wbr>Position<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+						<li class="tsd-signature tsd-kind-icon">_scroll<wbr>ToSelected<wbr>Position<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L218">ui/element/Select.ts:218</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L343">baser/ui/element/Select.ts:343</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>オプションが開かれた後にスクロール位置を調整する</p>
+									<p>スクロール位置を調整する</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
@@ -765,48 +1540,88 @@
 									</dd>
 								</dl>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
-					<a name="_update" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagprivate">private</span> _update</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">_update<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span></li>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+					<a name="_setclassname" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _set<wbr>Class<wbr>Name</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_set<wbr>Class<wbr>Name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#_setclassname">_setClassName</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Select.ts#L338">ui/element/Select.ts:338</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L209">baser/ui/element/Select.ts:209</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>クラス名を設定する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>override</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+					<a name="_update" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _update</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">_update<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L518">baser/ui/element/Select.ts:518</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>要素の状態を更新する</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.1.0</p>
+									<dd><p>0.4.1</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.1</p>
 									</dd>
 								</dl>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="addclass" class="tsd-anchor"></a>
 					<h3>add<wbr>Class</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Class<span class="tsd-signature-symbol">(</span>blockNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, elementNames<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;</span>&#x27;&#x27;, modifierName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;</span>&#x27;&#x27;<span class="tsd-signature-symbol">)</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Class<span class="tsd-signature-symbol">(</span>blockNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, elementNames<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, modifierName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<p>Inherited from         <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#addclass">addClass</a>
-								</p>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#addclass">addClass</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Element.ts#L340">ui/element/Element.ts:340</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L336">baser/ui/element/Element.ts:336</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>クラス名を付加する</p>
 								</div>
@@ -822,31 +1637,34 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>blockNames:         <span class="tsd-signature-type">string</span></h5>
+									<h5>blockNames: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>elementNames?:         <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> elementNames: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
 								</li>
 								<li>
-									<h5>modifierName?:         <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> modifierName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
 								</li>
 							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="getboolattr" class="tsd-anchor"></a>
 					<h3>get<wbr>Bool<wbr>Attr</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">get<wbr>Bool<wbr>Attr<span class="tsd-signature-symbol">(</span>attrName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<p>Inherited from         <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#getboolattr">getBoolAttr</a>
-								</p>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#getboolattr">getBoolAttr</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/element/Element.ts#L354">ui/element/Element.ts:354</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L350">baser/ui/element/Element.ts:350</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>要素の属性の真偽を判定する</p>
 								</div>
@@ -863,27 +1681,94 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>attrName:         <span class="tsd-signature-type">string</span></h5>
+									<h5>attrName: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">boolean</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="getindex" class="tsd-anchor"></a>
+					<h3>get<wbr>Index</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Index<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L591">baser/ui/element/Select.ts:591</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>現在の選択中のインデックス番号を取得する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="next" class="tsd-anchor"></a>
+					<h3>next</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">next<span class="tsd-signature-symbol">(</span>isSilent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L609">baser/ui/element/Select.ts:609</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>次の項目を選択する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>isSilent: <span class="tsd-signature-type">boolean</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="off" class="tsd-anchor"></a>
 					<h3>off</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">off<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
+						<li class="tsd-signature tsd-kind-icon">off<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.event.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<p>Inherited from         <a href="baser.ui.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.eventdispacher.html#off">off</a>
-								</p>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.event.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.event.eventdispacher.html#off">off</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L54">ui/EventDispacher.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/event/EventDispacher.ts#L52">baser/ui/event/EventDispacher.ts:52</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>イベントハンドラを削除する</p>
 								</div>
@@ -899,27 +1784,28 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>type?:         <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="baser.ui.event.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="on" class="tsd-anchor"></a>
 					<h3>on</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.event.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<p>Inherited from         <a href="baser.ui.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.eventdispacher.html#on">on</a>
-								</p>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.event.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.event.eventdispacher.html#on">on</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L35">ui/EventDispacher.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/event/EventDispacher.ts#L33">baser/ui/event/EventDispacher.ts:33</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>イベントハンドラを登録する</p>
 								</div>
@@ -935,36 +1821,190 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>type:         <span class="tsd-signature-type">string</span></h5>
+									<h5>type: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>handler:         <span class="tsd-signature-type">Function</span></h5>
+									<h5>handler: <span class="tsd-signature-type">Function</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="baser.ui.event.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="prev" class="tsd-anchor"></a>
+					<h3>prev</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">prev<span class="tsd-signature-symbol">(</span>isSilent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L623">baser/ui/element/Select.ts:623</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>前の項目を選択する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>isSilent: <span class="tsd-signature-type">boolean</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+					<a name="setdisabled" class="tsd-anchor"></a>
+					<h3>set<wbr>Disabled</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Disabled<span class="tsd-signature-symbol">(</span>isDisabled<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#setdisabled">setDisabled</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L637">baser/ui/element/Select.ts:637</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>無効状態を設定する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.1</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.1</p>
+									</dd>
+									<dt>override</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>isDisabled: <span class="tsd-signature-type">boolean</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="setindex" class="tsd-anchor"></a>
+					<h3>set<wbr>Index</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Index<span class="tsd-signature-symbol">(</span>index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, isSilent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L576">baser/ui/element/Select.ts:576</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>値をインデックス番号から設定する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.1</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>index: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> isSilent: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+					<a name="setvalue" class="tsd-anchor"></a>
+					<h3>set<wbr>Value</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Value<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#setvalue">setValue</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L560">baser/ui/element/Select.ts:560</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>値を設定する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.4.0</p>
+									</dd>
+									<dt>override</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="trigger" class="tsd-anchor"></a>
 					<h3>trigger</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array&lt;any&gt;</span><span class="tsd-signature-symbol"> =&nbsp;</span>[], context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
+						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any[]</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="baser.ui.event.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<p>Inherited from         <a href="baser.ui.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.eventdispacher.html#trigger">trigger</a>
-								</p>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.event.eventdispacher.html">EventDispacher</a>.<a href="baser.ui.event.eventdispacher.html#trigger">trigger</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/baser/ui/EventDispacher.ts#L66">ui/EventDispacher.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/event/EventDispacher.ts#L64">baser/ui/event/EventDispacher.ts:64</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>イベントハンドラを発火させる</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.3.0</p>
+									<dd><p>0.5.0</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.10</p>
@@ -974,20 +2014,316 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>type:         <span class="tsd-signature-type">string</span></h5>
+									<h5>type: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>args?:         <span class="tsd-signature-type">Array&lt;any&gt;</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> args: <span class="tsd-signature-type">any[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></h5>
 								</li>
 								<li>
-									<h5>context?:         <span class="tsd-signature-type">any</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> context: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <a href="baser.ui.eventdispacher.html" class="tsd-signature-type">EventDispacher</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="baser.ui.event.eventdispacher.html" class="tsd-signature-type">EventDispacher</a></h4>
 						</li>
 					</ul>
-			</section></section>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="addclassto" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> add<wbr>Class<wbr>To</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Class<wbr>To<span class="tsd-signature-symbol">(</span>$elem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span>, blockNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, elementNames<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, modifierName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#addclassto">addClassTo</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L247">baser/ui/element/Element.ts:247</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>クラス名を付加する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.1.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.1.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>$elem: <span class="tsd-signature-type">JQuery</span></h5>
+								</li>
+								<li>
+									<h5>blockNames: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> elementNames: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> modifierName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="createclassname" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> create<wbr>Class<wbr>Name</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Class<wbr>Name<span class="tsd-signature-symbol">(</span>blockNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, elementNames<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, modifierName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#createclassname">createClassName</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L120">baser/ui/element/Element.ts:120</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>クラス名文字列を生成する</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.1.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.1.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>blockNames: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> elementNames: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> modifierName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="getboolattr-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Bool<wbr>Attr</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Bool<wbr>Attr<span class="tsd-signature-symbol">(</span>$elem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span>, attrName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#getboolattr-1">getBoolAttr</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L215">baser/ui/element/Element.ts:215</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>要素の属性の真偽を判定する</p>
+								</div>
+								<p>DOM APIの標準で判定できるものはそれで判断</p>
+								<p>値なし属性の場合は存在すれば真</p>
+								<p>値あり属性の場合は偽相等の文字列でなければ全て真とする</p>
+								<p>ただし値なし属性の場合は値が空文字列のため、偽相等の文字列の例外とする</p>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.2.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>$elem: <span class="tsd-signature-type">JQuery</span></h5>
+								</li>
+								<li>
+									<h5>attrName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="removecssproperty" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> removeCSSProperty</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">removeCSSProperty<span class="tsd-signature-symbol">(</span>propertyName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, $elem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#removecssproperty">removeCSSProperty</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L291">baser/ui/element/Element.ts:291</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>CSSプロパティを取り除く</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.2.2</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.2.2</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>propertyName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>$elem: <span class="tsd-signature-type">JQuery</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="removecsspropertyfromdomelement" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> removeCSSProperty<wbr>FromDOMElement</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">removeCSSProperty<wbr>FromDOMElement<span class="tsd-signature-symbol">(</span>propertyName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, elem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#removecsspropertyfromdomelement">removeCSSPropertyFromDOMElement</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L271">baser/ui/element/Element.ts:271</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>CSSプロパティをDOM要素から取り除く</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.2.2</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.2.2</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>propertyName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>elem: <span class="tsd-signature-type">HTMLElement</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="removeclassfrom" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> remove<wbr>Class<wbr>From</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Class<wbr>From<span class="tsd-signature-symbol">(</span>$elem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span>, blockNames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, elementNames<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, modifierName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baser.ui.element.element.html">Element</a>.<a href="baser.ui.element.element.html#removeclassfrom">removeClassFrom</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Element.ts#L259">baser/ui/element/Element.ts:259</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>クラス名を取り除く</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>version</dt>
+									<dd><p>0.1.0</p>
+									</dd>
+									<dt>since</dt>
+									<dd><p>0.1.0</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>$elem: <span class="tsd-signature-type">JQuery</span></h5>
+								</li>
+								<li>
+									<h5>blockNames: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> elementNames: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> modifierName: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+				<h2>Object literals</h2>
+				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-class tsd-is-overwrite tsd-is-static tsd-is-external">
+					<a name="defaultoption" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> default<wbr>Option</h3>
+					<div class="tsd-signature tsd-kind-icon">default<wbr>Option<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<p>Overwrites <a href="baser.ui.element.formelement.html">FormElement</a>.<a href="baser.ui.element.formelement.html#defaultoption">defaultOption</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L38">baser/ui/element/Select.ts:38</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>オプションのデフォルト値</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>version</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+							<dt>since</dt>
+							<dd><p>0.4.0</p>
+							</dd>
+						</dl>
+					</div>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal tsd-is-external">
+						<a name="defaultoption.usedefaultoptionlist" class="tsd-anchor"></a>
+						<h3>use<wbr>Default<wbr>Option<wbr>List</h3>
+						<div class="tsd-signature tsd-kind-icon">use<wbr>Default<wbr>Option<wbr>List<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/baser/ui/element/Select.ts#L39">baser/ui/element/Select.ts:39</a></li>
+							</ul>
+						</aside>
+					</section>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
@@ -998,73 +2334,88 @@
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
-					<li class=" tsd-kind-container tsd-is-external">
+					<li class="current tsd-kind-module tsd-is-external">
 						<a href="../modules/baser.html">baser</a>
+						<ul>
+							<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/baser.ui.html">ui</a>
+								<ul>
+									<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
+										<a href="../modules/baser.ui.element.html">element</a>
+									</li>
+									<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+										<a href="../modules/baser.ui.event.html">event</a>
+									</li>
+								</ul>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/baser.utility.html">utility</a>
+							</li>
+						</ul>
 					</li>
-					<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
+					<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.ui.html">baser.ui</a>
+						<ul>
+							<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/baser.ui.element.html">element</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+								<a href="../modules/baser.ui.event.html">event</a>
+							</li>
+						</ul>
 					</li>
-					<li class="current tsd-kind-container tsd-parent-kind-container tsd-is-external">
+					<li class="current tsd-kind-module tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.ui.element.html">baser.ui.element</a>
 					</li>
-					<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/baser.ui.event.html">baser.ui.event</a>
+					</li>
+					<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.utility.html">baser.utility</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-external">
 						<a href="../enums/baser.ui.element.classnameseparatorforbem.html" class="tsd-kind-icon">Class<wbr>Name<wbr>Separator<wbr>ForBEM</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-external">
 						<a href="../enums/baser.ui.element.elementclassnamecase.html" class="tsd-kind-icon">Element<wbr>Class<wbr>Name<wbr>Case</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-container tsd-is-external">
-						<a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-kind-icon">Checkable<wbr>Element<wbr>Option</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
+						<a href="baser.ui.element.alignedboxes.html" class="tsd-kind-icon">Aligned<wbr>Boxes</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-container tsd-is-external">
-						<a href="../interfaces/baser.ui.element.formelementoption.html" class="tsd-kind-icon">Form<wbr>Element<wbr>Option</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-container tsd-is-external">
-						<a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-kind-icon">Map<wbr>Option</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-container tsd-is-external">
-						<a href="../interfaces/baser.ui.element.youtubeoption.html" class="tsd-kind-icon">Youtube<wbr>Option</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.checkableelement.html" class="tsd-kind-icon">Checkable<wbr>Element</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.checkbox.html" class="tsd-kind-icon">Checkbox</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.coordinate.html" class="tsd-kind-icon">Coordinate</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.element.html" class="tsd-kind-icon">Element</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
-						<a href="baser.ui.element.form.html" class="tsd-kind-icon">Form</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.formelement.html" class="tsd-kind-icon">Form<wbr>Element</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.map.html" class="tsd-kind-icon">Map</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.radio.html" class="tsd-kind-icon">Radio</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.radiogroup.html" class="tsd-kind-icon">Radio<wbr>Group</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class="current tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.select.html" class="tsd-kind-icon">Select</a>
 						<ul>
-							<li class=" tsd-kind-constructor-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
 								<a href="baser.ui.element.select.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
@@ -1085,41 +2436,29 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="baser.ui.element.select.html#_wrapper" class="tsd-kind-icon">$wrapper</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.select.html#static-classnameosandroid" class="tsd-kind-icon">class<wbr>Name<wbr>OsAndroid</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+								<a href="baser.ui.element.select.html#_config" class="tsd-kind-icon">_config</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.select.html#static-classnameosios" class="tsd-kind-icon">class<wbr>Name<wbr>OsIOs</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
+								<a href="baser.ui.element.select.html#_currentindex" class="tsd-kind-icon">_current<wbr>Index</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.select.html#static-classnamepseudoselect" class="tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Select</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.element.select.html#defaultselectedindex" class="tsd-kind-icon">default<wbr>Selected<wbr>Index</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.select.html#static-classnamepseudoselecteddisplay" class="tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Selected<wbr>Display</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="baser.ui.element.select.html#defaultvalue" class="tsd-kind-icon">default<wbr>Value</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.select.html#static-classnameselect" class="tsd-kind-icon">class<wbr>Name<wbr>Select</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.select.html#static-classnameselectoption" class="tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.select.html#static-classnameselectoptionlist" class="tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option<wbr>List</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.select.html#static-classnamestateselected" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Selected</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
-								<a href="baser.ui.element.select.html#static-classnamestateunselected" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Unselected</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="baser.ui.element.select.html#disabled" class="tsd-kind-icon">disabled</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="baser.ui.element.select.html#hasfocus" class="tsd-kind-icon">has<wbr>Focus</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="baser.ui.element.select.html#id" class="tsd-kind-icon">id</a>
+								<a href="baser.ui.element.select.html#haslabelbyforattr" class="tsd-kind-icon">has<wbr>Label<wbr>ByFor<wbr>Attr</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="baser.ui.element.select.html#isfocus" class="tsd-kind-icon">is<wbr>Focus</a>
+								<a href="baser.ui.element.select.html#id" class="tsd-kind-icon">id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="baser.ui.element.select.html#iswrappedbylabel" class="tsd-kind-icon">is<wbr>Wrapped<wbr>ByLabel</a>
@@ -1128,15 +2467,108 @@
 								<a href="baser.ui.element.select.html#label" class="tsd-kind-icon">label</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="baser.ui.element.select.html#labelaftertext" class="tsd-kind-icon">label<wbr>After<wbr>Text</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="baser.ui.element.select.html#labelbeforetext" class="tsd-kind-icon">label<wbr>Before<wbr>Text</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="baser.ui.element.select.html#name" class="tsd-kind-icon">name</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
-								<a href="baser.ui.element.select.html#_onblur" class="tsd-kind-icon">_onblur</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamedefaultcase" class="tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Case</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamedefaultprefix" class="tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Prefix</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamedefaultseparatorforelement" class="tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Separator<wbr>For<wbr>Element</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamedefaultseparatorformodifier" class="tsd-kind-icon">class<wbr>Name<wbr>Default<wbr>Separator<wbr>For<wbr>Modifier</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnameelementcommon" class="tsd-kind-icon">class<wbr>Name<wbr>Element<wbr>Common</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnameformelementcommon" class="tsd-kind-icon">class<wbr>Name<wbr>Form<wbr>Element<wbr>Common</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamelabel" class="tsd-kind-icon">class<wbr>Name<wbr>Label</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnameosandroid" class="tsd-kind-icon">class<wbr>Name<wbr>OsAndroid</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnameosios" class="tsd-kind-icon">class<wbr>Name<wbr>OsIOs</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamepseudoselect" class="tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Select</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamepseudoselecteddisplay" class="tsd-kind-icon">class<wbr>Name<wbr>Pseudo<wbr>Selected<wbr>Display</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnameselect" class="tsd-kind-icon">class<wbr>Name<wbr>Select</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnameselectoption" class="tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnameselectoptionlist" class="tsd-kind-icon">class<wbr>Name<wbr>Select<wbr>Option<wbr>List</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamestateblur" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Blur</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamestatedisabled" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Disabled</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamestatefocus" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Focus</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamestateselected" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Selected</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamestateunselected" class="tsd-kind-icon">class<wbr>Name<wbr>State<wbr>Unselected</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnameusedefaultoptionlist" class="tsd-kind-icon">class<wbr>Name<wbr>Use<wbr>Default<wbr>Option<wbr>List</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#classnamewrapper" class="tsd-kind-icon">class<wbr>Name<wbr>Wrapper</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#elements" class="tsd-kind-icon">elements</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#eventhandlers" class="tsd-kind-icon">event<wbr>Handlers</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#types" class="tsd-kind-icon">types</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+								<a href="baser.ui.element.select.html#_bindevents" class="tsd-kind-icon">_bind<wbr>Events</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
-								<a href="baser.ui.element.select.html#_onchange" class="tsd-kind-icon">_onchange</a>
+								<a href="baser.ui.element.select.html#_bindkeybordevent" class="tsd-kind-icon">_bind<wbr>Keybord<wbr>Event</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+								<a href="baser.ui.element.select.html#_createpsuedoelements" class="tsd-kind-icon">_create<wbr>Psuedo<wbr>Elements</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+								<a href="baser.ui.element.select.html#_createwrapper" class="tsd-kind-icon">_create<wbr>Wrapper</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected tsd-is-external">
+								<a href="baser.ui.element.select.html#_firechangeevent" class="tsd-kind-icon">_fire<wbr>Change<wbr>Event</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+								<a href="baser.ui.element.select.html#_onsilentchange" class="tsd-kind-icon">_on<wbr>Silent<wbr>Change</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+								<a href="baser.ui.element.select.html#_onblur" class="tsd-kind-icon">_onblur</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
 								<a href="baser.ui.element.select.html#_onfocus" class="tsd-kind-icon">_onfocus</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
@@ -1144,6 +2576,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
 								<a href="baser.ui.element.select.html#_scrolltoselectedposition" class="tsd-kind-icon">_scroll<wbr>ToSelected<wbr>Position</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected tsd-is-external">
+								<a href="baser.ui.element.select.html#_setclassname" class="tsd-kind-icon">_set<wbr>Class<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
 								<a href="baser.ui.element.select.html#_update" class="tsd-kind-icon">_update</a>
@@ -1154,32 +2589,119 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="baser.ui.element.select.html#getboolattr" class="tsd-kind-icon">get<wbr>Bool<wbr>Attr</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.element.select.html#getindex" class="tsd-kind-icon">get<wbr>Index</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.element.select.html#next" class="tsd-kind-icon">next</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="baser.ui.element.select.html#off" class="tsd-kind-icon">off</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="baser.ui.element.select.html#on" class="tsd-kind-icon">on</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.element.select.html#prev" class="tsd-kind-icon">prev</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+								<a href="baser.ui.element.select.html#setdisabled" class="tsd-kind-icon">set<wbr>Disabled</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="baser.ui.element.select.html#setindex" class="tsd-kind-icon">set<wbr>Index</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
+								<a href="baser.ui.element.select.html#setvalue" class="tsd-kind-icon">set<wbr>Value</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="baser.ui.element.select.html#trigger" class="tsd-kind-icon">trigger</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#addclassto" class="tsd-kind-icon">add<wbr>Class<wbr>To</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#createclassname" class="tsd-kind-icon">create<wbr>Class<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#getboolattr-1" class="tsd-kind-icon">get<wbr>Bool<wbr>Attr</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#removecssproperty" class="tsd-kind-icon">removeCSSProperty</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#removecsspropertyfromdomelement" class="tsd-kind-icon">removeCSSProperty<wbr>FromDOMElement</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#removeclassfrom" class="tsd-kind-icon">remove<wbr>Class<wbr>From</a>
+							</li>
+							<li class=" tsd-kind-object-literal tsd-parent-kind-class tsd-is-overwrite tsd-is-static tsd-is-external">
+								<a href="baser.ui.element.select.html#defaultoption" class="tsd-kind-icon">default<wbr>Option</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-container tsd-is-external">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
+						<a href="baser.ui.element.textfield.html" class="tsd-kind-icon">Text<wbr>Field</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
 						<a href="baser.ui.element.youtube.html" class="tsd-kind-icon">Youtube</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.alignedboxcallback.html" class="tsd-kind-icon">Aligned<wbr>Box<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-kind-icon">Checkable<wbr>Element<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.formelementoption.html" class="tsd-kind-icon">Form<wbr>Element<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.icheckableelement.html" class="tsd-kind-icon">ICheckable<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.icheckbox.html" class="tsd-kind-icon">ICheckbox</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.ielement.html" class="tsd-kind-icon">IElement</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.iformelement.html" class="tsd-kind-icon">IForm<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.iradio.html" class="tsd-kind-icon">IRadio</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.iselect.html" class="tsd-kind-icon">ISelect</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.itextfield.html" class="tsd-kind-icon">IText<wbr>Field</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-kind-icon">Map<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.selectoption.html" class="tsd-kind-icon">Select<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.textfieldoption.html" class="tsd-kind-icon">Text<wbr>Field<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.youtubemutecontrolleroptions.html" class="tsd-kind-icon">Youtube<wbr>Mute<wbr>Controller<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/baser.ui.element.youtubeoption.html" class="tsd-kind-icon">Youtube<wbr>Option</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.ui.element.html#double_hyphen" class="tsd-kind-icon">DOUBLE_<wbr>HYPHEN</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.ui.element.html#double_underscore" class="tsd-kind-icon">DOUBLE_<wbr>UNDERSCORE</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.ui.element.html#hyphen" class="tsd-kind-icon">HYPHEN</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/baser.ui.element.html#underscore" class="tsd-kind-icon">UNDERSCORE</a>
 					</li>
 				</ul>
@@ -1192,50 +2714,56 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li>&nbsp;</li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
@@ -1246,14 +2774,5 @@
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
 <script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
-<script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-56482699-1', 'auto');
-        ga('send', 'pageview');
-    </script>
 </body>
 </html>

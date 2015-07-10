@@ -29,10 +29,16 @@
 					<div id="tsd-filter">
 						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
 						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-private" checked />
-							<label class="tsd-widget" for="tsd-filter-private">Private</label>
 							<input type="checkbox" id="tsd-filter-externals" checked />
 							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
 							<input type="checkbox" id="tsd-filter-only-exported" />
@@ -68,57 +74,48 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Modules</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-container tsd-parent-kind-container tsd-is-external"><a href="baser.ui.html" class="tsd-kind-icon">ui</a></li>
-								<li class="tsd-kind-container tsd-parent-kind-container tsd-is-external"><a href="baser.utility.html" class="tsd-kind-icon">utility</a></li>
+								<li class="tsd-kind-module tsd-parent-kind-module tsd-is-external"><a href="baser.ui.html" class="tsd-kind-icon">ui</a></li>
+								<li class="tsd-kind-module tsd-parent-kind-module tsd-is-external"><a href="baser.utility.html" class="tsd-kind-icon">utility</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
-							<h3>Object literals</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-object-literal tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="../objects/baser.eventhandlers.html" class="tsd-kind-icon">event<wbr>Handlers</a></li>
-								<li class="tsd-kind-object-literal tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="../objects/baser.types.html" class="tsd-kind-icon">types</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
+						<section class="tsd-index-section tsd-is-external">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcbackground" class="tsd-kind-icon">bc<wbr>Background</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcboxalignheight" class="tsd-kind-icon">bc<wbr>Box<wbr>Align<wbr>Height</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bccheckbox" class="tsd-kind-icon">bc<wbr>Checkbox</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcimageloaded" class="tsd-kind-icon">bc<wbr>Image<wbr>Loaded</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bckeepaspectratio" class="tsd-kind-icon">bc<wbr>Keep<wbr>Aspect<wbr>Ratio</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcmaps" class="tsd-kind-icon">bc<wbr>Maps</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcradio" class="tsd-kind-icon">bc<wbr>Radio</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcscrollto" class="tsd-kind-icon">bc<wbr>Scroll<wbr>To</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcselect" class="tsd-kind-icon">bc<wbr>Select</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcyoutube" class="tsd-kind-icon">bc<wbr>Youtube</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
-							<h3>Variables</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcrollover" class="tsd-kind-icon">bc<wbr>Rollover</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcshy" class="tsd-kind-icon">bc<wbr>Shy</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcsplitlist" class="tsd-kind-icon">bc<wbr>Split<wbr>List</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported"><a href="baser.html#bcwink" class="tsd-kind-icon">bc<wbr>Wink</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcbackground" class="tsd-kind-icon">bc<wbr>Background</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcboxalignheight" class="tsd-kind-icon">bc<wbr>Box<wbr>Align<wbr>Height</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bccheckbox" class="tsd-kind-icon">bc<wbr>Checkbox</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcimageloaded" class="tsd-kind-icon">bc<wbr>Image<wbr>Loaded</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bckeepaspectratio" class="tsd-kind-icon">bc<wbr>Keep<wbr>Aspect<wbr>Ratio</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcmaps" class="tsd-kind-icon">bc<wbr>Maps</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcradio" class="tsd-kind-icon">bc<wbr>Radio</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcrollover" class="tsd-kind-icon">bc<wbr>Rollover</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcscrollto" class="tsd-kind-icon">bc<wbr>Scroll<wbr>To</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcselect" class="tsd-kind-icon">bc<wbr>Select</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcshy" class="tsd-kind-icon">bc<wbr>Shy</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcsplitlist" class="tsd-kind-icon">bc<wbr>Split<wbr>List</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcwink" class="tsd-kind-icon">bc<wbr>Wink</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-external"><a href="baser.html#bcyoutube" class="tsd-kind-icon">bc<wbr>Youtube</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
-				</section>            <section class="tsd-panel-group tsd-member-group tsd-is-external tsd-is-not-exported">
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bcbackground" class="tsd-anchor"></a>
 					<h3>bc<wbr>Background</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">bc<wbr>Background<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcBackground.ts#L35">/Users/hirao/git/baserjs/src/jquery/bcBackground.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcBackground.ts#L35">jquery/bcBackground.ts:35</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>自信の要素を基準に、指定の子要素を背景のように扱う</p>
 								</div>
@@ -136,48 +133,46 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options:         <span class="tsd-signature-type">any</span></h5>
+									<h5>options: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>オプション</p>
-											<hr>
-											<h2 id="sample">Sample</h2>
-											<h3 id="target-html">Target HTML</h3>
-											<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"sample"</span> <span class="hljs-attribute">data-id</span>=<span class="hljs-value">"rb0zOstIiyU"</span> <span class="hljs-attribute">data-width</span>=<span class="hljs-value">"3840"</span> <span class="hljs-attribute">data-height</span>=<span class="hljs-value">"2160"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-                                                </code></pre>
-											<h3 id="execute">Execute</h3>
-											<pre><code class="lang-js">$(<span class="hljs-string">'.sample'</span>).bcYoutube().find(<span class="hljs-string">'iframe'</span>).bcKeepAspectRatio();
-                                                </code></pre>
-											<h3 id="result">Result</h3>
-											<p>comming soon...</p>
-										</div>
+										<p>オプション</p>
+										<hr>
+										<h2 id="sample">Sample</h2>
+										<h3 id="target-html">Target HTML</h3>
+										<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"sample"</span> <span class="hljs-attribute">data-id</span>=<span class="hljs-value">"rb0zOstIiyU"</span> <span class="hljs-attribute">data-width</span>=<span class="hljs-value">"3840"</span> <span class="hljs-attribute">data-height</span>=<span class="hljs-value">"2160"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+</code></pre>
+										<h3 id="execute">Execute</h3>
+										<pre><code class="lang-js">$(<span class="hljs-string">'.sample'</span>).bcYoutube().find(<span class="hljs-string">'iframe'</span>).bcKeepAspectRatio();
+</code></pre>
+										<h3 id="result">Result</h3>
+										<p>comming soon...</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bcboxalignheight" class="tsd-anchor"></a>
 					<h3>bc<wbr>Box<wbr>Align<wbr>Height</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">bc<wbr>Box<wbr>Align<wbr>Height<span class="tsd-signature-symbol">(</span>columnOrKeyword<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, detailTarget<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Function</span>, breakPoint<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
-						<li class="tsd-signature tsd-kind-icon">bc<wbr>Box<wbr>Align<wbr>Height<span class="tsd-signature-symbol">(</span>columnOrKeyword<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">bc<wbr>Box<wbr>Align<wbr>Height<span class="tsd-signature-symbol">(</span>columnOrKeyword<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/baser.ui.breakpointsoption.html" class="tsd-signature-type">BreakPointsOption</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span>, detailTarget<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">?: </span><a href="../interfaces/baser.ui.element.alignedboxcallback.html" class="tsd-signature-type">AlignedBoxCallback</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcBoxAlignHeight.ts#L12">/Users/hirao/git/baserjs/src/jquery/bcBoxAlignHeight.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcBoxAlignHeight.ts#L10">jquery/bcBoxAlignHeight.ts:10</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>要素の高さを揃える</p>
 								</div>
-								<p>TODO: 計算ロジックとDOMアクセスのロジックを分ける</p>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.2.1</p>
+									<dd><p>0.7.0</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.15</p>
@@ -187,54 +182,39 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>columnOrKeyword?:         <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> columnOrKeyword: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/baser.ui.breakpointsoption.html" class="tsd-signature-type">BreakPointsOption</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
 								</li>
 								<li>
-									<h5>detailTarget?:         <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> detailTarget: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>callback?:         <span class="tsd-signature-type">Function</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-								</li>
-								<li>
-									<h5>breakPoint?:         <span class="tsd-signature-type">number</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <a href="../interfaces/baser.ui.element.alignedboxcallback.html" class="tsd-signature-type">AlignedBoxCallback</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
-						</li>
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcBoxAlignHeight.ts#L13">/Users/hirao/git/baserjs/src/jquery/bcBoxAlignHeight.ts:13</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>columnOrKeyword?:         <span class="tsd-signature-type">string</span> <span class="tsd-flag ts-flagoptional">optional</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bccheckbox" class="tsd-anchor"></a>
 					<h3>bc<wbr>Checkbox</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">bc<wbr>Checkbox<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-signature-type">CheckableElementOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcCheckbox.ts#L16">/Users/hirao/git/baserjs/src/jquery/bcCheckbox.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcCheckbox.ts#L16">jquery/bcCheckbox.ts:16</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.0.1</p>
+									<dd><p>0.7.0</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.1</p>
@@ -247,25 +227,27 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options:         <a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-signature-type">CheckableElementOption</a></h5>
+									<h5>options: <a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-signature-type">CheckableElementOption</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bcimageloaded" class="tsd-anchor"></a>
 					<h3>bc<wbr>Image<wbr>Loaded</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">bc<wbr>Image<wbr>Loaded<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">bc<wbr>Image<wbr>Loaded<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcImageLoaded.ts#L16">/Users/hirao/git/baserjs/src/jquery/bcImageLoaded.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcImageLoaded.ts#L16">jquery/bcImageLoaded.ts:16</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>要素内の画像の読み込みが完了してからコールバックを実行する</p>
 								</div>
@@ -284,41 +266,39 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>callback:         <span class="tsd-signature-type">Function</span></h5>
+									<h5>callback: <span class="tsd-signature-type">function</span></h5>
 									<ul class="tsd-parameters">
-										<li>
-											<h5>callback function signature<span class="tsd-signature-symbol"></span></h5>
-											<ul class="tsd-signatures tsd-kind-function-type tsd-parent-kind-parameter tsd-is-external tsd-is-not-exported">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
-												<li class="tsd-description"><aside class="tsd-sources">
-														<ul>
-															<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcImageLoaded.ts#L16">/Users/hirao/git/baserjs/src/jquery/bcImageLoaded.ts:16</a></li>
-														</ul>
-													</aside>
-													<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">any</span>
-													</h4>
+												<li class="tsd-description">
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 												</li>
-										</ul>        </li>
-								</ul>            </li>
+											</ul>
+										</li>
+									</ul>
+								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bckeepaspectratio" class="tsd-anchor"></a>
 					<h3>bc<wbr>Keep<wbr>Aspect<wbr>Ratio</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">bc<wbr>Keep<wbr>Aspect<wbr>Ratio<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcKeepAspectRatio.ts#L32">/Users/hirao/git/baserjs/src/jquery/bcKeepAspectRatio.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcKeepAspectRatio.ts#L32">jquery/bcKeepAspectRatio.ts:32</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>親のコンテナ要素の幅に合わせて、自信の縦横比を保ったまま幅の変更に対応する</p>
 								</div>
@@ -333,31 +313,33 @@
 										<h2 id="sample">Sample</h2>
 										<h3 id="target-html">Target HTML</h3>
 										<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"sample"</span> <span class="hljs-attribute">data-id</span>=<span class="hljs-value">"rb0zOstIiyU"</span> <span class="hljs-attribute">data-width</span>=<span class="hljs-value">"3840"</span> <span class="hljs-attribute">data-height</span>=<span class="hljs-value">"2160"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-                                </code></pre>
+</code></pre>
 										<h3 id="execute">Execute</h3>
 										<pre><code class="lang-js">$(<span class="hljs-string">'.sample'</span>).bcYoutube().find(<span class="hljs-string">'iframe'</span>).bcKeepAspectRatio();
-                                </code></pre>
+</code></pre>
 										<h3 id="result">Result</h3>
 										<p>comming soon...</p>
 									</dd>
 								</dl>
 							</div>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bcmaps" class="tsd-anchor"></a>
 					<h3>bc<wbr>Maps</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">bc<wbr>Maps<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-signature-type">MapOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcMaps.ts#L32">/Users/hirao/git/baserjs/src/jquery/bcMaps.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcMaps.ts#L32">jquery/bcMaps.ts:32</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>マップを埋め込む</p>
 								</div>
@@ -372,10 +354,10 @@
 										<h2 id="sample">Sample</h2>
 										<h3 id="target-html">Target HTML</h3>
 										<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"sample"</span> <span class="hljs-attribute">data-lat</span>=<span class="hljs-value">"33.606785"</span> <span class="hljs-attribute">data-lng</span>=<span class="hljs-value">"130.418314"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-                                </code></pre>
+</code></pre>
 										<h3 id="execute">Execute</h3>
 										<pre><code class="lang-js">$(<span class="hljs-string">'.sample'</span>).bcMaps();
-                                </code></pre>
+</code></pre>
 										<h3 id="result">Result</h3>
 										<p>comming soon...</p>
 									</dd>
@@ -384,31 +366,33 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options?:         <a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-signature-type">MapOption</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/baser.ui.element.mapoption.html" class="tsd-signature-type">MapOption</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bcradio" class="tsd-anchor"></a>
 					<h3>bc<wbr>Radio</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">bc<wbr>Radio<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-signature-type">CheckableElementOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcRadio.ts#L16">/Users/hirao/git/baserjs/src/jquery/bcRadio.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcRadio.ts#L16">jquery/bcRadio.ts:16</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>WAI-ARIAに対応した装飾可能な汎用要素でラップしたラジオボタンに変更する</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.0.1</p>
+									<dd><p>0.7.0</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.1</p>
@@ -421,25 +405,56 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options:         <a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-signature-type">CheckableElementOption</a></h5>
+									<h5>options: <a href="../interfaces/baser.ui.element.checkableelementoption.html" class="tsd-signature-type">CheckableElementOption</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a name="bcrollover" class="tsd-anchor"></a>
+					<h3>bc<wbr>Rollover</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">bc<wbr>Rollover<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcRollover.ts#L12">jquery/bcRollover.ts:12</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>マウスオーバー時に画像を切り替える</p>
+								</div>
+								<p>【使用非推奨】できるかぎり CSS の <code>:hover</code> と <code>background-image</code> を使用するべきです。</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bcscrollto" class="tsd-anchor"></a>
 					<h3>bc<wbr>Scroll<wbr>To</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">bc<wbr>Scroll<wbr>To<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/baser.ui.scrolloptions.html" class="tsd-signature-type">ScrollOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcScrollTo.ts#L16">/Users/hirao/git/baserjs/src/jquery/bcScrollTo.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcScrollTo.ts#L16">jquery/bcScrollTo.ts:16</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>リンク要素からのアンカーまでスムーズにスクロールをさせる</p>
 								</div>
@@ -458,31 +473,33 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options?:         <a href="../interfaces/baser.ui.scrolloptions.html" class="tsd-signature-type">ScrollOptions</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/baser.ui.scrolloptions.html" class="tsd-signature-type">ScrollOptions</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bcselect" class="tsd-anchor"></a>
 					<h3>bc<wbr>Select</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">bc<wbr>Select<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/baser.ui.element.formelementoption.html" class="tsd-signature-type">FormElementOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcSelect.ts#L16">/Users/hirao/git/baserjs/src/jquery/bcSelect.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcSelect.ts#L16">jquery/bcSelect.ts:16</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>version</dt>
-									<dd><p>0.0.1</p>
+									<dd><p>0.7.0</p>
 									</dd>
 									<dt>since</dt>
 									<dd><p>0.0.1</p>
@@ -495,25 +512,115 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options:         <a href="../interfaces/baser.ui.element.formelementoption.html" class="tsd-signature-type">FormElementOption</a></h5>
+									<h5>options: <a href="../interfaces/baser.ui.element.formelementoption.html" class="tsd-signature-type">FormElementOption</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 						</li>
 					</ul>
-					</section>            <section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a name="bcshy" class="tsd-anchor"></a>
+					<h3>bc<wbr>Shy</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">bc<wbr>Shy<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcShy.ts#L12">jquery/bcShy.ts:12</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>マウスオーバー時に半透明になるエフェクトをかける</p>
+								</div>
+								<p>【使用非推奨】できるかぎり CSS の <code>:hover</code> と <code>opacity</code>、そして <code>transition</code> を使用するべきです。</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a name="bcsplitlist" class="tsd-anchor"></a>
+					<h3>bc<wbr>Split<wbr>List</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">bc<wbr>Split<wbr>List<span class="tsd-signature-symbol">(</span>columnSize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcSplitList.ts#L10">jquery/bcSplitList.ts:10</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>リストを均等に分割する</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>columnSize: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a name="bcwink" class="tsd-anchor"></a>
+					<h3>bc<wbr>Wink</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">bc<wbr>Wink<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcWink.ts#L10">jquery/bcWink.ts:10</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>マウスオーバー時に一瞬透明になるエフェクトをかける</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a name="bcyoutube" class="tsd-anchor"></a>
 					<h3>bc<wbr>Youtube</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">bc<wbr>Youtube<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/baser.ui.element.youtubeoption.html" class="tsd-signature-type">YoutubeOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcYoutube.ts#L43">/Users/hirao/git/baserjs/src/jquery/bcYoutube.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/next/v0.7.0/src/jquery/bcYoutube.ts#L43">jquery/bcYoutube.ts:43</a></li>
 								</ul>
-								</aside>        <div class="tsd-comment tsd-typography">
+							</aside>
+							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>YouTubeを埋め込む</p>
 								</div>
@@ -527,10 +634,10 @@
 										<h2 id="sample">Sample</h2>
 										<h3 id="target-html">Target HTML</h3>
 										<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"sample"</span> <span class="hljs-attribute">data-id</span>=<span class="hljs-value">"rb0zOstIiyU"</span> <span class="hljs-attribute">data-width</span>=<span class="hljs-value">"720"</span> <span class="hljs-attribute">data-height</span>=<span class="hljs-value">"480"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-                                </code></pre>
+</code></pre>
 										<h3 id="execute">Execute</h3>
 										<pre><code class="lang-js">$(<span class="hljs-string">'.sample'</span>).bcYoutube();
-                                </code></pre>
+</code></pre>
 										<h3 id="result">Result</h3>
 										<p><div data-height="400"
 											data-theme-id="9760"
@@ -539,8 +646,8 @@
 											data-user="YusukeHirao"
 										class='codepen'></p>
 										<p><pre>
-                                <code>$(&#39;.sample&#39;).bcYoutube();</code>
-                                </pre></p>
+<code>$(&#39;.sample&#39;).bcYoutube();</code>
+</pre></p>
 										<p><p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a>
 												by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>)
 											on <a href='http://codepen.io'>CodePen</a>.</p>
@@ -552,193 +659,14 @@
 		<h4 class="tsd-parameters-title">Parameters</h4>
 		<ul class="tsd-parameters">
 			<li>
-				<h5>options?:         <a href="../interfaces/baser.ui.element.youtubeoption.html" class="tsd-signature-type">YoutubeOption</a> <span class="tsd-flag ts-flagoptional">optional</span></h5>
+				<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/baser.ui.element.youtubeoption.html" class="tsd-signature-type">YoutubeOption</a></h5>
 			</li>
 		</ul>
-		<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-		</h4>
+		<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">JQuery</span></h4>
 		</li>
 		</ul>
-		</section></section>        <section class="tsd-panel-group tsd-member-group tsd-is-external tsd-is-not-exported">
-			<h2>Variables</h2>
-			<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-				<a name="bcrollover" class="tsd-anchor"></a>
-				<h3>bc<wbr>Rollover</h3>
-				<div class="tsd-signature tsd-kind-icon">bc<wbr>Rollover<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">Function</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcRollover.ts#L12">/Users/hirao/git/baserjs/src/jquery/bcRollover.ts:12</a></li>
-					</ul>
-					</aside>        <div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>マウスオーバー時に画像を切り替える</p>
-					</div>
-					<p>【使用非推奨】できるかぎり CSS の <code>:hover</code> と <code>background-image</code> を使用するべきです。</p>
-					<dl class="tsd-comment-tags">
-						<dt>version</dt>
-						<dd><p>0.0.15</p>
-						</dd>
-						<dt>since</dt>
-						<dd><p>0.0.15</p>
-						</dd>
-					</dl>
-				</div>
-				<section class="tsd-panel tsd-member tsd-kind-function-expression tsd-parent-kind-variable tsd-is-external tsd-is-not-exported">
-					<a name="bcrollover.bcrollover_function_signature" class="tsd-anchor"></a>
-					<h3>bc<wbr>Rollover function signature</h3>
-					<ul class="tsd-signatures tsd-kind-function-expression tsd-parent-kind-variable tsd-is-external tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcRollover.ts#L12">/Users/hirao/git/baserjs/src/jquery/bcRollover.ts:12</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>options:         <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
-						</li>
-					</ul>
-				</section></section>            <section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-				<a name="bcshy" class="tsd-anchor"></a>
-				<h3>bc<wbr>Shy</h3>
-				<div class="tsd-signature tsd-kind-icon">bc<wbr>Shy<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">Function</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcShy.ts#L12">/Users/hirao/git/baserjs/src/jquery/bcShy.ts:12</a></li>
-					</ul>
-					</aside>        <div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>マウスオーバー時に半透明になるエフェクトをかける</p>
-					</div>
-					<p>【使用非推奨】できるかぎり CSS の <code>:hover</code> と <code>opacity</code>、そして <code>transition</code> を使用するべきです。</p>
-					<dl class="tsd-comment-tags">
-						<dt>version</dt>
-						<dd><p>0.0.15</p>
-						</dd>
-						<dt>since</dt>
-						<dd><p>0.0.15</p>
-						</dd>
-					</dl>
-				</div>
-				<section class="tsd-panel tsd-member tsd-kind-function-expression tsd-parent-kind-variable tsd-is-external tsd-is-not-exported">
-					<a name="bcshy.bcshy_function_signature" class="tsd-anchor"></a>
-					<h3>bc<wbr>Shy function signature</h3>
-					<ul class="tsd-signatures tsd-kind-function-expression tsd-parent-kind-variable tsd-is-external tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcShy.ts#L12">/Users/hirao/git/baserjs/src/jquery/bcShy.ts:12</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>options:         <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
-						</li>
-					</ul>
-				</section></section>            <section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-				<a name="bcsplitlist" class="tsd-anchor"></a>
-				<h3>bc<wbr>Split<wbr>List</h3>
-				<div class="tsd-signature tsd-kind-icon">bc<wbr>Split<wbr>List<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">Function</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcSplitList.ts#L10">/Users/hirao/git/baserjs/src/jquery/bcSplitList.ts:10</a></li>
-					</ul>
-					</aside>        <div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>リストを均等に分割する</p>
-					</div>
-					<dl class="tsd-comment-tags">
-						<dt>version</dt>
-						<dd><p>0.2.0</p>
-						</dd>
-						<dt>since</dt>
-						<dd><p>0.0.14</p>
-						</dd>
-					</dl>
-				</div>
-				<section class="tsd-panel tsd-member tsd-kind-function-expression tsd-parent-kind-variable tsd-is-external tsd-is-not-exported">
-					<a name="bcsplitlist.bcsplitlist_function_signature" class="tsd-anchor"></a>
-					<h3>bc<wbr>Split<wbr>List function signature</h3>
-					<ul class="tsd-signatures tsd-kind-function-expression tsd-parent-kind-variable tsd-is-external tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>columnSize<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcSplitList.ts#L10">/Users/hirao/git/baserjs/src/jquery/bcSplitList.ts:10</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>columnSize:         <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>options:         <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
-						</li>
-					</ul>
-				</section></section>            <section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-				<a name="bcwink" class="tsd-anchor"></a>
-				<h3>bc<wbr>Wink</h3>
-				<div class="tsd-signature tsd-kind-icon">bc<wbr>Wink<span class="tsd-signature-symbol">:</span>         <span class="tsd-signature-type">Function</span></div>
-				<aside class="tsd-sources">
-					<ul>
-						<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcWink.ts#L10">/Users/hirao/git/baserjs/src/jquery/bcWink.ts:10</a></li>
-					</ul>
-					</aside>        <div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>マウスオーバー時に一瞬透明になるエフェクトをかける</p>
-					</div>
-					<dl class="tsd-comment-tags">
-						<dt>version</dt>
-						<dd><p>0.0.14</p>
-						</dd>
-						<dt>since</dt>
-						<dd><p>0.0.14</p>
-						</dd>
-					</dl>
-				</div>
-				<section class="tsd-panel tsd-member tsd-kind-function-expression tsd-parent-kind-variable tsd-is-external tsd-is-not-exported">
-					<a name="bcwink.bcwink_function_signature" class="tsd-anchor"></a>
-					<h3>bc<wbr>Wink function signature</h3>
-					<ul class="tsd-signatures tsd-kind-function-expression tsd-parent-kind-variable tsd-is-external tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JQuery</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description"><aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baserproject/baserjs/blob/rc/src/jquery/bcWink.ts#L10">/Users/hirao/git/baserjs/src/jquery/bcWink.ts:10</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>options:         <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns         <span class="tsd-signature-type">JQuery</span>
-							</h4>
-						</li>
-					</ul>
-		</section></section></section>
+		</section>
+		</section>
 	</div>
 	<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 		<nav class="tsd-navigation primary">
@@ -749,69 +677,74 @@
 				<li class="label tsd-is-external">
 					<span>Externals</span>
 				</li>
-				<li class="current tsd-kind-container tsd-is-external">
+				<li class="current tsd-kind-module tsd-is-external">
 					<a href="baser.html">baser</a>
+					<ul>
+						<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+							<a href="baser.ui.html">ui</a>
+						</li>
+						<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+							<a href="baser.utility.html">utility</a>
+						</li>
+					</ul>
 				</li>
-				<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
+				<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
 					<a href="baser.ui.html">baser.ui</a>
 				</li>
-				<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
+				<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
 					<a href="baser.ui.element.html">baser.ui.element</a>
 				</li>
-				<li class=" tsd-kind-container tsd-parent-kind-container tsd-is-external">
+				<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
+					<a href="baser.ui.event.html">baser.ui.event</a>
+				</li>
+				<li class=" tsd-kind-module tsd-parent-kind-module tsd-is-external">
 					<a href="baser.utility.html">baser.utility</a>
 				</li>
 			</ul>
 		</nav>
 		<nav class="tsd-navigation secondary menu-sticky">
 			<ul class="before-current">
-				<li class=" tsd-kind-object-literal tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-					<a href="../objects/baser.eventhandlers.html" class="tsd-kind-icon">event<wbr>Handlers</a>
-				</li>
-				<li class=" tsd-kind-object-literal tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-					<a href="../objects/baser.types.html" class="tsd-kind-icon">types</a>
-				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bcbackground" class="tsd-kind-icon">bc<wbr>Background</a>
 				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bcboxalignheight" class="tsd-kind-icon">bc<wbr>Box<wbr>Align<wbr>Height</a>
 				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bccheckbox" class="tsd-kind-icon">bc<wbr>Checkbox</a>
 				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bcimageloaded" class="tsd-kind-icon">bc<wbr>Image<wbr>Loaded</a>
 				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bckeepaspectratio" class="tsd-kind-icon">bc<wbr>Keep<wbr>Aspect<wbr>Ratio</a>
 				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bcmaps" class="tsd-kind-icon">bc<wbr>Maps</a>
 				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bcradio" class="tsd-kind-icon">bc<wbr>Radio</a>
 				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-					<a href="baser.html#bcscrollto" class="tsd-kind-icon">bc<wbr>Scroll<wbr>To</a>
-				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-					<a href="baser.html#bcselect" class="tsd-kind-icon">bc<wbr>Select</a>
-				</li>
-				<li class=" tsd-kind-function tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
-					<a href="baser.html#bcyoutube" class="tsd-kind-icon">bc<wbr>Youtube</a>
-				</li>
-				<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bcrollover" class="tsd-kind-icon">bc<wbr>Rollover</a>
 				</li>
-				<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a href="baser.html#bcscrollto" class="tsd-kind-icon">bc<wbr>Scroll<wbr>To</a>
+				</li>
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a href="baser.html#bcselect" class="tsd-kind-icon">bc<wbr>Select</a>
+				</li>
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bcshy" class="tsd-kind-icon">bc<wbr>Shy</a>
 				</li>
-				<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bcsplitlist" class="tsd-kind-icon">bc<wbr>Split<wbr>List</a>
 				</li>
-				<li class=" tsd-kind-variable tsd-parent-kind-container tsd-is-external tsd-is-not-exported">
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 					<a href="baser.html#bcwink" class="tsd-kind-icon">bc<wbr>Wink</a>
+				</li>
+				<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+					<a href="baser.html#bcyoutube" class="tsd-kind-icon">bc<wbr>Youtube</a>
 				</li>
 			</ul>
 		</nav>
@@ -823,50 +756,56 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-container"><span class="tsd-kind-icon">Container, dynamic module</span></li>
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
-				<li class="tsd-kind-construct-signature"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-call-signature"><span class="tsd-kind-icon">Function, call signature, accessor</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Member, accessor</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
 				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li class="tsd-kind-construct-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private member</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li>&nbsp;</li>
-				<li>&nbsp;</li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static member</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
@@ -877,14 +816,5 @@
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
 <script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
-<script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-56482699-1', 'auto');
-        ga('send', 'pageview');
-    </script>
 </body>
 </html>
