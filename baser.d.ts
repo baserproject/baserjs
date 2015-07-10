@@ -403,6 +403,44 @@ declare module baser.ui {
     }
 }
 declare module baser.ui {
+    interface BreakPointsOption<T> {
+        [breakPoint: string]: T;
+    }
+    /**
+     * ブレークポイントの変化に応じた処理をする管理することができるクラス
+     *
+     * @version 0.7.0
+     * @since 0.7.0
+     *
+     */
+    class BreakPoints<T> extends event.EventDispacher {
+        currentPoint: number;
+        breakPoints: number[];
+        private _values;
+        /**
+         * コンストラクタ
+         *
+         * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+         * @param callback 変化に応じたコールバック
+         */
+        constructor(breakPoints: BreakPointsOption<T>, callback?: {
+            (value: T, breakPoint: number, windowWidth: number): void;
+        });
+        /**
+         * ブレークポイントの登録処理
+         *
+         * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+         */
+        private _setBreakPoints<T>(breakPoints);
+        /**
+         * ブレークポイントを追加する
+         *
+         * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+         */
+        add<T>(breakPoints: BreakPointsOption<T>): void;
+    }
+}
+declare module baser.ui {
     /**
      * 時間管理クラス
      *
@@ -617,29 +655,6 @@ declare module baser.ui {
         private _getX();
         private _getY();
         private _finish();
-    }
-}
-declare module baser.ui {
-    /**
-     * Box管理を担うクラス
-     *
-     * @version 0.2.2
-     * @since 0.0.15
-     *
-     */
-    class Box {
-        static align($target: JQuery, columns: number, callback: Function, breakPoint?: number): JQuery;
-        static createChar(): void;
-        static isChanged(): boolean;
-        static observer(): void;
-        static reAlign(): void;
-        static boot(): void;
-        static sleep(): void;
-        static push($target: JQuery, column?: number, callback?: Function, breakPoint?: number): void;
-        static destory($target: any): void;
-        static watchTimer: number;
-        static isBooted: boolean;
-        static settings: any;
     }
 }
 declare module baser.ui.element {
@@ -1890,6 +1905,185 @@ declare module baser.ui.element {
          *
          */
         update(ignoreRadio: Radio): void;
+    }
+}
+declare module baser.ui.element {
+    /**
+     * ボックスの高さ揃えるときのコールバック
+     *
+     * @version 0.7.0
+     * @since 0.7.0
+     *
+     */
+    interface AlignedBoxCallback {
+        (maxHeight: number, currentHeight: number, boxes: AlignedBoxes): boolean | void;
+    }
+    /**
+     * 高さ揃えをするボックスを管理するクラス
+     *
+     * @version 0.7.0
+     * @since 0.7.0
+     *
+     */
+    class AlignedBoxes extends Element {
+        /**
+         * jQuery dataに自信のインスタンスを登録するキー
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static DATA_KEY: string;
+        /**
+         * jQuery dataにUIDを登録するキー
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static DATA_KEY_ID: string;
+        /**
+         * 監視タイマーID
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static watchTimer: number;
+        /**
+         * 監視の間隔
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static watchInterval: number;
+        /**
+         * 監視タイマーが起動しているかどうか
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static isBooted: boolean;
+        /**
+         * 現在の基準のフォントサイズ
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static currentFontSize: number;
+        /**
+         * 監視対象のボックスグループ
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static groups: {
+            [id: string]: AlignedBoxes;
+        };
+        /**
+         * 基準の文字要素
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static dummyCharElement: HTMLElement;
+        /**
+         * 基準の文字要素を生成する
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static createChar(): void;
+        /**
+         * 文字の大きさが変わったかどうか
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static isChanged(): boolean;
+        /**
+         * 文字の大きさが変わったかどうかを監視するルーチン
+         *
+         * 文字の大きさが変わればボックスのサイズを再設定する
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static observerForFontSize(): void;
+        /**
+         * ボックスのサイズを再設定する
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static reAlign(): void;
+        /**
+         * 監視タイマーを起動する
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        static boot(): void;
+        /**
+         * ブレークポイントに寄るカラム数
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        private _columns;
+        /**
+         * ボックスの高さ揃えるときのコールバック
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        private _callback;
+        /**
+         * ボックスの高さ揃えるときのコールバック
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        private _currentColumn;
+        /**
+         * コンストラクタ
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         * @param $el 対象のボックス要素
+         * @param column カラム数もしくはブレークポイントに寄るカラム数 `0`の場合すべての要素の高さを揃える
+         * @param callback ボックスの高さ揃えるときのコールバック
+         */
+        constructor($el: JQuery, column?: number | BreakPointsOption<number>, callback?: AlignedBoxCallback);
+        /**
+         * ボックスの高さ揃える
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        private _align();
+        /**
+         * 高さ揃えを解除する
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        destroy(): void;
     }
 }
 declare module baser.ui.element {
