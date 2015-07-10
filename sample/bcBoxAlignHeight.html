@@ -10,19 +10,11 @@
 
 		$('.boxes .box').bcBoxAlignHeight(3);
 
-		$('.boxes2 .box').bcBoxAlignHeight(3);
-		baser.ui.Browser.browser.on('resizeend', function () {
-
-			if (640 < window.document.documentElement.clientWidth) {
-				console.log(3);
-				$('.boxes2 .box').bcBoxAlignHeight(3);
-			} else {
-				console.log(2);
-				$('.boxes2 .box').bcBoxAlignHeight(2);
-			}
-
+		$('.boxes2 .box').bcBoxAlignHeight({
+			640: 2,
+			Infinity: 3
 		});
-
+		
 	});
 	</script>
 	<style>

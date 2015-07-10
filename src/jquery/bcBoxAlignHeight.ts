@@ -3,24 +3,34 @@ module baser {
 	/**
 	 * 要素の高さを揃える
 	 *
-	 * TODO: 計算ロジックとDOMアクセスのロジックを分ける
-	 *
 	 * @version 0.7.0
 	 * @since 0.0.15
 	 *
 	 */
-	function bcBoxAlignHeight (columnOrKeyword?: number, detailTarget?: string, callback?: Function, breakPoint?: number): JQuery;
-	function bcBoxAlignHeight (columnOrKeyword?: string): JQuery;
-	function bcBoxAlignHeight (columnOrKeyword: any = 0, detailTarget?: string, callback?: Function, breakPoint: number = 0): JQuery {
+	function bcBoxAlignHeight (columnOrKeyword: string | number | ui.BreakPointsOption<number> = 0, detailTarget?: string, callback?: ui.element.AlignedBoxCallback): JQuery {
 
-		if ($.isNumeric(columnOrKeyword)) {
+		var keyword: string;
+		var column: number | ui.BreakPointsOption<number>;
+		
+		var boxes: ui.element.AlignedBoxes;
 
-			var column: number = <number> +columnOrKeyword;
+		if (typeof columnOrKeyword === 'string') {
 
-			baser.ui.element.Box.boot();
+			keyword = columnOrKeyword;
+
+			switch (keyword) {
+				case 'destroy': {
+					boxes = <ui.element.AlignedBoxes> this.data(ui.element.AlignedBoxes.DATA_KEY);
+					boxes.destroy();
+					break;
+				}
+			}
+
+		} else {
+			
+			column = columnOrKeyword;
 
 			var $detailTarget: JQuery;
-			var settings = baser.ui.element.Box.settings;
 
 			// 要素群の高さを揃え、setsに追加
 			if (detailTarget) {
@@ -28,31 +38,12 @@ module baser {
 				if ($detailTarget.length) {
 					this.each(function () {
 						var $split: JQuery = $(this).find(detailTarget);
-						baser.ui.element.Box.push($split, column, callback, breakPoint);
+						new baser.ui.element.AlignedBoxes($split, column, callback);
 					});
 				}
 			} else {
-				baser.ui.element.Box.push(this, column, callback, breakPoint);
+				new baser.ui.element.AlignedBoxes(this, column, callback);
 			}
-
-		} else {
-
-			var keyword: string = <string> columnOrKeyword;
-
-			switch (keyword) {
-
-				case 'destroy': {
-
-					this.each(function () {
-
-						baser.ui.element.Box.destory($(this));
-
-					});
-
-					break;
-				}
-			}
-
 		}
 
 		return this;

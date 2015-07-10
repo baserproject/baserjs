@@ -42,7 +42,7 @@
 /// <reference path="baser/ui/element/ICheckbox.ts" />
 /// <reference path="baser/ui/element/Checkbox.ts" />
 /// <reference path="baser/ui/element/RadioGroup.ts" />
-/// <reference path="baser/ui/element/Box.ts" />
+/// <reference path="baser/ui/element/AlignedBoxes.ts" />
 /// <reference path="baser/ui/element/Map.ts" />
 /// <reference path="baser/ui/element/Youtube.ts" />
 
