@@ -153,7 +153,6 @@ module baser.ui.element {
 		 *
 		 */
 		static reAlign (): void {
-			console.log(AlignedBoxes.groups);
 			var uid: string;
 			for (uid in AlignedBoxes.groups) {
 				AlignedBoxes.groups[uid].trigger('realign');

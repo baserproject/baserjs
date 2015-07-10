@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.7.0-beta.2 r251
+ * baserjs - v0.7.0-beta.2 r252
  * update: 2015-07-10
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -3588,7 +3588,6 @@ var baser;
                  *
                  */
                 AlignedBoxes.reAlign = function () {
-                    console.log(AlignedBoxes.groups);
                     var uid;
                     for (uid in AlignedBoxes.groups) {
                         AlignedBoxes.groups[uid].trigger('realign');
