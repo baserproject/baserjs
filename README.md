@@ -8,6 +8,10 @@ baserJS
 
 コーポレートサイトにちょうどいいJavaScriptライブラリ
 
+- [Web Site](https://baserproject.github.io/baserjs)
+- [API Document](http://baserproject.github.io/baserjs/docs/)
+- [Reference](http://qiita.com/search?q=baserjs)
+
 ## Usage
 
 ```html
@@ -23,4 +27,8 @@ $ bower install baserjs
 
 * * *
 
-Copyright © 2014 baserCMS Users Community, Licensed under the MIT License.
+## Development and Contribution
+
+[How to Install](INSTALL.md)
+
+Copyright © 2015 baserCMS Users Community, Licensed under the MIT License.
