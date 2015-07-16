@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.7.0-beta.2 r252
- * update: 2015-07-10
+ * baserjs - v0.8.0-beta r254
+ * update: 2015-07-16
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1927,6 +1927,36 @@ var baser;
                  */
                 Element.prototype.getBoolAttr = function (attrName) {
                     return Element.getBoolAttr(this.$el, attrName);
+                };
+                /**
+                 * オプションとdata属性の値、属性の値をマージする
+                 *
+                 * TODO: テストを書く
+                 * TODO: サブクラスに反映させる
+                 *
+                 * @version 0.8.0
+                 * @since 0.8.0
+                 *
+                 */
+                Element.prototype.mergeOptions = function (defaultOptions, options) {
+                    var optName;
+                    var attrs = {};
+                    var dataAttrs = {};
+                    for (optName in defaultOptions) {
+                        if (defaultOptions.hasOwnProperty(optName)) {
+                            switch (optName) {
+                                case 'id':
+                                case 'class': {
+                                    break;
+                                }
+                                default: {
+                                    attrs[optName] = this.$el.attr(optName);
+                                }
+                            }
+                            dataAttrs[optName] = this.$el.data(optName);
+                        }
+                    }
+                    return $.extend({}, defaultOptions, options, dataAttrs, attrs);
                 };
                 /**
                  * クラス名のデフォルトのプレフィックス
@@ -4046,7 +4076,7 @@ var baser;
                  *
                  * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
                  *
-                 * @version 0.5.0
+                 * @version 0.8.0
                  * @since 0.0.7
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @return {booelan} 初期化が成功したかどうか
@@ -4054,21 +4084,25 @@ var baser;
                  */
                 Youtube.prototype._init = function (options) {
                     var _this = this;
-                    var id = this.$el.data('id');
-                    var width = +(this.$el.data('width') || this.$el.attr('width') || NaN);
-                    var height = +(this.$el.data('height') || this.$el.attr('height') || NaN);
                     var protocol = location.protocol === 'file:' ? 'http:' : '';
-                    this.movieOption = $.extend({
+                    var defaultOptions = {
                         rel: false,
                         autoplay: true,
                         stopOnInactive: false,
                         controls: false,
                         loop: true,
                         showinfo: false,
-                        mute: false
-                    }, options);
+                        mute: false,
+                        id: '',
+                        width: 400,
+                        height: 300,
+                        index: 0,
+                        startSeconds: 0,
+                        suggestedQuality: 'default'
+                    };
+                    this.movieOption = this.mergeOptions(defaultOptions, options);
                     this.$el.empty();
-                    var ids = id.split(/\s*,\s*/);
+                    this.movieId = this.movieOption.id.split(/\s*,\s*/);
                     var $mov = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
                     var param = $.param({
                         version: 3,
@@ -4083,11 +4117,8 @@ var baser;
                         wmode: 'transparent',
                         enablejsapi: 1
                     });
-                    if (ids.length >= 2 || this.movieOption.loop) {
-                        param += '&amp;playlist=' + ids.join(',');
-                    }
+                    var id = this.movieId[this.movieOption.index];
                     var src = protocol + Youtube.PLAYER_URL + id + '?' + param;
-                    this.movieId = id;
                     $mov.prop('src', src);
                     var playerID = this.id + '-Player';
                     $mov.prop('id', playerID);
@@ -4098,82 +4129,99 @@ var baser;
                         height: '100%'
                     });
                     $mov.appendTo(this.$el);
-                    if (width) {
-                        $mov.width(width);
-                        $mov.data('width', width);
+                    if (this.movieOption.width) {
+                        $mov.width(this.movieOption.width);
+                        $mov.data('width', this.movieOption.width);
                     }
-                    if (height) {
-                        $mov.height(height);
-                        $mov.data('height', height);
+                    if (this.movieOption.height) {
+                        $mov.height(this.movieOption.height);
+                        $mov.data('height', this.movieOption.height);
                     }
                     $.getScript(protocol + Youtube.API_URL);
                     var intervalTimer;
-                    var listIndex;
                     intervalTimer = window.setInterval(function () {
                         if (!_this.player && 'YT' in window && YT.Player) {
-                            _this.player = new YT.Player(playerID, {
-                                events: {
-                                    onStateChange: function (e) {
-                                        switch (e.data) {
-                                            case -1: {
-                                                _this.trigger('unstarted', [_this.player]);
-                                                listIndex = _this.player.getPlaylistIndex();
-                                                if (_this.currentCueIndex !== listIndex) {
-                                                    _this.trigger('changecue', [_this.player]);
-                                                }
-                                                _this.currentCueIndex = listIndex;
-                                                break;
-                                            }
-                                            case YT.PlayerState.BUFFERING: {
-                                                _this.trigger('buffering', [_this.player]);
-                                                break;
-                                            }
-                                            case YT.PlayerState.CUED: {
-                                                _this.trigger('cued', [_this.player]);
-                                                break;
-                                            }
-                                            case YT.PlayerState.ENDED: {
-                                                _this.trigger('ended', [_this.player]);
-                                                break;
-                                            }
-                                            case YT.PlayerState.PAUSED: {
-                                                _this.trigger('paused', [_this.player]);
-                                                break;
-                                            }
-                                            case YT.PlayerState.PLAYING: {
-                                                _this.trigger('playing', [_this.player]);
-                                                _this.currentCueIndex = _this.player.getPlaylistIndex();
-                                                break;
-                                            }
-                                            default: {
-                                                if ('console' in window) {
-                                                    console.warn('YouTube Player state is unknown.');
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            });
+                            _this._createPlayer(playerID);
                         }
                         if (_this.player && _this.player.pauseVideo && _this.player.playVideo) {
                             window.clearInterval(intervalTimer);
-                            _this.isEmbeded = true;
-                            _this._isMuted = _this.player.isMuted();
-                            if (_this.movieOption.mute) {
-                                _this.mute();
-                            }
-                            if (_this.movieOption.stopOnInactive) {
-                                $(window).on('blur', function () {
-                                    _this.player.pauseVideo();
-                                }).on('focus', function () {
-                                    _this.player.playVideo();
-                                });
-                            }
-                            _this.$el.trigger('embeddedyoutubeplay', [_this.player]); // TODO: 廃止予定(v1.0.0)
-                            _this.trigger('embeded', [_this.player]);
+                            _this._onEmbeded();
                         }
                     }, 300);
                     return true;
+                };
+                Youtube.prototype._createPlayer = function (playerID) {
+                    var _this = this;
+                    this.player = new YT.Player(playerID, {
+                        events: {
+                            onStateChange: function (e) {
+                                switch (e.data) {
+                                    case -1: {
+                                        _this.trigger('unstarted', [_this.player]);
+                                        var listIndex = _this.player.getPlaylistIndex();
+                                        if (_this.currentCueIndex !== listIndex) {
+                                            _this.trigger('changecue', [_this.player]);
+                                        }
+                                        _this.currentCueIndex = listIndex;
+                                        break;
+                                    }
+                                    case YT.PlayerState.BUFFERING: {
+                                        _this.trigger('buffering', [_this.player]);
+                                        break;
+                                    }
+                                    case YT.PlayerState.CUED: {
+                                        _this.trigger('cued', [_this.player]);
+                                        break;
+                                    }
+                                    case YT.PlayerState.ENDED: {
+                                        _this.trigger('ended', [_this.player]);
+                                        break;
+                                    }
+                                    case YT.PlayerState.PAUSED: {
+                                        _this.trigger('paused', [_this.player]);
+                                        break;
+                                    }
+                                    case YT.PlayerState.PLAYING: {
+                                        _this.trigger('playing', [_this.player]);
+                                        _this.currentCueIndex = _this.player.getPlaylistIndex();
+                                        break;
+                                    }
+                                    default: {
+                                        if ('console' in window) {
+                                            console.warn('YouTube Player state is unknown.');
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                };
+                Youtube.prototype._onEmbeded = function () {
+                    var _this = this;
+                    this.isEmbeded = true;
+                    this._isMuted = this.player.isMuted();
+                    if (this.movieOption.mute) {
+                        this.mute();
+                    }
+                    if (this.movieOption.stopOnInactive) {
+                        $(window).on('blur', function () {
+                            _this.player.pauseVideo();
+                        }).on('focus', function () {
+                            _this.player.playVideo();
+                        });
+                    }
+                    // TODO: youtube.d.ts に loadPlaylist() と cuePlaylist() が登録されていない
+                    var _player = this.player;
+                    if (this.movieId.length >= 2) {
+                        if (this.movieOption.autoplay) {
+                            _player.loadPlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);
+                        }
+                        else {
+                            _player.cuePlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);
+                        }
+                    }
+                    this.$el.trigger('embeddedyoutubeplay', [this.player]); // TODO: 廃止予定(v1.0.0)
+                    this.trigger('embeded', [this.player]);
                 };
                 Youtube.prototype.reload = function (options) {
                     this._init(options);

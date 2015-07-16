@@ -356,6 +356,9 @@ module baser.ui.element {
 		/**
 		 * オプションとdata属性の値、属性の値をマージする
 		 *
+		 * TODO: テストを書く
+		 * TODO: サブクラスに反映させる
+		 * 
 		 * @version 0.8.0
 		 * @since 0.8.0
 		 *

@@ -845,6 +845,17 @@ declare module baser.ui.element {
          *
          */
         getBoolAttr(attrName: string): boolean;
+        /**
+         * オプションとdata属性の値、属性の値をマージする
+         *
+         * TODO: テストを書く
+         * TODO: サブクラスに反映させる
+         *
+         * @version 0.8.0
+         * @since 0.8.0
+         *
+         */
+        mergeOptions(defaultOptions: any, options: any): any;
     }
 }
 declare module baser.ui.element {
@@ -2299,6 +2310,13 @@ declare module baser.ui.element {
      */
     interface YoutubeOption {
         /**
+         * YouTubeの動画ID
+         *
+         * @since 0.8.0
+         *
+         */
+        id?: string;
+        /**
          * 関連動画を再生後に表示させるかどうか
          *
          * @since 0.0.16
@@ -2347,6 +2365,51 @@ declare module baser.ui.element {
          *
          */
         mute?: boolean;
+        /**
+         * 動画の幅
+         *
+         * @since 0.8.0
+         *
+         */
+        width?: number;
+        /**
+         * 動画の高さ
+         *
+         * @since 0.8.0
+         *
+         */
+        height?: number;
+        /**
+         * 再生リストの中から最初に再生する動画の番号
+         *
+         * @since 0.8.0
+         *
+         */
+        index?: number;
+        /**
+         * 再生リストの中から最初に再生する動画の再生位置
+         *
+         * 単位: 秒
+         *
+         * @since 0.8.0
+         *
+         */
+        startSeconds: number;
+        /**
+         * 動画の推奨再生画質を指定
+         *
+         * - 画質レベル small: プレーヤーの高さが 240 ピクセル、サイズが 320x240 ピクセル（アスペクト比 4:3）以上。
+         * - 画質レベル medium: プレーヤーの高さが 360 ピクセル、サイズが 640x360 ピクセル（アスペクト比 16:9）または 480x360 ピクセル（アスペクト比 4:3）。
+         * - 画質レベル large: プレーヤーの高さが 480 ピクセル、サイズが 853x480 ピクセル（アスペクト比 16:9）または 640x480 ピクセル（アスペクト比 4:3）。
+         * - 画質レベル hd720: プレーヤーの高さが 720 ピクセル、サイズが 1280x720 ピクセル（アスペクト比 16:9）または 960x720 ピクセル（アスペクト比 4:3）。
+         * - 画質レベル hd1080: プレーヤーの高さが 1080 ピクセル、サイズが 1920x1080 ピクセル（アスペクト比 16:9）または 1440x1080 ピクセル（アスペクト比 4:3）。
+         * - 画質レベル highres: プレーヤーの高さが 1080 ピクセル以上、つまりプレーヤーのアスペクト比が 1920x1080 ピクセル以上。
+         * - 画質レベル default: YouTube が適切な再生画質を選択します。この設定は、画質レベルをデフォルトの状態に戻します。それまでに cueVideoById、loadVideoById または setPlaybackQuality の各関数で行った再生画質の設定は無効になります。
+         *
+         * @since 0.8.0
+         *
+         */
+        suggestedQuality: string;
     }
     /**
      * Youtubeインスタンスの muteControllerメソッドのオプション
@@ -2428,11 +2491,11 @@ declare module baser.ui.element {
         /**
          * ムービーのID
          *
-         * @version 0.0.7
+         * @version 0.8.0
          * @since 0.0.7
          *
          */
-        movieId: string;
+        movieId: string[];
         /**
          * 現在のキューのインデックス番号
          *
@@ -2493,13 +2556,15 @@ declare module baser.ui.element {
          *
          * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
          *
-         * @version 0.5.0
+         * @version 0.8.0
          * @since 0.0.7
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @return {booelan} 初期化が成功したかどうか
          *
          */
         private _init(options?);
+        private _createPlayer(playerID);
+        private _onEmbeded();
         reload(options?: YoutubeOption): void;
         mute(): void;
         unMute(): void;
