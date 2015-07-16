@@ -6,7 +6,7 @@
     "baserCMS Users Community"
   ],
   "description": "Client side JavaScript libraries for baserCMS",
-  "main": "baser.min.js",
+  "main": "baser.js",
   "keywords": [
     "jQuery",
     "baser",
@@ -29,11 +29,16 @@
     "node_modules",
     "src",
     "test",
-    "tsd.json",
-    "typings"
+    "sample",
+    "tslint.json",
+    "typings",
+    "INSTALL.md",
+    "dtsm.json"
   ],
   "dependencies": {
-    "jquery2": "jquery#2",
     "jquery": "jquery#1"
+  },
+  "devDependencies": {
+    "jquery2": "jquery#2"
   }
 }
