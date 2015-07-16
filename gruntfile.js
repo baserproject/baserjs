@@ -94,7 +94,8 @@ module.exports = function(grunt) {
         options: {
           out: 'docs/',
           name: '<%= pkg.name %>',
-          gaID: 'UA-56482699-1'
+          gaID: 'UA-56482699-1',
+          mode: 'file'
         },
         src: 'src/index.ts'
       }

@@ -1,18 +1,10 @@
-module baser {
+module baser.ui.element {
 
-	export module ui {
+	export interface ITextField extends IFormElement {
 
-		export module element {
-
-			export interface ITextField extends IFormElement {
-
-				isEmpty: boolean;
-				placeholder: string;
-				hasPlaceholder: boolean;
-
-			}
-
-		}
+		isEmpty: boolean;
+		placeholder: string;
+		hasPlaceholder: boolean;
 
 	}
 

@@ -1,21 +1,13 @@
-module baser {
+module baser.ui.element {
 
-	export module ui {
+	export interface IElement extends event.IEventDispacher {
 
-		export module element {
+		id: string;
+		name: string;
+		$el: JQuery;
 
-			export interface IElement extends IEventDispacher {
-
-				id: string;
-				name: string;
-				$el: JQuery;
-
-				addClass (blockNames: string, elementNames?: string, modifierName?: string): void;
-				getBoolAttr (attrName: string): boolean;
-
-			}
-
-		}
+		addClass (blockNames: string, elementNames?: string, modifierName?: string): void;
+		getBoolAttr (attrName: string): boolean;
 
 	}
 

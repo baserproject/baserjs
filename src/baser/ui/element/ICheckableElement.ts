@@ -1,19 +1,11 @@
-module baser {
+module baser.ui.element {
 
-	export module ui {
+	export interface ICheckableElement extends IFormElement {
 
-		export module element {
+		checked: boolean;
+		defaultChecked: boolean;
 
-			export interface ICheckableElement extends IFormElement {
-
-				checked: boolean;
-				defaultChecked: boolean;
-
-				update (): void;
-
-			}
-
-		}
+		update (): void;
 
 	}
 

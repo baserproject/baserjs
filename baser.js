@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.6.0-rc r238
- * update: 2015-06-25
+ * baserjs - v0.7.0-beta.2 r252
+ * update: 2015-07-10
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -143,10 +143,10 @@
 }));
 
 /*!
- * jQuery Mousewheel 3.1.12
+ * jQuery Mousewheel 3.1.13
  *
- * Copyright 2014 jQuery Foundation and other contributors
- * Released under the MIT license.
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license
  * http://jquery.org/license
  */
 
@@ -454,6 +454,25 @@ var baser;
                 var rFalsy = /^\s*(?:false|null|undefined|0|0?(?:\.0+)?)?\s*$/i;
                 return rFalsy.test(str);
             };
+            /**
+             * 最初に登場する文字列の部分を分割する
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            String.divide = function (str, separator) {
+                var splited = str.split(separator);
+                var prefix;
+                var suffix;
+                if (splited) {
+                    prefix = splited.shift();
+                    if (splited.length) {
+                        suffix = splited.join(separator);
+                    }
+                }
+                return [prefix, suffix];
+            };
             return String;
         })();
         utility.String = String;
@@ -611,124 +630,145 @@ var baser;
 })(baser || (baser = {}));
 var baser;
 (function (baser) {
-    var eventHandlers = {};
-    var types = {};
     var ui;
     (function (ui) {
-        /**
-         * イベント駆動できるクラス
-         *
-         * @version 0.0.10
-         * @since 0.0.10
-         *
-         */
-        var EventDispacher = (function () {
+        var event;
+        (function (event) {
             /**
-             * コンストラクタ
+             * イベント駆動できるクラス
              *
              * @version 0.0.10
              * @since 0.0.10
              *
              */
-            function EventDispacher() {
-                // void
-            }
-            /**
-             * イベントハンドラを登録する
-             *
-             * @version 0.0.10
-             * @since 0.0.10
-             *
-             */
-            EventDispacher.prototype.on = function (type, handler) {
-                var eventHandler = new EventHandler(this, type, handler);
-                eventHandlers[eventHandler.id] = eventHandler;
-                if (!types[type]) {
-                    types[type] = [];
+            var EventDispacher = (function () {
+                /**
+                 * コンストラクタ
+                 *
+                 * @version 0.0.10
+                 * @since 0.0.10
+                 *
+                 */
+                function EventDispacher() {
+                    // void
                 }
-                types[type].push(eventHandler);
-                return this;
-            };
-            /**
-             * イベントハンドラを削除する
-             *
-             * @version 0.0.10
-             * @since 0.0.10
-             *
-             */
-            EventDispacher.prototype.off = function (type) {
-                delete types[type];
-                return this;
-            };
-            /**
-             * イベントハンドラを発火させる
-             *
-             * @version 0.5.0
-             * @since 0.0.10
-             *
-             */
-            EventDispacher.prototype.trigger = function (type, args, context) {
-                if (args === void 0) { args = []; }
-                var handlers;
-                var eventHandler;
-                var e;
-                context = context || this;
-                if (types[type]) {
-                    handlers = types[type].slice(); // clone
-                    while (handlers.length) {
-                        eventHandler = handlers.shift();
-                        if (eventHandler.context === this) {
-                            e = new DispacheEvent(type);
-                            eventHandler.handler.apply(context, [e].concat(args));
-                            if (e.isImmediatePropagationStopped()) {
-                                break;
+                /**
+                 * イベントハンドラを登録する
+                 *
+                 * @version 0.0.10
+                 * @since 0.0.10
+                 *
+                 */
+                EventDispacher.prototype.on = function (type, handler) {
+                    var eventHandler = new event.EventHandler(this, type, handler);
+                    EventDispacher.eventHandlers[eventHandler.id] = eventHandler;
+                    if (!EventDispacher.types[type]) {
+                        EventDispacher.types[type] = [];
+                    }
+                    EventDispacher.types[type].push(eventHandler);
+                    return this;
+                };
+                /**
+                 * イベントハンドラを削除する
+                 *
+                 * @version 0.0.10
+                 * @since 0.0.10
+                 *
+                 */
+                EventDispacher.prototype.off = function (type) {
+                    delete EventDispacher.types[type];
+                    return this;
+                };
+                /**
+                 * イベントハンドラを発火させる
+                 *
+                 * @version 0.5.0
+                 * @since 0.0.10
+                 *
+                 */
+                EventDispacher.prototype.trigger = function (type, args, context) {
+                    if (args === void 0) { args = []; }
+                    var handlers;
+                    var eventHandler;
+                    var e;
+                    context = context || this;
+                    if (EventDispacher.types[type]) {
+                        handlers = EventDispacher.types[type].slice(); // clone
+                        while (handlers.length) {
+                            eventHandler = handlers.shift();
+                            if (eventHandler.context === this) {
+                                e = new event.DispacheEvent(type);
+                                eventHandler.handler.apply(context, [e].concat(args));
+                                if (e.isImmediatePropagationStopped()) {
+                                    break;
+                                }
                             }
                         }
                     }
+                    return this;
+                };
+                EventDispacher.eventHandlers = {};
+                EventDispacher.types = {};
+                return EventDispacher;
+            })();
+            event.EventDispacher = EventDispacher;
+        })(event = ui.event || (ui.event = {}));
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        var event;
+        (function (event) {
+            /**
+             * イベントオブジェクトのクラス
+             *
+             * @version 0.3.0
+             * @since 0.0.10
+             *
+             */
+            var DispacheEvent = (function () {
+                function DispacheEvent(type) {
+                    this._isImmediatePropagationStopped = false;
+                    this.type = type;
                 }
-                return this;
-            };
-            return EventDispacher;
-        })();
-        ui.EventDispacher = EventDispacher;
-        /**
-         * イベントハンドラのラッパークラス
-         *
-         * @version 0.0.10
-         * @since 0.0.10
-         *
-         */
-        var EventHandler = (function () {
-            function EventHandler(context, type, handler) {
-                this.context = context;
-                this.id = baser.utility.String.UID();
-                this.type = type;
-                this.handler = handler;
-            }
-            return EventHandler;
-        })();
-        ui.EventHandler = EventHandler;
-        /**
-         * イベントオブジェクトのクラス
-         *
-         * @version 0.3.0
-         * @since 0.0.10
-         *
-         */
-        var DispacheEvent = (function () {
-            function DispacheEvent(type) {
-                this._isImmediatePropagationStopped = false;
-                this.type = type;
-            }
-            DispacheEvent.prototype.isImmediatePropagationStopped = function () {
-                return this._isImmediatePropagationStopped;
-            };
-            DispacheEvent.prototype.stopImmediatePropagation = function () {
-                this._isImmediatePropagationStopped = true;
-            };
-            return DispacheEvent;
-        })();
-        ui.DispacheEvent = DispacheEvent;
+                DispacheEvent.prototype.isImmediatePropagationStopped = function () {
+                    return this._isImmediatePropagationStopped;
+                };
+                DispacheEvent.prototype.stopImmediatePropagation = function () {
+                    this._isImmediatePropagationStopped = true;
+                };
+                return DispacheEvent;
+            })();
+            event.DispacheEvent = DispacheEvent;
+        })(event = ui.event || (ui.event = {}));
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        var event;
+        (function (event) {
+            /**
+             * イベントハンドラのラッパークラス
+             *
+             * @version 0.0.10
+             * @since 0.0.10
+             *
+             */
+            var EventHandler = (function () {
+                function EventHandler(context, type, handler) {
+                    this.context = context;
+                    this.id = baser.utility.String.UID();
+                    this.type = type;
+                    this.handler = handler;
+                }
+                return EventHandler;
+            })();
+            event.EventHandler = EventHandler;
+        })(event = ui.event || (ui.event = {}));
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
 var baser;
@@ -857,6 +897,133 @@ var baser;
         }
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        /**
+         * URLの情報を管理するクラス
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        var Locational = (function () {
+            /**
+             * コンストラクタ
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            function Locational(originalLocation) {
+                // ex) http:
+                this.protocol = originalLocation.protocol;
+                // ex) www.sample.com:80
+                this.host = originalLocation.host;
+                // ex) www.sample.com
+                this.hostname = originalLocation.hostname;
+                // ex) 80
+                this.port = originalLocation.port;
+                // /path/dir/file.ext
+                this.pathname = originalLocation.pathname;
+                // ?key=value&key2=value
+                this.search = originalLocation.search;
+                // #hash
+                this.hash = originalLocation.hash;
+                this.update();
+            }
+            /**
+             * クエリーストリングをハッシュにして返す
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            Locational.parseQueryString = function (queryString) {
+                var params = {};
+                var queries;
+                if (queryString) {
+                    queries = queryString.split(/&/g);
+                    $.each(queries, function (i, query) {
+                        var keyValue = baser.utility.String.divide(query, '=');
+                        var key = keyValue[0];
+                        var value = keyValue[1];
+                        if (key) {
+                            if (/\[\]$/.test(key)) {
+                                key = key.replace(/\[\]$/, '');
+                                if (params[key] && params[key].push) {
+                                    params[key].push(value);
+                                }
+                                else {
+                                    params[key] = [value];
+                                }
+                            }
+                            else {
+                                params[key] = value;
+                            }
+                        }
+                    });
+                }
+                return params;
+            };
+            Locational.prototype.update = function () {
+                // ex) http://www.sample.com:80
+                this.origin = this.protocol + '//' + this.host;
+                // ex) /path/dir/file.ext?key=value&key2=value#hash
+                this.path = this.pathname + this.search + this.hash;
+                // ex) http://www.sample.com:80/path/dir/file.ext?key=value&key2=value#hash
+                this.href = this.origin + this.path;
+                // ex) key=value&key2=value
+                this.query = this.search.replace(/^\?/, '');
+                // ex) { "key": "value", "key2": "value" }
+                this.params = Locational.parseQueryString(this.query);
+                return this;
+            };
+            Locational.prototype.addParam = function (key, value) {
+                var _this = this;
+                var eqAndValue = '';
+                if (typeof value === 'string' || !value) {
+                    if (value !== undefined) {
+                        eqAndValue = '=' + value;
+                    }
+                    if (this.search) {
+                        this.search += '&' + key + eqAndValue;
+                    }
+                    else {
+                        this.search = '?' + key + eqAndValue;
+                    }
+                }
+                else {
+                    $.each(value, function (i, val) {
+                        if (val !== undefined) {
+                            eqAndValue = '=' + val;
+                        }
+                        if (_this.search) {
+                            _this.search += '&' + key + '[]' + eqAndValue;
+                        }
+                        else {
+                            _this.search = '?' + key + '[]' + eqAndValue;
+                        }
+                    });
+                }
+                this.update();
+                return this;
+            };
+            Locational.prototype.removeParam = function (key) {
+                this.search = this.search.replace(new RegExp(key + '(?:\\[\\])?(?:=[^&]*)?(&|$)', 'g'), '');
+                this.update();
+                return this;
+            };
+            Locational.prototype.toString = function () {
+                this.update();
+                return this.href;
+            };
+            return Locational;
+        })();
+        ui.Locational = Locational;
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -867,7 +1034,6 @@ var baser;
 (function (baser) {
     var ui;
     (function (ui) {
-        var flexibleWindowObject = window;
         /**
          * ブラウザの情報を管理するクラス
          *
@@ -877,6 +1043,13 @@ var baser;
          */
         var Browser = (function (_super) {
             __extends(Browser, _super);
+            /**
+             * コンストラクタ
+             *
+             * @version 0.0.2
+             * @since 0.0.2
+             *
+             */
             function Browser() {
                 var _this = this;
                 _super.call(this);
@@ -919,17 +1092,24 @@ var baser;
             /**
              * ページ遷移する
              *
-             * @version 0.1.0
+             * @version 0.7.0
              * @since 0.1.0
              *
              */
             Browser.jumpTo = function (path, isBlank) {
                 if (isBlank === void 0) { isBlank = false; }
-                if (!isBlank) {
-                    window.location.href = path;
+                var href;
+                if (typeof path === 'string') {
+                    href = path;
                 }
                 else {
-                    window.open(path, null);
+                    href = path.href;
+                }
+                if (!isBlank) {
+                    window.location.href = href;
+                }
+                else {
+                    window.open(href, null);
                 }
             };
             /**
@@ -957,6 +1137,30 @@ var baser;
                 return bua;
             };
             /**
+             * 現在のURLのパラメータをリンク先へ引き継がせる
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            Browser.inheritParams = function (targetParam) {
+                var $target = $('a, area').filter('[href]');
+                var thisLocation = new ui.Locational(location);
+                if (!(targetParam in thisLocation.params)) {
+                    return;
+                }
+                var query = targetParam;
+                var value = thisLocation.params[targetParam];
+                $target.each(function (i, elem) {
+                    var targetElem = elem;
+                    var loc = new ui.Locational(targetElem);
+                    if (thisLocation.host === loc.host) {
+                        loc.addParam(query, value);
+                        targetElem.href = loc.href;
+                    }
+                });
+            };
+            /**
              * ブラウザ
              *
              * @version 0.0.10
@@ -972,12 +1176,97 @@ var baser;
              *
              */
             Browser.spec = {
-                isTouchable: flexibleWindowObject.ontouchstart !== undefined,
+                isTouchable: 'ontouchstart' in window,
                 ua: Browser.getUA()
             };
             return Browser;
-        })(ui.EventDispacher);
+        })(ui.event.EventDispacher);
         ui.Browser = Browser;
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        /**
+         * ブレークポイントの変化に応じた処理をする管理することができるクラス
+         *
+         * @version 0.7.0
+         * @since 0.7.0
+         *
+         */
+        var BreakPoints = (function (_super) {
+            __extends(BreakPoints, _super);
+            /**
+             * コンストラクタ
+             *
+             * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+             * @param callback 変化に応じたコールバック
+             */
+            function BreakPoints(breakPoints, callback) {
+                var _this = this;
+                _super.call(this);
+                this.currentPoint = 0;
+                this.breakPoints = [];
+                this._values = {};
+                this._setBreakPoints(breakPoints);
+                ui.Browser.browser.on('resizeend', function () {
+                    var i = 0;
+                    var l = _this.breakPoints.length;
+                    var wW = window.document.documentElement.clientWidth;
+                    var overPoint;
+                    var value;
+                    for (; i < l; i++) {
+                        overPoint = _this.breakPoints[i];
+                        if (wW <= overPoint) {
+                            if (_this.currentPoint !== overPoint) {
+                                _this.currentPoint = overPoint;
+                                value = _this._values[overPoint + ''];
+                                if (callback) {
+                                    callback(value, overPoint, wW);
+                                }
+                                _this.trigger('breakpoint', [value, overPoint, wW], _this);
+                                _this.trigger('breakpoint:' + overPoint, [value, wW], _this);
+                            }
+                            break;
+                        }
+                    }
+                });
+            }
+            /**
+             * ブレークポイントの登録処理
+             *
+             * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+             */
+            BreakPoints.prototype._setBreakPoints = function (breakPoints) {
+                var breakPointStr;
+                var breakPoint;
+                var value;
+                for (breakPointStr in breakPoints) {
+                    if (breakPoints.hasOwnProperty(breakPointStr)) {
+                        breakPoint = parseFloat(breakPointStr);
+                        if (breakPoint >= 1) {
+                            this.breakPoints.push(breakPoint);
+                            value = breakPoints[breakPointStr];
+                            this._values[breakPoint + ''] = value;
+                        }
+                    }
+                }
+                this.breakPoints.sort(function (a, b) {
+                    return a - b;
+                });
+            };
+            /**
+             * ブレークポイントを追加する
+             *
+             * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+             */
+            BreakPoints.prototype.add = function (breakPoints) {
+                this._setBreakPoints(breakPoints);
+            };
+            return BreakPoints;
+        })(ui.event.EventDispacher);
+        ui.BreakPoints = BreakPoints;
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
 var baser;
@@ -1360,221 +1649,6 @@ var baser;
 (function (baser) {
     var ui;
     (function (ui) {
-        /**
-         * 要素の寸法(幅・高さ)を管理するクラス
-         *
-         * @version 0.0.9
-         * @since 0.0.9
-         *
-         */
-        var Dimension = (function () {
-            /**
-             * コンストラクタ
-             *
-             * @version 0.0.9
-             * @since 0.0.9
-             *
-             */
-            function Dimension(el) {
-                if (el) {
-                    this.el = el;
-                }
-            }
-            return Dimension;
-        })();
-        ui.Dimension = Dimension;
-    })(ui = baser.ui || (baser.ui = {}));
-})(baser || (baser = {}));
-var baser;
-(function (baser) {
-    var ui;
-    (function (ui) {
-        /**
-         * Box管理を担うクラス
-         *
-         * @version 0.2.2
-         * @since 0.0.15
-         *
-         */
-        var Box = (function () {
-            function Box() {
-            }
-            Box.align = function ($target, columns, callback, breakPoint) {
-                if (breakPoint === void 0) { breakPoint = 0; }
-                var tiles = null;
-                var max = null;
-                var c = null;
-                var h = null;
-                var last = $target.length - 1;
-                var s = null;
-                if (!columns) {
-                    columns = $target.length;
-                }
-                $target.each(function (i) {
-                    var tile;
-                    var j, l;
-                    var cancel = false;
-                    if (breakPoint < window.document.documentElement.clientWidth) {
-                        ui.element.Element.removeCSSPropertyFromDOMElement('height', this);
-                        c = i % columns;
-                        if (c === 0) {
-                            tiles = [];
-                        }
-                        tile = tiles[c] = $(this);
-                        h = tile.height();
-                        if (c === 0 || h > max) {
-                            max = h;
-                        }
-                        if (i === last || c === columns - 1) {
-                            l = tiles.length;
-                            for (j = 0; j < l; j++) {
-                                if (tiles[j]) {
-                                    if ($.isFunction(callback)) {
-                                        cancel = !callback.call($target, max, h, tiles);
-                                    }
-                                    if (!cancel) {
-                                        tiles[j].height(max);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-                return $target;
-            };
-            // 文字の大きさを確認するためのdummyChar要素
-            Box.createChar = function () {
-                var dummyChar;
-                var $dummyChar = $('<p>M</p>').css({
-                    display: 'block',
-                    visibility: 'hidden',
-                    position: 'absolute',
-                    padding: 0,
-                    top: 0
-                });
-                $dummyChar.appendTo('body');
-                Box.settings.dummyChar = $dummyChar[0];
-                Box.settings.currentSize = Box.settings.dummyChar.offsetHeight;
-            };
-            // 文字の大きさが変わったか
-            Box.isChanged = function () {
-                if (Box.settings.currentSize === Box.settings.dummyChar.offsetHeight) {
-                    return false;
-                }
-                Box.settings.currentSize = Box.settings.dummyChar.offsetHeight;
-                return true;
-            };
-            // 文書を読み込んだ時点で
-            // 文字の大きさを確認しておく
-            // 文字の大きさが変わっていたら、
-            Box.observer = function () {
-                if (Box.isChanged()) {
-                    Box.reAlign();
-                }
-                return;
-            };
-            // 高さ揃えを再実行する処理
-            Box.reAlign = function () {
-                var settings = Box.settings;
-                var i;
-                var l = settings.sets.length;
-                var set;
-                for (i = 0; i < l; i++) {
-                    set = Box.settings.sets[i];
-                    set.height('auto');
-                    Box.align(set, settings.columns[i], settings.callbacks[i], settings.breakPoints[i]);
-                }
-                return;
-            };
-            Box.boot = function () {
-                var $w;
-                if (!Box.isBooted) {
-                    $w = $(window);
-                    $w.on('load', Box.reAlign);
-                    $w.on('resize', Box.reAlign);
-                    Box.isBooted = true;
-                    Box.createChar();
-                    // TODO: オプションでタイマーを回すのを制御できるようにする
-                    Box.watchTimer = window.setInterval(Box.observer, Box.settings.interval);
-                }
-            };
-            Box.sleep = function () {
-                var $w = $(window);
-                $w.off('load', Box.reAlign);
-                $w.off('resize', Box.reAlign);
-                window.clearInterval(Box.watchTimer);
-            };
-            Box.push = function ($target, column, callback, breakPoint) {
-                if (column === void 0) { column = null; }
-                if (callback === void 0) { callback = null; }
-                if (breakPoint === void 0) { breakPoint = null; }
-                var uid = $target.data('-box-align-height-');
-                if (uid) {
-                    this.destory($target);
-                }
-                else {
-                    uid = baser.utility.String.UID();
-                    $target.data('-box-align-height-', uid);
-                }
-                Box.align($target, column, callback, breakPoint);
-                Box.settings.uidList.push(uid);
-                Box.settings.sets.push($target);
-                Box.settings.columns.push(column);
-                Box.settings.callbacks.push(callback);
-                Box.settings.breakPoints.push(breakPoint);
-            };
-            Box.destory = function ($target) {
-                ui.element.Element.removeCSSProperty('height', $target);
-                var uid = $target.data('-box-align-height-');
-                var index = baser.utility.Array.indexOf(Box.settings.uidList, uid);
-                Box.settings.uidList = baser.utility.Array.remove(Box.settings.uidList, index);
-                Box.settings.sets = baser.utility.Array.remove(Box.settings.sets, index);
-                Box.settings.columns = baser.utility.Array.remove(Box.settings.columns, index);
-                Box.settings.callbacks = baser.utility.Array.remove(Box.settings.callbacks, index);
-                Box.settings.breakPoints = baser.utility.Array.remove(Box.settings.breakPoints, index);
-                if (Box.settings.uidList.length === 0) {
-                    this.sleep();
-                }
-            };
-            Box.isBooted = false;
-            Box.settings = {
-                interval: 1000,
-                currentSize: 0,
-                dummyChar: null,
-                sets: [],
-                columns: [],
-                callbacks: [],
-                breakPoints: [],
-                uidList: []
-            };
-            return Box;
-        })();
-        ui.Box = Box;
-    })(ui = baser.ui || (baser.ui = {}));
-})(baser || (baser = {}));
-var baser;
-(function (baser) {
-    var ui;
-    (function (ui) {
-        /**
-         * フォームのバリデーションを担うクラス
-         *
-         * @version 0.0.x
-         * @since 0.0.x
-         *
-         */
-        var Validation = (function () {
-            function Validation() {
-            }
-            return Validation;
-        })();
-        ui.Validation = Validation;
-    })(ui = baser.ui || (baser.ui = {}));
-})(baser || (baser = {}));
-var baser;
-(function (baser) {
-    var ui;
-    (function (ui) {
         var element;
         (function (element) {
             /**
@@ -1895,83 +1969,8 @@ var baser;
                  */
                 Element.classNameDefaultSeparatorForModifier = 1 /* DOUBLE_HYPHEN */;
                 return Element;
-            })(ui.EventDispacher);
+            })(ui.event.EventDispacher);
             element.Element = Element;
-        })(element = ui.element || (ui.element = {}));
-    })(ui = baser.ui || (baser.ui = {}));
-})(baser || (baser = {}));
-var baser;
-(function (baser) {
-    var ui;
-    (function (ui) {
-        var element;
-        (function (element) {
-            /**
-             * フォーム要素を扱う静的クラス
-             *
-             * @version 0.1.0
-             * @since 0.0.1
-             *
-             */
-            var Form = (function () {
-                function Form() {
-                }
-                /**
-                 * ラジオボタンを拡張する
-                 *
-                 * @version 0.0.1
-                 * @since 0.0.1
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Form.radio = function ($elem, options) {
-                    var radio = new element.Radio($elem, options);
-                    return $elem;
-                };
-                /**
-                 * チェックボックスを拡張する
-                 *
-                 * @version 0.0.1
-                 * @since 0.0.1
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Form.checkbox = function ($elem, options) {
-                    var checkbox = new element.Checkbox($elem, options);
-                    return $elem;
-                };
-                /**
-                 * セレクトボックスを拡張する
-                 *
-                 * @version 0.0.1
-                 * @since 0.0.1
-                 * @param $elem 管理するDOM要素のjQueryオブジェクト
-                 * @param options オプション
-                 *
-                 */
-                Form.select = function ($elem, options) {
-                    var select = new element.Select($elem, options);
-                    return $elem;
-                };
-                /**
-                 * 管理対象要素リスト
-                 *
-                 * @since 0.0.1
-                 *
-                 */
-                Form.elements = [];
-                /**
-                 * ラジオボタンのname属性値で紐付いたブループを管理するリスト
-                 *
-                 * @since 0.0.1
-                 *
-                 */
-                Form.radioGroups = {};
-                return Form;
-            })();
-            element.Form = Form;
         })(element = ui.element || (ui.element = {}));
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
@@ -1993,7 +1992,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.1
+                 * @version 0.7.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -2030,7 +2029,7 @@ var baser;
                     this.setDisabled($el.prop('disabled'));
                     this._onblur();
                     // フォーム要素に登録
-                    element.Form.elements.push(this);
+                    FormElement.elements.push(this);
                 }
                 /**
                  * クラス名を設定する
@@ -2249,6 +2248,7 @@ var baser;
                 FormElement.prototype._fireChangeEvent = function (isSilent) {
                     if (isSilent === void 0) { isSilent = false; }
                     var e;
+                    var legacyElement;
                     if (isSilent) {
                         this.$el.trigger('change.bcFormElement', [{ isSilent: true }]);
                     }
@@ -2259,7 +2259,8 @@ var baser;
                     }
                     else {
                         // IE8
-                        this.$el[0].fireEvent('onchange');
+                        legacyElement = this.$el[0];
+                        legacyElement.fireEvent('onchange');
                     }
                 };
                 /**
@@ -2360,6 +2361,14 @@ var baser;
                  *
                  */
                 FormElement.classNameStateDisabled = 'disabled';
+                /**
+                 * フォーム関連要素リスト
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                FormElement.elements = [];
                 return FormElement;
             })(element.Element);
             element.FormElement = FormElement;
@@ -3292,7 +3301,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.1
+                 * @version 0.7.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -3308,22 +3317,22 @@ var baser;
                     element.Element.addClassTo(this.$label, Radio.classNameRadio, element.FormElement.classNameLabel);
                     element.Element.addClassTo(this.$wrapper, Radio.classNameRadio + '-' + element.FormElement.classNameWrapper);
                     // ラジオボタングループに登録
-                    if (!element.Form.radioGroups[this.name]) {
-                        element.Form.radioGroups[this.name] = new element.RadioGroup(this.name);
+                    if (!element.RadioGroup.groups[this.name]) {
+                        element.RadioGroup.groups[this.name] = new element.RadioGroup(this.name);
                     }
-                    element.Form.radioGroups[this.name].add(this);
+                    element.RadioGroup.groups[this.name].add(this);
                 }
                 /**
                  * チェンジイベントのハンドラ
                  *
-                 * @version 0.0.1
+                 * @version 0.7.0
                  * @since 0.0.1
                  *
                  */
                 Radio.prototype._onchenge = function () {
                     _super.prototype._onchenge.call(this);
                     // 同じname属性のラジオボタン要素も同時に変更をする
-                    element.Form.radioGroups[this.name].update(this);
+                    element.RadioGroup.groups[this.name].update(this);
                 };
                 /**
                  * Radio要素のクラス
@@ -3452,9 +3461,263 @@ var baser;
                         }
                     }
                 };
+                /**
+                 * ラジオボタンのグループを保管するオブジェクト
+                 *
+                 * @since 0.7.0
+                 *
+                 */
+                RadioGroup.groups = {};
                 return RadioGroup;
             })();
             element.RadioGroup = RadioGroup;
+        })(element = ui.element || (ui.element = {}));
+    })(ui = baser.ui || (baser.ui = {}));
+})(baser || (baser = {}));
+var baser;
+(function (baser) {
+    var ui;
+    (function (ui) {
+        var element;
+        (function (element) {
+            /**
+             * 高さ揃えをするボックスを管理するクラス
+             *
+             * @version 0.7.0
+             * @since 0.7.0
+             *
+             */
+            var AlignedBoxes = (function (_super) {
+                __extends(AlignedBoxes, _super);
+                /**
+                 * コンストラクタ
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 * @param $el 対象のボックス要素
+                 * @param column カラム数もしくはブレークポイントに寄るカラム数 `0`の場合すべての要素の高さを揃える
+                 * @param callback ボックスの高さ揃えるときのコールバック
+                 */
+                function AlignedBoxes($el, column, callback) {
+                    var _this = this;
+                    if (column === void 0) { column = 0; }
+                    _super.call(this, $el);
+                    AlignedBoxes.boot();
+                    var uid = this.$el.data(AlignedBoxes.DATA_KEY_ID);
+                    if (uid) {
+                        this.destroy();
+                    }
+                    uid = baser.utility.String.UID();
+                    this.$el.data(AlignedBoxes.DATA_KEY_ID, uid);
+                    this.$el.data(AlignedBoxes.DATA_KEY, this);
+                    AlignedBoxes.groups[uid] = this;
+                    var columnInfo;
+                    if (typeof column === 'number') {
+                        columnInfo = {
+                            Infinity: column
+                        };
+                    }
+                    else {
+                        columnInfo = column;
+                    }
+                    this._columns = new ui.BreakPoints(columnInfo, function (column, breakPoint, windowWidth) {
+                        _this._currentColumn = column;
+                        _this._align();
+                    });
+                    this._callback = callback;
+                    this._align();
+                    this.on('realign', function () {
+                        _this._align();
+                    });
+                }
+                /**
+                 * 基準の文字要素を生成する
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.createChar = function () {
+                    var dummyChar;
+                    var $dummyChar = $('<del>M</del>').css({
+                        display: 'block',
+                        visibility: 'hidden',
+                        position: 'absolute',
+                        padding: 0,
+                        top: 0,
+                        zIndex: -1
+                    });
+                    $dummyChar.appendTo('body');
+                    AlignedBoxes.dummyCharElement = $dummyChar[0];
+                    AlignedBoxes.currentFontSize = AlignedBoxes.dummyCharElement.offsetHeight;
+                };
+                /**
+                 * 文字の大きさが変わったかどうか
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.isChanged = function () {
+                    if (AlignedBoxes.currentFontSize === AlignedBoxes.dummyCharElement.offsetHeight) {
+                        return false;
+                    }
+                    AlignedBoxes.currentFontSize = AlignedBoxes.dummyCharElement.offsetHeight;
+                    return true;
+                };
+                /**
+                 * 文字の大きさが変わったかどうかを監視するルーチン
+                 *
+                 * 文字の大きさが変わればボックスのサイズを再設定する
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.observerForFontSize = function () {
+                    if (AlignedBoxes.isChanged()) {
+                        AlignedBoxes.reAlign();
+                    }
+                    return;
+                };
+                /**
+                 * ボックスのサイズを再設定する
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.reAlign = function () {
+                    var uid;
+                    for (uid in AlignedBoxes.groups) {
+                        AlignedBoxes.groups[uid].trigger('realign');
+                    }
+                    return;
+                };
+                /**
+                 * 監視タイマーを起動する
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.boot = function () {
+                    var $w;
+                    if (!AlignedBoxes.isBooted) {
+                        $w = $(window);
+                        $w.on('load', AlignedBoxes.reAlign);
+                        ui.Browser.browser.on('resizeend', AlignedBoxes.reAlign);
+                        AlignedBoxes.isBooted = true;
+                        AlignedBoxes.createChar();
+                        AlignedBoxes.watchTimer = window.setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
+                    }
+                };
+                /**
+                 * ボックスの高さ揃える
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.prototype._align = function () {
+                    var _this = this;
+                    var tiles;
+                    var max;
+                    var c;
+                    var h;
+                    var last = this.$el.length - 1;
+                    if (!this._currentColumn) {
+                        this._currentColumn = this.$el.length;
+                    }
+                    this.$el.each(function (i, elem) {
+                        var tile;
+                        var j, l;
+                        var cancel = false;
+                        element.Element.removeCSSPropertyFromDOMElement('height', elem);
+                        c = i % _this._currentColumn;
+                        if (c === 0) {
+                            tiles = [];
+                        }
+                        tile = tiles[c] = $(elem);
+                        h = tile.height();
+                        if (c === 0 || h > max) {
+                            max = h;
+                        }
+                        if (i === last || c === _this._currentColumn - 1) {
+                            l = tiles.length;
+                            for (j = 0; j < l; j++) {
+                                if (tiles[j]) {
+                                    if ($.isFunction(_this._callback)) {
+                                        cancel = !_this._callback(max, h, _this);
+                                    }
+                                    if (!cancel) {
+                                        tiles[j].height(max);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                };
+                /**
+                 * 高さ揃えを解除する
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.prototype.destroy = function () {
+                    this.$el.each(function (i, elem) {
+                        var $this = $(elem);
+                        var uid = $this.data(AlignedBoxes.DATA_KEY_ID);
+                        $this.removeData(AlignedBoxes.DATA_KEY_ID);
+                        if (uid in AlignedBoxes.groups) {
+                            delete AlignedBoxes.groups[uid];
+                        }
+                    });
+                };
+                /**
+                 * jQuery dataに自信のインスタンスを登録するキー
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.DATA_KEY = 'bc-box';
+                /**
+                 * jQuery dataにUIDを登録するキー
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.DATA_KEY_ID = AlignedBoxes.DATA_KEY + '-id';
+                /**
+                 * 監視の間隔
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.watchInterval = 1000;
+                /**
+                 * 監視タイマーが起動しているかどうか
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.isBooted = false;
+                /**
+                 * 監視対象のボックスグループ
+                 *
+                 * @version 0.7.0
+                 * @since 0.7.0
+                 *
+                 */
+                AlignedBoxes.groups = {};
+                return AlignedBoxes;
+            })(element.Element);
+            element.AlignedBoxes = AlignedBoxes;
         })(element = ui.element || (ui.element = {}));
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
@@ -4003,7 +4266,6 @@ var baser;
         })(element = ui.element || (ui.element = {}));
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
-this.baser = baser;
 var baser;
 (function (baser) {
     /**
@@ -4135,7 +4397,7 @@ var baser;
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたラジオボタンに変更する
      *
-     * @version 0.0.1
+     * @version 0.7.0
      * @since 0.0.1
      *
      * * * *
@@ -4148,7 +4410,7 @@ var baser;
     function bcRadio(options) {
         return this.each(function (i, elem) {
             var $elem = $(elem);
-            baser.ui.element.Form.radio($elem, options);
+            new baser.ui.element.Radio($elem, options);
         });
     }
     $.fn.bcRadio = bcRadio;
@@ -4158,7 +4420,7 @@ var baser;
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する
      *
-     * @version 0.0.1
+     * @version 0.7.0
      * @since 0.0.1
      *
      * * * *
@@ -4171,7 +4433,7 @@ var baser;
     function bcCheckbox(options) {
         return this.each(function (i, elem) {
             var $elem = $(elem);
-            baser.ui.element.Form.checkbox($elem, options);
+            new baser.ui.element.Checkbox($elem, options);
         });
     }
     $.fn.bcCheckbox = bcCheckbox;
@@ -4181,7 +4443,7 @@ var baser;
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する
      *
-     * @version 0.0.1
+     * @version 0.7.0
      * @since 0.0.1
      *
      * * * *
@@ -4194,7 +4456,7 @@ var baser;
     function bcSelect(options) {
         return this.each(function (i, elem) {
             var $elem = $(elem);
-            baser.ui.element.Form.select($elem, options);
+            new baser.ui.element.Select($elem, options);
         });
     }
     $.fn.bcSelect = bcSelect;
@@ -4246,37 +4508,43 @@ var baser;
 })(baser || (baser = {}));
 var baser;
 (function (baser) {
-    function bcBoxAlignHeight(columnOrKeyword, detailTarget, callback, breakPoint) {
+    /**
+     * 要素の高さを揃える
+     *
+     * @version 0.7.0
+     * @since 0.0.15
+     *
+     */
+    function bcBoxAlignHeight(columnOrKeyword, detailTarget, callback) {
         if (columnOrKeyword === void 0) { columnOrKeyword = 0; }
-        if (breakPoint === void 0) { breakPoint = 0; }
-        if ($.isNumeric(columnOrKeyword)) {
-            var column = +columnOrKeyword;
-            baser.ui.Box.boot();
+        var keyword;
+        var column;
+        var boxes;
+        if (typeof columnOrKeyword === 'string') {
+            keyword = columnOrKeyword;
+            switch (keyword) {
+                case 'destroy': {
+                    boxes = this.data(baser.ui.element.AlignedBoxes.DATA_KEY);
+                    boxes.destroy();
+                    break;
+                }
+            }
+        }
+        else {
+            column = columnOrKeyword;
             var $detailTarget;
-            var settings = baser.ui.Box.settings;
             // 要素群の高さを揃え、setsに追加
             if (detailTarget) {
                 $detailTarget = this.find(detailTarget);
                 if ($detailTarget.length) {
                     this.each(function () {
                         var $split = $(this).find(detailTarget);
-                        baser.ui.Box.push($split, column, callback, breakPoint);
+                        new baser.ui.element.AlignedBoxes($split, column, callback);
                     });
                 }
             }
             else {
-                baser.ui.Box.push(this, column, callback, breakPoint);
-            }
-        }
-        else {
-            var keyword = columnOrKeyword;
-            switch (keyword) {
-                case 'destroy': {
-                    this.each(function () {
-                        baser.ui.Box.destory($(this));
-                    });
-                    break;
-                }
+                new baser.ui.element.AlignedBoxes(this, column, callback);
             }
         }
         return this;
@@ -4833,23 +5101,25 @@ var baser;
 /// <reference path="baser/utility/String.ts" />
 /// <reference path="baser/utility/Array.ts" />
 /// <reference path="baser/utility/Mathematics.ts" />
+/* UI/イベント
+================================================================= */
+/// <reference path="baser/ui/event/IEventDispacher.ts" />
+/// <reference path="baser/ui/event/EventDispacher.ts" />
+/// <reference path="baser/ui/event/DispacheEvent.ts" />
+/// <reference path="baser/ui/event/EventHandler.ts" />
 /* UI
 ================================================================= */
-/// <reference path="baser/ui/IEventDispacher.ts" />
-/// <reference path="baser/ui/EventDispacher.ts" />
 /// <reference path="baser/ui/Sequence.ts" />
+/// <reference path="baser/ui/Locational.ts" />
 /// <reference path="baser/ui/Browser.ts" />
+/// <reference path="baser/ui/BreakPoints.ts" />
 /// <reference path="baser/ui/Timer.ts" />
 /// <reference path="baser/ui/AnimationFrames.ts" />
 /// <reference path="baser/ui/Scroll.ts" />
-/// <reference path="baser/ui/Dimension.ts" />
-/// <reference path="baser/ui/Box.ts" />
-/// <reference path="baser/ui/Validation.ts" />
 /* UI/エレメント
 ================================================================= */
 /// <reference path="baser/ui/element/IElement.ts" />
 /// <reference path="baser/ui/element/Element.ts" />
-/// <reference path="baser/ui/element/Form.ts" />
 /// <reference path="baser/ui/element/IFormElement.ts" />
 /// <reference path="baser/ui/element/FormElement.ts" />
 /// <reference path="baser/ui/element/ITextField.ts" />
@@ -4863,11 +5133,9 @@ var baser;
 /// <reference path="baser/ui/element/ICheckbox.ts" />
 /// <reference path="baser/ui/element/Checkbox.ts" />
 /// <reference path="baser/ui/element/RadioGroup.ts" />
+/// <reference path="baser/ui/element/AlignedBoxes.ts" />
 /// <reference path="baser/ui/element/Map.ts" />
 /// <reference path="baser/ui/element/Youtube.ts" />
-/* baserJSコア
-================================================================= */
-/// <reference path="baser.ts" />
 /* jQueryプラグイン
 ================================================================= */
 /// <reference path="jquery/bcYoutube.ts" />

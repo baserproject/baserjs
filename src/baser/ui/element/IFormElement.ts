@@ -1,25 +1,17 @@
-module baser {
+module baser.ui.element {
 
-	export module ui {
+	export interface IFormElement extends IElement {
 
-		export module element {
+		label: string;
+		hasFocus: boolean;
+		disabled: boolean;
+		defaultValue: string;
+		isWrappedByLabel: boolean;
+		$label: JQuery;
+		$wrapper: JQuery;
 
-			export interface IFormElement extends IElement {
-
-				label: string;
-				hasFocus: boolean;
-				disabled: boolean;
-				defaultValue: string;
-				isWrappedByLabel: boolean;
-				$label: JQuery;
-				$wrapper: JQuery;
-
-				setValue (value: string | number | boolean): void;
-				setDisabled (isDisabled: boolean): void;
-
-			}
-
-		}
+		setValue (value: string | number | boolean): void;
+		setDisabled (isDisabled: boolean): void;
 
 	}
 

@@ -1,23 +1,15 @@
-module baser {
+module baser.ui.element {
 
-	export module ui {
+	export interface ISelect extends IFormElement {
 
-		export module element {
+		defaultSelectedIndex: number;
+		$selected: JQuery;
+		$pseudo: JQuery;
+		$options: JQuery;
 
-			export interface ISelect extends IFormElement {
-
-				defaultSelectedIndex: number;
-				$selected: JQuery;
-				$pseudo: JQuery;
-				$options: JQuery;
-
-				getIndex (): number;
-				next (isSilent: boolean): void;
-				prev (isSilent: boolean): void;
-
-			}
-
-		}
+		getIndex (): number;
+		next (isSilent: boolean): void;
+		prev (isSilent: boolean): void;
 
 	}
 
