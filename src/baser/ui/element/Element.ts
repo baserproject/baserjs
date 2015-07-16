@@ -353,6 +353,26 @@ module baser.ui.element {
 
 		}
 
+		/**
+		 * オプションとdata属性の値、属性の値をマージする
+		 *
+		 * @version 0.8.0
+		 * @since 0.8.0
+		 *
+		 */
+		public mergeOptions (defaultOptions: { [option: string ]: any }, options: any): { [option: string ]: any } {
+			var optName: string;
+			var attrs: { [option: string ]: any } = {};
+			var dataAttrs: { [option: string ]: any } = {};
+			for (optName in defaultOptions) {
+				if (defaultOptions.hasOwnProperty(optName)) {
+					attrs[optName] = this.$el.attr(optName);
+					dataAttrs = this.$el.data(optName);
+				}
+			}
+			return $.extend({}, defaultOptions, options, dataAttrs, attrs);
+		}
+
 	}
 
 }
