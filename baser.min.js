@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.7.0-beta.2 r252
- * update: 2015-07-10
+ * baserjs - v0.7.0 r254
+ * update: 2015-07-16
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
