@@ -360,14 +360,23 @@ module baser.ui.element {
 		 * @since 0.8.0
 		 *
 		 */
-		public mergeOptions (defaultOptions: { [option: string ]: any }, options: any): { [option: string ]: any } {
+		public mergeOptions (defaultOptions: any, options: any): any {
 			var optName: string;
 			var attrs: { [option: string ]: any } = {};
 			var dataAttrs: { [option: string ]: any } = {};
 			for (optName in defaultOptions) {
 				if (defaultOptions.hasOwnProperty(optName)) {
-					attrs[optName] = this.$el.attr(optName);
-					dataAttrs = this.$el.data(optName);
+					// 属性はidとclassは除外する
+					switch (optName) {
+						case 'id':
+						case 'class': {
+							break;
+						}
+						default: {
+							attrs[optName] = this.$el.attr(optName);
+						}
+					}
+					dataAttrs[optName] = this.$el.data(optName);
 				}
 			}
 			return $.extend({}, defaultOptions, options, dataAttrs, attrs);
