@@ -414,6 +414,9 @@ module baser.ui.element {
 							}
 							case YT.PlayerState.ENDED: {
 								this.trigger('ended', [this.player]);
+								if (this.movieId.length > 1 && this.movieOption.loop && this.currentCueIndex === this.movieId.length - 1) {
+									this.player.playVideoAt(0);
+								}
 								break;
 							}
 							case YT.PlayerState.PAUSED: {

@@ -4175,6 +4175,9 @@ var baser;
                                     }
                                     case YT.PlayerState.ENDED: {
                                         _this.trigger('ended', [_this.player]);
+                                        if (_this.movieId.length > 1 && _this.movieOption.loop && _this.currentCueIndex === _this.movieId.length - 1) {
+                                            _this.player.playVideoAt(0);
+                                        }
                                         break;
                                     }
                                     case YT.PlayerState.PAUSED: {
