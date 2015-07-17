@@ -170,7 +170,7 @@ module baser.ui.element {
 	/**
 	 * YouTube要素
 	 *
-	 * @version 0.0.7
+	 * @version 0.8.0
 	 * @since 0.0.7
 	 *
 	 */
@@ -389,7 +389,15 @@ module baser.ui.element {
 			return true;
 
 		}
-		
+
+		/**
+		 * プレイヤーを生成する
+		 *
+		 * @version 0.8.0
+		 * @since 0.8.0
+		 * @param playerID プレイヤーのDOM ID
+		 *
+		 */
 		private _createPlayer (playerID: string) {
 			this.player = new YT.Player(playerID, {
 				events: {
@@ -438,7 +446,14 @@ module baser.ui.element {
 				}
 			});
 		}
-		
+
+		/**
+		 * プレイヤーの生成が完了して実行可能になったときに呼ばれる処理
+		 *
+		 * @version 0.8.0
+		 * @since 0.8.0
+		 *
+		 */
 		private _onEmbeded (): void {
 			this.isEmbeded = true;
 			this._isMuted = this.player.isMuted();
@@ -469,20 +484,52 @@ module baser.ui.element {
 			this.trigger('embeded', [this.player]);
 		}
 
+		/**
+		 * 再設定する
+		 *
+		 * @version 0.0.7
+		 * @since 0.0.7
+		 *
+		 */
 		public reload (options?: YoutubeOption): void {
 			this._init(options);
 		}
-		
+
+		/**
+		 * ミュートする
+		 *
+		 * @version 0.8.0
+		 * @since 0.5.0
+		 *
+		 */
 		public mute (): void {
 			this.player.mute();
 			this._isMuted = true;
+			this.trigger('onmute', [this.player]);
 		}
 		
+		/**
+		 * ミュートを解除する
+		 *
+		 * @version 0.8.0
+		 * @since 0.5.0
+		 *
+		 */
 		public unMute (): void {
 			this.player.unMute();
 			this._isMuted = false;
+			this.trigger('onunmute', [this.player]);
 		}
 
+		/**
+		 * ミュートのオンオフを要素にアサインする
+		 *
+		 * @version 0.8.0
+		 * @since 0.5.0
+		 * @param $el アサインするDOM要素のjQueryオブジェクト
+		 * @param options オプション
+		 *
+		 */
 		public muteController ($el, options: YoutubeMuteControllerOptions): void {
 			var defaults: YoutubeMuteControllerOptions = {
 				eventType: <string> 'click',
@@ -512,6 +559,9 @@ module baser.ui.element {
 				});
 				update();
 			};
+			this.on('onmute onunmute', (): void => {
+				update();
+			});
 			if (this.isEmbeded) {
 				bindCtrl();
 			} else {

@@ -1,6 +1,6 @@
 /**
  * baserjs - v0.8.0-beta r254
- * update: 2015-07-16
+ * update: 2015-07-17
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -4041,7 +4041,7 @@ var baser;
             /**
              * YouTube要素
              *
-             * @version 0.0.7
+             * @version 0.8.0
              * @since 0.0.7
              *
              */
@@ -4150,6 +4150,14 @@ var baser;
                     }, 300);
                     return true;
                 };
+                /**
+                 * プレイヤーを生成する
+                 *
+                 * @version 0.8.0
+                 * @since 0.8.0
+                 * @param playerID プレイヤーのDOM ID
+                 *
+                 */
                 Youtube.prototype._createPlayer = function (playerID) {
                     var _this = this;
                     this.player = new YT.Player(playerID, {
@@ -4199,6 +4207,13 @@ var baser;
                         }
                     });
                 };
+                /**
+                 * プレイヤーの生成が完了して実行可能になったときに呼ばれる処理
+                 *
+                 * @version 0.8.0
+                 * @since 0.8.0
+                 *
+                 */
                 Youtube.prototype._onEmbeded = function () {
                     var _this = this;
                     this.isEmbeded = true;
@@ -4226,17 +4241,49 @@ var baser;
                     this.$el.trigger('embeddedyoutubeplay', [this.player]); // TODO: 廃止予定(v1.0.0)
                     this.trigger('embeded', [this.player]);
                 };
+                /**
+                 * 再設定する
+                 *
+                 * @version 0.0.7
+                 * @since 0.0.7
+                 *
+                 */
                 Youtube.prototype.reload = function (options) {
                     this._init(options);
                 };
+                /**
+                 * ミュートする
+                 *
+                 * @version 0.8.0
+                 * @since 0.5.0
+                 *
+                 */
                 Youtube.prototype.mute = function () {
                     this.player.mute();
                     this._isMuted = true;
+                    this.trigger('onmute', [this.player]);
                 };
+                /**
+                 * ミュートを解除する
+                 *
+                 * @version 0.8.0
+                 * @since 0.5.0
+                 *
+                 */
                 Youtube.prototype.unMute = function () {
                     this.player.unMute();
                     this._isMuted = false;
+                    this.trigger('onunmute', [this.player]);
                 };
+                /**
+                 * ミュートのオンオフを要素にアサインする
+                 *
+                 * @version 0.8.0
+                 * @since 0.5.0
+                 * @param $el アサインするDOM要素のjQueryオブジェクト
+                 * @param options オプション
+                 *
+                 */
                 Youtube.prototype.muteController = function ($el, options) {
                     var _this = this;
                     var defaults = {
@@ -4269,6 +4316,9 @@ var baser;
                         });
                         update();
                     };
+                    this.on('onmute onunmute', function () {
+                        update();
+                    });
                     if (this.isEmbeded) {
                         bindCtrl();
                     }

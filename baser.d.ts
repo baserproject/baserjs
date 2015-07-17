@@ -2451,7 +2451,7 @@ declare module baser.ui.element {
     /**
      * YouTube要素
      *
-     * @version 0.0.7
+     * @version 0.8.0
      * @since 0.0.7
      *
      */
@@ -2563,11 +2563,56 @@ declare module baser.ui.element {
          *
          */
         private _init(options?);
+        /**
+         * プレイヤーを生成する
+         *
+         * @version 0.8.0
+         * @since 0.8.0
+         * @param playerID プレイヤーのDOM ID
+         *
+         */
         private _createPlayer(playerID);
+        /**
+         * プレイヤーの生成が完了して実行可能になったときに呼ばれる処理
+         *
+         * @version 0.8.0
+         * @since 0.8.0
+         *
+         */
         private _onEmbeded();
+        /**
+         * 再設定する
+         *
+         * @version 0.0.7
+         * @since 0.0.7
+         *
+         */
         reload(options?: YoutubeOption): void;
+        /**
+         * ミュートする
+         *
+         * @version 0.8.0
+         * @since 0.5.0
+         *
+         */
         mute(): void;
+        /**
+         * ミュートを解除する
+         *
+         * @version 0.8.0
+         * @since 0.5.0
+         *
+         */
         unMute(): void;
+        /**
+         * ミュートのオンオフを要素にアサインする
+         *
+         * @version 0.8.0
+         * @since 0.5.0
+         * @param $el アサインするDOM要素のjQueryオブジェクト
+         * @param options オプション
+         *
+         */
         muteController($el: any, options: YoutubeMuteControllerOptions): void;
     }
 }
