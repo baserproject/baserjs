@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.8.0-beta r254
+ * baserjs - v0.8.0-beta r255
  * update: 2015-07-17
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -655,17 +655,28 @@ var baser;
                 /**
                  * イベントハンドラを登録する
                  *
-                 * @version 0.0.10
+                 * @version 0.8.0
                  * @since 0.0.10
                  *
                  */
                 EventDispacher.prototype.on = function (type, handler) {
-                    var eventHandler = new event.EventHandler(this, type, handler);
-                    EventDispacher.eventHandlers[eventHandler.id] = eventHandler;
-                    if (!EventDispacher.types[type]) {
-                        EventDispacher.types[type] = [];
+                    var types;
+                    if (typeof type === 'string') {
+                        types = type.split(/\s+/g);
                     }
-                    EventDispacher.types[type].push(eventHandler);
+                    else {
+                        types = type;
+                    }
+                    var i = 0;
+                    var l = types.length;
+                    for (; i < l; i++) {
+                        var eventHandler = new event.EventHandler(this, types[i], handler);
+                        EventDispacher.eventHandlers[eventHandler.id] = eventHandler;
+                        if (!EventDispacher.types[types[i]]) {
+                            EventDispacher.types[types[i]] = [];
+                        }
+                        EventDispacher.types[types[i]].push(eventHandler);
+                    }
                     return this;
                 };
                 /**
@@ -676,7 +687,18 @@ var baser;
                  *
                  */
                 EventDispacher.prototype.off = function (type) {
-                    delete EventDispacher.types[type];
+                    var types;
+                    if (typeof type === 'string') {
+                        types = type.split(/\s+/g);
+                    }
+                    else {
+                        types = type;
+                    }
+                    var i = 0;
+                    var l = types.length;
+                    for (; i < l; i++) {
+                        delete EventDispacher.types[types[i]];
+                    }
                     return this;
                 };
                 /**

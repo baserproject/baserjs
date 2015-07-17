@@ -165,11 +165,11 @@ declare module baser.ui.event {
         /**
          * イベントハンドラを登録する
          *
-         * @version 0.0.10
+         * @version 0.8.0
          * @since 0.0.10
          *
          */
-        on(type: string, handler: Function): EventDispacher;
+        on(type: string | string[], handler: Function): EventDispacher;
         /**
          * イベントハンドラを削除する
          *
@@ -177,7 +177,7 @@ declare module baser.ui.event {
          * @since 0.0.10
          *
          */
-        off(type?: string): EventDispacher;
+        off(type?: string | string[]): EventDispacher;
         /**
          * イベントハンドラを発火させる
          *
