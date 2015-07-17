@@ -424,6 +424,8 @@ module baser.ui.element {
 								this.trigger('ended', [this.player]);
 								if (this.movieId.length > 1 && this.movieOption.loop && this.currentCueIndex === this.movieId.length - 1) {
 									this.player.playVideoAt(0);
+								} else if (this.movieOption.loop) {
+									this.player.playVideo();
 								}
 								break;
 							}

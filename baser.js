@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.8.0-beta r255
+ * baserjs - v0.8.0-beta r257
  * update: 2015-07-17
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -4207,6 +4207,9 @@ var baser;
                                         _this.trigger('ended', [_this.player]);
                                         if (_this.movieId.length > 1 && _this.movieOption.loop && _this.currentCueIndex === _this.movieId.length - 1) {
                                             _this.player.playVideoAt(0);
+                                        }
+                                        else if (_this.movieOption.loop) {
+                                            _this.player.playVideo();
                                         }
                                         break;
                                     }
