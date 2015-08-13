@@ -516,7 +516,19 @@ module baser.ui.element {
 		/**
 		 * 要素の状態を更新する
 		 *
-		 * @version 0.4.1
+		 * @version 0.8.0
+		 * @since 0.0.1
+		 *
+		 */
+		public update (): Select {
+			this._update();
+			return this;
+		}
+
+		/**
+		 * 要素の状態を更新する
+		 *
+		 * @version 0.8.0
 		 * @since 0.0.1
 		 *
 		 */
