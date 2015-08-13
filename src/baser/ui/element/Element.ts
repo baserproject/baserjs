@@ -111,6 +111,11 @@ module baser.ui.element {
 		public name: string = '';
 
 		/**
+		 * baserJSのエレメント化してたかどうか
+		 */
+		protected _elementized: boolean = false;
+
+		/**
 		 * クラス名文字列を生成する
 		 *
 		 * @version 0.1.0
@@ -297,7 +302,7 @@ module baser.ui.element {
 		/**
 		 * コンストラクタ
 		 *
-		 * @version 0.3.0
+		 * @version 0.8.0
 		 * @since 0.0.1
 		 * @param $el 管理するDOM要素のjQueryオブジェクト
 		 *
@@ -305,6 +310,17 @@ module baser.ui.element {
 		constructor ($el: JQuery) {
 
 			super();
+
+			// 既にbaserJSのエレメント化している場合
+			if ($el.data('bc-element')) {
+				if ('console' in window) {
+					console.warn('This element is elementized of baserJS.');
+				}
+				this._elementized = true;
+				return;
+			}
+
+			$el.data('bc-element', this);
 
 			this.$el = $el;
 

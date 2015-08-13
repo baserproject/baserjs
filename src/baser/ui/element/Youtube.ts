@@ -275,7 +275,7 @@ module baser.ui.element {
 		/**
 		 * コンストラクタ
 		 *
-		 * @version 0.0.7
+		 * @version 0.8.0
 		 * @since 0.0.7
 		 * @param $el 管理するDOM要素のjQueryオブジェクト
 		 *
@@ -283,6 +283,16 @@ module baser.ui.element {
 		constructor ($el: JQuery, options?: YoutubeOption) {
 
 			super($el);
+
+			// 既にエレメント化されていた場合は何もしない
+			if (this._elementized) {
+				return;
+			}
+
+			// IE6・7は反映させない
+			if (!$el[0].querySelector) {
+				return;
+			}
 
 			if (this._init(options)) {
 				Youtube.movies.push(this);
