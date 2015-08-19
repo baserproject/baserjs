@@ -111,6 +111,11 @@ module baser.ui.element {
 		public name: string = '';
 
 		/**
+		 * baserJSのエレメント化してたかどうか
+		 */
+		protected _elementized: boolean = false;
+
+		/**
 		 * クラス名文字列を生成する
 		 *
 		 * @version 0.1.0
@@ -297,7 +302,7 @@ module baser.ui.element {
 		/**
 		 * コンストラクタ
 		 *
-		 * @version 0.3.0
+		 * @version 0.8.0
 		 * @since 0.0.1
 		 * @param $el 管理するDOM要素のjQueryオブジェクト
 		 *
@@ -306,20 +311,31 @@ module baser.ui.element {
 
 			super();
 
+			// 既にbaserJSのエレメント化している場合
+			if ($el.data('bc-element')) {
+				if ('console' in window) {
+					console.warn('This element is elementized of baserJS.');
+				}
+				this._elementized = true;
+				return;
+			}
+
+			$el.data('bc-element', this);
+
 			this.$el = $el;
 
-			// IDの抽出 & 生成
-			this.id = this.$el.attr('id');
-			if (!this.id) {
-				this.id = utility.String.UID();
-				this.$el.attr('id', this.id);
-			}
-
-			// name属性の抽出
-			var name: string = this.$el.attr('name');
-			if (name) {
-				this.name = name;
-			}
+			// ID・nameの抽出 & 生成
+			var ids: string[] = [];
+			var names: string[] = [];
+			this.$el.each( (i: number, el: HTMLElement): void => {
+				var id: string = el.id || utility.String.UID();
+				var name: string = el.getAttribute('name');
+				el.id = id;
+				ids.push(id);
+				names.push(name);
+			});
+			this.id = ids.join(' ');
+			this.name = names.join(' ');
 
 			// 共通クラスの付加
 			this.addClass(Element.classNameElementCommon);
@@ -351,6 +367,38 @@ module baser.ui.element {
 
 			return Element.getBoolAttr(this.$el, attrName);
 
+		}
+
+		/**
+		 * オプションとdata属性の値、属性の値をマージする
+		 *
+		 * TODO: テストを書く
+		 * TODO: サブクラスに反映させる
+		 * 
+		 * @version 0.8.0
+		 * @since 0.8.0
+		 *
+		 */
+		public mergeOptions (defaultOptions: any, options: any): any {
+			var optName: string;
+			var attrs: { [option: string ]: any } = {};
+			var dataAttrs: { [option: string ]: any } = {};
+			for (optName in defaultOptions) {
+				if (defaultOptions.hasOwnProperty(optName)) {
+					// 属性はidとclassは除外する
+					switch (optName) {
+						case 'id':
+						case 'class': {
+							break;
+						}
+						default: {
+							attrs[optName] = this.$el.attr(optName);
+						}
+					}
+					dataAttrs[optName] = this.$el.data(optName);
+				}
+			}
+			return $.extend({}, defaultOptions, options, dataAttrs, attrs);
 		}
 
 	}

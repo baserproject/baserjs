@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.7.0 r254
- * update: 2015-07-16
+ * baserjs - v0.8.0 r263
+ * update: 2015-08-19
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -655,17 +655,28 @@ var baser;
                 /**
                  * イベントハンドラを登録する
                  *
-                 * @version 0.0.10
+                 * @version 0.8.0
                  * @since 0.0.10
                  *
                  */
                 EventDispacher.prototype.on = function (type, handler) {
-                    var eventHandler = new event.EventHandler(this, type, handler);
-                    EventDispacher.eventHandlers[eventHandler.id] = eventHandler;
-                    if (!EventDispacher.types[type]) {
-                        EventDispacher.types[type] = [];
+                    var types;
+                    if (typeof type === 'string') {
+                        types = type.split(/\s+/g);
                     }
-                    EventDispacher.types[type].push(eventHandler);
+                    else {
+                        types = type;
+                    }
+                    var i = 0;
+                    var l = types.length;
+                    for (; i < l; i++) {
+                        var eventHandler = new event.EventHandler(this, types[i], handler);
+                        EventDispacher.eventHandlers[eventHandler.id] = eventHandler;
+                        if (!EventDispacher.types[types[i]]) {
+                            EventDispacher.types[types[i]] = [];
+                        }
+                        EventDispacher.types[types[i]].push(eventHandler);
+                    }
                     return this;
                 };
                 /**
@@ -676,7 +687,18 @@ var baser;
                  *
                  */
                 EventDispacher.prototype.off = function (type) {
-                    delete EventDispacher.types[type];
+                    var types;
+                    if (typeof type === 'string') {
+                        types = type.split(/\s+/g);
+                    }
+                    else {
+                        types = type;
+                    }
+                    var i = 0;
+                    var l = types.length;
+                    for (; i < l; i++) {
+                        delete EventDispacher.types[types[i]];
+                    }
                     return this;
                 };
                 /**
@@ -857,12 +879,12 @@ var baser;
         ui.Sequence = Sequence;
         var Task = (function () {
             function Task(func) {
-                this.status = 1 /* yet */;
+                this.status = TaskState.yet;
                 this._func = func;
             }
             Task.prototype.act = function (sequence, sequenceIndex, value) {
                 var result = this._func.call(sequence, sequenceIndex, value);
-                this.status = 0 /* done */;
+                this.status = TaskState.done;
                 return result;
             };
             return Task;
@@ -1024,7 +1046,7 @@ var baser;
         ui.Locational = Locational;
     })(ui = baser.ui || (baser.ui = {}));
 })(baser || (baser = {}));
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -1252,9 +1274,7 @@ var baser;
                         }
                     }
                 }
-                this.breakPoints.sort(function (a, b) {
-                    return a - b;
-                });
+                this.breakPoints.sort(function (a, b) { return a - b; });
             };
             /**
              * ブレークポイントを追加する
@@ -1562,6 +1582,7 @@ var baser;
                     // スクロール先座標をセットする
                     x = 0;
                     y = 0;
+                    // 親のオフセットを足していって自身の座標を確定
                     while (ele) {
                         x += ele.offsetLeft;
                         y += ele.offsetTop;
@@ -1695,7 +1716,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.3.0
+                 * @version 0.8.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  *
@@ -1709,18 +1730,32 @@ var baser;
                      *
                      */
                     this.name = '';
+                    /**
+                     * baserJSのエレメント化してたかどうか
+                     */
+                    this._elementized = false;
+                    // 既にbaserJSのエレメント化している場合
+                    if ($el.data('bc-element')) {
+                        if ('console' in window) {
+                            console.warn('This element is elementized of baserJS.');
+                        }
+                        this._elementized = true;
+                        return;
+                    }
+                    $el.data('bc-element', this);
                     this.$el = $el;
-                    // IDの抽出 & 生成
-                    this.id = this.$el.attr('id');
-                    if (!this.id) {
-                        this.id = baser.utility.String.UID();
-                        this.$el.attr('id', this.id);
-                    }
-                    // name属性の抽出
-                    var name = this.$el.attr('name');
-                    if (name) {
-                        this.name = name;
-                    }
+                    // ID・nameの抽出 & 生成
+                    var ids = [];
+                    var names = [];
+                    this.$el.each(function (i, el) {
+                        var id = el.id || baser.utility.String.UID();
+                        var name = el.getAttribute('name');
+                        el.id = id;
+                        ids.push(id);
+                        names.push(name);
+                    });
+                    this.id = ids.join(' ');
+                    this.name = names.join(' ');
                     // 共通クラスの付加
                     this.addClass(Element.classNameElementCommon);
                 }
@@ -1740,19 +1775,19 @@ var baser;
                     var elementSeparator;
                     var modifierSeparator;
                     switch (Element.classNameDefaultCase) {
-                        case 0 /* HYPHEN_DELIMITED */:
+                        case ElementClassNameCase.HYPHEN_DELIMITED:
                             separator = HYPHEN;
                             blockNames = baser.utility.String.hyphenDelimited(blockNames);
                             elementNames = baser.utility.String.hyphenDelimited(elementNames);
                             modifierName = baser.utility.String.hyphenDelimited(modifierName);
                             break;
-                        case 1 /* SNAKE_CASE */:
+                        case ElementClassNameCase.SNAKE_CASE:
                             separator = UNDERSCORE;
                             blockNames = baser.utility.String.snakeCase(blockNames);
                             elementNames = baser.utility.String.snakeCase(elementNames);
                             modifierName = baser.utility.String.snakeCase(modifierName);
                             break;
-                        case 2 /* CAMEL_CASE */:
+                        case ElementClassNameCase.CAMEL_CASE:
                             separator = '';
                             blockNames = baser.utility.String.camelCase(blockNames, true);
                             elementNames = baser.utility.String.camelCase(elementNames);
@@ -1760,36 +1795,36 @@ var baser;
                             break;
                     }
                     switch (Element.classNameDefaultSeparatorForElement) {
-                        case 0 /* HYPHEN */:
+                        case ClassNameSeparatorForBEM.HYPHEN:
                             elementSeparator = HYPHEN;
                             break;
-                        case 1 /* DOUBLE_HYPHEN */:
+                        case ClassNameSeparatorForBEM.DOUBLE_HYPHEN:
                             elementSeparator = DOUBLE_HYPHEN;
                             break;
-                        case 2 /* UNDERSCORE */:
+                        case ClassNameSeparatorForBEM.UNDERSCORE:
                             elementSeparator = UNDERSCORE;
                             break;
-                        case 3 /* DOUBLE_UNDERSCORE */:
+                        case ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE:
                             elementSeparator = DOUBLE_UNDERSCORE;
                             break;
-                        case 4 /* CAMEL_CASE */:
+                        case ClassNameSeparatorForBEM.CAMEL_CASE:
                             elementSeparator = '';
                             break;
                     }
                     switch (Element.classNameDefaultSeparatorForModifier) {
-                        case 0 /* HYPHEN */:
+                        case ClassNameSeparatorForBEM.HYPHEN:
                             modifierSeparator = HYPHEN;
                             break;
-                        case 1 /* DOUBLE_HYPHEN */:
+                        case ClassNameSeparatorForBEM.DOUBLE_HYPHEN:
                             modifierSeparator = DOUBLE_HYPHEN;
                             break;
-                        case 2 /* UNDERSCORE */:
+                        case ClassNameSeparatorForBEM.UNDERSCORE:
                             modifierSeparator = UNDERSCORE;
                             break;
-                        case 3 /* DOUBLE_UNDERSCORE */:
+                        case ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE:
                             modifierSeparator = DOUBLE_UNDERSCORE;
                             break;
-                        case 4 /* CAMEL_CASE */:
+                        case ClassNameSeparatorForBEM.CAMEL_CASE:
                             modifierSeparator = '';
                             break;
                     }
@@ -1929,6 +1964,37 @@ var baser;
                     return Element.getBoolAttr(this.$el, attrName);
                 };
                 /**
+                 * オプションとdata属性の値、属性の値をマージする
+                 *
+                 * TODO: テストを書く
+                 * TODO: サブクラスに反映させる
+                 *
+                 * @version 0.8.0
+                 * @since 0.8.0
+                 *
+                 */
+                Element.prototype.mergeOptions = function (defaultOptions, options) {
+                    var optName;
+                    var attrs = {};
+                    var dataAttrs = {};
+                    for (optName in defaultOptions) {
+                        if (defaultOptions.hasOwnProperty(optName)) {
+                            // 属性はidとclassは除外する
+                            switch (optName) {
+                                case 'id':
+                                case 'class': {
+                                    break;
+                                }
+                                default: {
+                                    attrs[optName] = this.$el.attr(optName);
+                                }
+                            }
+                            dataAttrs[optName] = this.$el.data(optName);
+                        }
+                    }
+                    return $.extend({}, defaultOptions, options, dataAttrs, attrs);
+                };
+                /**
                  * クラス名のデフォルトのプレフィックス
                  *
                  * @version 0.1.0
@@ -1951,7 +2017,7 @@ var baser;
                  * @since 0.1.0
                  *
                  */
-                Element.classNameDefaultCase = 0 /* HYPHEN_DELIMITED */;
+                Element.classNameDefaultCase = ElementClassNameCase.HYPHEN_DELIMITED;
                 /**
                  * BEMのエレメントのクラス名の繋ぎ文字
                  *
@@ -1959,7 +2025,7 @@ var baser;
                  * @since 0.1.0
                  *
                  */
-                Element.classNameDefaultSeparatorForElement = 3 /* DOUBLE_UNDERSCORE */;
+                Element.classNameDefaultSeparatorForElement = ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE;
                 /**
                  * BEMのモディファイアのクラス名の繋ぎ文字
                  *
@@ -1967,7 +2033,7 @@ var baser;
                  * @since 0.1.0
                  *
                  */
-                Element.classNameDefaultSeparatorForModifier = 1 /* DOUBLE_HYPHEN */;
+                Element.classNameDefaultSeparatorForModifier = ClassNameSeparatorForBEM.DOUBLE_HYPHEN;
                 return Element;
             })(ui.event.EventDispacher);
             element.Element = Element;
@@ -1992,7 +2058,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.7.0
+                 * @version 0.8.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -2007,6 +2073,10 @@ var baser;
                      *
                      */
                     this.hasFocus = false;
+                    // 既にエレメント化されていた場合は何もしない
+                    if (this._elementized) {
+                        return;
+                    }
                     // IE6・7は反映させない
                     if (!$el[0].querySelector) {
                         return;
@@ -2393,7 +2463,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.1
+                 * @version 0.8.0
                  * @since 0.4.0
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -2409,6 +2479,10 @@ var baser;
                      *
                      */
                     this.placeholder = '';
+                    // 既にエレメント化されていた場合は何もしない
+                    if (this._elementized) {
+                        return;
+                    }
                     // IE6・7は反映させない
                     if (!$el[0].querySelector) {
                         return;
@@ -2633,7 +2707,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.1
+                 * @version 0.8.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -2641,6 +2715,10 @@ var baser;
                  */
                 function Select($el, options) {
                     _super.call(this, $el, $.extend({}, Select.defaultOption, options));
+                    // 既にエレメント化されていた場合は何もしない
+                    if (this._elementized) {
+                        return;
+                    }
                     // IE6・7は反映させない
                     if (!$el[0].querySelector) {
                         return;
@@ -2831,7 +2909,8 @@ var baser;
                         _this._onblur();
                     });
                     // 擬似セレクトボックスにフォーカスorクリックが起こった時に発火する
-                    this.$pseudo.on('focus.bcSelect', function (e) {
+                    this.$pseudo
+                        .on('focus.bcSelect', function (e) {
                         if (!_this.disabled) {
                             _this._onfocus();
                         }
@@ -2840,7 +2919,8 @@ var baser;
                         }
                         // ドキュメントに伝達しない
                         e.stopPropagation();
-                    }).on('click.bcSelect', function (e) {
+                    })
+                        .on('click.bcSelect', function (e) {
                         if (!_this.disabled) {
                             _this._onfocus();
                         }
@@ -2870,18 +2950,21 @@ var baser;
                     $(document).on('keydown', function (e) {
                         if (_this.hasFocus) {
                             switch (e.keyCode) {
+                                // keyUp
                                 case 38: {
                                     _this.prev(true);
                                     _this._scrollToSelectedPosition();
                                     e.preventDefault();
                                     break;
                                 }
+                                // keyDown
                                 case 40: {
                                     _this.next(true);
                                     _this._scrollToSelectedPosition();
                                     e.preventDefault();
                                     break;
                                 }
+                                // Return (Enter)
                                 case 13: {
                                     if (_this._currentIndex !== _this.getIndex()) {
                                         _this._fireChangeEvent();
@@ -2935,7 +3018,18 @@ var baser;
                 /**
                  * 要素の状態を更新する
                  *
-                 * @version 0.4.1
+                 * @version 0.8.0
+                 * @since 0.0.1
+                 *
+                 */
+                Select.prototype.update = function () {
+                    this._update();
+                    return this;
+                };
+                /**
+                 * 要素の状態を更新する
+                 *
+                 * @version 0.8.0
                  * @since 0.0.1
                  *
                  */
@@ -2950,14 +3044,17 @@ var baser;
                     this.$el.find('option').each(function (i, opt) {
                         var $opt = $(opt);
                         var isSelected;
+                        var isDisabled;
                         var $psuedoOpt;
                         isSelected = $opt.prop('selected');
+                        isDisabled = $opt.prop('disabled');
                         if (isSelected) {
                             _this.$selected.text($opt.text());
                         }
                         if (_this.$options) {
                             $psuedoOpt = $psuedoOptList.eq(i);
                             $psuedoOpt.attr('aria-selected', '' + isSelected);
+                            $psuedoOpt.attr('aria-disabled', '' + isDisabled);
                             if (isSelected) {
                                 element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
                                 element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
@@ -2965,6 +3062,12 @@ var baser;
                             else {
                                 element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
                                 element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+                            }
+                            if (isDisabled) {
+                                element.Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateDisabled);
+                            }
+                            else {
+                                element.Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateDisabled);
                             }
                         }
                     });
@@ -2988,14 +3091,14 @@ var baser;
                 /**
                  * 値をインデックス番号から設定する
                  *
-                 * @version 0.4.1
+                 * @version 0.8.0
                  * @since 0.4.0
                  *
                  */
                 Select.prototype.setIndex = function (index, isSilent) {
                     if (isSilent === void 0) { isSilent = false; }
                     var $targetOption = this.$el.find('option').eq(index);
-                    if ($targetOption.length && !$targetOption.prop('selected')) {
+                    if ($targetOption.length && !$targetOption.prop('selected') && !$targetOption.prop('disabled')) {
                         $targetOption.prop('selected', true);
                         this._fireChangeEvent(isSilent);
                     }
@@ -3173,7 +3276,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.1
+                 * @version 0.8.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -3182,6 +3285,10 @@ var baser;
                 function CheckableElement($el, options) {
                     var _this = this;
                     _super.call(this, $el, $.extend({}, CheckableElement.defaultOption, options));
+                    // 既にエレメント化されていた場合は何もしない
+                    if (this._elementized) {
+                        return;
+                    }
                     // IE6・7は反映させない
                     if (!$el[0].querySelector) {
                         return;
@@ -3301,7 +3408,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.7.0
+                 * @version 0.8.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -3309,6 +3416,10 @@ var baser;
                  */
                 function Radio($el, options) {
                     _super.call(this, $el, options);
+                    // 既にエレメント化されていた場合は何もしない
+                    if (this._elementized) {
+                        return;
+                    }
                     // IE6・7は反映させない
                     if (!$el[0].querySelector) {
                         return;
@@ -3366,7 +3477,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.4.1
+                 * @version 0.8.0
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options オプション
@@ -3374,6 +3485,10 @@ var baser;
                  */
                 function Checkbox($el, options) {
                     _super.call(this, $el, options);
+                    // 既にエレメント化されていた場合は何もしない
+                    if (this._elementized) {
+                        return;
+                    }
                     // IE6・7は反映させない
                     if (!$el[0].querySelector) {
                         return;
@@ -3730,7 +3845,7 @@ var baser;
             /**
              * マップ要素
              *
-             * @version 0.0.6
+             * @version 0.8.0
              * @since 0.0.6
              *
              */
@@ -3739,7 +3854,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.6.0
+                 * @version 0.8.0
                  * @since 0.0.6
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @param options マップオプション
@@ -3747,6 +3862,14 @@ var baser;
                  */
                 function Map($el, options) {
                     _super.call(this, $el);
+                    // 既にエレメント化されていた場合は何もしない
+                    if (this._elementized) {
+                        return;
+                    }
+                    // IE6・7は反映させない
+                    if (!$el[0].querySelector) {
+                        return;
+                    }
                     this.$el.addClass(Map.className);
                     if ('google' in window && google.maps) {
                         this.mapOption = $.extend({}, options);
@@ -3791,7 +3914,7 @@ var baser;
                 /**
                  * レンダリング
                  *
-                 * @version 0.6.0
+                 * @version 0.8.0
                  * @since 0.2.0
                  * @param mapCenterLat 緯度
                  * @param mapCenterLng 経度
@@ -3805,8 +3928,7 @@ var baser;
                     }
                     var coordinates = [];
                     this.$coordinates.each(function (i, el) {
-                        var $this = $(el);
-                        var coordinate = new Coordinate($this);
+                        var coordinate = new Coordinate(el, _this);
                         coordinates.push(coordinate);
                     });
                     this.mapOption = $.extend({
@@ -3828,7 +3950,7 @@ var baser;
                         fitBounds: google.maps.Map.prototype.fitBounds
                     }));
                     $.each(coordinates, function (i, coordinate) {
-                        coordinate.markTo(_this, function (coordinate) {
+                        coordinate.markTo(function (coordinate) {
                             if (_this.mapOption.fitBounds) {
                                 _this.markerBounds.extend(coordinate.position);
                                 _this.gmap.fitBounds(_this.markerBounds);
@@ -3923,7 +4045,7 @@ var baser;
             /**
              * 座標要素
              *
-             * @version 0.6.0
+             * @version 0.8.0
              * @since 0.0.6
              *
              */
@@ -3931,15 +4053,16 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.6.0
+                 * @version 0.8.0
                  * @since 0.0.6
                  *
                  */
-                function Coordinate($el) {
+                function Coordinate(el, map) {
                     var _this = this;
-                    var address = $el.data('address');
+                    this.$el = $(el);
+                    this._map = map;
+                    var address = this.$el.data('address');
                     var dfd = $.Deferred();
-                    this.$el = $el;
                     if (address) {
                         Map.getLatLngByAddress(address, function (lat, lng) {
                             _this.lat = lat;
@@ -3949,8 +4072,8 @@ var baser;
                         });
                     }
                     else {
-                        this.lat = $el.data('lat');
-                        this.lng = $el.data('lng');
+                        this.lat = this.$el.data('lat');
+                        this.lng = this.$el.data('lng');
                         this.position = new google.maps.LatLng(this.lat, this.lng);
                         dfd.resolve();
                     }
@@ -3959,14 +4082,14 @@ var baser;
                 /**
                  * ピンをマップに立てる
                  *
-                 * @version 0.6.0
+                 * @version 0.8.0
                  * @since 0.0.6
                  *
                  */
-                Coordinate.prototype.markTo = function (map, callback) {
+                Coordinate.prototype.markTo = function (callback) {
                     var _this = this;
                     this._promiseLatLng.done(function () {
-                        _this._markTo(map);
+                        _this._markTo();
                         if (callback) {
                             callback(_this);
                         }
@@ -3975,11 +4098,11 @@ var baser;
                 /**
                  * ピンをマップに立てる
                  *
-                 * @version 0.6.0
+                 * @version 0.8.0
                  * @since 0.0.6
                  *
                  */
-                Coordinate.prototype._markTo = function (map) {
+                Coordinate.prototype._markTo = function () {
                     var _this = this;
                     this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
                     this.icon = this.$el.data('icon') || null;
@@ -3987,15 +4110,35 @@ var baser;
                         position: this.position,
                         title: this.title,
                         icon: this.icon,
-                        map: map.gmap
+                        map: this._map.gmap
                     });
-                    if (map.$coordinates !== map.$el) {
+                    if (this._map.$coordinates !== this._map.$el) {
                         google.maps.event.addListener(this.marker, 'click', function () {
-                            map.info.setContent(_this.$el[0]);
-                            map.info.open(map.gmap, _this.marker);
-                            _this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
+                            _this.openInfoWindow();
                         });
                     }
+                };
+                /**
+                 * インフォウィンドウを開く
+                 *
+                 * @version 0.8.0
+                 * @since 0.8.0
+                 *
+                 */
+                Coordinate.prototype.openInfoWindow = function () {
+                    this._map.info.setContent(this.$el[0]);
+                    this._map.info.open(this._map.gmap, this.marker);
+                    this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
+                    // マップの中心を移動する
+                    var content = this._map.info.getContent();
+                    var proj = this._map.gmap.getProjection();
+                    var currentPoint = proj.fromLatLngToPoint(this.position);
+                    var scale = Math.pow(2, this._map.gmap.getZoom());
+                    var height = $(content).height();
+                    var y = (currentPoint.y * scale - height) / scale;
+                    var newPoint = new google.maps.Point(currentPoint.x, y);
+                    var newPosition = proj.fromPointToLatLng(newPoint);
+                    this._map.gmap.panTo(newPosition);
                 };
                 return Coordinate;
             })();
@@ -4011,7 +4154,7 @@ var baser;
             /**
              * YouTube要素
              *
-             * @version 0.0.7
+             * @version 0.8.0
              * @since 0.0.7
              *
              */
@@ -4020,7 +4163,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.0.7
+                 * @version 0.8.0
                  * @since 0.0.7
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  *
@@ -4035,6 +4178,14 @@ var baser;
                      *
                      */
                     this.isEmbeded = false;
+                    // 既にエレメント化されていた場合は何もしない
+                    if (this._elementized) {
+                        return;
+                    }
+                    // IE6・7は反映させない
+                    if (!$el[0].querySelector) {
+                        return;
+                    }
                     if (this._init(options)) {
                         Youtube.movies.push(this);
                         this.$el.addClass(Youtube.className);
@@ -4046,7 +4197,7 @@ var baser;
                  *
                  * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
                  *
-                 * @version 0.5.0
+                 * @version 0.8.0
                  * @since 0.0.7
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  * @return {booelan} 初期化が成功したかどうか
@@ -4054,21 +4205,25 @@ var baser;
                  */
                 Youtube.prototype._init = function (options) {
                     var _this = this;
-                    var id = this.$el.data('id');
-                    var width = +(this.$el.data('width') || this.$el.attr('width') || NaN);
-                    var height = +(this.$el.data('height') || this.$el.attr('height') || NaN);
                     var protocol = location.protocol === 'file:' ? 'http:' : '';
-                    this.movieOption = $.extend({
+                    var defaultOptions = {
                         rel: false,
                         autoplay: true,
                         stopOnInactive: false,
                         controls: false,
                         loop: true,
                         showinfo: false,
-                        mute: false
-                    }, options);
+                        mute: false,
+                        id: '',
+                        width: 400,
+                        height: 300,
+                        index: 0,
+                        startSeconds: 0,
+                        suggestedQuality: 'default'
+                    };
+                    this.movieOption = this.mergeOptions(defaultOptions, options);
                     this.$el.empty();
-                    var ids = id.split(/\s*,\s*/);
+                    this.movieId = this.movieOption.id.split(/\s*,\s*/);
                     var $mov = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
                     var param = $.param({
                         version: 3,
@@ -4083,11 +4238,8 @@ var baser;
                         wmode: 'transparent',
                         enablejsapi: 1
                     });
-                    if (ids.length >= 2 || this.movieOption.loop) {
-                        param += '&amp;playlist=' + ids.join(',');
-                    }
+                    var id = this.movieId[this.movieOption.index];
                     var src = protocol + Youtube.PLAYER_URL + id + '?' + param;
-                    this.movieId = id;
                     $mov.prop('src', src);
                     var playerID = this.id + '-Player';
                     $mov.prop('id', playerID);
@@ -4098,94 +4250,164 @@ var baser;
                         height: '100%'
                     });
                     $mov.appendTo(this.$el);
-                    if (width) {
-                        $mov.width(width);
-                        $mov.data('width', width);
+                    if (this.movieOption.width) {
+                        $mov.width(this.movieOption.width);
+                        $mov.data('width', this.movieOption.width);
                     }
-                    if (height) {
-                        $mov.height(height);
-                        $mov.data('height', height);
+                    if (this.movieOption.height) {
+                        $mov.height(this.movieOption.height);
+                        $mov.data('height', this.movieOption.height);
                     }
                     $.getScript(protocol + Youtube.API_URL);
                     var intervalTimer;
-                    var listIndex;
                     intervalTimer = window.setInterval(function () {
                         if (!_this.player && 'YT' in window && YT.Player) {
-                            _this.player = new YT.Player(playerID, {
-                                events: {
-                                    onStateChange: function (e) {
-                                        switch (e.data) {
-                                            case -1: {
-                                                _this.trigger('unstarted', [_this.player]);
-                                                listIndex = _this.player.getPlaylistIndex();
-                                                if (_this.currentCueIndex !== listIndex) {
-                                                    _this.trigger('changecue', [_this.player]);
-                                                }
-                                                _this.currentCueIndex = listIndex;
-                                                break;
-                                            }
-                                            case YT.PlayerState.BUFFERING: {
-                                                _this.trigger('buffering', [_this.player]);
-                                                break;
-                                            }
-                                            case YT.PlayerState.CUED: {
-                                                _this.trigger('cued', [_this.player]);
-                                                break;
-                                            }
-                                            case YT.PlayerState.ENDED: {
-                                                _this.trigger('ended', [_this.player]);
-                                                break;
-                                            }
-                                            case YT.PlayerState.PAUSED: {
-                                                _this.trigger('paused', [_this.player]);
-                                                break;
-                                            }
-                                            case YT.PlayerState.PLAYING: {
-                                                _this.trigger('playing', [_this.player]);
-                                                _this.currentCueIndex = _this.player.getPlaylistIndex();
-                                                break;
-                                            }
-                                            default: {
-                                                if ('console' in window) {
-                                                    console.warn('YouTube Player state is unknown.');
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            });
+                            _this._createPlayer(playerID);
                         }
                         if (_this.player && _this.player.pauseVideo && _this.player.playVideo) {
                             window.clearInterval(intervalTimer);
-                            _this.isEmbeded = true;
-                            _this._isMuted = _this.player.isMuted();
-                            if (_this.movieOption.mute) {
-                                _this.mute();
-                            }
-                            if (_this.movieOption.stopOnInactive) {
-                                $(window).on('blur', function () {
-                                    _this.player.pauseVideo();
-                                }).on('focus', function () {
-                                    _this.player.playVideo();
-                                });
-                            }
-                            _this.$el.trigger('embeddedyoutubeplay', [_this.player]); // TODO: 廃止予定(v1.0.0)
-                            _this.trigger('embeded', [_this.player]);
+                            _this._onEmbeded();
                         }
                     }, 300);
                     return true;
                 };
+                /**
+                 * プレイヤーを生成する
+                 *
+                 * @version 0.8.0
+                 * @since 0.8.0
+                 * @param playerID プレイヤーのDOM ID
+                 *
+                 */
+                Youtube.prototype._createPlayer = function (playerID) {
+                    var _this = this;
+                    this.player = new YT.Player(playerID, {
+                        events: {
+                            onStateChange: function (e) {
+                                switch (e.data) {
+                                    case -1: {
+                                        _this.trigger('unstarted', [_this.player]);
+                                        var listIndex = _this.player.getPlaylistIndex();
+                                        if (_this.currentCueIndex !== listIndex) {
+                                            _this.trigger('changecue', [_this.player]);
+                                        }
+                                        _this.currentCueIndex = listIndex;
+                                        break;
+                                    }
+                                    case YT.PlayerState.BUFFERING: {
+                                        _this.trigger('buffering', [_this.player]);
+                                        break;
+                                    }
+                                    case YT.PlayerState.CUED: {
+                                        _this.trigger('cued', [_this.player]);
+                                        break;
+                                    }
+                                    case YT.PlayerState.ENDED: {
+                                        _this.trigger('ended', [_this.player]);
+                                        if (_this.movieId.length > 1 && _this.movieOption.loop && _this.currentCueIndex === _this.movieId.length - 1) {
+                                            _this.player.playVideoAt(0);
+                                        }
+                                        else if (_this.movieOption.loop) {
+                                            _this.player.playVideo();
+                                        }
+                                        break;
+                                    }
+                                    case YT.PlayerState.PAUSED: {
+                                        _this.trigger('paused', [_this.player]);
+                                        break;
+                                    }
+                                    case YT.PlayerState.PLAYING: {
+                                        _this.trigger('playing', [_this.player]);
+                                        _this.currentCueIndex = _this.player.getPlaylistIndex();
+                                        break;
+                                    }
+                                    default: {
+                                        if ('console' in window) {
+                                            console.warn('YouTube Player state is unknown.');
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                };
+                /**
+                 * プレイヤーの生成が完了して実行可能になったときに呼ばれる処理
+                 *
+                 * @version 0.8.0
+                 * @since 0.8.0
+                 *
+                 */
+                Youtube.prototype._onEmbeded = function () {
+                    var _this = this;
+                    this.isEmbeded = true;
+                    this._isMuted = this.player.isMuted();
+                    if (this.movieOption.mute) {
+                        this.mute();
+                    }
+                    if (this.movieOption.stopOnInactive) {
+                        $(window).on('blur', function () {
+                            _this.player.pauseVideo();
+                        }).on('focus', function () {
+                            _this.player.playVideo();
+                        });
+                    }
+                    // TODO: youtube.d.ts に loadPlaylist() と cuePlaylist() が登録されていない
+                    var _player = this.player;
+                    if (this.movieId.length >= 2) {
+                        if (this.movieOption.autoplay) {
+                            _player.loadPlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);
+                        }
+                        else {
+                            _player.cuePlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);
+                        }
+                    }
+                    this.$el.trigger('embeddedyoutubeplay', [this.player]); // TODO: 廃止予定(v1.0.0)
+                    this.trigger('embeded', [this.player]);
+                };
+                /**
+                 * 再設定する
+                 *
+                 * @version 0.0.7
+                 * @since 0.0.7
+                 *
+                 */
                 Youtube.prototype.reload = function (options) {
                     this._init(options);
                 };
+                /**
+                 * ミュートする
+                 *
+                 * @version 0.8.0
+                 * @since 0.5.0
+                 *
+                 */
                 Youtube.prototype.mute = function () {
                     this.player.mute();
                     this._isMuted = true;
+                    this.trigger('onmute', [this.player]);
                 };
+                /**
+                 * ミュートを解除する
+                 *
+                 * @version 0.8.0
+                 * @since 0.5.0
+                 *
+                 */
                 Youtube.prototype.unMute = function () {
                     this.player.unMute();
                     this._isMuted = false;
+                    this.trigger('onunmute', [this.player]);
                 };
+                /**
+                 * ミュートのオンオフを要素にアサインする
+                 *
+                 * @version 0.8.0
+                 * @since 0.5.0
+                 * @param $el アサインするDOM要素のjQueryオブジェクト
+                 * @param options オプション
+                 *
+                 */
                 Youtube.prototype.muteController = function ($el, options) {
                     var _this = this;
                     var defaults = {
@@ -4218,6 +4440,9 @@ var baser;
                         });
                         update();
                     };
+                    this.on('onmute onunmute', function () {
+                        update();
+                    });
                     if (this.isEmbeded) {
                         bindCtrl();
                     }
@@ -4372,6 +4597,8 @@ var baser;
                     e.preventDefault();
                     return;
                 }
+                // セレクタとして要素が存在する場合はその要素に移動
+                // 「/」で始まるなどセレクターとして不正な場合、例外を投げることがあるので無視する
                 try {
                     target = $(href);
                     if (target.length) {
@@ -4380,8 +4607,7 @@ var baser;
                         return;
                     }
                 }
-                catch (err) {
-                }
+                catch (err) { }
             }
             return;
         });
@@ -4443,7 +4669,7 @@ var baser;
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する
      *
-     * @version 0.7.0
+     * @version 0.8.0
      * @since 0.0.1
      *
      * * * *
@@ -4456,7 +4682,17 @@ var baser;
     function bcSelect(options) {
         return this.each(function (i, elem) {
             var $elem = $(elem);
-            new baser.ui.element.Select($elem, options);
+            if (typeof options === 'string') {
+                switch (options) {
+                    case 'update': {
+                        var select = $elem.data('bc-element');
+                        select.update();
+                    }
+                }
+            }
+            else {
+                new baser.ui.element.Select($elem, options);
+            }
         });
     }
     $.fn.bcSelect = bcSelect;
@@ -4682,7 +4918,9 @@ var baser;
                     $this.data('-bc-is-touchstarted', false);
                     return true;
                 }
-                $target.stop(true, false).fadeTo(config.close, config.opacity);
+                $target
+                    .stop(true, false)
+                    .fadeTo(config.close, config.opacity);
                 return true;
             });
             $this.on('mouseleave', function (e) {
@@ -4690,7 +4928,9 @@ var baser;
                     $this.data('-bc-is-touchstarted', false);
                     return true;
                 }
-                $target.stop(true, false).fadeTo(config.open, 1);
+                $target
+                    .stop(true, false)
+                    .fadeTo(config.open, 1);
                 return true;
             });
             if (config.stopOnTouch) {
@@ -4736,7 +4976,10 @@ var baser;
                     $this.data('-bc-is-touchstarted', false);
                     return true;
                 }
-                $target.stop(true, false).fadeTo(config.close, config.opacity).fadeTo(config.open, 1);
+                $target
+                    .stop(true, false)
+                    .fadeTo(config.close, config.opacity)
+                    .fadeTo(config.open, 1);
                 return true;
             });
             if (config.stopOnTouch) {
@@ -4930,6 +5173,9 @@ var baser;
                     containerHeight = $elem.height();
                 }
                 containerAspectRatio = containerWidth / containerHeight;
+                // 画像の拡縮率の算出
+                // アス比が1以上なら横長/1以下なら縦長
+                // コンテナが横長
                 switch (config.size) {
                     case 'contain':
                         if (1 < containerAspectRatio) {

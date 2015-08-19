@@ -1,12 +1,12 @@
 {
   "name": "baserjs",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "homepage": "https://github.com/baserproject/baserjs",
   "authors": [
     "baserCMS Users Community"
   ],
   "description": "Client side JavaScript libraries for baserCMS",
-  "main": "baser.js",
+  "main": "baser.min.js",
   "keywords": [
     "jQuery",
     "baser",
@@ -29,16 +29,11 @@
     "node_modules",
     "src",
     "test",
-    "sample",
-    "tslint.json",
-    "typings",
-    "INSTALL.md",
-    "dtsm.json"
+    "tsd.json",
+    "typings"
   ],
   "dependencies": {
+    "jquery2": "jquery#2",
     "jquery": "jquery#1"
-  },
-  "devDependencies": {
-    "jquery2": "jquery#2"
   }
 }

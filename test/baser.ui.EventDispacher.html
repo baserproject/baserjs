@@ -57,6 +57,31 @@ test('baser.ui.event.EventDispacher.on/off のテスト', 0, function() {
 
 });
 
+test('baser.ui.event.EventDispacher.on 複数イベント のテスト', 1, function() {
+
+	var eDispacher = new baser.ui.event.EventDispacher();
+
+	eDispacher.on('xEvent xEvent2', function() {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+	});
+
+	eDispacher.trigger('xEvent');
+
+});
+
+test('baser.ui.event.EventDispacher.on 複数イベント のテスト2', 2, function() {
+
+	var eDispacher = new baser.ui.event.EventDispacher();
+
+	eDispacher.on('xEvent xEvent2', function() {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+	});
+
+	eDispacher.trigger('xEvent');
+	eDispacher.trigger('xEvent2');
+
+});
+
 </script>
 
 </body>

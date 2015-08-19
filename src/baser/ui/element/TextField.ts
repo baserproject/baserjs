@@ -101,7 +101,7 @@ module baser.ui.element {
 		/**
 		 * コンストラクタ
 		 *
-		 * @version 0.4.1
+		 * @version 0.8.0
 		 * @since 0.4.0
 		 * @param $el 管理するDOM要素のjQueryオブジェクト
 		 * @param options オプション
@@ -110,6 +110,11 @@ module baser.ui.element {
 		constructor ($el: JQuery, options: TextFieldOption) {
 
 			super($el, $.extend({}, TextField.defaultOption, options));
+
+			// 既にエレメント化されていた場合は何もしない
+			if (this._elementized) {
+				return;
+			}
 
 			// IE6・7は反映させない
 			if (!$el[0].querySelector) {

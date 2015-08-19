@@ -180,7 +180,7 @@ module baser.ui.element {
 		/**
 		 * コンストラクタ
 		 *
-		 * @version 0.4.1
+		 * @version 0.8.0
 		 * @since 0.0.1
 		 * @param $el 管理するDOM要素のjQueryオブジェクト
 		 * @param options オプション
@@ -189,6 +189,11 @@ module baser.ui.element {
 		constructor ($el: JQuery, options: SelectOption) {
 
 			super($el, $.extend({}, Select.defaultOption, options));
+
+			// 既にエレメント化されていた場合は何もしない
+			if (this._elementized) {
+				return;
+			}
 
 			// IE6・7は反映させない
 			if (!$el[0].querySelector) {
@@ -511,7 +516,19 @@ module baser.ui.element {
 		/**
 		 * 要素の状態を更新する
 		 *
-		 * @version 0.4.1
+		 * @version 0.8.0
+		 * @since 0.0.1
+		 *
+		 */
+		public update (): Select {
+			this._update();
+			return this;
+		}
+
+		/**
+		 * 要素の状態を更新する
+		 *
+		 * @version 0.8.0
 		 * @since 0.0.1
 		 *
 		 */
@@ -529,20 +546,28 @@ module baser.ui.element {
 			this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
 				var $opt: JQuery = $(opt);
 				var isSelected: boolean;
+				var isDisabled: boolean;
 				var $psuedoOpt: JQuery;
 				isSelected = <boolean> $opt.prop('selected');
+				isDisabled = <boolean> $opt.prop('disabled');
 				if (isSelected) {
 					this.$selected.text($opt.text());
 				}
 				if (this.$options) {
 					$psuedoOpt = $psuedoOptList.eq(i);
 					$psuedoOpt.attr('aria-selected', <string> '' + isSelected);
+					$psuedoOpt.attr('aria-disabled', <string> '' + isDisabled);
 					if (isSelected) {
 						Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
 						Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
 					} else {
 						Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
 						Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+					}
+					if (isDisabled) {
+						Element.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateDisabled);
+					} else {
+						Element.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateDisabled);
 					}
 				}
 			});
@@ -569,13 +594,13 @@ module baser.ui.element {
 		/**
 		 * 値をインデックス番号から設定する
 		 *
-		 * @version 0.4.1
+		 * @version 0.8.0
 		 * @since 0.4.0
 		 *
 		 */
 		public setIndex (index: number, isSilent: boolean = false): void {
 			var $targetOption: JQuery = this.$el.find('option').eq(index);
-			if ($targetOption.length && !$targetOption.prop('selected')) {
+			if ($targetOption.length && !$targetOption.prop('selected') && !$targetOption.prop('disabled')) {
 				$targetOption.prop('selected', true);
 				this._fireChangeEvent(isSilent);
 			}
