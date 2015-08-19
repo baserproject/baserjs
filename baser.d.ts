@@ -763,6 +763,10 @@ declare module baser.ui.element {
          */
         name: string;
         /**
+         * baserJSのエレメント化してたかどうか
+         */
+        protected _elementized: boolean;
+        /**
          * クラス名文字列を生成する
          *
          * @version 0.1.0
@@ -821,7 +825,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.3.0
+         * @version 0.8.0
          * @since 0.0.1
          * @param $el 管理するDOM要素のjQueryオブジェクト
          *
@@ -1063,7 +1067,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.7.0
+         * @version 0.8.0
          * @since 0.0.1
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @param options オプション
@@ -1259,7 +1263,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.4.1
+         * @version 0.8.0
          * @since 0.4.0
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @param options オプション
@@ -1512,7 +1516,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.4.1
+         * @version 0.8.0
          * @since 0.0.1
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @param options オプション
@@ -1609,7 +1613,15 @@ declare module baser.ui.element {
         /**
          * 要素の状態を更新する
          *
-         * @version 0.4.1
+         * @version 0.8.0
+         * @since 0.0.1
+         *
+         */
+        update(): Select;
+        /**
+         * 要素の状態を更新する
+         *
+         * @version 0.8.0
          * @since 0.0.1
          *
          */
@@ -1626,7 +1638,7 @@ declare module baser.ui.element {
         /**
          * 値をインデックス番号から設定する
          *
-         * @version 0.4.1
+         * @version 0.8.0
          * @since 0.4.0
          *
          */
@@ -1752,7 +1764,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.4.1
+         * @version 0.8.0
          * @since 0.0.1
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @param options オプション
@@ -1809,7 +1821,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.7.0
+         * @version 0.8.0
          * @since 0.0.1
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @param options オプション
@@ -1850,7 +1862,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.4.1
+         * @version 0.8.0
          * @since 0.0.1
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @param options オプション
@@ -2159,7 +2171,7 @@ declare module baser.ui.element {
     /**
      * マップ要素
      *
-     * @version 0.0.6
+     * @version 0.8.0
      * @since 0.0.6
      *
      */
@@ -2257,7 +2269,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.6.0
+         * @version 0.8.0
          * @since 0.0.6
          * @param $el 管理するDOM要素のjQueryオブジェクト
          * @param options マップオプション
@@ -2275,7 +2287,7 @@ declare module baser.ui.element {
         /**
          * レンダリング
          *
-         * @version 0.6.0
+         * @version 0.8.0
          * @since 0.2.0
          * @param mapCenterLat 緯度
          * @param mapCenterLng 経度
@@ -2545,7 +2557,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.0.7
+         * @version 0.8.0
          * @since 0.0.7
          * @param $el 管理するDOM要素のjQueryオブジェクト
          *
