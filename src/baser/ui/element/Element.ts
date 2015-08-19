@@ -324,18 +324,18 @@ module baser.ui.element {
 
 			this.$el = $el;
 
-			// IDの抽出 & 生成
-			this.id = this.$el.attr('id');
-			if (!this.id) {
-				this.id = utility.String.UID();
-				this.$el.attr('id', this.id);
-			}
-
-			// name属性の抽出
-			var name: string = this.$el.attr('name');
-			if (name) {
-				this.name = name;
-			}
+			// ID・nameの抽出 & 生成
+			var ids: string[] = [];
+			var names: string[] = [];
+			this.$el.each( (i: number, el: HTMLElement): void => {
+				var id: string = el.id || utility.String.UID();
+				var name: string = el.getAttribute('name');
+				el.id = id;
+				ids.push(id);
+				names.push(name);
+			});
+			this.id = ids.join(' ');
+			this.name = names.join(' ');
 
 			// 共通クラスの付加
 			this.addClass(Element.classNameElementCommon);
