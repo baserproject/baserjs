@@ -69,7 +69,7 @@ module baser.ui.element {
 	/**
 	 * マップ要素
 	 *
-	 * @version 0.0.6
+	 * @version 0.8.0
 	 * @since 0.0.6
 	 *
 	 */
@@ -252,7 +252,7 @@ module baser.ui.element {
 		/**
 		 * レンダリング
 		 *
-		 * @version 0.6.0
+		 * @version 0.8.0
 		 * @since 0.2.0
 		 * @param mapCenterLat 緯度
 		 * @param mapCenterLng 経度
@@ -268,8 +268,7 @@ module baser.ui.element {
 			var coordinates: Coordinate[] = [];
 
 			this.$coordinates.each( (i: number, el: HTMLElement): void => {
-				var $this: JQuery = $(el);
-				var coordinate: Coordinate = new Coordinate($this);
+				var coordinate: Coordinate = new Coordinate(el, this);
 				coordinates.push(coordinate);
 			});
 
@@ -295,7 +294,7 @@ module baser.ui.element {
 			}));
 
 			$.each(coordinates, (i: number, coordinate: Coordinate ): void => {
-				coordinate.markTo(this, (coordinate: Coordinate): void => {
+				coordinate.markTo( (coordinate: Coordinate): void => {
 					if (this.mapOption.fitBounds) {
 						this.markerBounds.extend(coordinate.position);
 						this.gmap.fitBounds(this.markerBounds);
@@ -359,7 +358,7 @@ module baser.ui.element {
 	/**
 	 * 座標要素
 	 *
-	 * @version 0.6.0
+	 * @version 0.8.0
 	 * @since 0.0.6
 	 *
 	 */
@@ -372,22 +371,25 @@ module baser.ui.element {
 		public lng: number;
 		public position: google.maps.LatLng; // @since 0.6.0
 		public marker: google.maps.Marker;
+		private _map: Map; // @since 0.8.0
 		private _promiseLatLng: JQueryPromise<void>; // @since 0.6.0
 
 		/**
 		 * コンストラクタ
 		 *
-		 * @version 0.6.0
+		 * @version 0.8.0
 		 * @since 0.0.6
 		 *
 		 */
-		constructor ($el: JQuery) {
+		constructor (el: HTMLElement, map: Map) {
 
-			var address: string = $el.data('address');
+			this.$el = $(el);
+			
+			this._map = map;
+
+			var address: string = this.$el.data('address');
 
 			var dfd: JQueryDeferred<void> = $.Deferred<void>();
-
-			this.$el = $el;
 
 			if (address) {
 				Map.getLatLngByAddress(address, (lat: number, lng: number): void => {
@@ -397,8 +399,8 @@ module baser.ui.element {
 					dfd.resolve();
 				});
 			} else {
-				this.lat = <number> $el.data('lat');
-				this.lng = <number> $el.data('lng');
+				this.lat = <number> this.$el.data('lat');
+				this.lng = <number> this.$el.data('lng');
 				this.position = new google.maps.LatLng(this.lat, this.lng);
 				dfd.resolve();
 			}
@@ -410,13 +412,13 @@ module baser.ui.element {
 		/**
 		 * ピンをマップに立てる
 		 *
-		 * @version 0.6.0
+		 * @version 0.8.0
 		 * @since 0.0.6
 		 *
 		 */
-		public markTo (map: Map, callback?: (coordinate: Coordinate) => void): void {
-			this._promiseLatLng.done((): void => {
-				this._markTo(map);
+		public markTo (callback?: (coordinate: Coordinate) => void): void {
+			this._promiseLatLng.done( (): void => {
+				this._markTo();
 				if (callback) {
 					callback(this);
 				}
@@ -426,28 +428,50 @@ module baser.ui.element {
 		/**
 		 * ピンをマップに立てる
 		 *
-		 * @version 0.6.0
+		 * @version 0.8.0
 		 * @since 0.0.6
 		 *
 		 */
-		private _markTo (map: Map): void {
+		private _markTo (): void {
 			this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
 			this.icon = this.$el.data('icon') || null;
 			this.marker = new google.maps.Marker({
 				position: this.position,
 				title: this.title,
 				icon: this.icon,
-				map: map.gmap
+				map: this._map.gmap
 			});
-			if (map.$coordinates !== map.$el) {
+			if (this._map.$coordinates !== this._map.$el) {
 				google.maps.event.addListener(this.marker, 'click', (): void => {
-					map.info.setContent(this.$el[0]);
-					map.info.open(map.gmap, this.marker);
-					this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
+					this.openInfoWindow();
 				});
 			}
 		}
-
+		
+		/**
+		 * インフォウィンドウを開く
+		 * 
+		 * @version 0.8.0
+		 * @since 0.8.0
+		 * 
+		 */
+		public openInfoWindow (): void {
+			this._map.info.setContent(this.$el[0]);
+			this._map.info.open(this._map.gmap, this.marker);
+			this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
+			
+			// マップの中心を移動する
+			var content: HTMLElement = this._map.info.getContent();
+			var proj: google.maps.Projection = this._map.gmap.getProjection();
+			var currentPoint: google.maps.Point = proj.fromLatLngToPoint(this.position);
+			var scale: number = Math.pow(2, this._map.gmap.getZoom());
+			var height: number = $(content).height();
+			var y: number = (currentPoint.y * scale - height) / scale;
+			var newPoint: google.maps.Point = new google.maps.Point(currentPoint.x, y);
+			var newPosition: google.maps.LatLng = proj.fromPointToLatLng(newPoint);
+			this._map.gmap.panTo(newPosition);
+		}
+		
 	}
 
 }
