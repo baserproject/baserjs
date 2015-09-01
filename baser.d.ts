@@ -409,8 +409,8 @@ declare module baser.ui {
     /**
      * ブレークポイントの変化に応じた処理をする管理することができるクラス
      *
-     * @version 0.7.0
-     * @since 0.7.0
+     * @version 0.8.1
+     * @since 0.8.1
      *
      */
     class BreakPoints<T> extends event.EventDispacher {
@@ -2074,7 +2074,7 @@ declare module baser.ui.element {
          */
         private _callback;
         /**
-         * ボックスの高さ揃えるときのコールバック
+         * 現在のカラム
          *
          * @version 0.7.0
          * @since 0.7.0
@@ -2094,8 +2094,8 @@ declare module baser.ui.element {
         /**
          * ボックスの高さ揃える
          *
-         * @version 0.7.0
-         * @since 0.7.0
+         * @version 0.8.1
+         * @since 0.8.1
          *
          */
         private _align();

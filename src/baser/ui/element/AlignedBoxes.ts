@@ -198,7 +198,7 @@ module baser.ui.element {
 		private _callback: AlignedBoxCallback;
 
 		/**
-		 * ボックスの高さ揃えるときのコールバック
+		 * 現在のカラム
 		 *
 		 * @version 0.7.0
 		 * @since 0.7.0
@@ -261,42 +261,47 @@ module baser.ui.element {
 		/**
 		 * ボックスの高さ揃える
 		 *
-		 * @version 0.7.0
-		 * @since 0.7.0
+		 * @version 0.8.1
+		 * @since 0.8.1
 		 *
 		 */
 		private _align (): void {
-			var tiles: JQuery[];
-			var max: number;
-			var c: number;
-			var h: number;
-			var last: number = this.$el.length - 1;
-			if (!this._currentColumn) {
-				this._currentColumn = this.$el.length;
-			}
+			var $box_array: JQuery[];
+			var maxHeight: number = 0;
+			var lastIndex: number = this.$el.length - 1;
 			this.$el.each( (i: number, elem: HTMLElement): any => {
-				var tile: JQuery;
-				var j: number, l: number;
-				var cancel: boolean = false;
+				var $box: JQuery = $(elem);
+				
+				// 要素の高さを強制に無効にする
 				Element.removeCSSPropertyFromDOMElement('height', elem);
-				c = i % this._currentColumn;
-				if (c === 0) {
-					tiles = [];
+				
+				// column が 0 だと最初の要素の意味
+				var column: number = i % this._currentColumn;
+				if (column === 0) {
+					// 配列をリセットする
+					$box_array = [];
 				}
-				tile = tiles[c] = $(elem);
-				h = tile.height();
-				if (c === 0 || h > max) {
-					max = h;
+				
+				// 配列に追加
+				$box_array[column] = $box;
+				
+				// 現在の高さと最大の高さを比べて最大の高さを更新
+				// column が 0 ならばリセットさせるので最大の高さもリセット
+				var currentHeight = $box.height();
+				if (column === 0 || currentHeight > maxHeight) {
+					maxHeight = currentHeight;
 				}
-				if (i === last || c === this._currentColumn - 1) {
-					l = tiles.length;
-					for (j = 0; j < l; j++) {
-						if (tiles[j]) {
+				if (i === lastIndex || column === this._currentColumn - 1) {
+					for (let j: number = 0, l: number = $box_array.length; j < l; j++) {
+						if ($box_array[j]) {
+							let cancel: boolean;
+							// コールバックを実行
 							if ($.isFunction(this._callback)) {
-								cancel = !this._callback(max, h, this);
+								cancel = !this._callback(maxHeight, currentHeight, this);
 							}
+							// コールバックの戻り値がfalseでなければ高さを変更
 							if (!cancel) {
-								tiles[j].height(max);
+								$box_array[j].height(maxHeight);
 							}
 						}
 					}

@@ -1,6 +1,6 @@
 /**
- * baserjs - v0.8.0 r263
- * update: 2015-08-19
+ * baserjs - v0.8.1-beta r264
+ * update: 2015-09-01
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
  * License: Licensed under the MIT License
@@ -1213,8 +1213,8 @@ var baser;
         /**
          * ブレークポイントの変化に応じた処理をする管理することができるクラス
          *
-         * @version 0.7.0
-         * @since 0.7.0
+         * @version 0.8.1
+         * @since 0.8.1
          *
          */
         var BreakPoints = (function (_super) {
@@ -1254,6 +1254,7 @@ var baser;
                         }
                     }
                 });
+                ui.Browser.browser.trigger('resizeend');
             }
             /**
              * ブレークポイントの登録処理
@@ -3730,43 +3731,44 @@ var baser;
                 /**
                  * ボックスの高さ揃える
                  *
-                 * @version 0.7.0
-                 * @since 0.7.0
+                 * @version 0.8.1
+                 * @since 0.8.1
                  *
                  */
                 AlignedBoxes.prototype._align = function () {
                     var _this = this;
-                    var tiles;
-                    var max;
-                    var c;
-                    var h;
-                    var last = this.$el.length - 1;
-                    if (!this._currentColumn) {
-                        this._currentColumn = this.$el.length;
-                    }
+                    var $box_array;
+                    var maxHeight = 0;
+                    var lastIndex = this.$el.length - 1;
                     this.$el.each(function (i, elem) {
-                        var tile;
-                        var j, l;
-                        var cancel = false;
+                        var $box = $(elem);
+                        // 要素の高さを強制に無効にする
                         element.Element.removeCSSPropertyFromDOMElement('height', elem);
-                        c = i % _this._currentColumn;
-                        if (c === 0) {
-                            tiles = [];
+                        // column が 0 だと最初の要素の意味
+                        var column = i % _this._currentColumn;
+                        if (column === 0) {
+                            // 配列をリセットする
+                            $box_array = [];
                         }
-                        tile = tiles[c] = $(elem);
-                        h = tile.height();
-                        if (c === 0 || h > max) {
-                            max = h;
+                        // 配列に追加
+                        $box_array[column] = $box;
+                        // 現在の高さと最大の高さを比べて最大の高さを更新
+                        // column が 0 ならばリセットさせるので最大の高さもリセット
+                        var currentHeight = $box.height();
+                        if (column === 0 || currentHeight > maxHeight) {
+                            maxHeight = currentHeight;
                         }
-                        if (i === last || c === _this._currentColumn - 1) {
-                            l = tiles.length;
-                            for (j = 0; j < l; j++) {
-                                if (tiles[j]) {
+                        if (i === lastIndex || column === _this._currentColumn - 1) {
+                            for (var j = 0, l = $box_array.length; j < l; j++) {
+                                if ($box_array[j]) {
+                                    var cancel = void 0;
+                                    // コールバックを実行
                                     if ($.isFunction(_this._callback)) {
-                                        cancel = !_this._callback(max, h, _this);
+                                        cancel = !_this._callback(maxHeight, currentHeight, _this);
                                     }
+                                    // コールバックの戻り値がfalseでなければ高さを変更
                                     if (!cancel) {
-                                        tiles[j].height(max);
+                                        $box_array[j].height(maxHeight);
                                     }
                                 }
                             }

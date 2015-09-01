@@ -7,8 +7,8 @@ module baser.ui {
 	/**
 	 * ブレークポイントの変化に応じた処理をする管理することができるクラス
 	 *
-	 * @version 0.7.0
-	 * @since 0.7.0
+	 * @version 0.8.1
+	 * @since 0.8.1
 	 *
 	 */
 	export class BreakPoints<T> extends event.EventDispacher {
@@ -48,6 +48,7 @@ module baser.ui {
 					}
 				}
 			});
+			Browser.browser.trigger('resizeend');
 		}
 		
 		/**
