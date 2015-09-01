@@ -266,7 +266,7 @@ module baser.ui.element {
 		 *
 		 */
 		private _align (): void {
-			var $box_array: JQuery[];
+			var $box_array: JQuery[] = [];
 			var maxHeight: number = 0;
 			var lastIndex: number = this.$el.length - 1;
 			this.$el.each( (i: number, elem: HTMLElement): any => {

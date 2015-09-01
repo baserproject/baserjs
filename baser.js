@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.8.1-beta r264
+ * baserjs - v0.8.1-beta r268
  * update: 2015-09-01
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -1233,17 +1233,13 @@ var baser;
                 this._values = {};
                 this._setBreakPoints(breakPoints);
                 ui.Browser.browser.on('resizeend', function () {
-                    var i = 0;
-                    var l = _this.breakPoints.length;
                     var wW = window.document.documentElement.clientWidth;
-                    var overPoint;
-                    var value;
-                    for (; i < l; i++) {
-                        overPoint = _this.breakPoints[i];
+                    for (var i = 0, l = _this.breakPoints.length; i < l; i++) {
+                        var overPoint = _this.breakPoints[i];
                         if (wW <= overPoint) {
                             if (_this.currentPoint !== overPoint) {
                                 _this.currentPoint = overPoint;
-                                value = _this._values[overPoint + ''];
+                                var value = _this._values[overPoint];
                                 if (callback) {
                                     callback(value, overPoint, wW);
                                 }
@@ -1259,19 +1255,24 @@ var baser;
             /**
              * ブレークポイントの登録処理
              *
+             * @version 0.8.1
+             * @since 0.7.0
              * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
              */
             BreakPoints.prototype._setBreakPoints = function (breakPoints) {
-                var breakPointStr;
-                var breakPoint;
-                var value;
-                for (breakPointStr in breakPoints) {
+                for (var breakPointStr in breakPoints) {
                     if (breakPoints.hasOwnProperty(breakPointStr)) {
-                        breakPoint = parseFloat(breakPointStr);
+                        var breakPoint = void 0;
+                        if (/^defaults?$/i.test(breakPointStr)) {
+                            breakPoint = Infinity;
+                        }
+                        else {
+                            breakPoint = parseFloat(breakPointStr);
+                        }
                         if (breakPoint >= 1) {
                             this.breakPoints.push(breakPoint);
-                            value = breakPoints[breakPointStr];
-                            this._values[breakPoint + ''] = value;
+                            var value = breakPoints[breakPointStr];
+                            this._values[breakPoint] = value;
                         }
                     }
                 }
@@ -1717,7 +1718,7 @@ var baser;
                 /**
                  * コンストラクタ
                  *
-                 * @version 0.8.0
+                 * @version 0.8.1
                  * @since 0.0.1
                  * @param $el 管理するDOM要素のjQueryオブジェクト
                  *
@@ -1735,6 +1736,7 @@ var baser;
                      * baserJSのエレメント化してたかどうか
                      */
                     this._elementized = false;
+                    this.$el = $el;
                     // 既にbaserJSのエレメント化している場合
                     if ($el.data('bc-element')) {
                         if ('console' in window) {
@@ -1744,7 +1746,6 @@ var baser;
                         return;
                     }
                     $el.data('bc-element', this);
-                    this.$el = $el;
                     // ID・nameの抽出 & 生成
                     var ids = [];
                     var names = [];
@@ -3737,7 +3738,7 @@ var baser;
                  */
                 AlignedBoxes.prototype._align = function () {
                     var _this = this;
-                    var $box_array;
+                    var $box_array = [];
                     var maxHeight = 0;
                     var lastIndex = this.$el.length - 1;
                     this.$el.each(function (i, elem) {

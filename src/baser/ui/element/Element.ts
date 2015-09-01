@@ -302,7 +302,7 @@ module baser.ui.element {
 		/**
 		 * コンストラクタ
 		 *
-		 * @version 0.8.0
+		 * @version 0.8.1
 		 * @since 0.0.1
 		 * @param $el 管理するDOM要素のjQueryオブジェクト
 		 *
@@ -310,6 +310,8 @@ module baser.ui.element {
 		constructor ($el: JQuery) {
 
 			super();
+
+			this.$el = $el;
 
 			// 既にbaserJSのエレメント化している場合
 			if ($el.data('bc-element')) {
@@ -321,8 +323,6 @@ module baser.ui.element {
 			}
 
 			$el.data('bc-element', this);
-
-			this.$el = $el;
 
 			// ID・nameの抽出 & 生成
 			var ids: string[] = [];

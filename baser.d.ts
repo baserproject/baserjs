@@ -429,6 +429,8 @@ declare module baser.ui {
         /**
          * ブレークポイントの登録処理
          *
+         * @version 0.8.1
+         * @since 0.7.0
          * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
          */
         private _setBreakPoints<T>(breakPoints);
@@ -825,7 +827,7 @@ declare module baser.ui.element {
         /**
          * コンストラクタ
          *
-         * @version 0.8.0
+         * @version 0.8.1
          * @since 0.0.1
          * @param $el 管理するDOM要素のjQueryオブジェクト
          *
