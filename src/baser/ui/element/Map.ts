@@ -365,7 +365,7 @@ module baser.ui.element {
 	class Coordinate {
 
 		public title: string;
-		public icon: string;
+		public icon: google.maps.MarkerImage = null;
 		public $el: JQuery;
 		public lat: number;
 		public lng: number;
@@ -428,13 +428,27 @@ module baser.ui.element {
 		/**
 		 * ピンをマップに立てる
 		 *
-		 * @version 0.8.0
+		 * @version 0.8.1
 		 * @since 0.0.6
 		 *
 		 */
 		private _markTo (): void {
 			this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
-			this.icon = this.$el.data('icon') || null;
+			var iconURL: string = this.$el.data('icon');
+			var iconSize: string = this.$el.data('iconSize');
+			if (iconURL) {
+				this.icon = new google.maps.MarkerImage(iconURL);
+				if (iconSize) {
+					let sizeQ: string[] = iconSize.split(/\s+/);
+					let width: number = +sizeQ[0] || null;
+					if (width) {
+						let height: number = +sizeQ[1] || width;
+						let size: google.maps.Size = new google.maps.Size(width, height);
+						this.icon.size = size;
+						this.icon.scaledSize = size;
+					}
+				}
+			}
 			this.marker = new google.maps.Marker({
 				position: this.position,
 				title: this.title,

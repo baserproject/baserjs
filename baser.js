@@ -1,5 +1,5 @@
 /**
- * baserjs - v0.8.1-beta r268
+ * baserjs - v0.8.1-beta r270
  * update: 2015-09-01
  * Author: baserCMS Users Community [https://github.com/baserproject/]
  * Github: https://github.com/baserproject/baserjs
@@ -4062,6 +4062,7 @@ var baser;
                  */
                 function Coordinate(el, map) {
                     var _this = this;
+                    this.icon = null;
                     this.$el = $(el);
                     this._map = map;
                     var address = this.$el.data('address');
@@ -4101,14 +4102,28 @@ var baser;
                 /**
                  * ピンをマップに立てる
                  *
-                 * @version 0.8.0
+                 * @version 0.8.1
                  * @since 0.0.6
                  *
                  */
                 Coordinate.prototype._markTo = function () {
                     var _this = this;
                     this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
-                    this.icon = this.$el.data('icon') || null;
+                    var iconURL = this.$el.data('icon');
+                    var iconSize = this.$el.data('iconSize');
+                    if (iconURL) {
+                        this.icon = new google.maps.MarkerImage(iconURL);
+                        if (iconSize) {
+                            var sizeQ = iconSize.split(/\s+/);
+                            var width = +sizeQ[0] || null;
+                            if (width) {
+                                var height = +sizeQ[1] || width;
+                                var size = new google.maps.Size(width, height);
+                                this.icon.size = size;
+                                this.icon.scaledSize = size;
+                            }
+                        }
+                    }
                     this.marker = new google.maps.Marker({
                         position: this.position,
                         title: this.title,
