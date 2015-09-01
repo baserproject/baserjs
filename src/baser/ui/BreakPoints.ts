@@ -27,17 +27,13 @@ module baser.ui {
 			super();
 			this._setBreakPoints<T>(breakPoints);
 			Browser.browser.on('resizeend', (): void => {
-				var i: number = 0;
-				var l: number = this.breakPoints.length;
 				var wW: number = window.document.documentElement.clientWidth;
-				var overPoint: number;
-				var value: T;
-				for (; i < l; i++) {
-					overPoint = this.breakPoints[i];
+				for (let i: number = 0, l: number = this.breakPoints.length; i < l; i++) {
+					let overPoint: number = this.breakPoints[i];
 					if (wW <= overPoint) {
 						if (this.currentPoint !== overPoint) {
 							this.currentPoint = overPoint;
-							value = <T> this._values[overPoint + ''];
+							let value: T = <T> this._values[overPoint];
 							if (callback) {
 								callback(value, overPoint, wW);
 							}
@@ -54,20 +50,24 @@ module baser.ui {
 		/**
 		 * ブレークポイントの登録処理
 		 * 
+		 * @version 0.8.1
+		 * @since 0.7.0
 		 * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
 		 */
 		private _setBreakPoints<T> (breakPoints: BreakPointsOption<T>): void {
-			var breakPointStr: string;
-			var breakPoint: number;
-			var value: T;
 			
-			for (breakPointStr in breakPoints) {
+			for (let breakPointStr in breakPoints) {
 				if (breakPoints.hasOwnProperty(breakPointStr)) {
-					breakPoint = parseFloat(breakPointStr);
+					let breakPoint: number;
+					if (/^defaults?$/i.test(breakPointStr)) {
+						breakPoint = Infinity;
+					} else {
+						breakPoint = parseFloat(breakPointStr);
+					}
 					if (breakPoint >= 1) {
 						this.breakPoints.push(breakPoint);
-						value = breakPoints[breakPointStr];
-						this._values[breakPoint + ''] = value;
+						let value: T = breakPoints[breakPointStr];
+						this._values[breakPoint] = value;
 					}
 				}
 			}
