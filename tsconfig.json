@@ -1,0 +1,42 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "outDir": "./dist/",
+        "module": "commonjs",
+        "declaration": true
+    },
+    "files": [
+        "src/Interface/ICheckableElement.ts",
+        "src/Interface/ICheckbox.ts",
+        "src/Interface/IElement.ts",
+        "src/Interface/IEventDispacher.ts",
+        "src/Interface/IFormElement.ts",
+        "src/Interface/IRadio.ts",
+        "src/Interface/ISelect.ts",
+        "src/Interface/ITextField.ts",
+        "src/Class/AlignedBoxes.ts",
+        "src/Class/AnimationFrames.ts",
+        "src/Class/BaserElement.ts",
+        "src/Class/BreakPoints.ts",
+        "src/Class/Browser.ts",
+        "src/Class/CheckableElement.ts",
+        "src/Class/Checkbox.ts",
+        "src/Class/DispacheEvent.ts",
+        "src/Class/EventDispacher.ts",
+        "src/Class/EventHandler.ts",
+        "src/Class/FormElement.ts",
+        "src/Class/GoogleMaps.ts",
+        "src/Class/Locational.ts",
+        "src/Class/Radio.ts",
+        "src/Class/RadioGroup.ts",
+        "src/Class/Scroll.ts",
+        "src/Class/Select.ts",
+        "src/Class/Sequence.ts",
+        "src/Class/TextField.ts",
+        "src/Class/Timer.ts",
+        "src/Class/UtilArray.ts",
+        "src/Class/UtilMath.ts",
+        "src/Class/UtilString.ts",
+        "src/Class/YouTube.ts"
+    ]
+}

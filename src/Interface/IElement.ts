@@ -1,14 +1,12 @@
-module baser.ui.element {
+/// <reference path="../../typings/bundle.d.ts" />
+import IEventDispacher = require('./IEventDispacher');
 
-	export interface IElement extends event.IEventDispacher {
-
-		id: string;
-		name: string;
-		$el: JQuery;
-
-		addClass (blockNames: string, elementNames?: string, modifierName?: string): void;
-		getBoolAttr (attrName: string): boolean;
-
-	}
-
+interface IElement extends IEventDispacher {
+	id: string;
+	name: string;
+	$el: JQuery;
+	addClass (blockNames: string, elementNames?: string, modifierName?: string): void;
+	getBoolAttr (attrName: string): boolean;
 }
+
+export = IElement;

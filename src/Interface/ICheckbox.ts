@@ -1,7 +1,5 @@
-module baser.ui.element {
+import ICheckableElement = require('./ICheckableElement');
 
-	export interface ICheckbox extends ICheckableElement {
+interface ICheckbox extends ICheckableElement { }
 
-	}
-
-}
+export = ICheckbox;

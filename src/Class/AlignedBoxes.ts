@@ -1,15 +1,13 @@
-module baser.ui.element {
-
-	/**
-	 * ボックスの高さ揃えるときのコールバック
-	 *
-	 * @version 0.7.0
-	 * @since 0.7.0
-	 *
-	 */	
-	export interface AlignedBoxCallback {
-		(maxHeight: number, currentHeight: number, boxes: AlignedBoxes): boolean | void;
-	}
+/**
+ * ボックスの高さ揃えるときのコールバック
+ *
+ * @version 0.7.0
+ * @since 0.7.0
+ *
+ */	
+interface AlignedBoxCallback {
+	(maxHeight: number, currentHeight: number, boxes: AlignedBoxes): boolean | void;
+}
 
 	/**
 	 * 高さ揃えをするボックスを管理するクラス
@@ -329,4 +327,5 @@ module baser.ui.element {
 
 	}
 
-}
+
+export = AlignedBoxes;

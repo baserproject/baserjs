@@ -1,7 +1,5 @@
-module baser.ui.element {
+import ICheckableElement = require('./ICheckableElement');
 
-	export interface IRadio extends ICheckableElement {
+interface IRadio extends ICheckableElement { }
 
-	}
-
-}
+export = IRadio;
