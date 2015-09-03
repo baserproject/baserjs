@@ -25,13 +25,13 @@ gulp.task 'compress', ->
 		.pipe rename 'baser.min.js'
 		.pipe gulp.dest './'
 
-gulp.task 'docs', ->
-	gulp.src 'src/baserJS.ts'
-		.pipe typedoc
-			target: 'ES5'
-			includeDeclarations: on
-			mode: 'file'
-			out: 'docs'
+# gulp.task 'docs', ->
+# 	gulp.src 'src/baserJS.ts'
+# 		.pipe typedoc
+# 			target: 'ES5'
+# 			includeDeclarations: on
+# 			mode: 'file'
+# 			out: 'docs'
 
 gulp.task 'watch', ->
 	gulp.watch 'src/**/*.ts', ['default']
