@@ -5,7 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = new __();
 };
 var UtilString = require('./UtilString');
-var EventDispacher = require('./EventDispacher');
+var EventDispatcher = require('./EventDispatcher');
 var ElementClassNameCase = require('../Enum/ElementClassNameCase');
 var ClassNameSeparatorForBEM = require('../Enum/ClassNameSeparatorForBEM');
 var HYPHEN = '-';
@@ -343,5 +343,5 @@ var BaserElement = (function (_super) {
      */
     BaserElement.classNameDefaultSeparatorForModifier = ClassNameSeparatorForBEM.DOUBLE_HYPHEN;
     return BaserElement;
-})(EventDispacher);
+})(EventDispatcher);
 module.exports = BaserElement;

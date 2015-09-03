@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var EventDispacher = require('./EventDispacher');
+var EventDispatcher = require('./EventDispatcher');
 var Locational = require('./Locational');
 /**
  * ブラウザの情報を管理するクラス
@@ -152,5 +152,5 @@ var Browser = (function (_super) {
         ua: Browser.getUA()
     };
     return Browser;
-})(EventDispacher);
+})(EventDispatcher);
 module.exports = Browser;

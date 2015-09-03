@@ -4,13 +4,25 @@ var __extends = (this && this.__extends) || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var EventDispacher = require('./EventDispacher');
+var EventDispatcher = require('./EventDispatcher');
 var Browser = require('./Browser');
 /**
  * ブレークポイントの変化に応じた処理をする管理することができるクラス
  *
  * @version 0.8.1
- * @since 0.8.1
+ * @since 0.7.0
+ *
+ * ```
+ * new BreakPoints({
+ * 	340: 'sp',
+ * 	768: 'tab',
+ * 	1200: 'pc',
+ * 	'default': 'bigger'
+ * }, (value, breakPoint, windowWidth) => {
+ * 	// ブレークポイントが340以下なら value = 'sp' など
+ *  // 指定のブレークポイントを跨いだ際にしか発火しない
+ * });
+ * ```
  *
  */
 var BreakPoints = (function (_super) {
@@ -18,14 +30,38 @@ var BreakPoints = (function (_super) {
     /**
      * コンストラクタ
      *
+     * @version 0.9.0
+     * @since 0.7.0
      * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
      * @param callback 変化に応じたコールバック
+     *
      */
     function BreakPoints(breakPoints, callback) {
         var _this = this;
         _super.call(this);
+        /**
+        * 現在のブレークポイント（ウィンドウの幅）
+        *
+        * @version 0.8.1
+        * @since 0.7.0
+        *
+        */
         this.currentPoint = 0;
+        /**
+        * ブレークポイント
+        *
+        * @version 0.8.1
+        * @since 0.7.0
+        *
+        */
         this.breakPoints = [];
+        /**
+        * ブレークポイントに対してハンドラに渡す値
+        *
+        * @version 0.8.1
+        * @since 0.7.0
+        *
+        */
         this._values = {};
         this._setBreakPoints(breakPoints);
         Browser.browser.on('resizeend', function () {
@@ -54,6 +90,7 @@ var BreakPoints = (function (_super) {
      * @version 0.8.1
      * @since 0.7.0
      * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+     *
      */
     BreakPoints.prototype._setBreakPoints = function (breakPoints) {
         for (var breakPointStr in breakPoints) {
@@ -77,11 +114,14 @@ var BreakPoints = (function (_super) {
     /**
      * ブレークポイントを追加する
      *
+     * @version 0.7.0
+     * @since 0.7.0
      * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+     *
      */
     BreakPoints.prototype.add = function (breakPoints) {
         this._setBreakPoints(breakPoints);
     };
     return BreakPoints;
-})(EventDispacher);
+})(EventDispatcher);
 module.exports = BreakPoints;

@@ -1,4 +1,4 @@
-import DispacheEvent = require('./DispacheEvent');
+import DispatchEvent = require('./DispatchEvent');
 import BaserElement = require('./BaserElement');
 import YouTubeOption = require('../Interface/YouTubeOption');
 import YoutubeMuteControllerOptions = require('../Interface/YoutubeMuteControllerOptions');
@@ -413,7 +413,7 @@ class YouTube extends BaserElement {
 		if (this.isEmbeded) {
 			bindCtrl();
 		} else {
-			this.on('embeded', (e: DispacheEvent, ytp: YT.Player): void => {
+			this.on('embeded', (e: DispatchEvent, ytp: YT.Player): void => {
 				this.off(e.type);
 				bindCtrl();
 			});

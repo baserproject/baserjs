@@ -1,5 +1,5 @@
 
-import EventDispacher = require('./EventDispacher');
+import EventDispatcher = require('./EventDispatcher');
 import Locational = require('./Locational');
 import BrowserUserAgent = require('../Interface/BrowserUserAgent');
 
@@ -12,7 +12,7 @@ type LinkElement = HTMLAnchorElement | HTMLAreaElement;
  * @since 0.0.2
  *
  */
-class Browser extends EventDispacher {
+class Browser extends EventDispatcher {
 
 	/**
 	 * ブラウザ

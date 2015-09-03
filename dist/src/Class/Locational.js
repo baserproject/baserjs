@@ -32,17 +32,18 @@ var Locational = (function () {
         this.update();
     }
     /**
-     * クエリーストリングをハッシュにして返す
+     * クエリー文字列をハッシュにして返す
      *
      * @version 0.7.0
      * @since 0.7.0
+     * @param queryString クエリー文字列
+     * @return ハッシュデータ
      *
      */
     Locational.parseQueryString = function (queryString) {
         var params = {};
-        var queries;
         if (queryString) {
-            queries = queryString.split(/&/g);
+            var queries = queryString.split(/&/g);
             $.each(queries, function (i, query) {
                 var keyValue = UtilString.divide(query, '=');
                 var key = keyValue[0];

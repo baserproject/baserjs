@@ -67,8 +67,8 @@
 	var _Browser = __webpack_require__(6);
 	var _CheckableElement = __webpack_require__(14);
 	var _Checkbox = __webpack_require__(16);
-	var _DispacheEvent = __webpack_require__(8);
-	var _EventDispacher = __webpack_require__(7);
+	var _DispatchEvent = __webpack_require__(8);
+	var _EventDispatcher = __webpack_require__(7);
 	var _EventHandler = __webpack_require__(9);
 	var _FormElement = __webpack_require__(15);
 	var _GoogleMaps = __webpack_require__(17);
@@ -91,8 +91,8 @@
 	exports.Browser = _Browser;
 	exports.CheckableElement = _CheckableElement;
 	exports.Checkbox = _Checkbox;
-	exports.DispacheEvent = _DispacheEvent;
-	exports.EventDispacher = _EventDispacher;
+	exports.DispatchEvent = _DispatchEvent;
+	exports.EventDispatcher = _EventDispatcher;
 	exports.EventHandler = _EventHandler;
 	exports.FormElement = _FormElement;
 	exports.GoogleMaps = _GoogleMaps;
@@ -414,7 +414,7 @@
 	/**
 	 * ユーティリティ文字列クラス
 	 *
-	 * @version 0.0.2
+	 * @version 0.9.0
 	 * @since 0.0.2
 	 *
 	 */
@@ -424,34 +424,39 @@
 	    /**
 	     * ユニークIDを発行する
 	     *
-	     * @version 0.0.1
+	     * @version 0.9.0
 	     * @since 0.0.1
+	     * @param seed シード
+	     * @param prefix 接頭辞
 	     *
 	     */
-	    UtilString.UID = function (seed) {
-	        var random = Math.floor(Math.random() * 1e8);
-	        if (!seed) {
+	    UtilString.UID = function (seed, prefix) {
+	        if (prefix === void 0) { prefix = 'uid'; }
+	        var random = Math.random() * 1e8;
+	        if (seed !== undefined) {
 	            seed = new Date().valueOf();
 	        }
-	        var uniqueNumber = random + seed;
-	        var uid = 'uid-' + uniqueNumber.toString(24);
-	        return uid;
+	        var uniqueNumber = Math.abs(Math.floor(random + seed));
+	        if (prefix) {
+	            prefix += '-';
+	        }
+	        return "" + prefix + uniqueNumber.toString(24);
 	    };
 	    /**
-	     * ハイフン チェインケース化
+	     * ハイフンチェインケース化
 	     *
-	     * @version 0.1.0
+	     * @version 0.9.0
 	     * @since 0.1.0
+	     * @param str 対象の文字列
+	     * @return ハイフンチェインケース化された文字列
 	     *
 	     */
 	    UtilString.hyphenDelimited = function (str) {
-	        var words = str.replace(/[A-Z]/g, function ($1) {
-	            return ' ' + $1.toLowerCase();
-	        }).split(/[^a-z0-9]+/ig);
 	        var result = [];
-	        var i = 0;
-	        var l = words.length;
-	        for (; i < l; i++) {
+	        var words = str.replace(/[A-Z]/g, function ($1) {
+	            return " " + $1.toLowerCase();
+	        }).split(/[^a-z0-9]+/ig);
+	        for (var i = 0, l = words.length; i < l; i++) {
 	            if (words[i]) {
 	                result.push(words[i].toLowerCase());
 	            }
@@ -463,6 +468,8 @@
 	     *
 	     * @version 0.1.0
 	     * @since 0.1.0
+	     * @param str 対象の文字列
+	     * @return スネークケース化された文字列
 	     *
 	     */
 	    UtilString.snakeCase = function (str) {
@@ -471,37 +478,44 @@
 	    /**
 	     * キャメルケース化
 	     *
-	     * @version 0.1.0
+	     * @version 0.9.0
 	     * @since 0.1.0
+	     * @param str 対象の文字列
+	     * @param upperCase 頭文字を大文字にするかどうか
+	     * @return キャメルケース化された文字列
 	     *
 	     */
 	    UtilString.camelCase = function (str, upperCase) {
 	        if (upperCase === void 0) { upperCase = false; }
-	        var hdStr = UtilString.hyphenDelimited(str);
-	        if (upperCase && /^[a-z]/.test(hdStr)) {
-	            hdStr = '-' + hdStr;
+	        var result = UtilString.hyphenDelimited(str);
+	        if (upperCase && /^[a-z]/.test(result)) {
+	            result = "-" + result;
 	        }
-	        return hdStr.replace(/-([a-z])/g, function ($1, $2) {
+	        return result.replace(/-([a-z])/g, function ($1, $2) {
 	            return $2.toUpperCase();
 	        });
 	    };
 	    /**
 	     * 文字列が論理値の偽相等であるかどうか
 	     *
-	     * @version 0.2.0
+	     * @version 0.9.0
 	     * @since 0.2.0
+	     * @param str 対象の文字列
+	     * @return 文字列が論理値の偽相等であるかどうか
 	     *
 	     */
 	    UtilString.isFalsy = function (str) {
-	        str = str.toLowerCase();
-	        var rFalsy = /^\s*(?:false|null|undefined|0|0?(?:\.0+)?)?\s*$/i;
-	        return rFalsy.test(str);
+	        var FALSY_PATTERN = /^\s*(?:false|null|undefined|0|0?(?:\.0+)?)?\s*$/i;
+	        return FALSY_PATTERN.test(str.toLowerCase());
 	    };
 	    /**
-	     * 最初に登場する文字列の部分を分割する
+	     * 最初に登場する指定の区切り文字の場所で文字列を一回だけ分割する
 	     *
-	     * @version 0.7.0
+	     * @version 0.9.0
 	     * @since 0.7.0
+	     * @param str 対象の文字列
+	     * @param separator 区切り文字
+	     * @return 分割した文字列
 	     *
 	     */
 	    UtilString.divide = function (str, separator) {
@@ -514,7 +528,12 @@
 	                suffix = splited.join(separator);
 	            }
 	        }
-	        return [prefix, suffix];
+	        if (prefix && suffix) {
+	            return [prefix, suffix];
+	        }
+	        else {
+	            return [str];
+	        }
 	    };
 	    return UtilString;
 	})();
@@ -531,7 +550,7 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var EventDispacher = __webpack_require__(7);
+	var EventDispatcher = __webpack_require__(7);
 	var Locational = __webpack_require__(10);
 	/**
 	 * ブラウザの情報を管理するクラス
@@ -679,7 +698,7 @@
 	        ua: Browser.getUA()
 	    };
 	    return Browser;
-	})(EventDispacher);
+	})(EventDispatcher);
 	module.exports = Browser;
 
 
@@ -687,16 +706,26 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DispacheEvent = __webpack_require__(8);
+	var DispatchEvent = __webpack_require__(8);
 	var EventHandler = __webpack_require__(9);
 	/**
-	 * イベント駆動できるクラス
+	 * イベントを検知してハンドラを発火させることができるクラス
 	 *
-	 * @version 0.0.10
+	 * @version 0.9.0
 	 * @since 0.0.10
 	 *
+	 * ```
+	 * let dispatcher = new EventDispatcher();
+	 *
+	 * dispatcher.on('event', (e) -> {
+	 * 	// handler
+	 * });
+	 *
+	 * dispatcher.trigger('event');
+	 * ```
+	 *
 	 */
-	var EventDispacher = (function () {
+	var EventDispatcher = (function () {
 	    /**
 	     * コンストラクタ
 	     *
@@ -704,17 +733,20 @@
 	     * @since 0.0.10
 	     *
 	     */
-	    function EventDispacher() {
+	    function EventDispatcher() {
 	        // void
 	    }
 	    /**
 	     * イベントハンドラを登録する
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.10
+	     * @param type イベントのタイプ（複数可）
+	     * @param handler
+	     * @return インスタンス自身
 	     *
 	     */
-	    EventDispacher.prototype.on = function (type, handler) {
+	    EventDispatcher.prototype.on = function (type, handler) {
 	        var types;
 	        if (typeof type === 'string') {
 	            types = type.split(/\s+/g);
@@ -722,26 +754,26 @@
 	        else {
 	            types = type;
 	        }
-	        var i = 0;
-	        var l = types.length;
-	        for (; i < l; i++) {
+	        for (var i = 0, l = types.length; i < l; i++) {
 	            var eventHandler = new EventHandler(this, types[i], handler);
-	            EventDispacher.eventHandlers[eventHandler.id] = eventHandler;
-	            if (!EventDispacher.types[types[i]]) {
-	                EventDispacher.types[types[i]] = [];
+	            EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
+	            if (!EventDispatcher.types[types[i]]) {
+	                EventDispatcher.types[types[i]] = [];
 	            }
-	            EventDispacher.types[types[i]].push(eventHandler);
+	            EventDispatcher.types[types[i]].push(eventHandler);
 	        }
 	        return this;
 	    };
 	    /**
 	     * イベントハンドラを削除する
 	     *
-	     * @version 0.0.10
+	     * @version 0.9.0
 	     * @since 0.0.10
+	     * @param type イベントのタイプ（複数可）
+	     * @return インスタンス自身
 	     *
 	     */
-	    EventDispacher.prototype.off = function (type) {
+	    EventDispatcher.prototype.off = function (type) {
 	        var types;
 	        if (typeof type === 'string') {
 	            types = type.split(/\s+/g);
@@ -749,33 +781,48 @@
 	        else {
 	            types = type;
 	        }
-	        var i = 0;
-	        var l = types.length;
-	        for (; i < l; i++) {
-	            delete EventDispacher.types[types[i]];
+	        for (var i = 0, l = types.length; i < l; i++) {
+	            delete EventDispatcher.types[types[i]];
 	        }
 	        return this;
 	    };
 	    /**
 	     * イベントハンドラを発火させる
 	     *
-	     * @version 0.5.0
+	     * @version 0.9.0
 	     * @since 0.0.10
+	     * @param type イベントのタイプ
+	     * @param args イベントハンドラに渡す引数
+	     * @param context イベントハンドラのコンテキスト
+	     * @return インスタンス自身
 	     *
 	     */
-	    EventDispacher.prototype.trigger = function (type, args, context) {
+	    EventDispatcher.prototype.trigger = function (type, args, context) {
 	        if (args === void 0) { args = []; }
-	        var handlers;
-	        var eventHandler;
-	        var e;
 	        context = context || this;
-	        if (EventDispacher.types[type]) {
-	            handlers = EventDispacher.types[type].slice(); // clone
+	        var typeName;
+	        var e;
+	        if (typeof type === 'string') {
+	            typeName = type;
+	            e = new DispatchEvent(type);
+	        }
+	        else {
+	            e = type;
+	            typeName = e.type;
+	        }
+	        if (EventDispatcher.types[typeName]) {
+	            // sliceをつかってオブジェクトのコピーを渡し参照を切る
+	            var handlers = EventDispatcher.types[typeName].slice();
 	            while (handlers.length) {
-	                eventHandler = handlers.shift();
+	                var eventHandler = handlers.shift();
 	                if (eventHandler.context === this) {
-	                    e = new DispacheEvent(type);
-	                    eventHandler.handler.apply(context, [e].concat(args));
+	                    var isCancel = eventHandler.fire(context, e, args);
+	                    console.log(isCancel, e);
+	                    if (isCancel) {
+	                        e.preventDefault();
+	                        e.stopImmediatePropagation();
+	                    }
+	                    // イベントの伝達抑制状態であればループ抜けて以降の処理を行わない
 	                    if (e.isImmediatePropagationStopped()) {
 	                        break;
 	                    }
@@ -784,11 +831,25 @@
 	        }
 	        return this;
 	    };
-	    EventDispacher.eventHandlers = {};
-	    EventDispacher.types = {};
-	    return EventDispacher;
+	    /**
+	    * イベント駆動できるクラス
+	    *
+	    * @version 0.7.0
+	    * @since 0.7.0
+	    *
+	    */
+	    EventDispatcher.eventHandlers = {};
+	    /**
+	    * イベント駆動できるクラス
+	    *
+	    * @version 0.7.0
+	    * @since 0.7.0
+	    *
+	    */
+	    EventDispatcher.types = {};
+	    return EventDispatcher;
 	})();
-	module.exports = EventDispacher;
+	module.exports = EventDispatcher;
 
 
 /***/ },
@@ -802,20 +863,79 @@
 	 * @since 0.0.10
 	 *
 	 */
-	var DispacheEvent = (function () {
-	    function DispacheEvent(type) {
+	var DispatchEvent = (function () {
+	    /**
+	    * コンストラクタ
+	    *
+	    * @version 0.3.0
+	    * @since 0.0.10
+	    *
+	    */
+	    function DispatchEvent(type) {
+	        /**
+	        * イベントの伝達が止められているかどうか
+	        *
+	        * @version 0.0.10
+	        * @since 0.0.10
+	        *
+	        */
 	        this._isImmediatePropagationStopped = false;
+	        /**
+	        * デフォルトのイベントの発火が止められているかどうか
+	        *
+	        * @version 0.9.0
+	        * @since 0.9.0
+	        *
+	        */
+	        this._isDefaultPrevented = false;
 	        this.type = type;
 	    }
-	    DispacheEvent.prototype.isImmediatePropagationStopped = function () {
-	        return this._isImmediatePropagationStopped;
-	    };
-	    DispacheEvent.prototype.stopImmediatePropagation = function () {
+	    /**
+	    * イベントの伝達を止める
+	    *
+	    * @version 0.0.10
+	    * @since 0.0.10
+	    *
+	    */
+	    DispatchEvent.prototype.stopImmediatePropagation = function () {
 	        this._isImmediatePropagationStopped = true;
 	    };
-	    return DispacheEvent;
+	    /**
+	    * イベントの伝達が止められているかどうか
+	    *
+	    * @version 0.0.10
+	    * @since 0.0.10
+	    * @return イベントの伝達が止められているかどうか
+	    *
+	    */
+	    DispatchEvent.prototype.isImmediatePropagationStopped = function () {
+	        return this._isImmediatePropagationStopped;
+	    };
+	    /**
+	    * デフォルトのイベントの発火を止める
+	    * ※EventDispatcher.triggerでの実装に依る
+	    *
+	    * @version 0.9.0
+	    * @since 0.9.0
+	    *
+	    */
+	    DispatchEvent.prototype.preventDefault = function () {
+	        this._isDefaultPrevented = true;
+	    };
+	    /**
+	    * デフォルトのイベントの発火が止められているかどうか
+	    *
+	    * @version 0.9.0
+	    * @since 0.9.0
+	    * @return デフォルトのイベントの発火が止められているかどうか
+	    *
+	    */
+	    DispatchEvent.prototype.isDefaultPrevented = function () {
+	        return this._isDefaultPrevented;
+	    };
+	    return DispatchEvent;
 	})();
-	module.exports = DispacheEvent;
+	module.exports = DispatchEvent;
 
 
 /***/ },
@@ -831,12 +951,37 @@
 	 *
 	 */
 	var EventHandler = (function () {
+	    /**
+	    * ハンドラ
+	    *
+	    * @version 0.9.0
+	    * @since 0.0.10
+	    * @param context 紐づくディスパッチャーオブジェクト
+	    * @param type イベントのタイプ
+	    * @param handler ハンドラ
+	    *
+	    */
 	    function EventHandler(context, type, handler) {
 	        this.context = context;
 	        this.id = UtilString.UID();
 	        this.type = type;
-	        this.handler = handler;
+	        this._handler = handler;
 	    }
+	    /**
+	    * ハンドラを実行する
+	    *
+	    * @version 0.9.0
+	    * @since 0.0.10
+	    * @param context 紐づくディスパッチャーオブジェクト
+	    * @param type イベントのタイプ
+	    * @param handler ハンドラ
+	    * @return イベントの伝達を止めるかどうか
+	    *
+	    */
+	    EventHandler.prototype.fire = function (context, e, args) {
+	        var handlerReturn = this._handler.apply(context, [e].concat(args));
+	        return handlerReturn !== undefined && !handlerReturn;
+	    };
 	    return EventHandler;
 	})();
 	module.exports = EventHandler;
@@ -880,17 +1025,18 @@
 	        this.update();
 	    }
 	    /**
-	     * クエリーストリングをハッシュにして返す
+	     * クエリー文字列をハッシュにして返す
 	     *
 	     * @version 0.7.0
 	     * @since 0.7.0
+	     * @param queryString クエリー文字列
+	     * @return ハッシュデータ
 	     *
 	     */
 	    Locational.parseQueryString = function (queryString) {
 	        var params = {};
-	        var queries;
 	        if (queryString) {
-	            queries = queryString.split(/&/g);
+	            var queries = queryString.split(/&/g);
 	            $.each(queries, function (i, query) {
 	                var keyValue = UtilString.divide(query, '=');
 	                var key = keyValue[0];
@@ -980,13 +1126,25 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var EventDispacher = __webpack_require__(7);
+	var EventDispatcher = __webpack_require__(7);
 	var Browser = __webpack_require__(6);
 	/**
 	 * ブレークポイントの変化に応じた処理をする管理することができるクラス
 	 *
 	 * @version 0.8.1
-	 * @since 0.8.1
+	 * @since 0.7.0
+	 *
+	 * ```
+	 * new BreakPoints({
+	 * 	340: 'sp',
+	 * 	768: 'tab',
+	 * 	1200: 'pc',
+	 * 	'default': 'bigger'
+	 * }, (value, breakPoint, windowWidth) => {
+	 * 	// ブレークポイントが340以下なら value = 'sp' など
+	 *  // 指定のブレークポイントを跨いだ際にしか発火しない
+	 * });
+	 * ```
 	 *
 	 */
 	var BreakPoints = (function (_super) {
@@ -994,14 +1152,38 @@
 	    /**
 	     * コンストラクタ
 	     *
+	     * @version 0.9.0
+	     * @since 0.7.0
 	     * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
 	     * @param callback 変化に応じたコールバック
+	     *
 	     */
 	    function BreakPoints(breakPoints, callback) {
 	        var _this = this;
 	        _super.call(this);
+	        /**
+	        * 現在のブレークポイント（ウィンドウの幅）
+	        *
+	        * @version 0.8.1
+	        * @since 0.7.0
+	        *
+	        */
 	        this.currentPoint = 0;
+	        /**
+	        * ブレークポイント
+	        *
+	        * @version 0.8.1
+	        * @since 0.7.0
+	        *
+	        */
 	        this.breakPoints = [];
+	        /**
+	        * ブレークポイントに対してハンドラに渡す値
+	        *
+	        * @version 0.8.1
+	        * @since 0.7.0
+	        *
+	        */
 	        this._values = {};
 	        this._setBreakPoints(breakPoints);
 	        Browser.browser.on('resizeend', function () {
@@ -1030,6 +1212,7 @@
 	     * @version 0.8.1
 	     * @since 0.7.0
 	     * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+	     *
 	     */
 	    BreakPoints.prototype._setBreakPoints = function (breakPoints) {
 	        for (var breakPointStr in breakPoints) {
@@ -1053,13 +1236,16 @@
 	    /**
 	     * ブレークポイントを追加する
 	     *
+	     * @version 0.7.0
+	     * @since 0.7.0
 	     * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+	     *
 	     */
 	    BreakPoints.prototype.add = function (breakPoints) {
 	        this._setBreakPoints(breakPoints);
 	    };
 	    return BreakPoints;
-	})(EventDispacher);
+	})(EventDispatcher);
 	module.exports = BreakPoints;
 
 
@@ -1074,7 +1260,7 @@
 	    d.prototype = new __();
 	};
 	var UtilString = __webpack_require__(5);
-	var EventDispacher = __webpack_require__(7);
+	var EventDispatcher = __webpack_require__(7);
 	var ElementClassNameCase = __webpack_require__(3);
 	var ClassNameSeparatorForBEM = __webpack_require__(2);
 	var HYPHEN = '-';
@@ -1412,7 +1598,7 @@
 	     */
 	    BaserElement.classNameDefaultSeparatorForModifier = ClassNameSeparatorForBEM.DOUBLE_HYPHEN;
 	    return BaserElement;
-	})(EventDispacher);
+	})(EventDispatcher);
 	module.exports = BaserElement;
 
 
@@ -2725,32 +2911,42 @@
 
 /***/ },
 /* 21 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    __.prototype = b.prototype;
+	    d.prototype = new __();
+	};
+	var DispatchEvent = __webpack_require__(8);
+	var EventDispatcher = __webpack_require__(7);
 	/**
 	 * 時間管理クラス
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
-	var Timer = (function () {
+	var Timer = (function (_super) {
+	    __extends(Timer, _super);
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.0.8
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     *
 	     */
 	    function Timer() {
+	        _super.call(this);
 	        /**
 	         * タイマーID
 	         *
-	         * @version 0.0.8
+	         * @version 0.9.0
 	         * @since 0.0.8
 	         *
 	         */
-	        this.timerId = null;
+	        this._timerId = null;
 	        /**
 	         * インターバル
 	         *
@@ -2761,14 +2957,6 @@
 	         *
 	         */
 	        this.interval = 13;
-	        /**
-	         * プログレスイベントのコールバック
-	         *
-	         * @version 0.0.8
-	         * @since 0.0.8
-	         *
-	         */
-	        this._onProgress = null;
 	        this.now();
 	    }
 	    /**
@@ -2776,63 +2964,85 @@
 	     *
 	     * @version 0.0.1
 	     * @since 0.0.1
+	     * @return 保持しているタイムスタンプ
 	     *
 	     */
 	    Timer.prototype.valueOf = function () {
-	        return this.datetime.valueOf();
+	        return this._currentTime.valueOf();
 	    };
 	    /**
 	     * 時間を現在に更新する
 	     *
 	     * @version 0.0.1
 	     * @since 0.0.1
+	     * @return 更新した時間のタイムスタンプ
 	     *
 	     */
 	    Timer.prototype.now = function () {
-	        this.datetime = new Date();
+	        this._currentTime = new Date();
 	        return this.valueOf();
 	    };
 	    /**
 	     * タイマーをスタートする
+	     * 継続中 'progress' イベントを発行し続ける
+	     * 継続時間を指定しなければずっと作動する
 	     *
-	     * @version 0.0.8
+	     * @version 0.9.0
 	     * @since 0.0.8
+	     * @param time 継続時間
+	     * @return インスタンス自身
+	     *
+	     * ```
+	     * let timer = new Timer();
+	     * timer.on('progress', (e, currentTime, startTime, context) => {
+	     * 	context.stop();
+	     * }).start();
+	     * ```
 	     *
 	     */
 	    Timer.prototype.start = function (time) {
 	        var _this = this;
-	        var startTimestamp = this.now();
+	        if (time === void 0) { time = Infinity; }
+	        var START_TIMESTAMP = this.now();
 	        this.stop();
-	        var tick = function () {
-	            _this.timerId = window.setTimeout(function () {
-	                var period = _this.now() - startTimestamp;
+	        var tick = function (time) {
+	            _this._timerId = setTimeout(function () {
+	                var now = _this.now();
+	                var period = now - START_TIMESTAMP;
 	                if (period < time) {
-	                    if (_this._onProgress) {
-	                        _this._onProgress.call(_this);
-	                    }
-	                    tick();
+	                    _this.trigger('progress', [now, START_TIMESTAMP, _this], _this);
+	                    tick(time);
 	                }
 	                else {
 	                    _this.stop();
 	                }
 	            }, _this.interval);
 	        };
+	        tick(time);
 	        return this;
 	    };
 	    /**
 	     * タイマーをストップする
 	     *
-	     * @version 0.0.8
+	     * @version 0.9.0
 	     * @since 0.0.8
+	     * @return インスタンス自身
 	     *
 	     */
 	    Timer.prototype.stop = function () {
-	        clearTimeout(this.timerId);
-	        this.timerId = null;
+	        var now = this.now();
+	        var e = new DispatchEvent('stop');
+	        this.trigger(e, [now, this._timerId, this], this);
+	        if (!e.isDefaultPrevented()) {
+	            clearTimeout(this._timerId);
+	            console.log('とめたで' + e.type);
+	            this._timerId = null;
+	        }
 	        return this;
 	    };
 	    /**
 	     * 遅延処理
+	     * `stop`メソッドで止めることが可能
 	     *
 	     * @version 0.0.8
 	     * @since 0.0.8
@@ -2844,23 +3054,10 @@
 	            context = this;
 	        }
 	        this.stop();
-	        this.timerId = window.setTimeout(function () {
+	        this._timerId = window.setTimeout(function () {
 	            _this.stop();
 	            callback.call(context);
 	        }, time);
-	        return this;
-	    };
-	    /**
-	     * プログレスイベントを登録
-	     *
-	     * @version 0.0.8
-	     * @since 0.0.8
-	     *
-	     */
-	    Timer.prototype.progress = function (callback) {
-	        if ($.isFunction(callback)) {
-	            this._onProgress = callback;
-	        }
 	        return this;
 	    };
 	    /**
@@ -2874,7 +3071,7 @@
 	        return new Timer().wait(time, callback, context);
 	    };
 	    return Timer;
-	})();
+	})(EventDispatcher);
 	module.exports = Timer;
 
 
@@ -3835,7 +4032,7 @@
 	/**
 	 * ユーティリティ配列クラス
 	 *
-	 * @version 0.2.0
+	 * @version 0.9.0
 	 * @since 0.2.0
 	 *
 	 */
@@ -3844,26 +4041,34 @@
 	    }
 	    /**
 	     * 配列中の対象の要素が一番最初に存在するインデックス番号を返す
+	     * 存在しない場合は -1 を返す
 	     *
-	     * @version 0.2.0
+	     * @version 0.9.0
 	     * @since 0.2.0
+	     * @param array 対象の配列
+	     * @param searchElement 検索対象
+	     * @return 検索結果の番号
 	     *
 	     */
-	    UtilArray.indexOf = function (array, element) {
-	        var i = 0;
-	        var l = array.length;
-	        for (; i < l; i++) {
-	            if (element === array[i]) {
+	    UtilArray.indexOf = function (array, searchElement) {
+	        if (Array.prototype.indexOf) {
+	            return array.indexOf(searchElement);
+	        }
+	        for (var i = 0, l = array.length; i < l; i++) {
+	            if (searchElement === array[i]) {
 	                return i;
 	            }
 	        }
 	        return -1;
 	    };
 	    /**
-	     * 配列中の対象のインデックスを削除する
+	     * 配列中の指定の番号の要素を削除して詰める
 	     *
 	     * @version 0.2.0
 	     * @since 0.2.0
+	     * @param array 対象の配列
+	     * @param index 削除する番号
+	     * @return 削除された配列
 	     *
 	     */
 	    UtilArray.remove = function (array, index) {
@@ -3882,7 +4087,7 @@
 	/**
 	 * ユーティリティ算術クラス
 	 *
-	 * @version 0.2.0
+	 * @version 0.9.0
 	 * @since 0.0.2
 	 *
 	 */
@@ -3892,9 +4097,8 @@
 	    /**
 	     * 指定の範囲のランダムな数を返す
 	     *
-	     * @version 0.2.0
+	     * @version 0.9.0
 	     * @since 0.2.0
-	     *
 	     * @param base 基準の数
 	     * @param dist 基準からこの数までの範囲の乱数になる
 	     * @return 乱数
@@ -3911,47 +4115,42 @@
 	    /**
 	     * 配列内の数値の合計を算出する
 	     *
-	     * @version 0.2.0
+	     * @version 0.9.0
 	     * @since 0.2.0
-	     *
 	     * @param numberList 数の配列
 	     * @return 合計値
 	     *
 	     */
 	    UtilMath.sum = function (numberList) {
+	        var numbers = numberList.slice();
 	        var result = 0;
-	        var i = 0;
-	        var l = numberList.length;
-	        for (; i < l; i++) {
-	            result += numberList[i];
+	        while (numbers.length) {
+	            result += numbers.shift();
 	        }
 	        return result;
 	    };
 	    /**
 	     * 均等に分割する
 	     *
-	     * @version 0.2.0
+	     * @version 0.9.0
 	     * @since 0.2.0
-	     *
 	     * @param n 分割される数
 	     * @param devide 分割する数
-	     * @param returnInfo 詳細情報を返すかどうか
-	     * @return `returnInfo`が真の場合 分割された数値で構成された配列を、偽の場合 詳細情報と結果を返す
+	     * @return 分割された数値で構成された配列
 	     *
 	     */
-	    UtilMath.split = function (n, devide, returnInfo) {
-	        if (returnInfo === void 0) { returnInfo = false; }
+	    UtilMath.split = function (n, devide) {
+	        var result = [];
 	        n = Math.floor(n);
 	        devide = Math.floor(devide);
 	        // 分割した数
 	        var splited = Math.floor(n / devide);
-	        // 余り
-	        var rem = n % devide;
-	        // 余りの数だけ+1される
-	        var addtion = rem;
-	        var result = [];
-	        var i = devide;
-	        if (!(devide <= 0)) {
+	        if (0 < devide) {
+	            var i = devide;
+	            // 余り
+	            var rem = n % devide;
+	            // 余りの数だけ+1される
+	            var addtion = rem;
 	            while (i--) {
 	                if (0 < addtion || rem < 0 && 0 === addtion) {
 	                    result.push(splited + 1);
@@ -3959,19 +4158,10 @@
 	                else {
 	                    result.push(splited);
 	                }
-	                addtion -= rem < 0 ? -1 : 1;
+	                addtion += rem < 0 ? 1 : -1;
 	            }
 	        }
-	        if (returnInfo) {
-	            return {
-	                result: result,
-	                commonNumber: splited,
-	                addtion: rem
-	            };
-	        }
-	        else {
-	            return result;
-	        }
+	        return result;
 	    };
 	    return UtilMath;
 	})();

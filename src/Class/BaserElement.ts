@@ -1,5 +1,5 @@
 import UtilString = require('./UtilString');
-import EventDispacher = require('./EventDispacher');
+import EventDispatcher = require('./EventDispatcher');
 import ElementClassNameCase = require('../Enum/ElementClassNameCase');
 import ClassNameSeparatorForBEM = require('../Enum/ClassNameSeparatorForBEM');
 import IElement = require('../Interface/IElement');
@@ -16,7 +16,7 @@ const DOUBLE_UNDERSCORE: string = '__';
  * @since 0.0.1
  *
  */
-class BaserElement extends EventDispacher implements IElement {
+class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * クラス名のデフォルトのプレフィックス

@@ -1,6 +1,6 @@
-import IEventDispacher = require('./IEventDispacher');
+import IEventDispatcher = require('./IEventDispatcher');
 
-interface IElement extends IEventDispacher {
+interface IElement extends IEventDispatcher {
 	id: string;
 	name: string;
 	$el: JQuery;

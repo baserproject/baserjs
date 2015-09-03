@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>baser.EventDispacher</title>
+<title>baser.EventDispatcher</title>
 <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
 
 </head>
@@ -25,60 +25,60 @@
 <script>
 "use strict";
 
-test('baser.EventDispacher.on/trigger のテスト', 2, function() {
+test('baser.EventDispatcher.on/trigger のテスト', 2, function() {
 
-	var eDispacher = new baser.EventDispacher();
+	var eDispatcher = new baser.EventDispatcher();
 
-	eDispacher.on('xEvent', function() {
+	eDispatcher.on('xEvent', function() {
 		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
 	});
-	eDispacher.on('xEvent', function() {
+	eDispatcher.on('xEvent', function() {
 		ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
 	});
 
-	eDispacher.trigger('xEvent');
+	eDispatcher.trigger('xEvent');
 
 });
 
-test('baser.EventDispacher.on/off のテスト', 0, function() {
+test('baser.EventDispatcher.on/off のテスト', 0, function() {
 
-	var eDispacher = new baser.EventDispacher();
+	var eDispatcher = new baser.EventDispatcher();
 
-	eDispacher.on('xEvent', function() {
+	eDispatcher.on('xEvent', function() {
 		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
 	});
-	eDispacher.on('xEvent', function() {
+	eDispatcher.on('xEvent', function() {
 		ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
 	});
 
-	eDispacher.off('xEvent');
+	eDispatcher.off('xEvent');
 
-	eDispacher.trigger('xEvent');
-
-});
-
-test('baser.EventDispacher.on 複数イベント のテスト', 1, function() {
-
-	var eDispacher = new baser.EventDispacher();
-
-	eDispacher.on('xEvent xEvent2', function() {
-		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
-	});
-
-	eDispacher.trigger('xEvent');
+	eDispatcher.trigger('xEvent');
 
 });
 
-test('baser.EventDispacher.on 複数イベント のテスト2', 2, function() {
+test('baser.EventDispatcher.on 複数イベント のテスト', 1, function() {
 
-	var eDispacher = new baser.EventDispacher();
+	var eDispatcher = new baser.EventDispatcher();
 
-	eDispacher.on('xEvent xEvent2', function() {
+	eDispatcher.on('xEvent xEvent2', function() {
 		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
 	});
 
-	eDispacher.trigger('xEvent');
-	eDispacher.trigger('xEvent2');
+	eDispatcher.trigger('xEvent');
+
+});
+
+test('baser.EventDispatcher.on 複数イベント のテスト2', 2, function() {
+
+	var eDispatcher = new baser.EventDispatcher();
+
+	eDispatcher.on('xEvent xEvent2', function() {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+	});
+
+	eDispatcher.trigger('xEvent');
+	eDispatcher.trigger('xEvent2');
 
 });
 

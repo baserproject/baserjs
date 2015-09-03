@@ -16,7 +16,7 @@
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 
 <!-- Core Module -->
-<script src="../baser.min.js"></script>
+<script src="../baser.js"></script>
 
 <!-- Qunit -->
 <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
@@ -25,9 +25,107 @@
 <script>
 "use strict";
 
-test('baser.Timer のテスト', function() {
+test('baser.Timer.start/stop のテスト', function(assert) {
+	
+	var done = assert.async();
 
-	ok(true, 'テスト内容考案中');
+	assert.ok(baser.Timer, 'baser.Timer 存在確認');
+	
+	var timer = new baser.Timer();
+	
+	assert.ok(timer, 'baser.Timer インスタンス');
+	
+	var counter = 0;
+	timer.on('progress', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			timer.stop();
+			assert.equal(counter, 10, 'baser.Timer timer.stopメソッドの成功');
+			done();
+		} else {
+			assert.ok(true, 'baser.Timer progressイベントの保証');
+		}
+		counter++;
+	}).start();
+
+});
+
+test('baser.Timer.start/this.stop のテスト', function(assert) {
+	
+	var done = assert.async();
+
+	assert.ok(baser.Timer, 'baser.Timer 存在確認');
+	
+	var timer = new baser.Timer();
+	
+	assert.ok(timer, 'baser.Timer インスタンス');
+	
+	var counter = 0;
+	timer.on('progress', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			this.stop();
+			assert.equal(counter, 10, 'baser.Timer this.stopメソッドの成功');
+			done();
+		} else {
+			assert.ok(true, 'baser.Timer progressイベントの保証');
+		}
+		counter++;
+	}).start();
+
+});
+
+test('baser.Timer.start/context.stop のテスト', function(assert) {
+	
+	var done = assert.async();
+
+	assert.ok(baser.Timer, 'baser.Timer 存在確認');
+	
+	var timer = new baser.Timer();
+	
+	assert.ok(timer, 'baser.Timer インスタンス');
+	
+	var counter = 0;
+	timer.on('progress', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			context.stop();
+			assert.equal(counter, 10, 'baser.Timer context.stopメソッドの成功');
+			done();
+		} else {
+			assert.ok(true, 'baser.Timer progressイベントの保証');
+		}
+		counter++;
+	}).start();
+
+});
+
+test('baser.Timer stopイベント のテスト', function(assert) {
+	
+	var done = assert.async();
+
+	assert.ok(baser.Timer, 'baser.Timer 存在確認');
+	
+	var timer = new baser.Timer();
+	
+	assert.ok(timer, 'baser.Timer インスタンス');
+	
+	var counter = 0;
+	var stopCounter = 0;
+	timer.on('progress', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			context.stop();
+			assert.ok(true, 'baser.Timer context.stop ' + stopCounter + '回目以降');
+		} else {
+			assert.ok(true, 'baser.Timer progressイベントの保証');
+		}
+		counter++;
+	}).on('stop', function (e, currentTime, timerId, context) {
+		stopCounter++;
+		if (stopCounter >= 3) {
+			done();
+			return;
+		} else {
+			return false;
+		}
+	}).start();
 
 });
 

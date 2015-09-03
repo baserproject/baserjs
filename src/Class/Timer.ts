@@ -1,29 +1,32 @@
+import DispatchEvent = require('./DispatchEvent');
+import EventDispatcher = require('./EventDispatcher');
+
 /**
  * 時間管理クラス
  *
- * @version 0.0.8
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
-class Timer {
+class Timer extends EventDispatcher {
 
 	/**
-	 * コアとなるDateオブジェクト
+	 * インスタンスの最終更新時間
 	 *
 	 * @version 0.0.1
 	 * @since 0.0.1
 	 *
 	 */
-	public datetime: Date;
+	private _currentTime: Date;
 
 	/**
 	 * タイマーID
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.8
 	 *
 	 */
-	public timerId: number = null;
+	private _timerId: number = null;
 
 	/**
 	 * インターバル
@@ -37,22 +40,14 @@ class Timer {
 	public interval: number = 13;
 
 	/**
-	 * プログレスイベントのコールバック
-	 *
-	 * @version 0.0.8
-	 * @since 0.0.8
-	 *
-	 */
-	private _onProgress: Function = null;
-
-	/**
 	 * コンストラクタ
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
 	constructor () {
+		super();
 		this.now();
 	}
 
@@ -61,10 +56,11 @@ class Timer {
 	 *
 	 * @version 0.0.1
 	 * @since 0.0.1
+	 * @return 保持しているタイムスタンプ
 	 *
 	 */
 	public valueOf (): number {
-		return this.datetime.valueOf();
+		return this._currentTime.valueOf();
 	}
 
 	/**
@@ -72,54 +68,74 @@ class Timer {
 	 *
 	 * @version 0.0.1
 	 * @since 0.0.1
+	 * @return 更新した時間のタイムスタンプ
 	 *
 	 */
 	public now (): number {
-		this.datetime = new Date();
+		this._currentTime = new Date();
 		return this.valueOf();
 	}
 
 	/**
 	 * タイマーをスタートする
+	 * 継続中 'progress' イベントを発行し続ける
+	 * 継続時間を指定しなければずっと作動する
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.8
+	 * @param time 継続時間
+	 * @return インスタンス自身
+	 * 
+	 * ```
+	 * let timer = new Timer();
+	 * timer.on('progress', (e, currentTime, startTime, context) => {
+	 * 	context.stop();
+	 * }).start();
+	 * ```
 	 *
 	 */
-	public start (time: number): Timer {
-		var startTimestamp: number = this.now();
+	public start (time: number = Infinity): Timer {
+		const START_TIMESTAMP: number = this.now();
 		this.stop();
-		var tick: Function = (): void => {
-			this.timerId = window.setTimeout( (): void => {
-				var period: number = this.now() - startTimestamp;
+		let tick = (time: number): void => {
+			this._timerId = setTimeout( (): void => {
+				let now: number = this.now();
+				let period: number = now - START_TIMESTAMP;
 				if (period < time) {
-					if (this._onProgress) {
-						this._onProgress.call(this);
-					}
-					tick();
+					this.trigger('progress', [now, START_TIMESTAMP, this], this);
+					tick(time);
 				} else {
 					this.stop();
 				}
 			}, this.interval);
 		};
+		tick(time);
 		return this;
 	}
 
 	/**
 	 * タイマーをストップする
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.8
+	 * @return インスタンス自身
 	 *
 	 */
 	public stop (): Timer {
-		clearTimeout(this.timerId);
-		this.timerId = null;
+		let now: number = this.now();
+		let e: DispatchEvent = new DispatchEvent('stop');
+		this.trigger(e, [now, this._timerId, this], this);
+		if (!e.isDefaultPrevented()) {
+			clearTimeout(this._timerId);
+			console.log('とめたで' + e.type);
+			this._timerId = null;
+		}
 		return this;
 	}
 
 	/**
 	 * 遅延処理
+	 * `stop`メソッドで止めることが可能
 	 *
 	 * @version 0.0.8
 	 * @since 0.0.8
@@ -130,24 +146,10 @@ class Timer {
 			context = this;
 		}
 		this.stop();
-		this.timerId = window.setTimeout( (): void => {
+		this._timerId = window.setTimeout( (): void => {
 			this.stop();
 			callback.call(context);
 		}, time);
-		return this;
-	}
-
-	/**
-	 * プログレスイベントを登録
-	 *
-	 * @version 0.0.8
-	 * @since 0.0.8
-	 *
-	 */
-	public progress (callback: Function): Timer {
-		if ($.isFunction(callback)) {
-			this._onProgress = callback;
-		}
 		return this;
 	}
 

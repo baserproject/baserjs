@@ -10,21 +10,22 @@ import UtilString = require('./UtilString');
 class Locational {
 
 	/**
-	 * クエリーストリングをハッシュにして返す
+	 * クエリー文字列をハッシュにして返す
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
+	 * @param queryString クエリー文字列
+	 * @return ハッシュデータ
 	 *
 	 */
 	static parseQueryString (queryString: string): { [index: string]: string | string[] } {
-		var params: any = {};
-		var queries: string[];
+		let params: any = {};
 		if (queryString) {
-			queries = queryString.split(/&/g);
-			$.each(queries, function (i: number, query: string) {
-				var keyValue: string[] = UtilString.divide(query, '=');
-				var key: string = keyValue[0];
-				var value: string = keyValue[1];
+			let queries: string[] = queryString.split(/&/g);
+			$.each<string>(queries, (i: number, query: string): void => {
+				let keyValue: string[] = UtilString.divide(query, '=');
+				let key: string = keyValue[0];
+				let value: string = keyValue[1];
 				if (key) {
 					if (/\[\]$/.test(key)) {
 						key = key.replace(/\[\]$/, '');
