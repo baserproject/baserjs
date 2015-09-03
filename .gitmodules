@@ -1,3 +1,0 @@
-[submodule "src/lib/jquery-mousewheel"]
-	path = src/lib/jquery-mousewheel
-	url = https://github.com/jquery/jquery-mousewheel.git

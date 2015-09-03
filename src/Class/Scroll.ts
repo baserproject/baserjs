@@ -49,7 +49,8 @@ class Scroll {
 		offset += this.options.offset || 0;
 
 		if (this.options.wheelCancel) {
-			$(document).on('mousewheel', (): void => {
+			// TODO: IE8 wheelイベント対応検討
+			$(document).on('wheel', (): void => {
 				if (this.isScroll) {
 					this._finish();
 					if ($.isFunction(this.options.onScrollCancel)) {

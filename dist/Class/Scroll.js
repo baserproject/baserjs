@@ -36,7 +36,8 @@ var Scroll = (function () {
         this.options = options || {};
         offset += this.options.offset || 0;
         if (this.options.wheelCancel) {
-            $(document).on('mousewheel', function () {
+            // TODO: IE8 wheelイベント対応検討
+            $(document).on('wheel', function () {
                 if (_this.isScroll) {
                     _this._finish();
                     if ($.isFunction(_this.options.onScrollCancel)) {

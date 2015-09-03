@@ -41,12 +41,6 @@ module.exports = function(grunt) {
       },
     },
     concat: {
-      lib: {
-        src: [
-          'src/lib/jquery-mousewheel/jquery.mousewheel.js'
-        ],
-        dest: 'src/__tmp/__lib.js'
-      },
       dist: {
         options: {
           banner: '<%= meta.banner %>' + '\n' +
@@ -115,7 +109,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', [
     'typescript',
-    'concat:lib',
     'concat:dist',
     'uglify',
     'qunit',
