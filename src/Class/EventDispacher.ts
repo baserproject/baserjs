@@ -1,3 +1,4 @@
+import DispacheEvent = require('./DispacheEvent');
 import EventHandler = require('./EventHandler');
 import IEventDispacher = require('../Interface/IEventDispacher');
 

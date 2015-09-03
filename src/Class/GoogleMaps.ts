@@ -175,7 +175,7 @@ class GoogleMaps extends BaserElement {
 
 		if (mapCenterAddress) {
 			// 住所から緯度・経度を検索する（非同期）
-			Map.getLatLngByAddress(mapCenterAddress, (lat: number, lng: number): void => {
+			GoogleMaps.getLatLngByAddress(mapCenterAddress, (lat: number, lng: number): void => {
 				this._render(lat, lng);
 			});
 		} else {

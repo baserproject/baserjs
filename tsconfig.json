@@ -6,10 +6,7 @@
         "declaration": true
     },
     "files": [
-        // d.ts
-        "typings/bundle.d.ts",
-
-        // Interface
+        "./typings/bundle.d.ts",
         "./src/Interface/AlignedBoxCallback.ts",
         "./src/Interface/BreakPointsOption.ts",
         "./src/Interface/BrowserUserAgent.ts",
@@ -29,12 +26,8 @@
         "./src/Interface/TextFieldOption.ts",
         "./src/Interface/YouTubeMuteControllerOptions.ts",
         "./src/Interface/YouTubeOption.ts",
-
-        // Enum
         "./src/Enum/ClassNameSeparatorForBEM.ts",
         "./src/Enum/ElementClassNameCase.ts",
-
-        // Class
         "src/Class/AlignedBoxes.ts",
         "src/Class/AnimationFrames.ts",
         "src/Class/BaserElement.ts",
@@ -58,6 +51,8 @@
         "src/Class/UtilArray.ts",
         "src/Class/UtilMath.ts",
         "src/Class/UtilString.ts",
-        "src/Class/YouTube.ts"
+        "src/Class/YouTube.ts",
+        "src/baser.ts",
+        "src/baserJS.ts"
     ]
 }

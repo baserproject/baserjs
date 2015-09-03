@@ -1,5 +1,9 @@
+import UtilString = require('./UtilString');
+import Browser = require('./Browser');
+import BreakPoints = require('./BreakPoints');
 import BaserElement = require('./BaserElement');
 import AlignedBoxCallback = require('../Interface/AlignedBoxCallback');
+import BreakPointsOption = require('../Interface/BreakPointsOption');
 
 /**
  * 高さ揃えをするボックスを管理するクラス
@@ -216,7 +220,7 @@ class AlignedBoxes extends BaserElement {
 			this.destroy();
 		}
 
-		uid = utility.String.UID();
+		uid = UtilString.UID();
 		this.$el.data(AlignedBoxes.DATA_KEY_ID, uid);
 
 		this.$el.data(AlignedBoxes.DATA_KEY, this);
@@ -263,7 +267,7 @@ class AlignedBoxes extends BaserElement {
 			var $box: JQuery = $(elem);
 
 			// 要素の高さを強制に無効にする
-			Element.removeCSSPropertyFromDOMElement('height', elem);
+			BaserElement.removeCSSPropertyFromDOMElement('height', elem);
 
 			// column が 0 だと最初の要素の意味
 			var column: number = i % this._currentColumn;

@@ -7,7 +7,7 @@ import UtilString = require('./UtilString');
  * @since 0.7.0
  *
  */
-export class Locational {
+class Locational {
 
 	/**
 	 * クエリーストリングをハッシュにして返す

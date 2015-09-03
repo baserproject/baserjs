@@ -5,7 +5,7 @@
  * @since 0.0.1
  *
  */
-export class Timer {
+class Timer {
 
 	/**
 	 * コアとなるDateオブジェクト
