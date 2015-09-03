@@ -3,25 +3,26 @@ webpack = require 'gulp-webpack'
 ts = require 'gulp-typescript'
 typedoc = require 'gulp-typedoc'
 uglify = require 'gulp-uglify'
+rename = require 'gulp-rename'
+runSequence = require 'run-sequence'
 
 project = ts.createProject './tsconfig.json'
 
 gulp.task 'ts', ->
 	result = project.src()
-		.pipe ts project
+		.pipe ts project 
 	result.js
-		.pipe gulp.dest './'
+		.pipe gulp.dest './dist/'
 
 gulp.task 'pack', ->
-	gulp.src 'src/baserJS.ts'
+	gulp.src 'dist/src/baserJS.js'
 		.pipe webpack output: filename: 'baser.js'
 		.pipe gulp.dest './'
 
 gulp.task 'compress', ->
 	gulp.src './baser.js'
-		.pipe uglify
-			preserveComments: 'license'
-			output: file: 'baser.min.js'
+		.pipe uglify preserveComments: 'license'
+		.pipe rename 'baser.min.js'
 		.pipe gulp.dest './'
 
 gulp.task 'docs', ->
@@ -35,9 +36,10 @@ gulp.task 'docs', ->
 gulp.task 'watch', ->
 	gulp.watch 'src/**/*.ts', ['default']
 
-gulp.task 'default', [
-	'ts'
-	'pack'
-	'compress'
-]
+gulp.task 'default', (cb) -> runSequence(
+	'ts',
+	'pack',
+	'compress',
+	cb
+)
 	
