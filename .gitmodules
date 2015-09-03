@@ -1,6 +1,3 @@
 [submodule "src/lib/jquery-mousewheel"]
 	path = src/lib/jquery-mousewheel
 	url = https://github.com/jquery/jquery-mousewheel.git
-[submodule "src/lib/jquery-cookie"]
-	path = src/lib/jquery-cookie
-	url = https://github.com/carhartl/jquery-cookie.git

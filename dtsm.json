@@ -16,9 +16,6 @@
     },
     "googlemaps/google.maps.d.ts": {
       "ref": "8e02d8df4e476fe08ec3f5e4dc36db4e645ea34f"
-    },
-    "jquery.cookie/jquery.cookie.d.ts": {
-      "ref": "304a25197990aeabf8e9fd030ad927ed011b9e83"
     }
   }
 }
