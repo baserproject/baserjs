@@ -28,7 +28,7 @@ declare class UtilMath {
      * @return 合計値
      *
      */
-    static sam(numberList: number[]): number;
+    static sum(numberList: number[]): number;
     /**
      * 均等に分割する
      *

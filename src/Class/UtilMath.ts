@@ -35,7 +35,7 @@ class UtilMath {
 	 * @return 合計値
 	 *
 	 */
-	static sam (numberList: number[]): number {
+	static sum (numberList: number[]): number {
 		var result: number = 0;
 		var i: number = 0;
 		var l: number = numberList.length;

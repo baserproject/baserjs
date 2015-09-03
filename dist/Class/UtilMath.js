@@ -37,7 +37,7 @@ var UtilMath = (function () {
      * @return 合計値
      *
      */
-    UtilMath.sam = function (numberList) {
+    UtilMath.sum = function (numberList) {
         var result = 0;
         var i = 0;
         var l = numberList.length;
