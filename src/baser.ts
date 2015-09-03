@@ -1,3 +1,9 @@
+import _ClassNameSeparatorForBEM = require('./Enum/ClassNameSeparatorForBEM');
+import _ElementClassNameCase = require('./Enum/ElementClassNameCase');
+
+export var ClassNameSeparatorForBEM = _ClassNameSeparatorForBEM;
+export var ElementClassNameCase = _ElementClassNameCase;
+
 import _AlignedBoxes = require('./Class/AlignedBoxes');
 import _AnimationFrames = require('./Class/AnimationFrames');
 import _BaserElement = require('./Class/BaserElement');
