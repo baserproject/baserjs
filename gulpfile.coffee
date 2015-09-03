@@ -30,13 +30,14 @@ gulp.task 'test', ->
 	gulp.src './test/*.html'
 		.pipe qunit timeout: 30
 
-# gulp.task 'docs', ->
-# 	gulp.src 'src/baserJS.ts'
-# 		.pipe typedoc
-# 			target: 'ES5'
-# 			includeDeclarations: on
-# 			mode: 'file'
-# 			out: 'docs'
+gulp.task 'docs', ->
+	gulp.src './src/baserJS.ts'
+		.pipe typedoc
+			module: 'commonjs'
+			target: 'ES5'
+			includeDeclarations: on
+			mode: 'file'
+			out: 'docs'
 
 gulp.task 'dev-ts', (cb) -> runSequence(
 	'ts',

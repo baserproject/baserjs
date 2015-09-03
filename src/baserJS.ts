@@ -1,3 +1,5 @@
+/// <reference path="../typings/bundle.d.ts" />
+
 import baser = require('./baser');
 window['baser'] = baser;
 

@@ -44,6 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/// <reference path="../typings/bundle.d.ts" />
 	var baser = __webpack_require__(1);
 	window['baser'] = baser;
 	var JQueryAdapter = __webpack_require__(28);
