@@ -4,6 +4,7 @@ ts = require 'gulp-typescript'
 typedoc = require 'gulp-typedoc'
 uglify = require 'gulp-uglify'
 rename = require 'gulp-rename'
+qunit = require 'gulp-qunit'
 runSequence = require 'run-sequence'
 
 project = ts.createProject './tsconfig.json'
@@ -24,6 +25,10 @@ gulp.task 'compress', ->
 		.pipe uglify preserveComments: 'license'
 		.pipe rename 'baser.min.js'
 		.pipe gulp.dest './'
+		
+gulp.task 'test', ->
+	gulp.src './test/*.html'
+		.pipe qunit timeout: 30
 
 # gulp.task 'docs', ->
 # 	gulp.src 'src/baserJS.ts'
@@ -33,13 +38,31 @@ gulp.task 'compress', ->
 # 			mode: 'file'
 # 			out: 'docs'
 
-gulp.task 'watch', ->
-	gulp.watch 'src/**/*.ts', ['default']
+gulp.task 'dev-ts', (cb) -> runSequence(
+	'ts',
+	cb
+)
 
-gulp.task 'default', (cb) -> runSequence(
+gulp.task 'dev-web', (cb) -> runSequence(
+	'ts',
+	'pack',
+	cb
+)
+
+gulp.task 'watch', ->
+	gulp.watch 'src/**/*.ts', ['dev-web']
+
+gulp.task 'build', (cb) -> runSequence(
 	'ts',
 	'pack',
 	'compress',
+	'test',
+	cb
+)
+
+gulp.task 'default', (cb) -> runSequence(
+	'build',
+	'test',
 	cb
 )
 	
