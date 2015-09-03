@@ -6,14 +6,35 @@
         "declaration": true
     },
     "files": [
-        "src/Interface/ICheckableElement.ts",
-        "src/Interface/ICheckbox.ts",
-        "src/Interface/IElement.ts",
-        "src/Interface/IEventDispacher.ts",
-        "src/Interface/IFormElement.ts",
-        "src/Interface/IRadio.ts",
-        "src/Interface/ISelect.ts",
-        "src/Interface/ITextField.ts",
+        // d.ts
+        "typings/bundle.d.ts",
+
+        // Interface
+        "./src/Interface/AlignedBoxCallback.ts",
+        "./src/Interface/BreakPointsOption.ts",
+        "./src/Interface/BrowserUserAgent.ts",
+        "./src/Interface/CheckableElementOption.ts",
+        "./src/Interface/FormElementOption.ts",
+        "./src/Interface/GoogleMapsOption.ts",
+        "./src/Interface/ICheckableElement.ts",
+        "./src/Interface/ICheckbox.ts",
+        "./src/Interface/IElement.ts",
+        "./src/Interface/IEventDispacher.ts",
+        "./src/Interface/IFormElement.ts",
+        "./src/Interface/IRadio.ts",
+        "./src/Interface/ISelect.ts",
+        "./src/Interface/ITextField.ts",
+        "./src/Interface/ScrollOptions.ts",
+        "./src/Interface/SelectOption.ts",
+        "./src/Interface/TextFieldOption.ts",
+        "./src/Interface/YouTubeMuteControllerOptions.ts",
+        "./src/Interface/YouTubeOption.ts",
+
+        // Enum
+        "./src/Enum/ClassNameSeparatorForBEM.ts",
+        "./src/Enum/ElementClassNameCase.ts",
+
+        // Class
         "src/Class/AlignedBoxes.ts",
         "src/Class/AnimationFrames.ts",
         "src/Class/BaserElement.ts",

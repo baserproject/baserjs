@@ -1,53 +1,57 @@
-module baser.ui.element {
+import BaserElement = require('./BaserElement');
+import FormElement = require('./FormElement');
+import CheckableElement = require('./CheckableElement');
+import ICheckbox = require('../Interface/ICheckbox');
+import CheckableElementOption = require('../Interface/CheckableElementOption');
+
+/**
+ * チェックボックスの拡張クラス
+ *
+ * @version 0.1.0
+ * @since 0.0.1
+ *
+ */
+class Checkbox extends CheckableElement implements ICheckbox {
 
 	/**
-	 * チェックボックスの拡張クラス
+	 * Checkbox要素のクラス
 	 *
 	 * @version 0.1.0
-	 * @since 0.0.1
+	 * @since 0.1.0
 	 *
 	 */
-	export class Checkbox extends CheckableElement {
+	static classNameCheckbox: string = 'form-checkbox';
 
-		/**
-		 * Checkbox要素のクラス
-		 *
-		 * @version 0.1.0
-		 * @since 0.1.0
-		 *
-		 */
-		static classNameCheckbox: string = 'form-checkbox';
+	/**
+	 * コンストラクタ
+	 *
+	 * @version 0.8.0
+	 * @since 0.0.1
+	 * @param $el 管理するDOM要素のjQueryオブジェクト
+	 * @param options オプション
+	 *
+	 */
+	constructor ($el: JQuery, options: CheckableElementOption) {
 
-		/**
-		 * コンストラクタ
-		 *
-		 * @version 0.8.0
-		 * @since 0.0.1
-		 * @param $el 管理するDOM要素のjQueryオブジェクト
-		 * @param options オプション
-		 *
-		 */
-		constructor ($el: JQuery, options: CheckableElementOption) {
+		super($el, options);
 
-			super($el, options);
-
-			// 既にエレメント化されていた場合は何もしない
-			if (this._elementized) {
-				return;
-			}
-
-			// IE6・7は反映させない
-			if (!$el[0].querySelector) {
-				return;
-			}
-
-			this.addClass(Checkbox.classNameCheckbox);
-			Element.addClassTo(this.$label, Checkbox.classNameCheckbox, FormElement.classNameLabel);
-			Element.addClassTo(this.$wrapper, Checkbox.classNameCheckbox + '-' + FormElement.classNameWrapper);
-
+		// 既にエレメント化されていた場合は何もしない
+		if (this._elementized) {
+			return;
 		}
+
+		// IE6・7は反映させない
+		if (!$el[0].querySelector) {
+			return;
+		}
+
+		this.addClass(Checkbox.classNameCheckbox);
+		BaserElement.addClassTo(this.$label, Checkbox.classNameCheckbox, FormElement.classNameLabel);
+		BaserElement.addClassTo(this.$wrapper, Checkbox.classNameCheckbox + '-' + FormElement.classNameWrapper);
 
 	}
 
 }
+
+export = Checkbox;
 

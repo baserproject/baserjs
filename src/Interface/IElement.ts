@@ -1,4 +1,3 @@
-/// <reference path="../../typings/bundle.d.ts" />
 import IEventDispacher = require('./IEventDispacher');
 
 interface IElement extends IEventDispacher {
