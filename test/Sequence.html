@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>baser.ui.Sequence</title>
+<title>baser.Sequence</title>
 <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
 
 </head>
@@ -31,7 +31,7 @@ test('Basic Test: iterator and value, this context', function (assert) {
 
 	var done = assert.async();
 
-	var s = new baser.ui.Sequence([
+	var s = new baser.Sequence([
 		function (i, value) {
 			assert.strictEqual(i, 0, 'iterator');
 			assert.strictEqual(value, 'value', 'value');
@@ -56,7 +56,7 @@ test('Loop Test', function (assert) {
 
 	var done = assert.async();
 
-	var s = new baser.ui.Sequence([
+	var s = new baser.Sequence([
 		function (i, value) {
 			if (i >= 100) {
 				this.exit();
@@ -87,7 +87,7 @@ test('Waiting Test', function (assert) {
 
 	var start;
 
-	var s = new baser.ui.Sequence([
+	var s = new baser.Sequence([
 		function (i, value) {
 			start = Date.now();
 			assert.strictEqual(i, 0, 'iterator');
@@ -118,7 +118,7 @@ test('Loop & Wait Test', function (assert) {
 
 	var WAIT_TIME = 500;
 
-	var s = new baser.ui.Sequence([
+	var s = new baser.Sequence([
 		function (i, value) {
 			if (i >= 10) {
 				this.exit();
@@ -151,7 +151,7 @@ test('jQuery Deferred Test', function (assert) {
 
 	var start;
 
-	var s = new baser.ui.Sequence([
+	var s = new baser.Sequence([
 		function (i, value) {
 			start = Date.now();
 			assert.strictEqual(i, 0, 'iterator');
@@ -185,7 +185,7 @@ test('jQuery Deferred Test2', function (assert) {
 
 	var start;
 
-	var s = new baser.ui.Sequence([
+	var s = new baser.Sequence([
 		function (i, value) {
 			start = Date.now();
 			assert.strictEqual(i, 0, 'iterator');
@@ -221,7 +221,7 @@ test('jQuery Animation Test1', function (assert) {
 
 	var $anim = $('#anim');
 
-	var s = new baser.ui.Sequence([
+	var s = new baser.Sequence([
 		function (i, value) {
 			start = Date.now();
 			assert.strictEqual(i, 0, 'iterator');
@@ -253,7 +253,7 @@ test('jQuery Animation Test2', function (assert) {
 
 	var $anim = $('#anim');
 
-	var s = new baser.ui.Sequence([
+	var s = new baser.Sequence([
 		function (i, value) {
 			start = Date.now();
 			assert.strictEqual(i, 0, 'iterator');
@@ -283,7 +283,7 @@ test('jQuery Ajax Test', function (assert) {
 
 	var done = assert.async();
 
-	var s = new baser.ui.Sequence([
+	var s = new baser.Sequence([
 		function (i, value) {
 			assert.strictEqual(i, 0, 'iterator');
 			assert.strictEqual(value, 'value', 'value');

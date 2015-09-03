@@ -55,19 +55,23 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _AlignedBoxes = __webpack_require__(2);
+	var _ClassNameSeparatorForBEM = __webpack_require__(2);
+	var _ElementClassNameCase = __webpack_require__(3);
+	exports.ClassNameSeparatorForBEM = _ClassNameSeparatorForBEM;
+	exports.ElementClassNameCase = _ElementClassNameCase;
+	var _AlignedBoxes = __webpack_require__(4);
 	var _AnimationFrames = __webpack_require__(13);
-	var _BaserElement = __webpack_require__(10);
-	var _BreakPoints = __webpack_require__(9);
-	var _Browser = __webpack_require__(4);
+	var _BaserElement = __webpack_require__(12);
+	var _BreakPoints = __webpack_require__(11);
+	var _Browser = __webpack_require__(6);
 	var _CheckableElement = __webpack_require__(14);
 	var _Checkbox = __webpack_require__(16);
-	var _DispacheEvent = __webpack_require__(6);
-	var _EventDispacher = __webpack_require__(5);
-	var _EventHandler = __webpack_require__(7);
+	var _DispacheEvent = __webpack_require__(8);
+	var _EventDispacher = __webpack_require__(7);
+	var _EventHandler = __webpack_require__(9);
 	var _FormElement = __webpack_require__(15);
 	var _GoogleMaps = __webpack_require__(17);
-	var _Locational = __webpack_require__(8);
+	var _Locational = __webpack_require__(10);
 	var _Radio = __webpack_require__(18);
 	var _RadioGroup = __webpack_require__(19);
 	var _Scroll = __webpack_require__(20);
@@ -77,7 +81,7 @@
 	var _Timer = __webpack_require__(21);
 	var _UtilArray = __webpack_require__(25);
 	var _UtilMath = __webpack_require__(26);
-	var _UtilString = __webpack_require__(3);
+	var _UtilString = __webpack_require__(5);
 	var _YouTube = __webpack_require__(27);
 	exports.AlignedBoxes = _AlignedBoxes;
 	exports.AnimationFrames = _AnimationFrames;
@@ -107,6 +111,48 @@
 
 /***/ },
 /* 2 */
+/***/ function(module, exports) {
+
+	/**
+	 * BEM式のクラス名の接続形式
+	 *
+	 * @version 0.1.0
+	 * @since 0.1.0
+	 *
+	 */
+	var ClassNameSeparatorForBEM;
+	(function (ClassNameSeparatorForBEM) {
+	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["HYPHEN"] = 0] = "HYPHEN";
+	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["DOUBLE_HYPHEN"] = 1] = "DOUBLE_HYPHEN";
+	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["UNDERSCORE"] = 2] = "UNDERSCORE";
+	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["DOUBLE_UNDERSCORE"] = 3] = "DOUBLE_UNDERSCORE";
+	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["CAMEL_CASE"] = 4] = "CAMEL_CASE";
+	})(ClassNameSeparatorForBEM || (ClassNameSeparatorForBEM = {}));
+	module.exports = ClassNameSeparatorForBEM;
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	/**
+	 * クラス名の形式
+	 *
+	 * @version 0.1.0
+	 * @since 0.0.1
+	 *
+	 */
+	var ElementClassNameCase;
+	(function (ElementClassNameCase) {
+	    ElementClassNameCase[ElementClassNameCase["HYPHEN_DELIMITED"] = 0] = "HYPHEN_DELIMITED";
+	    ElementClassNameCase[ElementClassNameCase["SNAKE_CASE"] = 1] = "SNAKE_CASE";
+	    ElementClassNameCase[ElementClassNameCase["CAMEL_CASE"] = 2] = "CAMEL_CASE";
+	})(ElementClassNameCase || (ElementClassNameCase = {}));
+	module.exports = ElementClassNameCase;
+
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -115,10 +161,10 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var UtilString = __webpack_require__(3);
-	var Browser = __webpack_require__(4);
-	var BreakPoints = __webpack_require__(9);
-	var BaserElement = __webpack_require__(10);
+	var UtilString = __webpack_require__(5);
+	var Browser = __webpack_require__(6);
+	var BreakPoints = __webpack_require__(11);
+	var BaserElement = __webpack_require__(12);
 	/**
 	 * 高さ揃えをするボックスを管理するクラス
 	 *
@@ -361,7 +407,7 @@
 
 
 /***/ },
-/* 3 */
+/* 5 */
 /***/ function(module, exports) {
 
 	/**
@@ -475,7 +521,7 @@
 
 
 /***/ },
-/* 4 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -484,8 +530,8 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var EventDispacher = __webpack_require__(5);
-	var Locational = __webpack_require__(8);
+	var EventDispacher = __webpack_require__(7);
+	var Locational = __webpack_require__(10);
 	/**
 	 * ブラウザの情報を管理するクラス
 	 *
@@ -637,11 +683,11 @@
 
 
 /***/ },
-/* 5 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DispacheEvent = __webpack_require__(6);
-	var EventHandler = __webpack_require__(7);
+	var DispacheEvent = __webpack_require__(8);
+	var EventHandler = __webpack_require__(9);
 	/**
 	 * イベント駆動できるクラス
 	 *
@@ -745,7 +791,7 @@
 
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/**
@@ -772,10 +818,10 @@
 
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UtilString = __webpack_require__(3);
+	var UtilString = __webpack_require__(5);
 	/**
 	 * イベントハンドラのラッパークラス
 	 *
@@ -796,10 +842,10 @@
 
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UtilString = __webpack_require__(3);
+	var UtilString = __webpack_require__(5);
 	/**
 	 * URLの情報を管理するクラス
 	 *
@@ -924,7 +970,7 @@
 
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -933,8 +979,8 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var EventDispacher = __webpack_require__(5);
-	var Browser = __webpack_require__(4);
+	var EventDispacher = __webpack_require__(7);
+	var Browser = __webpack_require__(6);
 	/**
 	 * ブレークポイントの変化に応じた処理をする管理することができるクラス
 	 *
@@ -1017,7 +1063,7 @@
 
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __extends = (this && this.__extends) || function (d, b) {
@@ -1026,10 +1072,10 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var UtilString = __webpack_require__(3);
-	var EventDispacher = __webpack_require__(5);
-	var ElementClassNameCase = __webpack_require__(11);
-	var ClassNameSeparatorForBEM = __webpack_require__(12);
+	var UtilString = __webpack_require__(5);
+	var EventDispacher = __webpack_require__(7);
+	var ElementClassNameCase = __webpack_require__(3);
+	var ClassNameSeparatorForBEM = __webpack_require__(2);
 	var HYPHEN = '-';
 	var DOUBLE_HYPHEN = '--';
 	var UNDERSCORE = '_';
@@ -1370,48 +1416,6 @@
 
 
 /***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	/**
-	 * クラス名の形式
-	 *
-	 * @version 0.1.0
-	 * @since 0.0.1
-	 *
-	 */
-	var ElementClassNameCase;
-	(function (ElementClassNameCase) {
-	    ElementClassNameCase[ElementClassNameCase["HYPHEN_DELIMITED"] = 0] = "HYPHEN_DELIMITED";
-	    ElementClassNameCase[ElementClassNameCase["SNAKE_CASE"] = 1] = "SNAKE_CASE";
-	    ElementClassNameCase[ElementClassNameCase["CAMEL_CASE"] = 2] = "CAMEL_CASE";
-	})(ElementClassNameCase || (ElementClassNameCase = {}));
-	module.exports = ElementClassNameCase;
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	/**
-	 * BEM式のクラス名の接続形式
-	 *
-	 * @version 0.1.0
-	 * @since 0.1.0
-	 *
-	 */
-	var ClassNameSeparatorForBEM;
-	(function (ClassNameSeparatorForBEM) {
-	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["HYPHEN"] = 0] = "HYPHEN";
-	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["DOUBLE_HYPHEN"] = 1] = "DOUBLE_HYPHEN";
-	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["UNDERSCORE"] = 2] = "UNDERSCORE";
-	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["DOUBLE_UNDERSCORE"] = 3] = "DOUBLE_UNDERSCORE";
-	    ClassNameSeparatorForBEM[ClassNameSeparatorForBEM["CAMEL_CASE"] = 4] = "CAMEL_CASE";
-	})(ClassNameSeparatorForBEM || (ClassNameSeparatorForBEM = {}));
-	module.exports = ClassNameSeparatorForBEM;
-
-
-/***/ },
 /* 13 */
 /***/ function(module, exports) {
 
@@ -1493,7 +1497,7 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var BaserElement = __webpack_require__(10);
+	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
 	/**
 	 * ラジオボタンとチェックボックスの抽象クラス
@@ -1630,7 +1634,7 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var BaserElement = __webpack_require__(10);
+	var BaserElement = __webpack_require__(12);
 	/**
 	 * フォーム要素の抽象クラス
 	 *
@@ -2039,7 +2043,7 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var BaserElement = __webpack_require__(10);
+	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
 	var CheckableElement = __webpack_require__(14);
 	/**
@@ -2097,7 +2101,7 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var BaserElement = __webpack_require__(10);
+	var BaserElement = __webpack_require__(12);
 	/**
 	 * マップ要素
 	 *
@@ -2425,7 +2429,7 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var BaserElement = __webpack_require__(10);
+	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
 	var CheckableElement = __webpack_require__(14);
 	var RadioGroup = __webpack_require__(19);
@@ -2882,9 +2886,9 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var BaserElement = __webpack_require__(10);
+	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
-	var Browser = __webpack_require__(4);
+	var Browser = __webpack_require__(6);
 	/**
 	 * セレクトボックスの拡張クラス
 	 *
@@ -3583,7 +3587,7 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var BaserElement = __webpack_require__(10);
+	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
 	/**
 	 * テキストフィールドの拡張クラス
@@ -3912,7 +3916,7 @@
 	     * @return 合計値
 	     *
 	     */
-	    UtilMath.sam = function (numberList) {
+	    UtilMath.sum = function (numberList) {
 	        var result = 0;
 	        var i = 0;
 	        var l = numberList.length;
@@ -3982,7 +3986,7 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var BaserElement = __webpack_require__(10);
+	var BaserElement = __webpack_require__(12);
 	/**
 	 * YouTube要素
 	 *
@@ -4329,9 +4333,9 @@
 	var UtilMath = __webpack_require__(26);
 	var Timer = __webpack_require__(21);
 	var AnimationFrames = __webpack_require__(13);
-	var Browser = __webpack_require__(4);
-	var BaserElement = __webpack_require__(10);
-	var AlignedBoxes = __webpack_require__(2);
+	var Browser = __webpack_require__(6);
+	var BaserElement = __webpack_require__(12);
+	var AlignedBoxes = __webpack_require__(4);
 	var Checkbox = __webpack_require__(16);
 	var Radio = __webpack_require__(18);
 	var Select = __webpack_require__(22);

@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>baser.ui.event.EventDispacher</title>
+<title>baser.EventDispacher</title>
 <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
 
 </head>
@@ -25,9 +25,9 @@
 <script>
 "use strict";
 
-test('baser.ui.event.EventDispacher.on/trigger のテスト', 2, function() {
+test('baser.EventDispacher.on/trigger のテスト', 2, function() {
 
-	var eDispacher = new baser.ui.event.EventDispacher();
+	var eDispacher = new baser.EventDispacher();
 
 	eDispacher.on('xEvent', function() {
 		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
@@ -40,9 +40,9 @@ test('baser.ui.event.EventDispacher.on/trigger のテスト', 2, function() {
 
 });
 
-test('baser.ui.event.EventDispacher.on/off のテスト', 0, function() {
+test('baser.EventDispacher.on/off のテスト', 0, function() {
 
-	var eDispacher = new baser.ui.event.EventDispacher();
+	var eDispacher = new baser.EventDispacher();
 
 	eDispacher.on('xEvent', function() {
 		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
@@ -57,9 +57,9 @@ test('baser.ui.event.EventDispacher.on/off のテスト', 0, function() {
 
 });
 
-test('baser.ui.event.EventDispacher.on 複数イベント のテスト', 1, function() {
+test('baser.EventDispacher.on 複数イベント のテスト', 1, function() {
 
-	var eDispacher = new baser.ui.event.EventDispacher();
+	var eDispacher = new baser.EventDispacher();
 
 	eDispacher.on('xEvent xEvent2', function() {
 		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
@@ -69,9 +69,9 @@ test('baser.ui.event.EventDispacher.on 複数イベント のテスト', 1, func
 
 });
 
-test('baser.ui.event.EventDispacher.on 複数イベント のテスト2', 2, function() {
+test('baser.EventDispacher.on 複数イベント のテスト2', 2, function() {
 
-	var eDispacher = new baser.ui.event.EventDispacher();
+	var eDispacher = new baser.EventDispacher();
 
 	eDispacher.on('xEvent xEvent2', function() {
 		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');

@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>baser.ui.element.Select</title>
+<title>baser.Select</title>
 <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
 
 </head>
@@ -63,7 +63,7 @@ test('added class names', function() {
 
 	var $target = $('#target');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.Select($target);
 
 	ok(target.$el.parent('span').hasClass('-bc-form-element'), 'class name of wrapper');
 	ok(target.$el.parent('span').hasClass('-bc-wrapper'), 'class name of wrapper');
@@ -97,7 +97,7 @@ test('wrapped label', function() {
 
 	var $target = $('#target-wrapped-label');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.Select($target);
 
 	ok(target.$label.hasClass('-bc-form-element'), 'class name of label element');
 	ok(target.$label.hasClass('-bc-form-element__label'), 'class name of label element');
@@ -113,7 +113,7 @@ test('wrapped label - optional label', function() {
 
 	var $target = $('#target-wrapped-label');
 
-	var target = new baser.ui.element.Select($target, {
+	var target = new baser.Select($target, {
 		label: 'labelFromOption'
 	});
 
@@ -126,7 +126,7 @@ test('leaved label', function() {
 
 	var $target = $('#target-with-label');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.Select($target);
 
 	ok(target.$label.hasClass('-bc-form-element'), 'class name of label element');
 	ok(target.$label.hasClass('-bc-form-element__label'), 'class name of label element');
@@ -142,7 +142,7 @@ test('leaved label - optional label', function() {
 
 	var $target = $('#target-with-label');
 
-	var target = new baser.ui.element.Select($target, {
+	var target = new baser.Select($target, {
 		label: 'labelFromOption'
 	});
 
@@ -155,7 +155,7 @@ test('title label - optional label', function() {
 
 	var $target = $('#target-title-label');
 
-	var target = new baser.ui.element.FormElement($target);
+	var target = new baser.FormElement($target);
 
 	equal(target.label, 'title-label', 'text of label');
 
@@ -165,7 +165,7 @@ test('default value', function() {
 
 	var $target = $('#target-default-value');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.Select($target);
 
 	equal(target.defaultValue, 'default-value', 'default value');
 
@@ -176,7 +176,7 @@ test('disabled - get', function() {
 
 	var $target = $('#target-disabled');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.Select($target);
 
 	ok(target.disabled, 'disabled is true');
 	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
@@ -195,7 +195,7 @@ test('disabled - change', function() {
 
 	var $target = $('#target-disabled');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.Select($target);
 
 	ok(target.disabled, 'disabled is true');
 	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
@@ -220,7 +220,7 @@ test('disabled - change', function() {
 
 	var $target = $('#target-disabled');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.Select($target);
 
 	ok(target.disabled, 'disabled is true');
 	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
@@ -247,7 +247,7 @@ test('setValue (invalid value) / change event', function() {
 
 	var $target = $('#target');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.Select($target);
 
 	target.on('change', function (e) {
 		equal(target.$el.val(), settingValue, 'fired baserJS change');
@@ -272,7 +272,7 @@ test('setValue / change event', function() {
 
 	var $target = $('#target');
 
-	var target = new baser.ui.element.Select($target);
+	var target = new baser.Select($target);
 
 	target.on('change', function (e) {
 		equal(target.$el.val(), settingValue, 'fired baserJS change');

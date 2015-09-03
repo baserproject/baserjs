@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>baser.ui.element.Element</title>
+<title>baser.BaserElement</title>
 <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
 
 </head>
@@ -30,103 +30,103 @@
 <script>
 "use strict";
 
-test('baser.ui.element.Element.createClassNameのテスト', function() {
+test('baser.BaserElement.createClassNameのテスト', function() {
 
-	ok(baser.ui.element.Element.createClassName, 'baser.ui.element.Element.createClassName は存在します');
+	ok(baser.BaserElement.createClassName, 'baser.BaserElement.createClassName は存在します');
 
-	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), '-bc-block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block', 'element', 'modifier'), '-bc-block__element--modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
 
 
-	baser.ui.element.Element.classNameDefaultPrefix = 'original-prefix';
-	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), 'original-prefix-block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), 'original-prefix-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), 'original-prefix-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), 'original-prefix-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	baser.BaserElement.classNameDefaultPrefix = 'original-prefix';
+	equal(baser.BaserElement.createClassName('block', 'element', 'modifier'), 'original-prefix-block__element--modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('blockBlock', 'elementElement', 'modifierModifier'), 'original-prefix-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block-block', 'element-element', 'modifier-modifier'), 'original-prefix-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block_block', 'element_element', 'modifier_modifier'), 'original-prefix-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
 
-	baser.ui.element.Element.classNameDefaultPrefix = 'PREFIX   AAAAA';
-	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), 'PREFIXAAAAA-block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), 'PREFIXAAAAA-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), 'PREFIXAAAAA-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), 'PREFIXAAAAA-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	baser.BaserElement.classNameDefaultPrefix = 'PREFIX   AAAAA';
+	equal(baser.BaserElement.createClassName('block', 'element', 'modifier'), 'PREFIXAAAAA-block__element--modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('blockBlock', 'elementElement', 'modifierModifier'), 'PREFIXAAAAA-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block-block', 'element-element', 'modifier-modifier'), 'PREFIXAAAAA-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block_block', 'element_element', 'modifier_modifier'), 'PREFIXAAAAA-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
 
-	baser.ui.element.Element.classNameDefaultPrefix = '-bc';
-	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), '-bc-block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	baser.BaserElement.classNameDefaultPrefix = '-bc';
+	equal(baser.BaserElement.createClassName('block', 'element', 'modifier'), '-bc-block__element--modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bc-block-block__element-element--modifier-modifier', 'baser.BaserElement.createClassName の変換は成功しています');
 
-	baser.ui.element.Element.classNameDefaultCase = baser.ui.element.ElementClassNameCase.SNAKE_CASE;
-	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), '-bc_block__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bc_block_block__element_element--modifier_modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bc_block_block__element_element--modifier_modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bc_block_block__element_element--modifier_modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	baser.BaserElement.classNameDefaultCase = baser.ElementClassNameCase.SNAKE_CASE;
+	equal(baser.BaserElement.createClassName('block', 'element', 'modifier'), '-bc_block__element--modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bc_block_block__element_element--modifier_modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bc_block_block__element_element--modifier_modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bc_block_block__element_element--modifier_modifier', 'baser.BaserElement.createClassName の変換は成功しています');
 
-	baser.ui.element.Element.classNameDefaultCase = baser.ui.element.ElementClassNameCase.CAMEL_CASE;
-	equal(baser.ui.element.Element.createClassName('block', 'element', 'modifier'), '-bcBlock__element--modifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bcBlockBlock__elementElement--modifierModifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bcBlockBlock__elementElement--modifierModifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
-	equal(baser.ui.element.Element.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bcBlockBlock__elementElement--modifierModifier', 'baser.ui.element.Element.createClassName の変換は成功しています');
+	baser.BaserElement.classNameDefaultCase = baser.ElementClassNameCase.CAMEL_CASE;
+	equal(baser.BaserElement.createClassName('block', 'element', 'modifier'), '-bcBlock__element--modifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('blockBlock', 'elementElement', 'modifierModifier'), '-bcBlockBlock__elementElement--modifierModifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block-block', 'element-element', 'modifier-modifier'), '-bcBlockBlock__elementElement--modifierModifier', 'baser.BaserElement.createClassName の変換は成功しています');
+	equal(baser.BaserElement.createClassName('block_block', 'element_element', 'modifier_modifier'), '-bcBlockBlock__elementElement--modifierModifier', 'baser.BaserElement.createClassName の変換は成功しています');
 
-	ok(baser.ui.element.Element.classNameDefaultSeparatorForElement, 'baser.ui.element.Element.classNameDefaultSeparatorForElement は存在します');
-	ok(baser.ui.element.Element.classNameDefaultSeparatorForModifier, 'baser.ui.element.Element.classNameDefaultSeparatorForModifier は存在します');
+	ok(baser.BaserElement.classNameDefaultSeparatorForElement, 'baser.BaserElement.classNameDefaultSeparatorForElement は存在します');
+	ok(baser.BaserElement.classNameDefaultSeparatorForModifier, 'baser.BaserElement.classNameDefaultSeparatorForModifier は存在します');
 
 });
 
-test('baser.ui.element.Element.prototype.addClassのテスト', function() {
+test('baser.BaserElement.prototype.addClassのテスト', function() {
 
 	// リセット
-	baser.ui.element.Element.classNameDefaultCase = baser.ui.element.ElementClassNameCase.HYPHEN_DELIMITED;
+	baser.BaserElement.classNameDefaultCase = baser.ElementClassNameCase.HYPHEN_DELIMITED;
 
 	var $test = $('#test');
-	var testElem = new baser.ui.element.Element($test);
+	var testElem = new baser.BaserElement($test);
 
 
 	testElem.addClass('sample-block');
-	ok(testElem.$el.hasClass('-bc-sample-block'), 'baser.ui.element.Element.prototype.addClass で問題なくクラスは付加されました');
+	ok(testElem.$el.hasClass('-bc-sample-block'), 'baser.BaserElement.prototype.addClass で問題なくクラスは付加されました');
 
 	testElem.addClass('sample-block', 'sample-box');
-	ok(testElem.$el.hasClass('-bc-sample-block__sample-box'), 'baser.ui.element.Element.prototype.addClass で問題なくクラスは付加されました');
+	ok(testElem.$el.hasClass('-bc-sample-block__sample-box'), 'baser.BaserElement.prototype.addClass で問題なくクラスは付加されました');
 
 	testElem.addClass('sample-block', 'sample-box', 'sample-modifier');
-	ok(testElem.$el.hasClass('-bc-sample-block__sample-box--sample-modifier'), 'baser.ui.element.Element.prototype.addClass で問題なくクラスは付加されました');
+	ok(testElem.$el.hasClass('-bc-sample-block__sample-box--sample-modifier'), 'baser.BaserElement.prototype.addClass で問題なくクラスは付加されました');
 
 	testElem.addClass('sample-block', '', 'sample-modifier');
-	ok(testElem.$el.hasClass('-bc-sample-block--sample-modifier'), 'baser.ui.element.Element.prototype.addClass で問題なくクラスは付加されました');
+	ok(testElem.$el.hasClass('-bc-sample-block--sample-modifier'), 'baser.BaserElement.prototype.addClass で問題なくクラスは付加されました');
 
 
 });
 
-test('baser.ui.element.Element.getBoolAttrのテスト', function() {
+test('baser.BaserElement.getBoolAttrのテスト', function() {
 
 	// <input type="checkbox" checked data-foo data-bar="bar" data-hoge="" data-fuga="false" data-false="0" data-true="1.0">
 
 	var $test = $('#getBoolAttr input');
-	ok(baser.ui.element.Element.getBoolAttr($test, 'checked'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
-	ok(baser.ui.element.Element.getBoolAttr($test, 'data-foo'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
-	ok(baser.ui.element.Element.getBoolAttr($test, 'data-bar'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
-	ok(baser.ui.element.Element.getBoolAttr($test, 'data-hoge'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
-	ok(!baser.ui.element.Element.getBoolAttr($test, 'data-fuga'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
-	ok(!baser.ui.element.Element.getBoolAttr($test, 'data-false'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
-	ok(baser.ui.element.Element.getBoolAttr($test, 'data-true'), 'baser.ui.element.Element.getBoolAttr は正しく論理値を返しました');
+	ok(baser.BaserElement.getBoolAttr($test, 'checked'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
+	ok(baser.BaserElement.getBoolAttr($test, 'data-foo'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
+	ok(baser.BaserElement.getBoolAttr($test, 'data-bar'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
+	ok(baser.BaserElement.getBoolAttr($test, 'data-hoge'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
+	ok(!baser.BaserElement.getBoolAttr($test, 'data-fuga'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
+	ok(!baser.BaserElement.getBoolAttr($test, 'data-false'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
+	ok(baser.BaserElement.getBoolAttr($test, 'data-true'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
 
 });
 
-test('baser.ui.element.Element.prototype.getBoolAttrのテスト', function() {
+test('baser.BaserElement.prototype.getBoolAttrのテスト', function() {
 
 	// <input type="checkbox" checked data-foo data-bar="bar" data-hoge="" data-fuga="false" data-false="0" data-true="1.0">
 
 	var $test = $('#getBoolAttr input');
-	var testElem = new baser.ui.element.Element($test);
-	ok(testElem.getBoolAttr('checked'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
-	ok(testElem.getBoolAttr('data-foo'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
-	ok(testElem.getBoolAttr('data-bar'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
-	ok(testElem.getBoolAttr('data-hoge'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
-	ok(!testElem.getBoolAttr('data-fuga'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
-	ok(!testElem.getBoolAttr('data-false'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
-	ok(testElem.getBoolAttr('data-true'), 'baser.ui.element.Element.prototype.getBoolAttr は正しく論理値を返しました');
+	var testElem = new baser.BaserElement($test);
+	ok(testElem.getBoolAttr('checked'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(testElem.getBoolAttr('data-foo'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(testElem.getBoolAttr('data-bar'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(testElem.getBoolAttr('data-hoge'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(!testElem.getBoolAttr('data-fuga'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(!testElem.getBoolAttr('data-false'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');
+	ok(testElem.getBoolAttr('data-true'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');
 
 });
 
