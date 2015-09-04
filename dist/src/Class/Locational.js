@@ -34,7 +34,7 @@ var Locational = (function () {
     /**
      * クエリー文字列をハッシュにして返す
      *
-     * @version 0.7.0
+     * @version 0.9.0
      * @since 0.7.0
      * @param queryString クエリー文字列
      * @return ハッシュデータ
@@ -51,8 +51,10 @@ var Locational = (function () {
                 if (key) {
                     if (/\[\]$/.test(key)) {
                         key = key.replace(/\[\]$/, '');
-                        if (params[key] && params[key].push) {
-                            params[key].push(value);
+                        var child = params[key];
+                        if (child && child instanceof Array) {
+                            child.push(value);
+                            params[key] = child;
                         }
                         else {
                             params[key] = [value];

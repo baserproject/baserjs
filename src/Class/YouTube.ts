@@ -378,7 +378,7 @@ class YouTube extends BaserElement {
 	 * @param options オプション
 	 *
 	 */
-	public muteController ($el, options: YoutubeMuteControllerOptions): void {
+	public muteController ($el: JQuery, options: YoutubeMuteControllerOptions): void {
 		var defaults: YoutubeMuteControllerOptions = {
 			eventType: <string> 'click',
 			mutedClass: <string> 'is-muted',

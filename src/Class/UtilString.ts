@@ -12,15 +12,13 @@ class UtilString {
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.1
-	 * @param seed シード
 	 * @param prefix 接頭辞
+	 * @return ユニークID
 	 *
 	 */
-	static UID (seed?: number, prefix: string = 'uid'): string {
+	static UID (prefix: string = 'uid'): string {
 		let random: number = Math.random() * 1e8;
-		if (seed !== undefined) {
-			seed = new Date().valueOf();
-		}
+		let seed = new Date().valueOf();
 		let uniqueNumber: number = Math.abs(Math.floor(random + seed));
 		if (prefix) {
 			prefix += '-';
@@ -117,11 +115,7 @@ class UtilString {
 				suffix = splited.join(separator);
 			}
 		}
-		if (prefix && suffix) {
-			return [prefix, suffix];
-		} else {
-			return [str];
-		}
+		return [prefix, suffix];
 	}
 
 }

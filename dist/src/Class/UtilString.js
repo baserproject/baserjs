@@ -13,16 +13,14 @@ var UtilString = (function () {
      *
      * @version 0.9.0
      * @since 0.0.1
-     * @param seed シード
      * @param prefix 接頭辞
+     * @return ユニークID
      *
      */
-    UtilString.UID = function (seed, prefix) {
+    UtilString.UID = function (prefix) {
         if (prefix === void 0) { prefix = 'uid'; }
         var random = Math.random() * 1e8;
-        if (seed !== undefined) {
-            seed = new Date().valueOf();
-        }
+        var seed = new Date().valueOf();
         var uniqueNumber = Math.abs(Math.floor(random + seed));
         if (prefix) {
             prefix += '-';
@@ -115,12 +113,7 @@ var UtilString = (function () {
                 suffix = splited.join(separator);
             }
         }
-        if (prefix && suffix) {
-            return [prefix, suffix];
-        }
-        else {
-            return [str];
-        }
+        return [prefix, suffix];
     };
     return UtilString;
 })();

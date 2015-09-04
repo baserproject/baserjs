@@ -129,7 +129,6 @@ class EventDispatcher implements IEventDispatcher {
 				let eventHandler: EventHandler = handlers.shift();
 				if (eventHandler.context === this) {
 					let isCancel: boolean = eventHandler.fire(context, e, args);
-					console.log(isCancel, e);
 					if (isCancel) {
 						e.preventDefault();
 						e.stopImmediatePropagation();

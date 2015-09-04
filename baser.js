@@ -426,16 +426,14 @@
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.1
-	     * @param seed シード
 	     * @param prefix 接頭辞
+	     * @return ユニークID
 	     *
 	     */
-	    UtilString.UID = function (seed, prefix) {
+	    UtilString.UID = function (prefix) {
 	        if (prefix === void 0) { prefix = 'uid'; }
 	        var random = Math.random() * 1e8;
-	        if (seed !== undefined) {
-	            seed = new Date().valueOf();
-	        }
+	        var seed = new Date().valueOf();
 	        var uniqueNumber = Math.abs(Math.floor(random + seed));
 	        if (prefix) {
 	            prefix += '-';
@@ -528,12 +526,7 @@
 	                suffix = splited.join(separator);
 	            }
 	        }
-	        if (prefix && suffix) {
-	            return [prefix, suffix];
-	        }
-	        else {
-	            return [str];
-	        }
+	        return [prefix, suffix];
 	    };
 	    return UtilString;
 	})();
@@ -817,7 +810,6 @@
 	                var eventHandler = handlers.shift();
 	                if (eventHandler.context === this) {
 	                    var isCancel = eventHandler.fire(context, e, args);
-	                    console.log(isCancel, e);
 	                    if (isCancel) {
 	                        e.preventDefault();
 	                        e.stopImmediatePropagation();
@@ -859,7 +851,7 @@
 	/**
 	 * イベントオブジェクトのクラス
 	 *
-	 * @version 0.3.0
+	 * @version 0.9.0
 	 * @since 0.0.10
 	 *
 	 */
@@ -946,7 +938,7 @@
 	/**
 	 * イベントハンドラのラッパークラス
 	 *
-	 * @version 0.0.10
+	 * @version 0.9.0
 	 * @since 0.0.10
 	 *
 	 */
@@ -1027,7 +1019,7 @@
 	    /**
 	     * クエリー文字列をハッシュにして返す
 	     *
-	     * @version 0.7.0
+	     * @version 0.9.0
 	     * @since 0.7.0
 	     * @param queryString クエリー文字列
 	     * @return ハッシュデータ
@@ -1044,8 +1036,10 @@
 	                if (key) {
 	                    if (/\[\]$/.test(key)) {
 	                        key = key.replace(/\[\]$/, '');
-	                        if (params[key] && params[key].push) {
-	                            params[key].push(value);
+	                        var child = params[key];
+	                        if (child && child instanceof Array) {
+	                            child.push(value);
+	                            params[key] = child;
 	                        }
 	                        else {
 	                            params[key] = [value];
@@ -2984,8 +2978,11 @@
 	    };
 	    /**
 	     * タイマーをスタートする
-	     * 継続中 'progress' イベントを発行し続ける
+	     * 継続中`progress`イベントを発行し続ける
 	     * 継続時間を指定しなければずっと作動する
+	     *
+	     * 継続時間を指定して`stop`イベントだけを利用するようなケースでは
+	     * `wait`メソッドを利用したほうが効率がよい
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.8
@@ -3003,21 +3000,33 @@
 	    Timer.prototype.start = function (time) {
 	        var _this = this;
 	        if (time === void 0) { time = Infinity; }
+	        // call: 0
 	        var START_TIMESTAMP = this.now();
-	        this.stop();
+	        clearTimeout(this._timerId);
+	        // call: 1
 	        var tick = function (time) {
+	            // call: 3, 7, 12... onTick
 	            _this._timerId = setTimeout(function () {
+	                // call: 5, 10... onProgress
 	                var now = _this.now();
 	                var period = now - START_TIMESTAMP;
 	                if (period < time) {
-	                    _this.trigger('progress', [now, START_TIMESTAMP, _this], _this);
+	                    // call: 6, 11... onKickTick
 	                    tick(time);
+	                    // call: 9, 14... onFireProgressHandler
+	                    var e = new DispatchEvent('progress');
+	                    _this.trigger(e, [now, START_TIMESTAMP, _this], _this);
+	                    if (e.isDefaultPrevented()) {
+	                        _this.stop();
+	                    }
 	                }
 	                else {
 	                    _this.stop();
 	                }
 	            }, _this.interval);
+	            // call: 4, 8, 13... onStacked
 	        };
+	        // call: 2
 	        tick(time);
 	        return this;
 	    };
@@ -3035,7 +3044,6 @@
 	        this.trigger(e, [now, this._timerId, this], this);
 	        if (!e.isDefaultPrevented()) {
 	            clearTimeout(this._timerId);
-	            console.log('とめたで' + e.type);
 	            this._timerId = null;
 	        }
 	        return this;
@@ -3044,27 +3052,45 @@
 	     * 遅延処理
 	     * `stop`メソッドで止めることが可能
 	     *
-	     * @version 0.0.8
+	     * @version 0.9.0
 	     * @since 0.0.8
+	     * @param delay 遅延時間
+	     * @param callback 遅延後の処理
+	     * @param context コンテクスト
+	     * @return インスタンス自身
+	     *
+	     * ```
+	     * let timer = new Timer();
+	     * timer.wait( (currentTime, startTime, context) => {
+	     * 	context.stop();
+	     * }).start();
+	     * ```
 	     *
 	     */
-	    Timer.prototype.wait = function (time, callback, context) {
+	    Timer.prototype.wait = function (delay, callback, context) {
 	        var _this = this;
-	        if (context == null) {
-	            context = this;
-	        }
-	        this.stop();
-	        this._timerId = window.setTimeout(function () {
+	        context = context || this;
+	        var START_TIMESTAMP = this.now();
+	        clearTimeout(this._timerId);
+	        this._timerId = setTimeout(function () {
 	            _this.stop();
-	            callback.call(context);
-	        }, time);
+	            var now = _this.now();
+	            callback.call(context, now, START_TIMESTAMP, context);
+	        }, delay);
 	        return this;
 	    };
 	    /**
 	     * 遅延処理
 	     *
-	     * @version 0.0.8
+	     * `wait`メソッドを実行したインスタンスを返す
+	     * そのインスタンスは`stop`メソッドで止めることが可能
+	     *
+	     * @version 0.9.0
 	     * @since 0.0.8
+	     * @param delay 遅延時間
+	     * @param callback 遅延後の処理
+	     * @param context コンテクスト
+	     * @return `wait`メソッドを実行したインスタンス
 	     *
 	     */
 	    Timer.wait = function (time, callback, context) {

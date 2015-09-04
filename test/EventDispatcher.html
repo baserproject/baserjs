@@ -57,6 +57,104 @@ test('baser.EventDispatcher.on/off のテスト', 0, function() {
 
 });
 
+test('baser.EventDispatcher.on/off のテスト return false キャンセル', 1, function() {
+
+	var eDispatcher = new baser.EventDispatcher();
+
+	eDispatcher.on('xEvent', function() {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+		return false;
+	});
+	eDispatcher.on('xEvent', function() {
+		ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
+	});
+
+	eDispatcher.trigger('xEvent');
+
+});
+
+test('baser.EventDispatcher.on/off のテスト return false キャンセル2', 2, function() {
+
+	var eDispatcher = new baser.EventDispatcher();
+
+	eDispatcher.on('xEvent', function() {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+	});
+	eDispatcher.on('xEvent', function() {
+		ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
+		return false;
+	});
+
+	eDispatcher.trigger('xEvent');
+
+});
+
+test('baser.EventDispatcher.on/off のテスト stopImmediatePropagation キャンセル', 1, function() {
+
+	var eDispatcher = new baser.EventDispatcher();
+
+	eDispatcher.on('xEvent', function(e) {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+		e.stopImmediatePropagation();
+	});
+	eDispatcher.on('xEvent', function(e) {
+		ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
+	});
+
+	eDispatcher.trigger('xEvent');
+
+});
+
+test('baser.EventDispatcher.on/off のテスト stopImmediatePropagation キャンセル2', 2, function() {
+
+	var eDispatcher = new baser.EventDispatcher();
+
+	eDispatcher.on('xEvent', function(e) {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+	});
+	eDispatcher.on('xEvent', function(e) {
+		ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
+		e.stopImmediatePropagation();
+	});
+
+	eDispatcher.trigger('xEvent');
+
+});
+
+test('baser.EventDispatcher.on/off のテスト preventDefault キャンセル', 2, function() {
+
+	var eDispatcher = new baser.EventDispatcher();
+
+	eDispatcher.on('xEvent', function(e) {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+		e.preventDefault();
+	});
+	eDispatcher.on('xEvent', function(e) {
+		ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
+	});
+
+	eDispatcher.trigger('xEvent');
+
+});
+
+test('baser.EventDispatcher.on/off のテスト preventDefault キャンセル2', 1, function() {
+
+	var eDispatcher = new baser.EventDispatcher();
+
+	eDispatcher.on('xEvent', function(e) {
+		ok(true, 'カスタムイベントが on メソッドで登録され、 trigger メソッドで発火した');
+		e.preventDefault();
+	});
+	eDispatcher.on('xEvent', function(e) {
+		if (!e.isDefaultPrevented()) {
+			ok(true, 'カスタムイベントが on メソッドで 2つ 登録され、 trigger メソッドで発火した');
+		}
+	});
+
+	eDispatcher.trigger('xEvent');
+
+});
+
 test('baser.EventDispatcher.on 複数イベント のテスト', 1, function() {
 
 	var eDispatcher = new baser.EventDispatcher();

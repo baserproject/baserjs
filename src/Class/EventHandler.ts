@@ -5,7 +5,7 @@ import EventDispatcher = require('./EventDispatcher');
 /**
  * イベントハンドラのラッパークラス
  *
- * @version 0.0.10
+ * @version 0.9.0
  * @since 0.0.10
  *
  */

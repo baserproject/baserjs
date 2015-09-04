@@ -25,10 +25,10 @@
 <script>
 "use strict";
 
-test('baser.Timer.start/stop のテスト', function(assert) {
+test('baser.Timer.start/stop のテスト', 13, function(assert) {
 	
 	var done = assert.async();
-
+	
 	assert.ok(baser.Timer, 'baser.Timer 存在確認');
 	
 	var timer = new baser.Timer();
@@ -38,8 +38,8 @@ test('baser.Timer.start/stop のテスト', function(assert) {
 	var counter = 0;
 	timer.on('progress', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
-			timer.stop();
 			assert.equal(counter, 10, 'baser.Timer timer.stopメソッドの成功');
+			timer.stop();
 			done();
 		} else {
 			assert.ok(true, 'baser.Timer progressイベントの保証');
@@ -49,10 +49,10 @@ test('baser.Timer.start/stop のテスト', function(assert) {
 
 });
 
-test('baser.Timer.start/this.stop のテスト', function(assert) {
+test('baser.Timer.start/this.stop のテスト', 13, function(assert) {
 	
 	var done = assert.async();
-
+	
 	assert.ok(baser.Timer, 'baser.Timer 存在確認');
 	
 	var timer = new baser.Timer();
@@ -62,8 +62,8 @@ test('baser.Timer.start/this.stop のテスト', function(assert) {
 	var counter = 0;
 	timer.on('progress', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.Timer timer.stopメソッドの成功');
 			this.stop();
-			assert.equal(counter, 10, 'baser.Timer this.stopメソッドの成功');
 			done();
 		} else {
 			assert.ok(true, 'baser.Timer progressイベントの保証');
@@ -73,10 +73,11 @@ test('baser.Timer.start/this.stop のテスト', function(assert) {
 
 });
 
-test('baser.Timer.start/context.stop のテスト', function(assert) {
+
+test('baser.Timer.start/context.stop のテスト', 13, function(assert) {
 	
 	var done = assert.async();
-
+	
 	assert.ok(baser.Timer, 'baser.Timer 存在確認');
 	
 	var timer = new baser.Timer();
@@ -86,8 +87,8 @@ test('baser.Timer.start/context.stop のテスト', function(assert) {
 	var counter = 0;
 	timer.on('progress', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.Timer timer.stopメソッドの成功');
 			context.stop();
-			assert.equal(counter, 10, 'baser.Timer context.stopメソッドの成功');
 			done();
 		} else {
 			assert.ok(true, 'baser.Timer progressイベントの保証');
@@ -97,35 +98,87 @@ test('baser.Timer.start/context.stop のテスト', function(assert) {
 
 });
 
-test('baser.Timer stopイベント のテスト', function(assert) {
+test('baser.Timer stopイベント return false のテスト', 14, function(assert) {
 	
 	var done = assert.async();
-
-	assert.ok(baser.Timer, 'baser.Timer 存在確認');
-	
 	var timer = new baser.Timer();
-	
-	assert.ok(timer, 'baser.Timer インスタンス');
-	
 	var counter = 0;
 	var stopCounter = 0;
 	timer.on('progress', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
-			context.stop();
 			assert.ok(true, 'baser.Timer context.stop ' + stopCounter + '回目以降');
+			this.stop();
 		} else {
 			assert.ok(true, 'baser.Timer progressイベントの保証');
 		}
 		counter++;
 	}).on('stop', function (e, currentTime, timerId, context) {
-		stopCounter++;
 		if (stopCounter >= 3) {
 			done();
 			return;
-		} else {
-			return false;
 		}
+		stopCounter++;
+		return false;
 	}).start();
+
+});
+
+test('baser.Timer stopイベント preventDefault のテスト', 14, function(assert) {
+	
+	var done = assert.async();
+	var timer = new baser.Timer();
+	var counter = 0;
+	var stopCounter = 0;
+	timer.on('progress', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			assert.ok(true, 'baser.Timer context.stop ' + stopCounter + '回目以降');
+			this.stop();
+		} else {
+			assert.ok(true, 'baser.Timer progressイベントの保証');
+		}
+		counter++;
+	}).on('stop', function (e, currentTime, timerId, context) {
+		if (stopCounter >= 3) {
+			done();
+			return;
+		}
+		stopCounter++;
+		e.preventDefault();
+	}).start();
+
+});
+
+test('baser.Timer start(time)のテスト', function(assert) {
+
+	var done = assert.async();
+	var timer = new baser.Timer();
+
+	var id = setTimeout(function () {
+		throw new Error('baser.Timer start(time) 継続時間経過後を過ぎても止まっていないことになる');
+	}, 2100);
+
+	timer.on('stop', function (e, currentTime, timerId, context) {
+		clearTimeout(id);
+		assert.ok(true, 'baser.Timer start(time) 継続時間経過後、自然に停止');
+		done();
+	}).start(2000);
+
+});
+
+test('baser.Timer waitのテスト', function(assert) {
+
+	var done = assert.async();
+	var timer = new baser.Timer();
+
+	var id = setTimeout(function () {
+		throw new Error('baser.Timer wait 遅延時間より先に実行された');
+	}, 2100);
+
+	timer.wait(2000, function (currentTime, timerId, context) {
+		clearTimeout(id);
+		assert.ok(true, 'baser.Timer wait 遅延時間後');
+		done();
+	});
 
 });
 

@@ -78,8 +78,11 @@ class Timer extends EventDispatcher {
 
 	/**
 	 * タイマーをスタートする
-	 * 継続中 'progress' イベントを発行し続ける
+	 * 継続中`progress`イベントを発行し続ける
 	 * 継続時間を指定しなければずっと作動する
+	 * 
+	 * 継続時間を指定して`stop`イベントだけを利用するようなケースでは
+	 * `wait`メソッドを利用したほうが効率がよい
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.8
@@ -95,20 +98,33 @@ class Timer extends EventDispatcher {
 	 *
 	 */
 	public start (time: number = Infinity): Timer {
+		// call: 0
 		const START_TIMESTAMP: number = this.now();
-		this.stop();
+		clearTimeout(this._timerId);
+		// call: 1
 		let tick = (time: number): void => {
+			// call: 3, 7, 12... onTick
 			this._timerId = setTimeout( (): void => {
+				// call: 5, 10... onProgress
 				let now: number = this.now();
 				let period: number = now - START_TIMESTAMP;
 				if (period < time) {
-					this.trigger('progress', [now, START_TIMESTAMP, this], this);
+					// call: 6, 11... onKickTick
 					tick(time);
+					// call: 9, 14... onFireProgressHandler
+					let e: DispatchEvent = new DispatchEvent('progress');
+					this.trigger(e, [now, START_TIMESTAMP, this], this);
+					if (e.isDefaultPrevented()) {
+						this.stop();
+						// didn't calling onProgress 
+					}
 				} else {
 					this.stop();
 				}
 			}, this.interval);
+			// call: 4, 8, 13... onStacked
 		};
+		// call: 2
 		tick(time);
 		return this;
 	}
@@ -127,7 +143,6 @@ class Timer extends EventDispatcher {
 		this.trigger(e, [now, this._timerId, this], this);
 		if (!e.isDefaultPrevented()) {
 			clearTimeout(this._timerId);
-			console.log('とめたで' + e.type);
 			this._timerId = null;
 		}
 		return this;
@@ -137,30 +152,48 @@ class Timer extends EventDispatcher {
 	 * 遅延処理
 	 * `stop`メソッドで止めることが可能
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.8
-	 *
+	 * @param delay 遅延時間
+	 * @param callback 遅延後の処理
+	 * @param context コンテクスト
+	 * @return インスタンス自身
+	 * 
+	 * ```
+	 * let timer = new Timer();
+	 * timer.wait( (currentTime, startTime, context) => {
+	 * 	context.stop();
+	 * }).start();
+	 * ```
+	 * 
 	 */
-	public wait (time: number, callback: Function, context?: any): Timer {
-		if (context == null) {
-			context = this;
-		}
-		this.stop();
-		this._timerId = window.setTimeout( (): void => {
+	public wait (delay: number, callback: { (currentTime: number, startTime: number, context?: any): void }, context?: any): Timer {
+		context = context || this;
+		const START_TIMESTAMP: number = this.now();
+		clearTimeout(this._timerId);
+		this._timerId = setTimeout( (): void => {
 			this.stop();
-			callback.call(context);
-		}, time);
+			let now: number = this.now();
+			callback.call(context, now, START_TIMESTAMP, context);
+		}, delay);
 		return this;
 	}
 
 	/**
 	 * 遅延処理
+	 * 
+	 * `wait`メソッドを実行したインスタンスを返す
+	 * そのインスタンスは`stop`メソッドで止めることが可能
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.8
+	 * @param delay 遅延時間
+	 * @param callback 遅延後の処理
+	 * @param context コンテクスト
+	 * @return `wait`メソッドを実行したインスタンス
 	 *
 	 */
-	static wait (time: number, callback: Function, context?: any): Timer {
+	static wait (time: number, callback: { (currentTime: number, startTime: number, context?: any): void }, context?: any): Timer {
 		return new Timer().wait(time, callback, context);
 	}
 

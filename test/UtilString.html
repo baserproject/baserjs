@@ -36,7 +36,7 @@ test('baser.UtilString.UIDのテスト', function() {
 	}
 
 	for (i = 0; i < 1000; i++) {
-		notEqual(baser.UtilString.UID('abc'), baser.UtilString.UID('abc'), 'baser.UtilString.UID は引数に同じシードを渡しても絶対にユニークな文字列を返すかどうかのテスト ' + (i + 1) + '回目');
+		notEqual(baser.UtilString.UID(123), baser.UtilString.UID(123), 'baser.UtilString.UID は引数に同じシードを渡しても絶対にユニークな文字列を返すかどうかのテスト ' + (i + 1) + '回目');
 	}
 
 });

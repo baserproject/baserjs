@@ -57,7 +57,6 @@ gulp.task 'build', (cb) -> runSequence(
 	'ts',
 	'pack',
 	'compress',
-	'test',
 	cb
 )
 

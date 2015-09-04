@@ -12,14 +12,14 @@ class Locational {
 	/**
 	 * クエリー文字列をハッシュにして返す
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 * @param queryString クエリー文字列
 	 * @return ハッシュデータ
 	 *
 	 */
 	static parseQueryString (queryString: string): { [index: string]: string | string[] } {
-		let params: any = {};
+		let params: { [index: string]: string | string[] } = {};
 		if (queryString) {
 			let queries: string[] = queryString.split(/&/g);
 			$.each<string>(queries, (i: number, query: string): void => {
@@ -29,8 +29,10 @@ class Locational {
 				if (key) {
 					if (/\[\]$/.test(key)) {
 						key = key.replace(/\[\]$/, '');
-						if (params[key] && params[key].push) {
-							params[key].push(value);
+						let child: string | string[] = params[key];
+						if (child && child instanceof Array) {
+							child.push(value);
+							params[key] = child;
 						} else {
 							params[key] = [value];
 						}

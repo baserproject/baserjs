@@ -109,7 +109,6 @@ var EventDispatcher = (function () {
                 var eventHandler = handlers.shift();
                 if (eventHandler.context === this) {
                     var isCancel = eventHandler.fire(context, e, args);
-                    console.log(isCancel, e);
                     if (isCancel) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
