@@ -6,6 +6,8 @@ interface BrowserUserAgent {
 	iPod: boolean;
 	safari: boolean;
 	chrome: boolean;
+	edge: boolean;
+	ie: boolean;
 }
 
 export = BrowserUserAgent;

@@ -7,8 +7,10 @@ type LinkElement = HTMLAnchorElement | HTMLAreaElement;
 
 /**
  * ブラウザの情報を管理するクラス
- *
- * @version 0.0.2
+ * 
+ * TODO: テストを書く（テストフレームワークの選定から）
+ * 
+ * @version 0.9.0
  * @since 0.0.2
  *
  */
@@ -41,12 +43,12 @@ class Browser extends EventDispatcher {
 	/**
 	 * ページ遷移する
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.1.0
 	 *
 	 */
 	static jumpTo (path: string | Locational, isBlank: boolean = false): void {
-		var href: string;
+		let href: string;
 		if (typeof path === 'string') {
 			href = path;
 		} else {
@@ -62,24 +64,30 @@ class Browser extends EventDispatcher {
 	/**
 	 * ユーザーエージェント情報を取得する
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
 	static getUA (): BrowserUserAgent {
-		var ua: string = navigator.userAgent;
-		var bua: BrowserUserAgent = {
+		let ua: string = navigator.userAgent;
+		let bua: BrowserUserAgent = {
 			iOS: false,
 			android: /android/i.test(ua),
 			iPad: /ipad/i.test(ua),
 			iPhone: /iphone/i.test(ua),
 			iPod: /ipod/i.test(ua),
 			safari: /safari/i.test(ua),
-			chrome: /crios|chrome/i.test(ua)
+			chrome: /crios|chrome/i.test(ua),
+			edge: /edge/i.test(ua),
+			ie: /msie/.test(ua)
 		};
 		bua.iOS = bua.iPad || bua.iPhone || bua.iPod || false;
 		if (bua.chrome) {
 			bua.safari = false;
+		}
+		if (bua.edge) {
+			bua.safari = false;
+			bua.chrome = false;
 		}
 		return bua;
 	}
@@ -87,21 +95,21 @@ class Browser extends EventDispatcher {
 	/**
 	 * 現在のURLのパラメータをリンク先へ引き継がせる
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 *
 	 */
 	static inheritParams (targetParam: string): void {
-		var $target: JQuery = $('a, area').filter('[href]');
-		var thisLocation: Locational = new Locational(location);
+		let $target: JQuery = $('a, area').filter('[href]');
+		let thisLocation: Locational = new Locational(location);
 		if (!(targetParam in thisLocation.params)) {
 			return;
 		}
-		var query: string = targetParam;
-		var value: string | string[] = thisLocation.params[targetParam];
+		let query: string = targetParam;
+		let value: string | string[] = thisLocation.params[targetParam];
 		$target.each( (i: number, elem: Element): any => {
-			var targetElem: LinkElement = <LinkElement> elem;
-			var loc: Locational = new Locational(targetElem);
+			let targetElem: LinkElement = <LinkElement> elem;
+			let loc: Locational = new Locational(targetElem);
 			if (thisLocation.host === loc.host) {
 				loc.addParam(query, value);
 				targetElem.href = loc.href;
@@ -109,15 +117,46 @@ class Browser extends EventDispatcher {
 		});
 	}
 
+	/**
+	 * リサイズイベントからリサイズエンドイベントまでのインターバル
+	 *
+	 * @version 0.0.2
+	 * @since 0.0.2
+	 *
+	 */
 	public resizeEndInterval: number = 100;
+
+	/**
+	 * スクロールイベントからスクロールエンドイベントまでのインターバル
+	 *
+	 * @version 0.0.2
+	 * @since 0.0.2
+	 *
+	 */
 	public scrollEndInterval: number = 100;
+
+	/**
+	 * 現在リサイズ中かどうか
+	 *
+	 * @version 0.0.2
+	 * @since 0.0.2
+	 *
+	 */
 	public isResize: boolean = false;
+
+	/**
+	 * 現在スクロール中かどうか
+	 *
+	 * @version 0.0.2
+	 * @since 0.0.2
+	 *
+	 */
 	public isScroll: boolean = false;
 
 	/**
 	 * コンストラクタ
 	 *
-	 * @version 0.0.2
+	 * @version 0.9.0
 	 * @since 0.0.2
 	 *
 	 */
@@ -125,10 +164,10 @@ class Browser extends EventDispatcher {
 
 		super();
 
-		var $window: JQuery = $(window);
+		let $window: JQuery = $(window);
 
 		// リサイズイベント
-		var resizeEndTimer: number;
+		let resizeEndTimer: number;
 		$window.on('resize', (e: JQueryEventObject): void => {
 			if (!this.isResize) {
 				this.trigger('resizestart');
@@ -144,7 +183,7 @@ class Browser extends EventDispatcher {
 		});
 
 		// スクロールイベント
-		var scrollEndTimer: number;
+		let scrollEndTimer: number;
 		$window.on('scroll', (e: JQueryEventObject): void => {
 			if (!this.isScroll) {
 				this.trigger('scrollstart');

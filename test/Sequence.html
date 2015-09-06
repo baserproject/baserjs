@@ -58,7 +58,6 @@ test('Loop Test', function (assert) {
 
 	var s = new baser.Sequence([
 		function (i, value) {
-			console.log(i);
 			if (i >= 100) {
 				this.exit();
 				done();

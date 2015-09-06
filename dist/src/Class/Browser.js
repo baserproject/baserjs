@@ -9,7 +9,9 @@ var Locational = require('./Locational');
 /**
  * ブラウザの情報を管理するクラス
  *
- * @version 0.0.2
+ * TODO: テストを書く（テストフレームワークの選定から）
+ *
+ * @version 0.9.0
  * @since 0.0.2
  *
  */
@@ -18,16 +20,44 @@ var Browser = (function (_super) {
     /**
      * コンストラクタ
      *
-     * @version 0.0.2
+     * @version 0.9.0
      * @since 0.0.2
      *
      */
     function Browser() {
         var _this = this;
         _super.call(this);
+        /**
+         * リサイズイベントからリサイズエンドイベントまでのインターバル
+         *
+         * @version 0.0.2
+         * @since 0.0.2
+         *
+         */
         this.resizeEndInterval = 100;
+        /**
+         * スクロールイベントからスクロールエンドイベントまでのインターバル
+         *
+         * @version 0.0.2
+         * @since 0.0.2
+         *
+         */
         this.scrollEndInterval = 100;
+        /**
+         * 現在リサイズ中かどうか
+         *
+         * @version 0.0.2
+         * @since 0.0.2
+         *
+         */
         this.isResize = false;
+        /**
+         * 現在スクロール中かどうか
+         *
+         * @version 0.0.2
+         * @since 0.0.2
+         *
+         */
         this.isScroll = false;
         var $window = $(window);
         // リサイズイベント
@@ -64,7 +94,7 @@ var Browser = (function (_super) {
     /**
      * ページ遷移する
      *
-     * @version 0.7.0
+     * @version 0.9.0
      * @since 0.1.0
      *
      */
@@ -87,7 +117,7 @@ var Browser = (function (_super) {
     /**
      * ユーザーエージェント情報を取得する
      *
-     * @version 0.4.0
+     * @version 0.9.0
      * @since 0.0.1
      *
      */
@@ -100,18 +130,24 @@ var Browser = (function (_super) {
             iPhone: /iphone/i.test(ua),
             iPod: /ipod/i.test(ua),
             safari: /safari/i.test(ua),
-            chrome: /crios|chrome/i.test(ua)
+            chrome: /crios|chrome/i.test(ua),
+            edge: /edge/i.test(ua),
+            ie: /msie/.test(ua)
         };
         bua.iOS = bua.iPad || bua.iPhone || bua.iPod || false;
         if (bua.chrome) {
             bua.safari = false;
+        }
+        if (bua.edge) {
+            bua.safari = false;
+            bua.chrome = false;
         }
         return bua;
     };
     /**
      * 現在のURLのパラメータをリンク先へ引き継がせる
      *
-     * @version 0.7.0
+     * @version 0.9.0
      * @since 0.7.0
      *
      */
