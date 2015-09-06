@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>baser.AnimationFrames</title>
+<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<!-- Libraries -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Core Module -->
+<script src="../baser.js"></script>
+
+<!-- Qunit -->
+<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+<!-- Test Code -->
+<script>
+"use strict";
+
+
+test('baser.AnimationFrames.start/stop のテスト', 13, function(assert) {
+	
+	var done = assert.async();
+	
+	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
+	
+	var counter = 0;
+	var af = new baser.AnimationFrames(function () {
+		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.AnimationFrames AnimationFrames.stopメソッドの成功');
+			af.stop();
+			done();
+		} else {
+			assert.ok(true, 'baser.AnimationFrames コールバック実行の保証');
+		}
+		counter++;
+	});
+	
+	assert.ok(af, 'baser.AnimationFrames インスタンス');
+	
+	af.start();
+
+});
+
+
+test('baser.AnimationFrames.start/this.stop のテスト', 13, function(assert) {
+	
+	var done = assert.async();
+	
+	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
+	
+	var counter = 0;
+	var af = new baser.AnimationFrames(function () {
+		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.AnimationFrames AnimationFrames.stopメソッドの成功');
+			this.stop();
+			done();
+		} else {
+			assert.ok(true, 'baser.AnimationFrames コールバック実行の保証');
+		}
+		counter++;
+	});
+	
+	assert.ok(af, 'baser.AnimationFrames インスタンス');
+	
+	af.start();
+
+});
+
+test('baser.AnimationFrames.start/context.stop のテスト', 13, function(assert) {
+	
+	var done = assert.async();
+	
+	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
+	
+	var counter = 0;
+	var af = new baser.AnimationFrames(function (now, start, context) {
+		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.AnimationFrames AnimationFrames.stopメソッドの成功');
+			context.stop();
+			done();
+		} else {
+			assert.ok(true, 'baser.AnimationFrames コールバック実行の保証');
+		}
+		counter++;
+	});
+	
+	assert.ok(af, 'baser.AnimationFrames インスタンス');
+	
+	af.start();
+
+});
+
+test('baser.AnimationFrames enterframeイベント stop のテスト', 13, function(assert) {
+	
+	var done = assert.async();
+	
+	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
+	
+	var af = new baser.AnimationFrames();
+	
+	assert.ok(af, 'baser.AnimationFrames インスタンス');
+	
+	var counter = 0;
+	af.on('enterframe', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.AnimationFrames AnimationFrames.stopメソッドの成功');
+			af.stop();
+			done();
+		} else {
+			assert.ok(true, 'baser.AnimationFrames enterframeイベントの保証');
+		}
+		counter++;
+	}).start();
+
+});
+
+test('baser.AnimationFrames enterframeイベント this.stop のテスト', 13, function(assert) {
+	
+	var done = assert.async();
+	
+	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
+	
+	var af = new baser.AnimationFrames();
+	
+	assert.ok(af, 'baser.AnimationFrames インスタンス');
+	
+	var counter = 0;
+	af.on('enterframe', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.AnimationFrames AnimationFrames.stopメソッドの成功');
+			this.stop();
+			done();
+		} else {
+			assert.ok(true, 'baser.AnimationFrames enterframeイベントの保証');
+		}
+		counter++;
+	}).start();
+
+});
+
+test('baser.AnimationFrames enterframeイベント context.stop のテスト', 13, function(assert) {
+	
+	var done = assert.async();
+	
+	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
+	
+	var af = new baser.AnimationFrames();
+	
+	assert.ok(af, 'baser.AnimationFrames インスタンス');
+	
+	var counter = 0;
+	af.on('enterframe', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.AnimationFrames AnimationFrames.stopメソッドの成功');
+			context.stop();
+			done();
+		} else {
+			assert.ok(true, 'baser.AnimationFrames enterframeイベントの保証');
+		}
+		counter++;
+	}).start();
+
+});
+
+test('baser.AnimationFrames enterframeイベント cancelとstopイベント のテスト', 14, function(assert) {
+	
+	var done = assert.async();
+	
+	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
+	
+	var af = new baser.AnimationFrames();
+	
+	assert.ok(af, 'baser.AnimationFrames インスタンス');
+	
+	var counter = 0;
+	af.on('enterframe', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.AnimationFrames AnimationFrames.stopメソッドの成功');
+			return false;
+		} else {
+			assert.ok(true, 'baser.AnimationFrames enterframeイベントの保証');
+		}
+		counter++;
+	}).start().on('stop', function () {
+		assert.ok(true, 'stopイベントの保証');
+		done();
+	});
+
+});
+
+test('baser.AnimationFrames enterframeイベント 強制setTimeout のテスト', 13, function(assert) {
+	
+	var done = assert.async();
+	
+	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
+	
+	var af = new baser.AnimationFrames();
+	
+	// 強制setTimeout
+	af._isPolyfill = true;
+	
+	assert.ok(af, 'baser.AnimationFrames インスタンス');
+	
+	var counter = 0;
+	af.on('enterframe', function (e, currentTime, startTime, context) {
+		if (counter >= 10) {
+			assert.equal(counter, 10, 'baser.AnimationFrames AnimationFrames.stopメソッドの成功');
+			af.stop();
+			done();
+		} else {
+			assert.ok(true, 'baser.AnimationFrames enterframeイベントの保証');
+		}
+		counter++;
+	}).start();
+
+});
+
+</script>
+
+</body>
+</html>

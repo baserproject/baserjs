@@ -1598,65 +1598,134 @@
 
 /***/ },
 /* 13 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    __.prototype = b.prototype;
+	    d.prototype = new __();
+	};
+	var DispatchEvent = __webpack_require__(8);
+	var EventDispatcher = __webpack_require__(7);
 	/**
 	 * アニメーションフレームを管理するクラス
 	 *
-	 * @version 0.0.10
+	 * @version 0.9.0
 	 * @since 0.0.10
 	 *
 	 */
-	var AnimationFrames = (function () {
+	var AnimationFrames = (function (_super) {
+	    __extends(AnimationFrames, _super);
 	    /**
 	     * フレーム毎のに実行するコールバックを登録する
 	     *
-	     * @version 0.0.10
+	     * @version 0.9.0
 	     * @since 0.0.10
-	     * @return {number} リクエストIDを返す
+	     * @param callback コールバック関数
 	     *
 	     */
 	    function AnimationFrames(callback) {
-	        this.callback = callback;
+	        _super.call(this);
+	        /**
+	         * 停止状態かどうか
+	         *
+	         * @version 0.9.0
+	         * @since 0.9.0
+	         *
+	         */
+	        this._isStop = true;
+	        this._callback = callback;
+	        this._isPolyfill = !('requestAnimationFrame' in window && 'cancelAnimationFrame' in window);
 	    }
+	    /**
+	     * フレーム処理を開始する
+	     *
+	     * @version 0.9.0
+	     * @since 0.0.10
+	     * @param context コンテキスト
+	     * @return インスタンス自身
+	     *
+	     */
 	    AnimationFrames.prototype.start = function (context) {
 	        var _this = this;
-	        var interval;
 	        context = context || this;
-	        if ('requestAnimationFrame' in window) {
-	            this.requestId = requestAnimationFrame(function () {
-	                cancelAnimationFrame(_this.requestId);
-	                _this.callback.call(context);
-	                _this.start(context);
-	            });
+	        this._isStop = false;
+	        var START_TIMESTAMP = new Date().getTime();
+	        if (!this._isPolyfill) {
+	            // call: 0 define function
+	            var onEnterFrame = function (timestamp) {
+	                cancelAnimationFrame(_this._requestId);
+	                // call: 3 fire callback
+	                var e = _this._enterFrame(context, timestamp, START_TIMESTAMP);
+	                // call: 4 cancel continue
+	                if (!e.isDefaultPrevented() && !_this._isStop) {
+	                    // continue
+	                    _this._requestId = requestAnimationFrame(onEnterFrame);
+	                }
+	                else {
+	                    var e_1 = new DispatchEvent('stop');
+	                    _this.trigger(e_1, [timestamp, START_TIMESTAMP, context], context);
+	                }
+	            };
+	            this._requestId = requestAnimationFrame(onEnterFrame);
 	        }
 	        else {
-	            interval = 1000 / AnimationFrames.FRAME_RATE;
-	            this.requestId = window.setTimeout(function () {
-	                window.clearTimeout(_this.requestId);
-	                _this.callback.call(context);
-	                _this.start(context);
-	            }, interval);
+	            var interval = 1000 / AnimationFrames.FRAME_RATE;
+	            var onEnterFrame = function () {
+	                clearTimeout(_this._requestId);
+	                var timestamp = new Date().getTime();
+	                var e = _this._enterFrame(context, timestamp, START_TIMESTAMP);
+	                if (!e.isDefaultPrevented() && !_this._isStop) {
+	                    _this._requestId = setTimeout(onEnterFrame, interval);
+	                }
+	                else {
+	                    var e_2 = new DispatchEvent('stop');
+	                    _this.trigger(e_2, [timestamp, START_TIMESTAMP, context], context);
+	                }
+	            };
+	            this._requestId = setTimeout(onEnterFrame, interval);
 	        }
+	        return this;
+	    };
+	    /**
+	     * フレーム毎の処理
+	     *
+	     * @version 0.9.0
+	     * @since 0.9.0
+	     * @param context コンテキスト
+	     * @return イベント
+	     *
+	     */
+	    AnimationFrames.prototype._enterFrame = function (context, now, startTimestamp) {
+	        if (this._callback) {
+	            this._callback.call(context, now, startTimestamp, context);
+	        }
+	        var e = new DispatchEvent('enterframe');
+	        this.trigger(e, [now, startTimestamp, context], this);
+	        return e;
 	    };
 	    /**
 	     * リクエストしたコールバックを停止する
 	     *
-	     * @version 0.0.10
+	     * @version 0.9.0
 	     * @since 0.0.10
-	     * @return {number} リクエストIDを返す
+	     * @return インスタンス自身
 	     *
 	     */
 	    AnimationFrames.prototype.stop = function () {
-	        if ('cancelAnimationFrame' in window) {
-	            cancelAnimationFrame(this.requestId);
+	        this._isStop = true;
+	        if (!this._isPolyfill) {
+	            cancelAnimationFrame(this._requestId);
 	        }
 	        else {
-	            window.clearTimeout(this.requestId);
+	            clearTimeout(this._requestId);
 	        }
+	        return this;
 	    };
 	    /**
 	     * フレームレート
+	     * 単位: FPS
 	     *
 	     * @version 0.0.10
 	     * @since 0.0.10
@@ -1664,7 +1733,7 @@
 	     */
 	    AnimationFrames.FRAME_RATE = 60;
 	    return AnimationFrames;
-	})();
+	})(EventDispatcher);
 	module.exports = AnimationFrames;
 
 
