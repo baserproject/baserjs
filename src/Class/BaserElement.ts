@@ -11,8 +11,11 @@ const DOUBLE_UNDERSCORE: string = '__';
 
 /**
  * DOM要素の抽象クラス
+ * 
+ * DOM要素操作に関するjQueryのメソッドは極力ここに集約したい
+ * 脱jQueryの際にこのクラスを改修するだけで済むようにする
  *
- * @version 0.3.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -64,16 +67,28 @@ class BaserElement extends EventDispatcher implements IElement {
 	static classNameDefaultSeparatorForModifier: ClassNameSeparatorForBEM = ClassNameSeparatorForBEM.DOUBLE_HYPHEN;
 
 	/**
-	 * 管理するDOM要素のjQueryオブジェクト
+	 * 【廃止予定】管理するDOM要素のjQueryオブジェクト
 	 *
+	 * @deprecated
+	 * @version 0.0.1
 	 * @since 0.0.1
 	 *
 	 */
 	public $el: JQuery;
 
 	/**
+	 * 管理するDOM要素
+	 *
+	 * @version 0.9.0
+	 * @since 0.9.0
+	 *
+	 */
+	public el: HTMLElement;
+
+	/**
 	 * 管理するDOM要素のid属性値
 	 *
+	 * @version 0.0.1
 	 * @since 0.0.1
 	 *
 	 */
@@ -82,6 +97,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	/**
 	 * 管理するDOM要素のname属性値
 	 *
+	 * @version 0.0.1
 	 * @since 0.0.1
 	 *
 	 */
@@ -89,84 +105,106 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * baserJSのエレメント化してたかどうか
+	 * 
+	 * @version 0.8.0
+	 * @since 0.8.0
+	 * 
 	 */
 	protected _elementized: boolean = false;
 
 	/**
-	 * クラス名文字列を生成する
+	 * BEMベースでクラス名文字列を生成する
 	 *
-	 * @version 0.1.0
+	 * @version 0.9.0
 	 * @since 0.1.0
+	 * @param blockName ブロック名
+	 * @param elementName 要素名
+	 * @param modifierName 状態名
+	 * @return 生成されたクラス名
 	 *
 	 */
 	static createClassName (blockNames: string, elementNames: string = '', modifierName: string = ''): string {
-		var className: string = '';
-		var prefix: string;
-		var separator: string;
-		var elementSeparator: string;
-		var modifierSeparator: string;
+		let className: string = '';
+		let prefix: string;
+		let separator: string;
+		let elementSeparator: string;
+		let modifierSeparator: string;
 		switch (BaserElement.classNameDefaultCase) {
-			case ElementClassNameCase.HYPHEN_DELIMITED:
+			case ElementClassNameCase.HYPHEN_DELIMITED: {
 				separator = HYPHEN;
 				blockNames = UtilString.hyphenDelimited(blockNames);
 				elementNames = UtilString.hyphenDelimited(elementNames);
 				modifierName = UtilString.hyphenDelimited(modifierName);
 				break;
-			case ElementClassNameCase.SNAKE_CASE:
+			}
+			case ElementClassNameCase.SNAKE_CASE: {
 				separator = UNDERSCORE;
 				blockNames = UtilString.snakeCase(blockNames);
 				elementNames = UtilString.snakeCase(elementNames);
 				modifierName = UtilString.snakeCase(modifierName);
 				break;
-			case ElementClassNameCase.CAMEL_CASE:
+			}
+			case ElementClassNameCase.CAMEL_CASE: {
 				separator = '';
 				blockNames = UtilString.camelCase(blockNames, true);
 				elementNames = UtilString.camelCase(elementNames);
 				modifierName = UtilString.camelCase(modifierName);
 				break;
+			}
 		}
 		switch (BaserElement.classNameDefaultSeparatorForElement) {
-			case ClassNameSeparatorForBEM.HYPHEN:
+			case ClassNameSeparatorForBEM.HYPHEN: {
 				elementSeparator = HYPHEN;
 				break;
-			case ClassNameSeparatorForBEM.DOUBLE_HYPHEN:
+			}
+			case ClassNameSeparatorForBEM.DOUBLE_HYPHEN: {
 				elementSeparator = DOUBLE_HYPHEN;
 				break;
-			case ClassNameSeparatorForBEM.UNDERSCORE:
+			}
+			case ClassNameSeparatorForBEM.UNDERSCORE: {
 				elementSeparator = UNDERSCORE;
 				break;
-			case ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE:
+			}
+			case ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE: {
 				elementSeparator = DOUBLE_UNDERSCORE;
 				break;
-			case ClassNameSeparatorForBEM.CAMEL_CASE:
+			}
+			case ClassNameSeparatorForBEM.CAMEL_CASE: {
 				elementSeparator = '';
 				break;
+			}
 		}
 		switch (BaserElement.classNameDefaultSeparatorForModifier) {
-			case ClassNameSeparatorForBEM.HYPHEN:
+			case ClassNameSeparatorForBEM.HYPHEN: {
 				modifierSeparator = HYPHEN;
 				break;
-			case ClassNameSeparatorForBEM.DOUBLE_HYPHEN:
+			}
+			case ClassNameSeparatorForBEM.DOUBLE_HYPHEN: {
 				modifierSeparator = DOUBLE_HYPHEN;
 				break;
-			case ClassNameSeparatorForBEM.UNDERSCORE:
+			}
+			case ClassNameSeparatorForBEM.UNDERSCORE: {
 				modifierSeparator = UNDERSCORE;
 				break;
-			case ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE:
+			}
+			case ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE: {
 				modifierSeparator = DOUBLE_UNDERSCORE;
 				break;
-			case ClassNameSeparatorForBEM.CAMEL_CASE:
+			}
+			case ClassNameSeparatorForBEM.CAMEL_CASE: {
 				modifierSeparator = '';
 				break;
+			}
 		}
 		if (BaserElement.classNameDefaultPrefix) {
 			prefix = BaserElement.classNameDefaultPrefix;
-			// 先頭のアルファベット・アンダースコア・ハイフン以外を削除
-			prefix = prefix.replace(/^[^a-z_-]/i, '');
-			// アルファベット・数字・アンダースコア・ハイフン以外を削除
-			prefix = prefix.replace(/[^a-z0-9_-]+/ig, '');
-			// 先頭の2個以上連続するハイフンを削除
-			prefix = prefix.replace(/^--+/, '-');
+			prefix = prefix
+				// 先頭のアルファベット・アンダースコア・ハイフン以外を削除
+				.replace(/^[^a-z_-]/i, '')
+				// アルファベット・数字・アンダースコア・ハイフン以外を削除
+				.replace(/[^a-z0-9_-]+/ig, '')
+				// 先頭の2個以上連続するハイフンを削除
+				.replace(/^--+/, '-');
 			className += prefix;
 		}
 		className += separator + blockNames;
@@ -183,41 +221,70 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * 要素の属性の真偽を判定する
 	 *
 	 * DOM APIの標準で判定できるものはそれで判断
-	 *
 	 * 値なし属性の場合は存在すれば真
-	 *
 	 * 値あり属性の場合は偽相等の文字列でなければ全て真とする
-	 *
 	 * ただし値なし属性の場合は値が空文字列のため、偽相等の文字列の例外とする
 	 *
-	 * @version 0.2.0
+	 * @version 0.9.0
 	 * @since 0.2.0
+	 * @param elem 対象のDOM要素
+	 * @param attrName 確認したい属性名
+	 * @return 結果
 	 *
 	 */
-	static getBoolAttr ($elem: JQuery, attrName: string): boolean {
+	static getBoolAttr (elem: HTMLElement, attrName: string): boolean {
+		let value: any;
 		// DOM APIの標準で判定できるものはそれで判断
-		var propValue: any = $elem.prop(attrName);
-		if (propValue === true) {
+		value = elem[attrName];
+		if (value === true) {
 			return true;
 		}
-		// 属性の値の取得 値なし属性の場合は 存在しない場合 undefined を返す
-		var value: string = $elem.attr(attrName);
-		if (value === undefined) {
-			return false;
+		let attr: Attr = elem.attributes.getNamedItem(attrName);
+		if (attr) {
+			value = attr.value;
+			if (value === '') {
+				// 値なし属性の場合は存在すれば真
+				return true;
+			} else {
+				return !UtilString.isFalsy('' + value);
+			}
+		} else {
+			// 属性がない場合は偽
+			return false
 		}
-		// 値なし属性の場合は値が空文字列 （偽相等の文字列の例外）
-		if (value === '') {
-			return true;
-		}
-		// 値あり属性の場合は偽相等の文字列でなければ全て真とする
-		return !UtilString.isFalsy(value);
 	}
 
 	/**
 	 * クラス名を付加する
+	 * 
+	 * use: jQuery
 	 *
+	 * @version 0.9.0
+	 * @since 0.1.0
+	 * @param elem 対象のDOM要素
+	 * @param blockName ブロック名
+	 * @param elementName 要素名
+	 * @param modifierName 状態名
+	 *
+	 */
+	static addClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
+		let $elem: JQuery = $(elem);
+		var className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		$elem.addClass(className);
+	}
+
+	/**
+	 * 【廃止予定】クラス名を付加する
+	 * 
+	 * use: jQuery
+	 * 
+	 * @deprecated
 	 * @version 0.1.0
 	 * @since 0.1.0
+	 * @param $elem 対象のDOM要素
+	 * @param blockName ブロック名
+	 * @param elementName 要素名
+	 * @param modifierName 状態名
 	 *
 	 */
 	static addClassTo ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
@@ -227,53 +294,107 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * クラス名を取り除く
+	 * 
+	 * use: jQuery
+	 * 
+	 * @version 0.9.0
+	 * @since 0.1.0
+	 * @param elem 対象のDOM要素
+	 * @param blockName ブロック名
+	 * @param elementName 要素名
+	 * @param modifierName 状態名
 	 *
+	 */
+	static removeClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
+		let $elem: JQuery = $(elem);
+		var className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		$elem.removeClass(className);
+	}
+
+
+	/**
+	 * 【廃止予定】クラス名を取り除く
+	 * 
+	 * use: jQuery
+	 *
+	 * @deprecated
 	 * @version 0.1.0
 	 * @since 0.1.0
+	 * @param $elem 対象のDOM要素
+	 * @param blockName ブロック名
+	 * @param elementName 要素名
+	 * @param modifierName 状態名
 	 *
 	 */
 	static removeClassFrom ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
 		var className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.removeClass(className);
 	}
-
+	
 	/**
 	 * CSSプロパティをDOM要素から取り除く
 	 *
-	 * @version 0.2.2
+	 * @version 0.9.0
 	 * @since 0.2.2
+	 * @param elem 対象のDOM要素
+	 * @param propName 取り除くCSSプロパティ
 	 *
 	 */
-	static removeCSSPropertyFromDOMElement (propertyName: string, elem: HTMLElement): void {
-		var style: CSSStyleDeclaration = elem.style;
+	static removeCSSProp (elem: HTMLElement, propName: string): void {
+		let style: CSSStyleDeclaration = elem.style;
 		// IE8以下はCSSStyleDeclarationのインターフェイスが標準でないのでメソッド定義チェックでエラーになる
-		var styleIE8lt: any = <any> style;
 		if (style) {
+			let styleIE8lt: any = <any> style;
 			if (style.removeProperty) {
-				style.removeProperty(propertyName);
+				style.removeProperty(propName);
 			} else if (styleIE8lt.removeAttribute) {
-				styleIE8lt.removeAttribute(propertyName);
+				styleIE8lt.removeAttribute(propName);
 			}
 		}
 	}
 
 	/**
-	 * CSSプロパティを取り除く
+	 * 【廃止予定】CSSプロパティをDOM要素から取り除く
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.2.2
+	 * @deprecated
+	 * @version 0.9.0
 	 * @since 0.2.2
+	 * @param propName 取り除くCSSプロパティ
+	 * @param elem 対象のDOM要素
+	 *
+	 */
+	static removeCSSPropertyFromDOMElement (propertyName: string, elem: HTMLElement): void {
+		BaserElement.removeCSSProp(elem, propertyName);
+	}
+
+	/**
+	 * 【廃止予定】CSSプロパティを取り除く
+	 * 
+	 * use: jQuery
+	 *
+	 * @version 0.9.0
+	 * @since 0.2.2
+	 * @param propName 取り除くCSSプロパティ
+	 * @param $elem 対象のDOM要素
 	 *
 	 */
 	static removeCSSProperty (propertyName: string, $elem: JQuery): void {
 		$elem.each( (i: number, elem: HTMLElement) => {
-			BaserElement.removeCSSPropertyFromDOMElement(propertyName, elem);
+			BaserElement.removeCSSProp(elem, propertyName);
 		});
 	}
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * use: jQuery
+	 * 
+	 * TODO: クラス名のつき方の規則をきちんと決める
+	 * TODO: コンストラクタの引数をネイティブのDOM要素にする
 	 *
-	 * @version 0.8.1
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 * @param $el 管理するDOM要素のjQueryオブジェクト
 	 *
@@ -281,6 +402,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	constructor ($el: JQuery) {
 		super();
 		this.$el = $el;
+		this.el = <HTMLElement> $el[0];
 		// 既にbaserJSのエレメント化している場合
 		if ($el.data('bc-element')) {
 			if ('console' in window) {
@@ -291,8 +413,8 @@ class BaserElement extends EventDispatcher implements IElement {
 		}
 		$el.data('bc-element', this);
 		// ID・nameの抽出 & 生成
-		var ids: string[] = [];
-		var names: string[] = [];
+		let ids: string[] = [];
+		let names: string[] = [];
 		this.$el.each( (i: number, el: HTMLElement): void => {
 			var id: string = el.id || UtilString.UID();
 			var name: string = el.getAttribute('name');
@@ -308,43 +430,46 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * クラス名を付加する
-	 *
-	 * @version 0.1.0
+	 * 
+	 * @version 0.9.0
 	 * @since 0.1.0
 	 *
 	 */
 	public addClass (blockNames: string, elementNames: string = '', modifierName: string = ''): void {
 		var className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
-		this.$el.addClass(className);
+		BaserElement.addClass(this.el, className);
 	}
 
 	/**
 	 * 要素の属性の真偽を判定する
-	 *
+	 * 
 	 * `BaserElement.getBoolAttr` のインスタンスメソッド版
 	 *
-	 * @version 0.2.0
+	 * @version 0.9.0
 	 * @since 0.2.0
 	 *
 	 */
 	public getBoolAttr (attrName: string): boolean {
-		return BaserElement.getBoolAttr(this.$el, attrName);
+		return BaserElement.getBoolAttr(this.el, attrName);
 	}
 
 	/**
 	 * オプションとdata属性の値、属性の値をマージする
+	 * 
+	 * use: jQuery
 	 *
 	 * TODO: テストを書く
 	 * TODO: サブクラスに反映させる
 	 * 
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.8.0
 	 *
 	 */
 	public mergeOptions (defaultOptions: any, options: any): any {
-		var optName: string;
-		var attrs: { [option: string ]: any } = {};
-		var dataAttrs: { [option: string ]: any } = {};
+		let attrs: { [option: string ]: any } = {};
+		let dataAttrs: { [option: string ]: any } = {};
+
+		let optName: string;
 		for (optName in defaultOptions) {
 			if (defaultOptions.hasOwnProperty(optName)) {
 				// 属性はidとclassは除外する

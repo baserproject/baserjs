@@ -83,7 +83,6 @@ test('baser.BaserElement.prototype.addClassのテスト', function() {
 	var $test = $('#test');
 	var testElem = new baser.BaserElement($test);
 
-
 	testElem.addClass('sample-block');
 	ok(testElem.$el.hasClass('-bc-sample-block'), 'baser.BaserElement.prototype.addClass で問題なくクラスは付加されました');
 
@@ -96,21 +95,6 @@ test('baser.BaserElement.prototype.addClassのテスト', function() {
 	testElem.addClass('sample-block', '', 'sample-modifier');
 	ok(testElem.$el.hasClass('-bc-sample-block--sample-modifier'), 'baser.BaserElement.prototype.addClass で問題なくクラスは付加されました');
 
-
-});
-
-test('baser.BaserElement.getBoolAttrのテスト', function() {
-
-	// <input type="checkbox" checked data-foo data-bar="bar" data-hoge="" data-fuga="false" data-false="0" data-true="1.0">
-
-	var $test = $('#getBoolAttr input');
-	ok(baser.BaserElement.getBoolAttr($test, 'checked'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
-	ok(baser.BaserElement.getBoolAttr($test, 'data-foo'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
-	ok(baser.BaserElement.getBoolAttr($test, 'data-bar'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
-	ok(baser.BaserElement.getBoolAttr($test, 'data-hoge'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
-	ok(!baser.BaserElement.getBoolAttr($test, 'data-fuga'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
-	ok(!baser.BaserElement.getBoolAttr($test, 'data-false'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
-	ok(baser.BaserElement.getBoolAttr($test, 'data-true'), 'baser.BaserElement.getBoolAttr は正しく論理値を返しました');
 
 });
 
