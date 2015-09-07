@@ -12,6 +12,9 @@ var UtilArray = (function () {
      * 配列中の対象の要素が一番最初に存在するインデックス番号を返す
      * 存在しない場合は -1 を返す
      *
+     * IE8のためのpolyfill
+     * ※Array.prototype.indexOfを完全に再現しているわけではない
+     *
      * @version 0.9.0
      * @since 0.2.0
      * @param array 対象の配列
@@ -23,10 +26,13 @@ var UtilArray = (function () {
         if (Array.prototype.indexOf) {
             return array.indexOf(searchElement);
         }
-        for (var i = 0, l = array.length; i < l; i++) {
-            if (searchElement === array[i]) {
+        var i = 0;
+        for (var _i = 0; _i < array.length; _i++) {
+            var item = array[_i];
+            if (searchElement === item) {
                 return i;
             }
+            i++;
         }
         return -1;
     };

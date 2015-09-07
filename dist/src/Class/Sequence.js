@@ -89,8 +89,9 @@ var Sequence = (function (_super) {
          *
          */
         this._isStop = true;
-        for (var i = 0, l = tasks.length; i < l; i++) {
-            this._tasks.push(new Task(tasks[i], this));
+        for (var _i = 0; _i < tasks.length; _i++) {
+            var task = tasks[_i];
+            this._tasks.push(new Task(task, this));
         }
     }
     /**

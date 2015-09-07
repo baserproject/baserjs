@@ -67,13 +67,13 @@ class EventDispatcher implements IEventDispatcher {
 		} else {
 			types = type;
 		}
-		for (let i: number = 0, l: number = types.length; i < l; i++) {
-			let eventHandler: EventHandler = new EventHandler(this, types[i], handler);
+		for (let type of types) {
+			let eventHandler: EventHandler = new EventHandler(this, type, handler);
 			EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
-			if (!EventDispatcher.types[types[i]]) {
-				EventDispatcher.types[types[i]] = [];
+			if (!EventDispatcher.types[type]) {
+				EventDispatcher.types[type] = [];
 			}
-			EventDispatcher.types[types[i]].push(eventHandler);
+			EventDispatcher.types[type].push(eventHandler);
 		}
 		return this;
 	}
@@ -94,8 +94,8 @@ class EventDispatcher implements IEventDispatcher {
 		} else {
 			types = type;
 		}
-		for (let i: number = 0, l: number = types.length; i < l; i++) {
-			delete EventDispatcher.types[types[i]];
+		for (let type of types) {
+			delete EventDispatcher.types[type];
 		}
 		return this;
 	}

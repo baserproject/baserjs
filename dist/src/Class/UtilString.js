@@ -41,9 +41,10 @@ var UtilString = (function () {
         var words = str.replace(/[A-Z]/g, function ($1) {
             return " " + $1.toLowerCase();
         }).split(/[^a-z0-9]+/ig);
-        for (var i = 0, l = words.length; i < l; i++) {
-            if (words[i]) {
-                result.push(words[i].toLowerCase());
+        for (var _i = 0; _i < words.length; _i++) {
+            var word = words[_i];
+            if (word) {
+                result.push(word.toLowerCase());
             }
         }
         return result.join('-');
@@ -95,6 +96,8 @@ var UtilString = (function () {
     };
     /**
      * 最初に登場する指定の区切り文字の場所で文字列を一回だけ分割する
+     *
+     * TODO: テストを書く
      *
      * @version 0.9.0
      * @since 0.7.0

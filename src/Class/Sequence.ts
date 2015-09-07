@@ -93,8 +93,8 @@ class Sequence extends EventDispatcher {
 	 */
 	constructor (tasks: Function[]) {
 		super();
-		for (let i: number = 0, l: number = tasks.length; i < l; i++) {
-			this._tasks.push(new Task(tasks[i], this));
+		for (let task of tasks) {
+			this._tasks.push(new Task(task, this));
 		}
 	}
 
