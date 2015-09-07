@@ -6,7 +6,7 @@ import YoutubeMuteControllerOptions = require('../Interface/YoutubeMuteControlle
 /**
  * YouTube要素
  *
- * @version 0.8.0
+ * @version 0.9.0
  * @since 0.0.7
  *
  */
@@ -110,10 +110,13 @@ class YouTube extends BaserElement {
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.7
 	 * @param el 管理するDOM要素
+	 * @param options オプション
 	 *
 	 */
 	constructor (el: HTMLElement, options?: YouTubeOption) {
@@ -140,20 +143,25 @@ class YouTube extends BaserElement {
 
 	/**
 	 * 初期化
+	 * 
+	 * use: jQuery
+	 * 
+	 * TODO: 長いので分割
 	 *
 	 * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.0.7
 	 * @param $el 管理するDOM要素のjQueryオブジェクト
-	 * @return {booelan} 初期化が成功したかどうか
+	 * @param options オプション
+	 * @return 初期化が成功したかどうか
 	 *
 	 */
 	private _init (options?: YouTubeOption): boolean {
 
-		var protocol: string = location.protocol === 'file:' ? 'http:' : '';
+		let protocol: string = location.protocol === 'file:' ? 'http:' : '';
 
-		var defaultOptions: YouTubeOption = {
+		let defaultOptions: YouTubeOption = {
 			rel: false,
 			autoplay: true,
 			stopOnInactive: false,
@@ -175,8 +183,8 @@ class YouTube extends BaserElement {
 
 		this.movieId = this.movieOption.id.split(/\s*,\s*/);
 
-		var $mov: JQuery = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
-		var param: string = $.param({
+		let $mov: JQuery = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
+		let param: string = $.param({
 			version: 3,
 			rel: this.movieOption.rel ? 1 : 0,
 			autoplay: this.movieOption.autoplay ? 1 : 0,
@@ -190,13 +198,13 @@ class YouTube extends BaserElement {
 			enablejsapi: 1
 		});
 
-		var id: string = this.movieId[this.movieOption.index];
+		let id: string = this.movieId[this.movieOption.index];
 
-		var src: string = protocol + YouTube.PLAYER_URL + id + '?' + param;
+		let src: string = protocol + YouTube.PLAYER_URL + id + '?' + param;
 
 		$mov.prop('src', src);
 
-		var playerID: string = this.id + '-Player';
+		let playerID: string = this.id + '-Player';
 		$mov.prop('id', playerID);
 
 		$mov.css({
@@ -220,14 +228,12 @@ class YouTube extends BaserElement {
 
 		$.getScript(protocol + YouTube.API_URL);
 
-		var intervalTimer: number;
-
-		intervalTimer = window.setInterval( () => {
+		let intervalTimer: number = setInterval( () => {
 			if (!this.player && 'YT' in window && YT.Player) {
 				this._createPlayer(playerID);
 			}
 			if (this.player && this.player.pauseVideo && this.player.playVideo) {
-				window.clearInterval(intervalTimer);
+				clearInterval(intervalTimer);
 				this._onEmbeded();
 			}
 		}, 300);
@@ -238,20 +244,22 @@ class YouTube extends BaserElement {
 
 	/**
 	 * プレイヤーを生成する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.8.0
 	 * @param playerID プレイヤーのDOM ID
 	 *
 	 */
-	private _createPlayer (playerID: string) {
-		this.player = new YT.Player(playerID, {
+	private _createPlayer (playerID: string): void {
+		this.player = new YT.Player(playerID, <YT.PlayerOptions> {
 			events: {
 				onStateChange: (e: YT.EventArgs): void => {
 					switch (e.data) {
 						case -1: {
 							this.trigger('unstarted', [this.player]);
-							var listIndex: number = this.player.getPlaylistIndex();
+							let listIndex: number = this.player.getPlaylistIndex();
 							if (this.currentCueIndex !== listIndex) {
 								this.trigger('changecue', [this.player]);
 							}
@@ -297,8 +305,10 @@ class YouTube extends BaserElement {
 
 	/**
 	 * プレイヤーの生成が完了して実行可能になったときに呼ばれる処理
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.8.0
 	 *
 	 */
@@ -319,7 +329,7 @@ class YouTube extends BaserElement {
 		}
 
 		// TODO: youtube.d.ts に loadPlaylist() と cuePlaylist() が登録されていない
-		var _player: any = this.player;
+		let _player: any = this.player;
 		if (this.movieId.length >= 2) {
 			if (this.movieOption.autoplay) {
 				_player.loadPlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);
@@ -337,6 +347,7 @@ class YouTube extends BaserElement {
 	 *
 	 * @version 0.0.7
 	 * @since 0.0.7
+	 * @param options オプション
 	 *
 	 */
 	public reload (options?: YouTubeOption): void {
@@ -371,23 +382,28 @@ class YouTube extends BaserElement {
 
 	/**
 	 * ミュートのオンオフを要素にアサインする
+	 * 
+	 * TODO: 別のクラスにする
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.5.0
 	 * @param $el アサインするDOM要素のjQueryオブジェクト
 	 * @param options オプション
 	 *
 	 */
-	public muteController ($el: JQuery, options: YoutubeMuteControllerOptions): void {
-		var defaults: YoutubeMuteControllerOptions = {
-			eventType: <string> 'click',
-			mutedClass: <string> 'is-muted',
-			unmutedClass: <string> 'is-unmuted',
-			baseClass: <string> 'youtube-mute-ctrl'
+	public muteController (el: HTMLElement | JQuery, options: YoutubeMuteControllerOptions): void {
+		let $el: JQuery = $(el);
+		let defaults: YoutubeMuteControllerOptions = {
+			eventType: 'click',
+			mutedClass: 'is-muted',
+			unmutedClass: 'is-unmuted',
+			baseClass: 'youtube-mute-ctrl'
 		};
-		var conf: YoutubeMuteControllerOptions = $.extend(defaults, options);
+		let conf: YoutubeMuteControllerOptions = $.extend(defaults, options);
 		BaserElement.addClassTo($el, conf.baseClass);
-		var update: () => void = (): void => {
+		let update: () => void = (): void => {
 			if (this._isMuted) {
 				BaserElement.addClassTo($el, conf.baseClass, '', conf.mutedClass);
 				BaserElement.removeClassFrom($el, conf.baseClass, '', conf.unmutedClass);
@@ -396,7 +412,7 @@ class YouTube extends BaserElement {
 				BaserElement.removeClassFrom($el, conf.baseClass, '', conf.mutedClass);
 			}
 		};
-		var bindCtrl: () => void = (): void => {
+		let bindCtrl: () => void = (): void => {
 			$el.on(conf.eventType, (e: JQueryEventObject): any => {
 				if (this._isMuted) {
 					this.unMute();

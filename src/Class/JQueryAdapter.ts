@@ -272,22 +272,19 @@ class JQueryAdapter {
 
 	}
 
-	// @version 0.5.0
+	// @version 0.9.0
 	// @since 0.1.0
 	public bcBoxLink (): JQuery {
-		var self: JQuery = $(this);
-		self.on('click', function (e: JQueryEventObject): void {
-			var $elem: JQuery = $(this);
-			var $link: JQuery = $elem.find('a, area').eq(0);
-			var href: string = $link.prop('href');
-			var isBlank: boolean;
+		return $(self).on('click', function (e: JQueryEventObject): void {
+			let $elem: JQuery = $(this);
+			let $link: JQuery = $elem.find('a, area').eq(0);
+			let href: string = $link.prop('href');
 			if ($link.length && href) {
-				isBlank = $link.prop('target') === '_blank';
+				let isBlank: boolean = $link.prop('target') === '_blank';
 				Browser.jumpTo(href, isBlank);
 				e.preventDefault();
 			}
 		});
-		return self;
 	}
 
 	/**
@@ -305,8 +302,12 @@ class JQueryAdapter {
 	 */
 	public bcCheckbox (options: CheckableElementOption): JQuery {
 		var self = $(this);
-		return self.each( (i: number, elem: HTMLElement): void => {
-			new Checkbox(elem, options);
+		return self.each( (i: number, elem: HTMLInputElement): void => {
+			if (elem.nodeName === 'INPUT') {
+				new Checkbox(elem, options);
+			} else if ('console' in window) {
+				console.warn('TypeError: A Node is not HTMLInputElement');
+			}
 		});
 	}
 
@@ -325,8 +326,12 @@ class JQueryAdapter {
 	 */
 	public bcRadio (options: CheckableElementOption): JQuery {
 		var self = $(this);
-		return self.each( (i: number, elem: HTMLElement): void => {
-			new Radio(elem, options);
+		return self.each( (i: number, elem: HTMLInputElement): void => {
+			if (elem.nodeName === 'INPUT') {
+				new Radio(elem, options);
+			} else if ('console' in window) {
+				console.warn('TypeError: A Node is not HTMLInputElement');
+			}
 		});
 	}
 
@@ -345,7 +350,7 @@ class JQueryAdapter {
 	 */
 	public bcSelect (options: string | SelectOption): JQuery {
 		var self = $(this);
-		return self.each( (i: number, elem: HTMLElement): void => {
+		return self.each( (i: number, elem: HTMLSelectElement): void => {
 			var $elem: JQuery = $(elem);
 			if (typeof options === 'string') {
 				switch (options) {
@@ -354,8 +359,10 @@ class JQueryAdapter {
 						select.update();
 					}
 				}
-			} else {
+			} if (elem.nodeName === 'SELECT') {
 				new Select(elem, options);
+			} else if ('console' in window) {
+				console.warn('TypeError: A Node is not HTMLSelectElement');
 			}
 		});
 	}

@@ -8,7 +8,7 @@ var BaserElement = require('./BaserElement');
 /**
  * YouTube要素
  *
- * @version 0.8.0
+ * @version 0.9.0
  * @since 0.0.7
  *
  */
@@ -17,9 +17,12 @@ var YouTube = (function (_super) {
     /**
      * コンストラクタ
      *
+     * use: jQuery
+     *
      * @version 0.9.0
      * @since 0.0.7
      * @param el 管理するDOM要素
+     * @param options オプション
      *
      */
     function YouTube(el, options) {
@@ -49,12 +52,17 @@ var YouTube = (function (_super) {
     /**
      * 初期化
      *
+     * use: jQuery
+     *
+     * TODO: 長いので分割
+     *
      * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
      *
-     * @version 0.8.0
+     * @version 0.9.0
      * @since 0.0.7
      * @param $el 管理するDOM要素のjQueryオブジェクト
-     * @return {booelan} 初期化が成功したかどうか
+     * @param options オプション
+     * @return 初期化が成功したかどうか
      *
      */
     YouTube.prototype._init = function (options) {
@@ -113,13 +121,12 @@ var YouTube = (function (_super) {
             $mov.data('height', this.movieOption.height);
         }
         $.getScript(protocol + YouTube.API_URL);
-        var intervalTimer;
-        intervalTimer = window.setInterval(function () {
+        var intervalTimer = setInterval(function () {
             if (!_this.player && 'YT' in window && YT.Player) {
                 _this._createPlayer(playerID);
             }
             if (_this.player && _this.player.pauseVideo && _this.player.playVideo) {
-                window.clearInterval(intervalTimer);
+                clearInterval(intervalTimer);
                 _this._onEmbeded();
             }
         }, 300);
@@ -128,7 +135,9 @@ var YouTube = (function (_super) {
     /**
      * プレイヤーを生成する
      *
-     * @version 0.8.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.8.0
      * @param playerID プレイヤーのDOM ID
      *
@@ -188,7 +197,9 @@ var YouTube = (function (_super) {
     /**
      * プレイヤーの生成が完了して実行可能になったときに呼ばれる処理
      *
-     * @version 0.8.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.8.0
      *
      */
@@ -224,6 +235,7 @@ var YouTube = (function (_super) {
      *
      * @version 0.0.7
      * @since 0.0.7
+     * @param options オプション
      *
      */
     YouTube.prototype.reload = function (options) {
@@ -256,14 +268,19 @@ var YouTube = (function (_super) {
     /**
      * ミュートのオンオフを要素にアサインする
      *
-     * @version 0.8.0
+     * TODO: 別のクラスにする
+     *
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.5.0
      * @param $el アサインするDOM要素のjQueryオブジェクト
      * @param options オプション
      *
      */
-    YouTube.prototype.muteController = function ($el, options) {
+    YouTube.prototype.muteController = function (el, options) {
         var _this = this;
+        var $el = $(el);
         var defaults = {
             eventType: 'click',
             mutedClass: 'is-muted',

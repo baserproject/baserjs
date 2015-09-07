@@ -11,7 +11,7 @@ var RadioGroup = require('./RadioGroup');
 /**
  * ラジオボタンの拡張クラス
  *
- * @version 0.1.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -19,6 +19,8 @@ var Radio = (function (_super) {
     __extends(Radio, _super);
     /**
      * コンストラクタ
+     *
+     * use: jQuery
      *
      * @version 0.9.0
      * @since 0.0.1
@@ -40,6 +42,7 @@ var Radio = (function (_super) {
         BaserElement.addClassTo(this.$label, Radio.classNameRadio, FormElement.classNameLabel);
         BaserElement.addClassTo(this.$wrapper, Radio.classNameRadio + '-' + FormElement.classNameWrapper);
         // ラジオボタングループに登録
+        // TODO: APIをRadioGroup.add(name, elem)にする
         if (!RadioGroup.groups[this.name]) {
             RadioGroup.groups[this.name] = new RadioGroup(this.name);
         }
@@ -48,6 +51,8 @@ var Radio = (function (_super) {
     /**
      * チェンジイベントのハンドラ
      *
+     * use: jQuery
+     *
      * @version 0.7.0
      * @since 0.0.1
      *
@@ -55,6 +60,7 @@ var Radio = (function (_super) {
     Radio.prototype._onchenge = function () {
         _super.prototype._onchenge.call(this);
         // 同じname属性のラジオボタン要素も同時に変更をする
+        // TODO: APIをRadioGroup.update(name, elem)にする
         RadioGroup.groups[this.name].update(this);
     };
     /**

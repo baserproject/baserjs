@@ -13,8 +13,8 @@
 		var $output = $('#output');
 		var $button = $('button');
 
-		var input = new baser.ui.element.FormElement($input);
-		var input2 = new baser.ui.element.FormElement($input2);
+		var input = new baser.FormElement($input[0]);
+		var input2 = new baser.FormElement($input2[0]);
 
 		input.on('change', function () {
 			$output.text($output.text() + '\nbaser: ' + $input.val());

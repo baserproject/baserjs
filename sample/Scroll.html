@@ -15,13 +15,23 @@
 
 		$('.btn').click(function() {
 
-			var scroll = new baser.ui.Scroll;
-			scroll.to($(this).text(), {
-				onScrollStart: function(e) { console.log(e.type) },
-				onScrollEnd: function(e) { console.log(e.type) },
-				onScrollCancel: function(e) { console.log(e.type) },
-				onScrollProgress: function(e) { console.log(e.type) }
-			});
+			var scroll = new baser.Scroll;
+			if (isNaN($(this).text())) {
+				scroll.to($(this).text(), {
+					onScrollStart: function(e) { console.log(e.type) },
+					onScrollEnd: function(e) { console.log(e.type) },
+					onScrollCancel: function(e) { console.log(e.type) },
+					onScrollProgress: function(e) { console.log(e.type) }
+				});
+			} else {
+				scroll.to(+$(this).text(), {
+					onScrollStart: function(e) { console.log(e.type) },
+					onScrollEnd: function(e) { console.log(e.type) },
+					onScrollCancel: function(e) { console.log(e.type) },
+					onScrollProgress: function(e) { console.log(e.type) }
+				});
+			}
+			
 
 		});
 

@@ -9,7 +9,7 @@ var FormElement = require('./FormElement');
 /**
  * テキストフィールドの拡張クラス
  *
- * @version 0.4.0
+ * @version 0.9.0
  * @since 0.4.0
  *
  */
@@ -17,6 +17,8 @@ var TextField = (function (_super) {
     __extends(TextField, _super);
     /**
      * コンストラクタ
+     *
+     * use: jQuery
      *
      * @version 0.9.0
      * @since 0.4.0
@@ -62,6 +64,8 @@ var TextField = (function (_super) {
     /**
      * ラップ要素を生成
      *
+     * use: jQuery
+     *
      * @version 0.4.0
      * @since 0.4.0
      * @override
@@ -73,6 +77,8 @@ var TextField = (function (_super) {
     };
     /**
      * イベントの登録
+     *
+     * use: jQuery
      *
      * @version 0.4.1
      * @since 0.4.0
@@ -112,7 +118,9 @@ var TextField = (function (_super) {
     /**
      * 要素の状態を更新する
      *
-     * @version 0.4.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
      *
      */
@@ -145,33 +153,39 @@ var TextField = (function (_super) {
     /**
      * 入力されている状態を設定する
      *
-     * @version 0.4.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
      *
      */
     TextField.prototype._setStateInputted = function () {
         this.isEmpty = false;
-        BaserElement.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
+        BaserElement.removeClass(this.el, FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
         BaserElement.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, TextField.classNameStateUninput);
         BaserElement.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', TextField.classNameStateUninput);
     };
     /**
      * 入力されていない状態を設定する
      *
-     * @version 0.4.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
      *
      */
     TextField.prototype._setStateUninputted = function () {
         this.isEmpty = true;
-        BaserElement.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
+        BaserElement.addClass(this.el, FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
         BaserElement.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, TextField.classNameStateUninput);
         BaserElement.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', TextField.classNameStateUninput);
     };
     /**
      * プレースホルダーと値が同じかどうか
      *
-     * @version 0.4.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
      *
      */
@@ -181,6 +195,8 @@ var TextField = (function (_super) {
     };
     /**
      * プレースホルダーの値を設定する
+     *
+     * use: jQuery
      *
      * @version 0.4.0
      * @since 0.4.0
@@ -193,13 +209,13 @@ var TextField = (function (_super) {
     /**
      * 【IE用】カーソル（キャレット）を先頭に持っていく
      *
-     * @version 0.4.0
+     * @version 0.9.0
      * @since 0.4.0
      *
      */
     TextField.prototype._msCaretMoveToTop = function () {
         // TODO: MS用の型を調査して定義
-        var input = this.$el[0];
+        var input = this.el;
         var range = input.createTextRange();
         range.collapse();
         range.moveStart('character', 0);

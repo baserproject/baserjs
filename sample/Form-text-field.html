@@ -17,11 +17,11 @@
 			var $this = $(this);
 
 			if (i === 1) {
-				var select = new baser.ui.element.TextField($this, {
+				var select = new baser.TextField(this, {
 					useDefaultOptionList: true
 				});
 			} else {
-				var select = new baser.ui.element.TextField($this);
+				var select = new baser.TextField(this);
 			}
 
 			select.on('change', function () {

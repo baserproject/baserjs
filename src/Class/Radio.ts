@@ -8,7 +8,7 @@ import CheckableElementOption = require('../Interface/CheckableElementOption');
 /**
  * ラジオボタンの拡張クラス
  *
- * @version 0.1.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -25,6 +25,8 @@ class Radio extends CheckableElement implements IRadio {
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.1
@@ -32,7 +34,7 @@ class Radio extends CheckableElement implements IRadio {
 	 * @param options オプション
 	 *
 	 */
-	constructor (el: HTMLElement, options: CheckableElementOption) {
+	constructor (el: HTMLInputElement, options: CheckableElementOption) {
 
 		super(el, options);
 
@@ -51,6 +53,7 @@ class Radio extends CheckableElement implements IRadio {
 		BaserElement.addClassTo(this.$wrapper, Radio.classNameRadio + '-' + FormElement.classNameWrapper);
 
 		// ラジオボタングループに登録
+		// TODO: APIをRadioGroup.add(name, elem)にする
 		if (!RadioGroup.groups[this.name]) {
 			RadioGroup.groups[this.name] = new RadioGroup(this.name);
 		}
@@ -60,18 +63,18 @@ class Radio extends CheckableElement implements IRadio {
 
 	/**
 	 * チェンジイベントのハンドラ
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.7.0
 	 * @since 0.0.1
 	 *
 	 */
 	public _onchenge () {
-
 		super._onchenge();
-
 		// 同じname属性のラジオボタン要素も同時に変更をする
+		// TODO: APIをRadioGroup.update(name, elem)にする
 		RadioGroup.groups[this.name].update(this);
-
 	}
 
 }

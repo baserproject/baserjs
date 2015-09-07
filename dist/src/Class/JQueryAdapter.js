@@ -242,22 +242,19 @@ var JQueryAdapter = (function () {
         }
         return self;
     };
-    // @version 0.5.0
+    // @version 0.9.0
     // @since 0.1.0
     JQueryAdapter.prototype.bcBoxLink = function () {
-        var self = $(this);
-        self.on('click', function (e) {
+        return $(self).on('click', function (e) {
             var $elem = $(this);
             var $link = $elem.find('a, area').eq(0);
             var href = $link.prop('href');
-            var isBlank;
             if ($link.length && href) {
-                isBlank = $link.prop('target') === '_blank';
+                var isBlank = $link.prop('target') === '_blank';
                 Browser.jumpTo(href, isBlank);
                 e.preventDefault();
             }
         });
-        return self;
     };
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する
@@ -275,7 +272,12 @@ var JQueryAdapter = (function () {
     JQueryAdapter.prototype.bcCheckbox = function (options) {
         var self = $(this);
         return self.each(function (i, elem) {
-            new Checkbox(elem, options);
+            if (elem.nodeName === 'INPUT') {
+                new Checkbox(elem, options);
+            }
+            else if ('console' in window) {
+                console.warn('TypeError: A Node is not HTMLInputElement');
+            }
         });
     };
     /**
@@ -294,7 +296,12 @@ var JQueryAdapter = (function () {
     JQueryAdapter.prototype.bcRadio = function (options) {
         var self = $(this);
         return self.each(function (i, elem) {
-            new Radio(elem, options);
+            if (elem.nodeName === 'INPUT') {
+                new Radio(elem, options);
+            }
+            else if ('console' in window) {
+                console.warn('TypeError: A Node is not HTMLInputElement');
+            }
         });
     };
     /**
@@ -322,8 +329,11 @@ var JQueryAdapter = (function () {
                     }
                 }
             }
-            else {
+            if (elem.nodeName === 'SELECT') {
                 new Select(elem, options);
+            }
+            else if ('console' in window) {
+                console.warn('TypeError: A Node is not HTMLSelectElement');
             }
         });
     };

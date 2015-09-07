@@ -5,13 +5,14 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = new __();
 };
 var UtilString = require('./UtilString');
+var EventDispatcher = require('./EventDispatcher');
 var Browser = require('./Browser');
 var BreakPoints = require('./BreakPoints');
 var BaserElement = require('./BaserElement');
 /**
  * 高さ揃えをするボックスを管理するクラス
  *
- * @version 0.7.0
+ * @version 0.9.0
  * @since 0.7.0
  *
  */
@@ -20,7 +21,7 @@ var AlignedBoxes = (function (_super) {
     /**
      * コンストラクタ
      *
-     * TODO: BaserElementのサブクラスにしない
+     * use: jQuery
      *
      * @version 0.9.0
      * @since 0.7.0
@@ -31,7 +32,8 @@ var AlignedBoxes = (function (_super) {
     function AlignedBoxes($el, column, callback) {
         var _this = this;
         if (column === void 0) { column = 0; }
-        _super.call(this, $el[0]);
+        _super.call(this);
+        this.$el = $el;
         AlignedBoxes.boot();
         var uid = this.$el.data(AlignedBoxes.DATA_KEY_ID);
         if (uid) {
@@ -63,12 +65,13 @@ var AlignedBoxes = (function (_super) {
     /**
      * 基準の文字要素を生成する
      *
-     * @version 0.7.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.7.0
      *
      */
     AlignedBoxes.createChar = function () {
-        var dummyChar;
         var $dummyChar = $('<del>M</del>').css({
             display: 'block',
             visibility: 'hidden',
@@ -84,8 +87,11 @@ var AlignedBoxes = (function (_super) {
     /**
      * 文字の大きさが変わったかどうか
      *
+     * TODO: 破壊的変更を加えていて単純な評価関数ではない
+     *
      * @version 0.7.0
      * @since 0.7.0
+     * @return 文字の大きさが変わったかどうか
      *
      */
     AlignedBoxes.isChanged = function () {
@@ -113,13 +119,12 @@ var AlignedBoxes = (function (_super) {
     /**
      * ボックスのサイズを再設定する
      *
-     * @version 0.7.0
+     * @version 0.9.0
      * @since 0.7.0
      *
      */
     AlignedBoxes.reAlign = function () {
-        var uid;
-        for (uid in AlignedBoxes.groups) {
+        for (var uid in AlignedBoxes.groups) {
             AlignedBoxes.groups[uid].trigger('realign');
         }
         return;
@@ -127,25 +132,28 @@ var AlignedBoxes = (function (_super) {
     /**
      * 監視タイマーを起動する
      *
-     * @version 0.7.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.7.0
      *
      */
     AlignedBoxes.boot = function () {
-        var $w;
         if (!AlignedBoxes.isBooted) {
-            $w = $(window);
-            $w.on('load', AlignedBoxes.reAlign);
+            $(window).on('load', AlignedBoxes.reAlign);
             Browser.browser.on('resizeend', AlignedBoxes.reAlign);
             AlignedBoxes.isBooted = true;
             AlignedBoxes.createChar();
-            AlignedBoxes.watchTimer = window.setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
+            // TODO: タイマーによる監視をオプションでオフにできるようにする
+            AlignedBoxes.watchTimer = setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
         }
     };
     /**
      * ボックスの高さ揃える
      *
-     * @version 0.8.1
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.8.1
      *
      */
@@ -173,16 +181,17 @@ var AlignedBoxes = (function (_super) {
                 maxHeight = currentHeight;
             }
             if (i === lastIndex || column === _this._currentColumn - 1) {
-                for (var j = 0, l = $box_array.length; j < l; j++) {
-                    if ($box_array[j]) {
+                for (var _i = 0; _i < $box_array.length; _i++) {
+                    var $box_1 = $box_array[_i];
+                    if ($box_1) {
                         var cancel = void 0;
                         // コールバックを実行
-                        if ($.isFunction(_this._callback)) {
+                        if (_this._callback) {
                             cancel = !_this._callback(maxHeight, currentHeight, _this);
                         }
                         // コールバックの戻り値がfalseでなければ高さを変更
                         if (!cancel) {
-                            $box_array[j].height(maxHeight);
+                            $box_1.height(maxHeight);
                         }
                     }
                 }
@@ -192,7 +201,9 @@ var AlignedBoxes = (function (_super) {
     /**
      * 高さ揃えを解除する
      *
-     * @version 0.7.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.7.0
      *
      */
@@ -247,5 +258,5 @@ var AlignedBoxes = (function (_super) {
      */
     AlignedBoxes.groups = {};
     return AlignedBoxes;
-})(BaserElement);
+})(EventDispatcher);
 module.exports = AlignedBoxes;

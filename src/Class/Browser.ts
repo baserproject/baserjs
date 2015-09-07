@@ -1,4 +1,3 @@
-
 import EventDispatcher = require('./EventDispatcher');
 import Locational = require('./Locational');
 import BrowserUserAgent = require('../Interface/BrowserUserAgent');

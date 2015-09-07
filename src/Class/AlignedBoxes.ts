@@ -1,4 +1,5 @@
 import UtilString = require('./UtilString');
+import EventDispatcher = require('./EventDispatcher');
 import Browser = require('./Browser');
 import BreakPoints = require('./BreakPoints');
 import BaserElement = require('./BaserElement');
@@ -8,11 +9,11 @@ import BreakPointsOption = require('../Interface/BreakPointsOption');
 /**
  * 高さ揃えをするボックスを管理するクラス
  *
- * @version 0.7.0
+ * @version 0.9.0
  * @since 0.7.0
  *
  */
-class AlignedBoxes extends BaserElement {
+class AlignedBoxes extends EventDispatcher {
 
 	/**
 	 * jQuery dataに自信のインスタンスを登録するキー
@@ -88,13 +89,14 @@ class AlignedBoxes extends BaserElement {
 
 	/**
 	 * 基準の文字要素を生成する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 *
 	 */
 	static createChar (): void {
-		var dummyChar: HTMLElement;
 		var $dummyChar: JQuery = $('<del>M</del>').css({
 			display: 'block',
 			visibility: 'hidden',
@@ -110,9 +112,12 @@ class AlignedBoxes extends BaserElement {
 
 	/**
 	 * 文字の大きさが変わったかどうか
-	 *
+	 * 
+	 * TODO: 破壊的変更を加えていて単純な評価関数ではない
+	 * 
 	 * @version 0.7.0
 	 * @since 0.7.0
+	 * @return 文字の大きさが変わったかどうか
 	 *
 	 */
 	static isChanged (): boolean {
@@ -142,13 +147,12 @@ class AlignedBoxes extends BaserElement {
 	/**
 	 * ボックスのサイズを再設定する
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 *
 	 */
 	static reAlign (): void {
-		var uid: string;
-		for (uid in AlignedBoxes.groups) {
+		for (var uid in AlignedBoxes.groups) {
 			AlignedBoxes.groups[uid].trigger('realign');
 		}
 		return;
@@ -156,22 +160,32 @@ class AlignedBoxes extends BaserElement {
 
 	/**
 	 * 監視タイマーを起動する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 *
 	 */
 	static boot (): void {
-		var $w: JQuery;
 		if (!AlignedBoxes.isBooted) {
-			$w = $(window);
-			$w.on('load', AlignedBoxes.reAlign);
+			$(window).on('load', AlignedBoxes.reAlign);
 			Browser.browser.on('resizeend', AlignedBoxes.reAlign);
 			AlignedBoxes.isBooted = true;
 			AlignedBoxes.createChar();
-			AlignedBoxes.watchTimer = window.setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
+			// TODO: タイマーによる監視をオプションでオフにできるようにする
+			AlignedBoxes.watchTimer = setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
 		}
 	}
+
+	/**
+	 * 対象のDOM要素
+	 *
+	 * @version 0.9.0
+	 * @since 0.9.0
+	 *
+	 */
+	public $el: JQuery;
 
 	/**
 	 * ブレークポイントに寄るカラム数
@@ -202,9 +216,9 @@ class AlignedBoxes extends BaserElement {
 
 	/**
 	 * コンストラクタ
-	 *
-	 * TODO: BaserElementのサブクラスにしない
 	 * 
+	 * use: jQuery
+	 *
 	 * @version 0.9.0
 	 * @since 0.7.0
 	 * @param $el 対象のボックス要素
@@ -212,11 +226,13 @@ class AlignedBoxes extends BaserElement {
 	 * @param callback ボックスの高さ揃えるときのコールバック
 	 */
 	constructor ($el: JQuery, column: number | BreakPointsOption<number> = 0, callback?: AlignedBoxCallback) {
-		super($el[0]);
+		super();
+		
+		this.$el = $el;
 
 		AlignedBoxes.boot();
 
-		var uid: string = this.$el.data(AlignedBoxes.DATA_KEY_ID);
+		let uid: string = this.$el.data(AlignedBoxes.DATA_KEY_ID);
 
 		if (uid) {
 			this.destroy();
@@ -229,7 +245,7 @@ class AlignedBoxes extends BaserElement {
 
 		AlignedBoxes.groups[uid] = this;
 
-		var columnInfo: BreakPointsOption<number>;
+		let columnInfo: BreakPointsOption<number>;
 
 		if (typeof column === 'number') {
 			columnInfo = {
@@ -256,23 +272,25 @@ class AlignedBoxes extends BaserElement {
 
 	/**
 	 * ボックスの高さ揃える
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.8.1
+	 * @version 0.9.0
 	 * @since 0.8.1
 	 *
 	 */
 	private _align (): void {
-		var $box_array: JQuery[] = [];
-		var maxHeight: number = 0;
-		var lastIndex: number = this.$el.length - 1;
+		let $box_array: JQuery[] = [];
+		let maxHeight: number = 0;
+		let lastIndex: number = this.$el.length - 1;
 		this.$el.each( (i: number, elem: HTMLElement): any => {
-			var $box: JQuery = $(elem);
+			let $box: JQuery = $(elem);
 
 			// 要素の高さを強制に無効にする
 			BaserElement.removeCSSPropertyFromDOMElement('height', elem);
 
 			// column が 0 だと最初の要素の意味
-			var column: number = i % this._currentColumn;
+			let column: number = i % this._currentColumn;
 			if (column === 0) {
 				// 配列をリセットする
 				$box_array = [];
@@ -283,21 +301,21 @@ class AlignedBoxes extends BaserElement {
 
 			// 現在の高さと最大の高さを比べて最大の高さを更新
 			// column が 0 ならばリセットさせるので最大の高さもリセット
-			var currentHeight = $box.height();
+			let currentHeight = $box.height();
 			if (column === 0 || currentHeight > maxHeight) {
 				maxHeight = currentHeight;
 			}
 			if (i === lastIndex || column === this._currentColumn - 1) {
-				for (let j: number = 0, l: number = $box_array.length; j < l; j++) {
-					if ($box_array[j]) {
+				for (let $box of $box_array) {
+					if ($box) {
 						let cancel: boolean;
 						// コールバックを実行
-						if ($.isFunction(this._callback)) {
+						if (this._callback) {
 							cancel = !this._callback(maxHeight, currentHeight, this);
 						}
 						// コールバックの戻り値がfalseでなければ高さを変更
 						if (!cancel) {
-							$box_array[j].height(maxHeight);
+							$box.height(maxHeight);
 						}
 					}
 				}
@@ -307,15 +325,17 @@ class AlignedBoxes extends BaserElement {
 
 	/**
 	 * 高さ揃えを解除する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 *
 	 */
 	public destroy (): void {
 		this.$el.each( (i: number, elem: HTMLElement): void => {
-			var $this: JQuery = $(elem);
-			var uid: string = $this.data(AlignedBoxes.DATA_KEY_ID);
+			let $this: JQuery = $(elem);
+			let uid: string = $this.data(AlignedBoxes.DATA_KEY_ID);
 			$this.removeData(AlignedBoxes.DATA_KEY_ID);
 			if (uid in AlignedBoxes.groups) {
 				delete AlignedBoxes.groups[uid];
@@ -324,6 +344,5 @@ class AlignedBoxes extends BaserElement {
 	}
 
 }
-
 
 export = AlignedBoxes;

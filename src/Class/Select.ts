@@ -8,7 +8,7 @@ import SelectOption = require('../Interface/SelectOption');
 /**
  * セレクトボックスの拡張クラス
  *
- * @version 0.1.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -116,6 +116,16 @@ class Select extends FormElement implements ISelect {
 	static classNameStateUnselected: string = 'unselected';
 
 	/**
+	 * 管理するDOM要素
+	 *
+	 * @override
+	 * @version 0.9.0
+	 * @since 0.9.0
+	 *
+	 */
+	public el: HTMLSelectElement;
+
+	/**
 	 * 初期の選択されているオプションのインデックス番号
 	 *
 	 * @since 0.4.0
@@ -165,6 +175,8 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.1
@@ -172,7 +184,7 @@ class Select extends FormElement implements ISelect {
 	 * @param options オプション
 	 *
 	 */
-	constructor (el: HTMLElement, options: SelectOption) {
+	constructor (el: HTMLSelectElement, options: SelectOption) {
 
 		super(el, $.extend({}, Select.defaultOption, options));
 
@@ -205,28 +217,32 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * ラップ要素を生成
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 * @override
 	 *
 	 */
 	protected _createWrapper (): void {
 		super._createWrapper();
-		BaserElement.addClassTo(this.$wrapper, Select.classNameSelect + '-' + FormElement.classNameWrapper);
+		BaserElement.addClassTo(this.$wrapper, `${Select.classNameSelect}-${FormElement.classNameWrapper}`);
 	}
 
 	/**
 	 * 擬似セレクトボックス要素を生成する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.1
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 * @override
 	 *
 	 */
 	protected _createPsuedoElements (): void {
 		this.$pseudo = $('<a />');
-		this.$pseudo.attr('href', '#'); // Focusable
+		this.$pseudo.attr('href', '#'); // href属性がないとフォーカスを当てることができない
 		this.$pseudo.insertAfter(this.$el);
 		BaserElement.addClassTo(this.$pseudo, FormElement.classNameFormElementCommon);
 		BaserElement.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
@@ -276,8 +292,10 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * イベントの登録
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.1
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 * @override
 	 *
@@ -292,8 +310,8 @@ class Select extends FormElement implements ISelect {
 
 		// 擬似option要素を選択した時に実行する
 		this.$pseudo.on('click.bcSelect', 'li', (e: JQueryEventObject): void => {
-			var $li: JQuery = $(e.target);
-			var index: number = $li.index();
+			let $li: JQuery = $(e.target);
+			let index: number = $li.index();
 			this._onblur();
 			this.setIndex(index);
 			e.stopPropagation();
@@ -326,29 +344,28 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * スクロール位置を調整する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.1.0
+	 * @version 0.9.0
 	 * @since 0.1.0
 	 *
 	 */
 	private _scrollToSelectedPosition (): void {
-		var $psuedoOptList: JQuery;
-		var $psuedoOpt: JQuery;
-		var optPos: JQueryCoordinates;
-		var cntPos: JQueryCoordinates;
 		if (this.$options) {
-			$psuedoOptList = this.$options.find('li');
+			let $selectedPsuedoOpt: JQuery;
+			let $psuedoOptList: JQuery = this.$options.find('li');
 			this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
 				var $opt: JQuery = $(opt);
 				var isSelected: boolean = <boolean> $opt.prop('selected');
 				if (isSelected) {
-					$psuedoOpt = $psuedoOptList.eq(i);
+					$selectedPsuedoOpt = $psuedoOptList.eq(i);
 				}
 			});
 			// ポジションを正しく取得するために一度スクロール位置をリセットする
 			this.$options.scrollTop(0);
-			optPos = $psuedoOpt.offset();
-			cntPos = this.$options.offset();
+			let optPos: JQueryCoordinates = $selectedPsuedoOpt.offset();
+			let cntPos: JQueryCoordinates = this.$options.offset();
 			if (optPos && cntPos) {
 				this.$options.scrollTop(optPos.top - cntPos.top);
 			}
@@ -357,6 +374,8 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * 擬似要素にフォーカスがあったった時のイベントと伝達を制御する
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.4.0
 	 * @since 0.0.1
@@ -420,11 +439,13 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * フォーカス時のキーボードイベント
-	 *
+	 * 
+	 * use: jQuery
+	 * 
+	 * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
+	 * 
 	 * @version 0.4.0
 	 * @since 0.4.0
-	 *
-	 * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
 	 *
 	 */
 	private _bindKeybordEvent (): void {
@@ -461,6 +482,8 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * フォーカスがあたった時の処理
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.4.1
 	 * @since 0.0.1
@@ -485,6 +508,8 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * フォーカスがはずれた時の処理
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.1.0
 	 * @since 0.0.1
@@ -504,6 +529,7 @@ class Select extends FormElement implements ISelect {
 	 *
 	 * @version 0.8.0
 	 * @since 0.0.1
+	 * @return インスタンス自身
 	 *
 	 */
 	public update (): Select {
@@ -513,36 +539,33 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * 要素の状態を更新する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
 	private _update (): void {
 
-		var $selectedOption: JQuery
-		var $psuedoOptList: JQuery;
+		let $selectedOption: JQuery = this.$el.find(':selected');
 
-		$selectedOption = this.$el.find(':selected');
-
+		let $psuedoOptList: JQuery;
 		if (this.$options) {
 			$psuedoOptList = this.$options.find('li');
 		}
 
 		this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
-			var $opt: JQuery = $(opt);
-			var isSelected: boolean;
-			var isDisabled: boolean;
-			var $psuedoOpt: JQuery;
-			isSelected = <boolean> $opt.prop('selected');
-			isDisabled = <boolean> $opt.prop('disabled');
+			let $opt: JQuery = $(opt);
+			let isSelected: boolean = <boolean> $opt.prop('selected');
 			if (isSelected) {
 				this.$selected.text($opt.text());
 			}
 			if (this.$options) {
-				$psuedoOpt = $psuedoOptList.eq(i);
-				$psuedoOpt.attr('aria-selected', <string> '' + isSelected);
-				$psuedoOpt.attr('aria-disabled', <string> '' + isDisabled);
+				let isDisabled: boolean = <boolean> $opt.prop('disabled');
+				let $psuedoOpt: JQuery = $psuedoOptList.eq(i);
+				$psuedoOpt.attr('aria-selected', '' + isSelected);
+				$psuedoOpt.attr('aria-disabled', '' + isDisabled);
 				if (isSelected) {
 					BaserElement.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
 					BaserElement.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
@@ -562,15 +585,18 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * 値を設定する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 * @override
+	 * @param value 設定したい値
 	 *
 	 */
 	public setValue (value: string | number | boolean): void {
-		var valueString: string = String(value);
-		var $targetOption: JQuery = this.$el.find('option[value="' + valueString + '"]');
+		let valueString: string = '' + value;
+		let $targetOption: JQuery = this.$el.find(`option[value="${valueString}"]`);
 		if ($targetOption.length && !$targetOption.prop('selected')) {
 			$targetOption.prop('selected', true);
 			this._fireChangeEvent();
@@ -578,14 +604,18 @@ class Select extends FormElement implements ISelect {
 	}
 
 	/**
-	 * 値をインデックス番号から設定する
+	 * インデックス番号から選択する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.4.0
-	 *
+	 * @param index 対象のインデックス番号
+	 * @param isSilent イベントを伝達しない
+	 * 
 	 */
 	public setIndex (index: number, isSilent: boolean = false): void {
-		var $targetOption: JQuery = this.$el.find('option').eq(index);
+		let $targetOption: JQuery = this.$el.find('option').eq(index);
 		if ($targetOption.length && !$targetOption.prop('selected') && !$targetOption.prop('disabled')) {
 			$targetOption.prop('selected', true);
 			this._fireChangeEvent(isSilent);
@@ -594,15 +624,18 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * 現在の選択中のインデックス番号を取得する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
+	 * @return インデックス番号
 	 *
 	 */
 	public getIndex (): number {
-		var currentIndex: number = 0;
+		let currentIndex: number = 0;
 		this.$el.find('option').each( (i: number, el: HTMLElement): void => {
-			var $opt = $(el);
+			let $opt: JQuery = $(el);
 			if ($opt.prop('selected')) {
 				currentIndex = $opt.index();
 			}
@@ -613,34 +646,38 @@ class Select extends FormElement implements ISelect {
 	/**
 	 * 次の項目を選択する
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
+	 * @param isSilent イベントを伝達しない
 	 *
 	 */
 	public next (isSilent: boolean): void {
-		var currentIndex: number = this.getIndex();
-		var max: number = this.$el.find('option').length;
-		var nextIndex: number = currentIndex + 1;
+		let currentIndex: number = this.getIndex();
+		let max: number = this.$el.find('option').length;
+		let nextIndex: number = currentIndex + 1;
 		this.setIndex(Math.min(nextIndex, max), isSilent);
 	}
 
 	/**
 	 * 前の項目を選択する
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
+	 * @param isSilent イベントを伝達しない
 	 *
 	 */
 	public prev (isSilent: boolean): void {
-		var currentIndex: number = this.getIndex();
-		var prevIndex: number = currentIndex - 1;
+		let currentIndex: number = this.getIndex();
+		let prevIndex: number = currentIndex - 1;
 		this.setIndex(Math.max(prevIndex, 0), isSilent);
 	}
 
 	/**
 	 * 無効状態を設定する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.1
+	 * @version 0.9.0
 	 * @since 0.4.1
 	 * @override
 	 *

@@ -7,7 +7,7 @@ import TextFieldOption = require('../Interface/TextFieldOption');
 /**
  * テキストフィールドの拡張クラス
  *
- * @version 0.4.0
+ * @version 0.9.0
  * @since 0.4.0
  *
  */
@@ -52,6 +52,16 @@ class TextField extends FormElement implements ITextField {
 	static supportPlaceholder: boolean = $('<input />').prop('placeholder') !== undefined;
 
 	/**
+	 * 管理するDOM要素
+	 *
+	 * @override
+	 * @version 0.9.0
+	 * @since 0.9.0
+	 *
+	 */
+	public el: HTMLInputElement | HTMLTextAreaElement;
+
+	/**
 	 * 空かどうか
 	 *
 	 * @version 0.4.0
@@ -87,6 +97,8 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.9.0
 	 * @since 0.4.0
@@ -94,7 +106,7 @@ class TextField extends FormElement implements ITextField {
 	 * @param options オプション
 	 *
 	 */
-	constructor (el: HTMLElement, options: TextFieldOption) {
+	constructor (el: HTMLInputElement | HTMLTextAreaElement, options: TextFieldOption) {
 
 		super(el, $.extend({}, TextField.defaultOption, options));
 
@@ -130,6 +142,8 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * ラップ要素を生成
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.4.0
 	 * @since 0.4.0
@@ -143,6 +157,8 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * イベントの登録
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.4.1
 	 * @since 0.4.0
@@ -184,15 +200,17 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * 要素の状態を更新する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
 	private _update (): void {
 
-		var currentValue: string = this.$el.val() || '';
-		var isEmpty: boolean = !currentValue;
+		let currentValue: string = this.$el.val() || '';
+		let isEmpty: boolean = !currentValue;
 
 		if (TextField.supportPlaceholder) {
 			if (isEmpty) {
@@ -217,15 +235,17 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * 入力されている状態を設定する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
 	private _setStateInputted (): void {
 		this.isEmpty = false;
-		BaserElement.removeClassFrom(
-			this.$el,
+		BaserElement.removeClass(
+			this.el,
 			FormElement.classNameFormElementCommon,
 			'',
 			TextField.classNameStateUninput);
@@ -243,15 +263,17 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * 入力されていない状態を設定する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
 	private _setStateUninputted (): void {
 		this.isEmpty = true;
-		BaserElement.addClassTo(
-			this.$el,
+		BaserElement.addClass(
+			this.el,
 			FormElement.classNameFormElementCommon,
 			'',
 			TextField.classNameStateUninput);
@@ -269,18 +291,22 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * プレースホルダーと値が同じかどうか
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
 	private _equalPlaceholder (): boolean {
-		var currentValue: string = this.$el.val() || '';
+		let currentValue: string = this.$el.val() || '';
 		return this.placeholder === currentValue;
 	}
 
 	/**
 	 * プレースホルダーの値を設定する
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.4.0
 	 * @since 0.4.0
@@ -294,13 +320,13 @@ class TextField extends FormElement implements ITextField {
 	/**
 	 * 【IE用】カーソル（キャレット）を先頭に持っていく
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
 	private _msCaretMoveToTop (): void {
 		// TODO: MS用の型を調査して定義
-		var input: any = this.$el[0];
+		var input: any = this.el;
 		var range: any = input.createTextRange();
 		range.collapse();
 		range.moveStart('character', 0);

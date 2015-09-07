@@ -8,7 +8,7 @@ var BaserElement = require('./BaserElement');
 /**
  * マップ要素
  *
- * @version 0.8.0
+ * @version 0.9.0
  * @since 0.0.6
  *
  */
@@ -16,6 +16,8 @@ var GoogleMaps = (function (_super) {
     __extends(GoogleMaps, _super);
     /**
      * コンストラクタ
+     *
+     * use: jQuery
      *
      * @version 0.9.0
      * @since 0.0.6
@@ -33,23 +35,27 @@ var GoogleMaps = (function (_super) {
         if (!el.querySelector) {
             return;
         }
-        this.$el.addClass(GoogleMaps.className);
         if ('google' in window && google.maps) {
+            this.$el.addClass(GoogleMaps.className);
             this.mapOption = $.extend({}, options);
             this._init();
+            // TODO: 必要な処理か検討
+            GoogleMaps.maps.push(this);
+            this.$el.data(GoogleMaps.className, this);
         }
         else {
-            if (console && console.warn) {
+            if ('console' in window) {
                 console.warn('ReferenceError: "//maps.google.com/maps/api/js" を先に読み込む必要があります。');
+                return;
             }
         }
-        GoogleMaps.maps.push(this);
-        this.$el.data(GoogleMaps.className, this);
     }
     /**
      * 初期化
      *
-     * @version 0.6.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.0.6
      *
      */
@@ -77,7 +83,9 @@ var GoogleMaps = (function (_super) {
     /**
      * レンダリング
      *
-     * @version 0.8.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.2.0
      * @param mapCenterLat 緯度
      * @param mapCenterLng 経度
@@ -109,7 +117,7 @@ var GoogleMaps = (function (_super) {
         this.info = new google.maps.InfoWindow({
             disableAutoPan: true
         });
-        this.gmap = new google.maps.Map(this.$el[0], $.extend({}, this.mapOption, {
+        this.gmap = new google.maps.Map(this.el, $.extend({}, this.mapOption, {
             fitBounds: google.maps.Map.prototype.fitBounds
         }));
         $.each(coordinates, function (i, coordinate) {
@@ -124,6 +132,8 @@ var GoogleMaps = (function (_super) {
     /**
      * 再読み込み・再設定
      *
+     * use: jQuery
+     *
      * @version 0.6.0
      * @since 0.2.0
      *
@@ -135,7 +145,7 @@ var GoogleMaps = (function (_super) {
     /**
      * 住所文字列から座標を非同期で取得
      *
-     * @version 0.2.0
+     * @version 0.9.0
      * @since 0.2.0
      *
      */
@@ -144,28 +154,29 @@ var GoogleMaps = (function (_super) {
         geocoder.geocode({
             address: address
         }, function (results, status) {
-            var lat;
-            var lng;
             switch (status) {
-                case google.maps.GeocoderStatus.OK:
-                    lat = results[0].geometry.location.lat();
-                    lng = results[0].geometry.location.lng();
+                case google.maps.GeocoderStatus.OK: {
+                    var lat = results[0].geometry.location.lat();
+                    var lng = results[0].geometry.location.lng();
+                    callback(lat, lng);
                     break;
+                }
                 case google.maps.GeocoderStatus.INVALID_REQUEST:
                 case google.maps.GeocoderStatus.ZERO_RESULTS:
-                case google.maps.GeocoderStatus.OVER_QUERY_LIMIT:
+                case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
                     if (console && console.warn) {
                         console.warn('ReferenceError: "' + address + 'は不正な住所のだったため結果を返すことができませんでした。"');
                     }
                     break;
+                }
                 case google.maps.GeocoderStatus.ERROR:
-                case google.maps.GeocoderStatus.UNKNOWN_ERROR:
+                case google.maps.GeocoderStatus.UNKNOWN_ERROR: {
                     if (console && console.warn) {
                         console.warn('Error: "エラーが発生しました。"');
                     }
                     break;
+                }
             }
-            callback(lat, lng);
         });
     };
     /**
@@ -207,7 +218,7 @@ var GoogleMaps = (function (_super) {
 /**
  * 座標要素
  *
- * @version 0.8.0
+ * @version 0.9.0
  * @since 0.0.6
  *
  */
@@ -215,13 +226,18 @@ var Coordinate = (function () {
     /**
      * コンストラクタ
      *
-     * @version 0.8.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.0.6
+     * @param el 対象のDOM要素
+     * @param map GoogleMaps要素
      *
      */
     function Coordinate(el, map) {
         var _this = this;
         this.icon = null;
+        this.el = el;
         this.$el = $(el);
         this._map = map;
         var address = this.$el.data('address');
@@ -235,8 +251,8 @@ var Coordinate = (function () {
             });
         }
         else {
-            this.lat = this.$el.data('lat');
-            this.lng = this.$el.data('lng');
+            this.lat = +this.$el.data('lat');
+            this.lng = +this.$el.data('lng');
             this.position = new google.maps.LatLng(this.lat, this.lng);
             dfd.resolve();
         }
@@ -247,6 +263,7 @@ var Coordinate = (function () {
      *
      * @version 0.8.0
      * @since 0.0.6
+     * @param callback 位置情報が取得できた後に実行するコールバック
      *
      */
     Coordinate.prototype.markTo = function (callback) {
@@ -261,7 +278,9 @@ var Coordinate = (function () {
     /**
      * ピンをマップに立てる
      *
-     * @version 0.8.1
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.0.6
      *
      */
@@ -298,12 +317,14 @@ var Coordinate = (function () {
     /**
      * インフォウィンドウを開く
      *
-     * @version 0.8.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.8.0
      *
      */
     Coordinate.prototype.openInfoWindow = function () {
-        this._map.info.setContent(this.$el[0]);
+        this._map.info.setContent(this.el);
         this._map.info.open(this._map.gmap, this.marker);
         this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
         // マップの中心を移動する

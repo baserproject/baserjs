@@ -10,7 +10,7 @@ var Browser = require('./Browser');
 /**
  * セレクトボックスの拡張クラス
  *
- * @version 0.1.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -18,6 +18,8 @@ var Select = (function (_super) {
     __extends(Select, _super);
     /**
      * コンストラクタ
+     *
+     * use: jQuery
      *
      * @version 0.9.0
      * @since 0.0.1
@@ -53,19 +55,23 @@ var Select = (function (_super) {
     /**
      * ラップ要素を生成
      *
-     * @version 0.4.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
      * @override
      *
      */
     Select.prototype._createWrapper = function () {
         _super.prototype._createWrapper.call(this);
-        BaserElement.addClassTo(this.$wrapper, Select.classNameSelect + '-' + FormElement.classNameWrapper);
+        BaserElement.addClassTo(this.$wrapper, Select.classNameSelect + "-" + FormElement.classNameWrapper);
     };
     /**
      * 擬似セレクトボックス要素を生成する
      *
-     * @version 0.4.1
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
      * @override
      *
@@ -73,7 +79,7 @@ var Select = (function (_super) {
     Select.prototype._createPsuedoElements = function () {
         var _this = this;
         this.$pseudo = $('<a />');
-        this.$pseudo.attr('href', '#'); // Focusable
+        this.$pseudo.attr('href', '#'); // href属性がないとフォーカスを当てることができない
         this.$pseudo.insertAfter(this.$el);
         BaserElement.addClassTo(this.$pseudo, FormElement.classNameFormElementCommon);
         BaserElement.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
@@ -119,7 +125,9 @@ var Select = (function (_super) {
     /**
      * イベントの登録
      *
-     * @version 0.4.1
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
      * @override
      *
@@ -164,28 +172,27 @@ var Select = (function (_super) {
     /**
      * スクロール位置を調整する
      *
-     * @version 0.1.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.1.0
      *
      */
     Select.prototype._scrollToSelectedPosition = function () {
-        var $psuedoOptList;
-        var $psuedoOpt;
-        var optPos;
-        var cntPos;
         if (this.$options) {
-            $psuedoOptList = this.$options.find('li');
+            var $selectedPsuedoOpt;
+            var $psuedoOptList = this.$options.find('li');
             this.$el.find('option').each(function (i, opt) {
                 var $opt = $(opt);
                 var isSelected = $opt.prop('selected');
                 if (isSelected) {
-                    $psuedoOpt = $psuedoOptList.eq(i);
+                    $selectedPsuedoOpt = $psuedoOptList.eq(i);
                 }
             });
             // ポジションを正しく取得するために一度スクロール位置をリセットする
             this.$options.scrollTop(0);
-            optPos = $psuedoOpt.offset();
-            cntPos = this.$options.offset();
+            var optPos = $selectedPsuedoOpt.offset();
+            var cntPos = this.$options.offset();
             if (optPos && cntPos) {
                 this.$options.scrollTop(optPos.top - cntPos.top);
             }
@@ -193,6 +200,8 @@ var Select = (function (_super) {
     };
     /**
      * 擬似要素にフォーカスがあったった時のイベントと伝達を制御する
+     *
+     * use: jQuery
      *
      * @version 0.4.0
      * @since 0.0.1
@@ -251,10 +260,12 @@ var Select = (function (_super) {
     /**
      * フォーカス時のキーボードイベント
      *
-     * @version 0.4.0
-     * @since 0.4.0
+     * use: jQuery
      *
      * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
+     *
+     * @version 0.4.0
+     * @since 0.4.0
      *
      */
     Select.prototype._bindKeybordEvent = function () {
@@ -292,6 +303,8 @@ var Select = (function (_super) {
     /**
      * フォーカスがあたった時の処理
      *
+     * use: jQuery
+     *
      * @version 0.4.1
      * @since 0.0.1
      * @override
@@ -315,6 +328,8 @@ var Select = (function (_super) {
     /**
      * フォーカスがはずれた時の処理
      *
+     * use: jQuery
+     *
      * @version 0.1.0
      * @since 0.0.1
      *
@@ -332,6 +347,7 @@ var Select = (function (_super) {
      *
      * @version 0.8.0
      * @since 0.0.1
+     * @return インスタンス自身
      *
      */
     Select.prototype.update = function () {
@@ -341,30 +357,28 @@ var Select = (function (_super) {
     /**
      * 要素の状態を更新する
      *
-     * @version 0.8.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.0.1
      *
      */
     Select.prototype._update = function () {
         var _this = this;
-        var $selectedOption;
+        var $selectedOption = this.$el.find(':selected');
         var $psuedoOptList;
-        $selectedOption = this.$el.find(':selected');
         if (this.$options) {
             $psuedoOptList = this.$options.find('li');
         }
         this.$el.find('option').each(function (i, opt) {
             var $opt = $(opt);
-            var isSelected;
-            var isDisabled;
-            var $psuedoOpt;
-            isSelected = $opt.prop('selected');
-            isDisabled = $opt.prop('disabled');
+            var isSelected = $opt.prop('selected');
             if (isSelected) {
                 _this.$selected.text($opt.text());
             }
             if (_this.$options) {
-                $psuedoOpt = $psuedoOptList.eq(i);
+                var isDisabled = $opt.prop('disabled');
+                var $psuedoOpt = $psuedoOptList.eq(i);
                 $psuedoOpt.attr('aria-selected', '' + isSelected);
                 $psuedoOpt.attr('aria-disabled', '' + isDisabled);
                 if (isSelected) {
@@ -387,24 +401,31 @@ var Select = (function (_super) {
     /**
      * 値を設定する
      *
-     * @version 0.4.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
      * @override
+     * @param value 設定したい値
      *
      */
     Select.prototype.setValue = function (value) {
-        var valueString = String(value);
-        var $targetOption = this.$el.find('option[value="' + valueString + '"]');
+        var valueString = '' + value;
+        var $targetOption = this.$el.find("option[value=\"" + valueString + "\"]");
         if ($targetOption.length && !$targetOption.prop('selected')) {
             $targetOption.prop('selected', true);
             this._fireChangeEvent();
         }
     };
     /**
-     * 値をインデックス番号から設定する
+     * インデックス番号から選択する
      *
-     * @version 0.8.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
+     * @param index 対象のインデックス番号
+     * @param isSilent イベントを伝達しない
      *
      */
     Select.prototype.setIndex = function (index, isSilent) {
@@ -418,8 +439,11 @@ var Select = (function (_super) {
     /**
      * 現在の選択中のインデックス番号を取得する
      *
-     * @version 0.4.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.0
+     * @return インデックス番号
      *
      */
     Select.prototype.getIndex = function () {
@@ -435,8 +459,9 @@ var Select = (function (_super) {
     /**
      * 次の項目を選択する
      *
-     * @version 0.4.0
+     * @version 0.9.0
      * @since 0.4.0
+     * @param isSilent イベントを伝達しない
      *
      */
     Select.prototype.next = function (isSilent) {
@@ -448,8 +473,9 @@ var Select = (function (_super) {
     /**
      * 前の項目を選択する
      *
-     * @version 0.4.0
+     * @version 0.9.0
      * @since 0.4.0
+     * @param isSilent イベントを伝達しない
      *
      */
     Select.prototype.prev = function (isSilent) {
@@ -460,7 +486,9 @@ var Select = (function (_super) {
     /**
      * 無効状態を設定する
      *
-     * @version 0.4.1
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.4.1
      * @override
      *

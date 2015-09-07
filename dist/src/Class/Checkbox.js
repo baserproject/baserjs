@@ -10,7 +10,7 @@ var CheckableElement = require('./CheckableElement');
 /**
  * チェックボックスの拡張クラス
  *
- * @version 0.1.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -18,6 +18,8 @@ var Checkbox = (function (_super) {
     __extends(Checkbox, _super);
     /**
      * コンストラクタ
+     *
+     * use: jQuery
      *
      * @version 0.9.0
      * @since 0.0.1

@@ -7,7 +7,7 @@ import CheckableElementOption = require('../Interface/CheckableElementOption');
 /**
  * チェックボックスの拡張クラス
  *
- * @version 0.1.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -24,6 +24,8 @@ class Checkbox extends CheckableElement implements ICheckbox {
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.1
@@ -31,7 +33,7 @@ class Checkbox extends CheckableElement implements ICheckbox {
 	 * @param options オプション
 	 *
 	 */
-	constructor (el: HTMLElement, options: CheckableElementOption) {
+	constructor (el: HTMLInputElement, options: CheckableElementOption) {
 
 		super(el, options);
 

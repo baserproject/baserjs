@@ -9,7 +9,7 @@ var FormElement = require('./FormElement');
 /**
  * ラジオボタンとチェックボックスの抽象クラス
  *
- * @version 0.1.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -17,6 +17,8 @@ var CheckableElement = (function (_super) {
     __extends(CheckableElement, _super);
     /**
      * コンストラクタ
+     *
+     * use: jQuery
      *
      * @version 0.9.0
      * @since 0.0.1
@@ -36,8 +38,8 @@ var CheckableElement = (function (_super) {
             return;
         }
         this._checkedClass = this._config.checkedClass;
-        this.checked = this.$el.prop('checked');
-        this.defaultChecked = this.$el.prop('defaultChecked');
+        this.checked = this.el.checked;
+        this.defaultChecked = this.el.defaultChecked;
         this._update();
         this.$el.on('change.bcCheckableElement', function () {
             _this._onchenge();
@@ -45,6 +47,8 @@ var CheckableElement = (function (_super) {
     }
     /**
      * 要素の状態を更新する
+     *
+     * use: jQuery
      *
      * @version 0.0.1
      * @since 0.0.1
@@ -69,22 +73,24 @@ var CheckableElement = (function (_super) {
     /**
      * 要素の状態を更新する
      *
-     * @version 0.1.0
+     * use: jQuery
+     *
+     * @version 0.9.0
      * @since 0.0.1
      *
      */
     CheckableElement.prototype._update = function () {
-        var checked = this.$el.prop('checked');
+        var checked = this.el.checked;
         // WAI-ARIA属性
         this.$el.attr('aria-checked', '' + checked);
         if (checked) {
             this.$el.addClass(this._checkedClass);
             this.$label.addClass(this._checkedClass);
             this.$wrapper.addClass(this._checkedClass);
-            BaserElement.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
+            BaserElement.addClass(this.el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
             BaserElement.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateChecked);
             BaserElement.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
-            BaserElement.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
+            BaserElement.removeClass(this.el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
             BaserElement.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
             BaserElement.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
         }
@@ -92,10 +98,10 @@ var CheckableElement = (function (_super) {
             this.$el.removeClass(this._checkedClass);
             this.$label.removeClass(this._checkedClass);
             this.$wrapper.removeClass(this._checkedClass);
-            BaserElement.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
+            BaserElement.addClass(this.el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
             BaserElement.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
             BaserElement.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
-            BaserElement.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
+            BaserElement.removeClass(this.el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
             BaserElement.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateChecked);
             BaserElement.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
         }

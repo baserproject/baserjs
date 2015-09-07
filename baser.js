@@ -1,3 +1,11 @@
+/**!
+* baserjs - v0.9.0-beta r271
+* update: 2015-09-08
+* Author: baserCMS Users Community [https://github.com/baserproject/]
+* Github: https://github.com/baserproject/baserjs
+* License: Licensed under the MIT License
+*/
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -64,12 +72,12 @@
 	var _AnimationFrames = __webpack_require__(13);
 	var _BaserElement = __webpack_require__(12);
 	var _BreakPoints = __webpack_require__(11);
-	var _Browser = __webpack_require__(6);
+	var _Browser = __webpack_require__(9);
 	var _CheckableElement = __webpack_require__(14);
 	var _Checkbox = __webpack_require__(16);
-	var _DispatchEvent = __webpack_require__(8);
-	var _EventDispatcher = __webpack_require__(7);
-	var _EventHandler = __webpack_require__(9);
+	var _DispatchEvent = __webpack_require__(7);
+	var _EventDispatcher = __webpack_require__(6);
+	var _EventHandler = __webpack_require__(8);
 	var _FormElement = __webpack_require__(15);
 	var _GoogleMaps = __webpack_require__(17);
 	var _Locational = __webpack_require__(10);
@@ -163,13 +171,14 @@
 	    d.prototype = new __();
 	};
 	var UtilString = __webpack_require__(5);
-	var Browser = __webpack_require__(6);
+	var EventDispatcher = __webpack_require__(6);
+	var Browser = __webpack_require__(9);
 	var BreakPoints = __webpack_require__(11);
 	var BaserElement = __webpack_require__(12);
 	/**
 	 * 高さ揃えをするボックスを管理するクラス
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 *
 	 */
@@ -178,7 +187,7 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * TODO: BaserElementのサブクラスにしない
+	     * use: jQuery
 	     *
 	     * @version 0.9.0
 	     * @since 0.7.0
@@ -189,7 +198,8 @@
 	    function AlignedBoxes($el, column, callback) {
 	        var _this = this;
 	        if (column === void 0) { column = 0; }
-	        _super.call(this, $el[0]);
+	        _super.call(this);
+	        this.$el = $el;
 	        AlignedBoxes.boot();
 	        var uid = this.$el.data(AlignedBoxes.DATA_KEY_ID);
 	        if (uid) {
@@ -221,12 +231,13 @@
 	    /**
 	     * 基準の文字要素を生成する
 	     *
-	     * @version 0.7.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.7.0
 	     *
 	     */
 	    AlignedBoxes.createChar = function () {
-	        var dummyChar;
 	        var $dummyChar = $('<del>M</del>').css({
 	            display: 'block',
 	            visibility: 'hidden',
@@ -242,8 +253,11 @@
 	    /**
 	     * 文字の大きさが変わったかどうか
 	     *
+	     * TODO: 破壊的変更を加えていて単純な評価関数ではない
+	     *
 	     * @version 0.7.0
 	     * @since 0.7.0
+	     * @return 文字の大きさが変わったかどうか
 	     *
 	     */
 	    AlignedBoxes.isChanged = function () {
@@ -271,13 +285,12 @@
 	    /**
 	     * ボックスのサイズを再設定する
 	     *
-	     * @version 0.7.0
+	     * @version 0.9.0
 	     * @since 0.7.0
 	     *
 	     */
 	    AlignedBoxes.reAlign = function () {
-	        var uid;
-	        for (uid in AlignedBoxes.groups) {
+	        for (var uid in AlignedBoxes.groups) {
 	            AlignedBoxes.groups[uid].trigger('realign');
 	        }
 	        return;
@@ -285,25 +298,28 @@
 	    /**
 	     * 監視タイマーを起動する
 	     *
-	     * @version 0.7.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.7.0
 	     *
 	     */
 	    AlignedBoxes.boot = function () {
-	        var $w;
 	        if (!AlignedBoxes.isBooted) {
-	            $w = $(window);
-	            $w.on('load', AlignedBoxes.reAlign);
+	            $(window).on('load', AlignedBoxes.reAlign);
 	            Browser.browser.on('resizeend', AlignedBoxes.reAlign);
 	            AlignedBoxes.isBooted = true;
 	            AlignedBoxes.createChar();
-	            AlignedBoxes.watchTimer = window.setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
+	            // TODO: タイマーによる監視をオプションでオフにできるようにする
+	            AlignedBoxes.watchTimer = setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
 	        }
 	    };
 	    /**
 	     * ボックスの高さ揃える
 	     *
-	     * @version 0.8.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.8.1
 	     *
 	     */
@@ -331,16 +347,17 @@
 	                maxHeight = currentHeight;
 	            }
 	            if (i === lastIndex || column === _this._currentColumn - 1) {
-	                for (var j = 0, l = $box_array.length; j < l; j++) {
-	                    if ($box_array[j]) {
+	                for (var _i = 0; _i < $box_array.length; _i++) {
+	                    var $box_1 = $box_array[_i];
+	                    if ($box_1) {
 	                        var cancel = void 0;
 	                        // コールバックを実行
-	                        if ($.isFunction(_this._callback)) {
+	                        if (_this._callback) {
 	                            cancel = !_this._callback(maxHeight, currentHeight, _this);
 	                        }
 	                        // コールバックの戻り値がfalseでなければ高さを変更
 	                        if (!cancel) {
-	                            $box_array[j].height(maxHeight);
+	                            $box_1.height(maxHeight);
 	                        }
 	                    }
 	                }
@@ -350,7 +367,9 @@
 	    /**
 	     * 高さ揃えを解除する
 	     *
-	     * @version 0.7.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.7.0
 	     *
 	     */
@@ -405,7 +424,7 @@
 	     */
 	    AlignedBoxes.groups = {};
 	    return AlignedBoxes;
-	})(BaserElement);
+	})(EventDispatcher);
 	module.exports = AlignedBoxes;
 
 
@@ -542,13 +561,299 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var DispatchEvent = __webpack_require__(7);
+	var EventHandler = __webpack_require__(8);
+	/**
+	 * イベントを検知してハンドラを発火させることができるクラス
+	 *
+	 * @version 0.9.0
+	 * @since 0.0.10
+	 *
+	 * ```
+	 * let dispatcher = new EventDispatcher();
+	 *
+	 * dispatcher.on('event', (e) -> {
+	 * 	// handler
+	 * });
+	 *
+	 * dispatcher.trigger('event');
+	 * ```
+	 *
+	 */
+	var EventDispatcher = (function () {
+	    /**
+	     * コンストラクタ
+	     *
+	     * @version 0.0.10
+	     * @since 0.0.10
+	     *
+	     */
+	    function EventDispatcher() {
+	        // void
+	    }
+	    /**
+	     * イベントハンドラを登録する
+	     *
+	     * @version 0.9.0
+	     * @since 0.0.10
+	     * @param type イベントのタイプ（複数可）
+	     * @param handler
+	     * @return インスタンス自身
+	     *
+	     */
+	    EventDispatcher.prototype.on = function (type, handler) {
+	        var types;
+	        if (typeof type === 'string') {
+	            types = type.split(/\s+/g);
+	        }
+	        else {
+	            types = type;
+	        }
+	        for (var _i = 0; _i < types.length; _i++) {
+	            var type_1 = types[_i];
+	            var eventHandler = new EventHandler(this, type_1, handler);
+	            EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
+	            if (!EventDispatcher.types[type_1]) {
+	                EventDispatcher.types[type_1] = [];
+	            }
+	            EventDispatcher.types[type_1].push(eventHandler);
+	        }
+	        return this;
+	    };
+	    /**
+	     * イベントハンドラを削除する
+	     *
+	     * @version 0.9.0
+	     * @since 0.0.10
+	     * @param type イベントのタイプ（複数可）
+	     * @return インスタンス自身
+	     *
+	     */
+	    EventDispatcher.prototype.off = function (type) {
+	        var types;
+	        if (typeof type === 'string') {
+	            types = type.split(/\s+/g);
+	        }
+	        else {
+	            types = type;
+	        }
+	        for (var _i = 0; _i < types.length; _i++) {
+	            var type_2 = types[_i];
+	            delete EventDispatcher.types[type_2];
+	        }
+	        return this;
+	    };
+	    /**
+	     * イベントハンドラを発火させる
+	     *
+	     * @version 0.9.0
+	     * @since 0.0.10
+	     * @param type イベントのタイプ
+	     * @param args イベントハンドラに渡す引数
+	     * @param context イベントハンドラのコンテキスト
+	     * @return インスタンス自身
+	     *
+	     */
+	    EventDispatcher.prototype.trigger = function (type, args, context) {
+	        if (args === void 0) { args = []; }
+	        context = context || this;
+	        var typeName;
+	        var e;
+	        if (typeof type === 'string') {
+	            typeName = type;
+	            e = new DispatchEvent(type);
+	        }
+	        else {
+	            e = type;
+	            typeName = e.type;
+	        }
+	        if (EventDispatcher.types[typeName]) {
+	            // sliceをつかってオブジェクトのコピーを渡し参照を切る
+	            var handlers = EventDispatcher.types[typeName].slice();
+	            while (handlers.length) {
+	                var eventHandler = handlers.shift();
+	                if (eventHandler.context === this) {
+	                    var isCancel = eventHandler.fire(context, e, args);
+	                    if (isCancel) {
+	                        e.preventDefault();
+	                        e.stopImmediatePropagation();
+	                    }
+	                    // イベントの伝達抑制状態であればループ抜けて以降の処理を行わない
+	                    if (e.isImmediatePropagationStopped()) {
+	                        break;
+	                    }
+	                }
+	            }
+	        }
+	        return this;
+	    };
+	    /**
+	    * イベント駆動できるクラス
+	    *
+	    * @version 0.7.0
+	    * @since 0.7.0
+	    *
+	    */
+	    EventDispatcher.eventHandlers = {};
+	    /**
+	    * イベント駆動できるクラス
+	    *
+	    * @version 0.7.0
+	    * @since 0.7.0
+	    *
+	    */
+	    EventDispatcher.types = {};
+	    return EventDispatcher;
+	})();
+	module.exports = EventDispatcher;
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	/**
+	 * イベントオブジェクトのクラス
+	 *
+	 * @version 0.9.0
+	 * @since 0.0.10
+	 *
+	 */
+	var DispatchEvent = (function () {
+	    /**
+	    * コンストラクタ
+	    *
+	    * @version 0.3.0
+	    * @since 0.0.10
+	    *
+	    */
+	    function DispatchEvent(type) {
+	        /**
+	        * イベントの伝達が止められているかどうか
+	        *
+	        * @version 0.0.10
+	        * @since 0.0.10
+	        *
+	        */
+	        this._isImmediatePropagationStopped = false;
+	        /**
+	        * デフォルトのイベントの発火が止められているかどうか
+	        *
+	        * @version 0.9.0
+	        * @since 0.9.0
+	        *
+	        */
+	        this._isDefaultPrevented = false;
+	        this.type = type;
+	    }
+	    /**
+	    * イベントの伝達を止める
+	    *
+	    * @version 0.0.10
+	    * @since 0.0.10
+	    *
+	    */
+	    DispatchEvent.prototype.stopImmediatePropagation = function () {
+	        this._isImmediatePropagationStopped = true;
+	    };
+	    /**
+	    * イベントの伝達が止められているかどうか
+	    *
+	    * @version 0.0.10
+	    * @since 0.0.10
+	    * @return イベントの伝達が止められているかどうか
+	    *
+	    */
+	    DispatchEvent.prototype.isImmediatePropagationStopped = function () {
+	        return this._isImmediatePropagationStopped;
+	    };
+	    /**
+	    * デフォルトのイベントの発火を止める
+	    * ※EventDispatcher.triggerでの実装に依る
+	    *
+	    * @version 0.9.0
+	    * @since 0.9.0
+	    *
+	    */
+	    DispatchEvent.prototype.preventDefault = function () {
+	        this._isDefaultPrevented = true;
+	    };
+	    /**
+	    * デフォルトのイベントの発火が止められているかどうか
+	    *
+	    * @version 0.9.0
+	    * @since 0.9.0
+	    * @return デフォルトのイベントの発火が止められているかどうか
+	    *
+	    */
+	    DispatchEvent.prototype.isDefaultPrevented = function () {
+	        return this._isDefaultPrevented;
+	    };
+	    return DispatchEvent;
+	})();
+	module.exports = DispatchEvent;
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UtilString = __webpack_require__(5);
+	/**
+	 * イベントハンドラのラッパークラス
+	 *
+	 * @version 0.9.0
+	 * @since 0.0.10
+	 *
+	 */
+	var EventHandler = (function () {
+	    /**
+	    * ハンドラ
+	    *
+	    * @version 0.9.0
+	    * @since 0.0.10
+	    * @param context 紐づくディスパッチャーオブジェクト
+	    * @param type イベントのタイプ
+	    * @param handler ハンドラ
+	    *
+	    */
+	    function EventHandler(context, type, handler) {
+	        this.context = context;
+	        this.id = UtilString.UID();
+	        this.type = type;
+	        this._handler = handler;
+	    }
+	    /**
+	    * ハンドラを実行する
+	    *
+	    * @version 0.9.0
+	    * @since 0.0.10
+	    * @param context 紐づくディスパッチャーオブジェクト
+	    * @param type イベントのタイプ
+	    * @param handler ハンドラ
+	    * @return イベントの伝達を止めるかどうか
+	    *
+	    */
+	    EventHandler.prototype.fire = function (context, e, args) {
+	        var handlerReturn = this._handler.apply(context, [e].concat(args));
+	        return handlerReturn !== undefined && !handlerReturn;
+	    };
+	    return EventHandler;
+	})();
+	module.exports = EventHandler;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var EventDispatcher = __webpack_require__(7);
+	var EventDispatcher = __webpack_require__(6);
 	var Locational = __webpack_require__(10);
 	/**
 	 * ブラウザの情報を管理するクラス
@@ -741,292 +1046,6 @@
 
 
 /***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var DispatchEvent = __webpack_require__(8);
-	var EventHandler = __webpack_require__(9);
-	/**
-	 * イベントを検知してハンドラを発火させることができるクラス
-	 *
-	 * @version 0.9.0
-	 * @since 0.0.10
-	 *
-	 * ```
-	 * let dispatcher = new EventDispatcher();
-	 *
-	 * dispatcher.on('event', (e) -> {
-	 * 	// handler
-	 * });
-	 *
-	 * dispatcher.trigger('event');
-	 * ```
-	 *
-	 */
-	var EventDispatcher = (function () {
-	    /**
-	     * コンストラクタ
-	     *
-	     * @version 0.0.10
-	     * @since 0.0.10
-	     *
-	     */
-	    function EventDispatcher() {
-	        // void
-	    }
-	    /**
-	     * イベントハンドラを登録する
-	     *
-	     * @version 0.9.0
-	     * @since 0.0.10
-	     * @param type イベントのタイプ（複数可）
-	     * @param handler
-	     * @return インスタンス自身
-	     *
-	     */
-	    EventDispatcher.prototype.on = function (type, handler) {
-	        var types;
-	        if (typeof type === 'string') {
-	            types = type.split(/\s+/g);
-	        }
-	        else {
-	            types = type;
-	        }
-	        for (var _i = 0; _i < types.length; _i++) {
-	            var type_1 = types[_i];
-	            var eventHandler = new EventHandler(this, type_1, handler);
-	            EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
-	            if (!EventDispatcher.types[type_1]) {
-	                EventDispatcher.types[type_1] = [];
-	            }
-	            EventDispatcher.types[type_1].push(eventHandler);
-	        }
-	        return this;
-	    };
-	    /**
-	     * イベントハンドラを削除する
-	     *
-	     * @version 0.9.0
-	     * @since 0.0.10
-	     * @param type イベントのタイプ（複数可）
-	     * @return インスタンス自身
-	     *
-	     */
-	    EventDispatcher.prototype.off = function (type) {
-	        var types;
-	        if (typeof type === 'string') {
-	            types = type.split(/\s+/g);
-	        }
-	        else {
-	            types = type;
-	        }
-	        for (var _i = 0; _i < types.length; _i++) {
-	            var type_2 = types[_i];
-	            delete EventDispatcher.types[type_2];
-	        }
-	        return this;
-	    };
-	    /**
-	     * イベントハンドラを発火させる
-	     *
-	     * @version 0.9.0
-	     * @since 0.0.10
-	     * @param type イベントのタイプ
-	     * @param args イベントハンドラに渡す引数
-	     * @param context イベントハンドラのコンテキスト
-	     * @return インスタンス自身
-	     *
-	     */
-	    EventDispatcher.prototype.trigger = function (type, args, context) {
-	        if (args === void 0) { args = []; }
-	        context = context || this;
-	        var typeName;
-	        var e;
-	        if (typeof type === 'string') {
-	            typeName = type;
-	            e = new DispatchEvent(type);
-	        }
-	        else {
-	            e = type;
-	            typeName = e.type;
-	        }
-	        if (EventDispatcher.types[typeName]) {
-	            // sliceをつかってオブジェクトのコピーを渡し参照を切る
-	            var handlers = EventDispatcher.types[typeName].slice();
-	            while (handlers.length) {
-	                var eventHandler = handlers.shift();
-	                if (eventHandler.context === this) {
-	                    var isCancel = eventHandler.fire(context, e, args);
-	                    if (isCancel) {
-	                        e.preventDefault();
-	                        e.stopImmediatePropagation();
-	                    }
-	                    // イベントの伝達抑制状態であればループ抜けて以降の処理を行わない
-	                    if (e.isImmediatePropagationStopped()) {
-	                        break;
-	                    }
-	                }
-	            }
-	        }
-	        return this;
-	    };
-	    /**
-	    * イベント駆動できるクラス
-	    *
-	    * @version 0.7.0
-	    * @since 0.7.0
-	    *
-	    */
-	    EventDispatcher.eventHandlers = {};
-	    /**
-	    * イベント駆動できるクラス
-	    *
-	    * @version 0.7.0
-	    * @since 0.7.0
-	    *
-	    */
-	    EventDispatcher.types = {};
-	    return EventDispatcher;
-	})();
-	module.exports = EventDispatcher;
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	/**
-	 * イベントオブジェクトのクラス
-	 *
-	 * @version 0.9.0
-	 * @since 0.0.10
-	 *
-	 */
-	var DispatchEvent = (function () {
-	    /**
-	    * コンストラクタ
-	    *
-	    * @version 0.3.0
-	    * @since 0.0.10
-	    *
-	    */
-	    function DispatchEvent(type) {
-	        /**
-	        * イベントの伝達が止められているかどうか
-	        *
-	        * @version 0.0.10
-	        * @since 0.0.10
-	        *
-	        */
-	        this._isImmediatePropagationStopped = false;
-	        /**
-	        * デフォルトのイベントの発火が止められているかどうか
-	        *
-	        * @version 0.9.0
-	        * @since 0.9.0
-	        *
-	        */
-	        this._isDefaultPrevented = false;
-	        this.type = type;
-	    }
-	    /**
-	    * イベントの伝達を止める
-	    *
-	    * @version 0.0.10
-	    * @since 0.0.10
-	    *
-	    */
-	    DispatchEvent.prototype.stopImmediatePropagation = function () {
-	        this._isImmediatePropagationStopped = true;
-	    };
-	    /**
-	    * イベントの伝達が止められているかどうか
-	    *
-	    * @version 0.0.10
-	    * @since 0.0.10
-	    * @return イベントの伝達が止められているかどうか
-	    *
-	    */
-	    DispatchEvent.prototype.isImmediatePropagationStopped = function () {
-	        return this._isImmediatePropagationStopped;
-	    };
-	    /**
-	    * デフォルトのイベントの発火を止める
-	    * ※EventDispatcher.triggerでの実装に依る
-	    *
-	    * @version 0.9.0
-	    * @since 0.9.0
-	    *
-	    */
-	    DispatchEvent.prototype.preventDefault = function () {
-	        this._isDefaultPrevented = true;
-	    };
-	    /**
-	    * デフォルトのイベントの発火が止められているかどうか
-	    *
-	    * @version 0.9.0
-	    * @since 0.9.0
-	    * @return デフォルトのイベントの発火が止められているかどうか
-	    *
-	    */
-	    DispatchEvent.prototype.isDefaultPrevented = function () {
-	        return this._isDefaultPrevented;
-	    };
-	    return DispatchEvent;
-	})();
-	module.exports = DispatchEvent;
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var UtilString = __webpack_require__(5);
-	/**
-	 * イベントハンドラのラッパークラス
-	 *
-	 * @version 0.9.0
-	 * @since 0.0.10
-	 *
-	 */
-	var EventHandler = (function () {
-	    /**
-	    * ハンドラ
-	    *
-	    * @version 0.9.0
-	    * @since 0.0.10
-	    * @param context 紐づくディスパッチャーオブジェクト
-	    * @param type イベントのタイプ
-	    * @param handler ハンドラ
-	    *
-	    */
-	    function EventHandler(context, type, handler) {
-	        this.context = context;
-	        this.id = UtilString.UID();
-	        this.type = type;
-	        this._handler = handler;
-	    }
-	    /**
-	    * ハンドラを実行する
-	    *
-	    * @version 0.9.0
-	    * @since 0.0.10
-	    * @param context 紐づくディスパッチャーオブジェクト
-	    * @param type イベントのタイプ
-	    * @param handler ハンドラ
-	    * @return イベントの伝達を止めるかどうか
-	    *
-	    */
-	    EventHandler.prototype.fire = function (context, e, args) {
-	        var handlerReturn = this._handler.apply(context, [e].concat(args));
-	        return handlerReturn !== undefined && !handlerReturn;
-	    };
-	    return EventHandler;
-	})();
-	module.exports = EventHandler;
-
-
-/***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1205,8 +1224,8 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var EventDispatcher = __webpack_require__(7);
-	var Browser = __webpack_require__(6);
+	var EventDispatcher = __webpack_require__(6);
+	var Browser = __webpack_require__(9);
 	/**
 	 * ブレークポイントの変化に応じた処理をする管理することができるクラス
 	 *
@@ -1339,7 +1358,7 @@
 	    d.prototype = new __();
 	};
 	var UtilString = __webpack_require__(5);
-	var EventDispatcher = __webpack_require__(7);
+	var EventDispatcher = __webpack_require__(6);
 	var ElementClassNameCase = __webpack_require__(3);
 	var ClassNameSeparatorForBEM = __webpack_require__(2);
 	var HYPHEN = '-';
@@ -1795,8 +1814,8 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var DispatchEvent = __webpack_require__(8);
-	var EventDispatcher = __webpack_require__(7);
+	var DispatchEvent = __webpack_require__(7);
+	var EventDispatcher = __webpack_require__(6);
 	/**
 	 * アニメーションフレームを管理するクラス
 	 *
@@ -1941,7 +1960,7 @@
 	/**
 	 * ラジオボタンとチェックボックスの抽象クラス
 	 *
-	 * @version 0.1.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
@@ -1949,6 +1968,8 @@
 	    __extends(CheckableElement, _super);
 	    /**
 	     * コンストラクタ
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.1
@@ -1968,8 +1989,8 @@
 	            return;
 	        }
 	        this._checkedClass = this._config.checkedClass;
-	        this.checked = this.$el.prop('checked');
-	        this.defaultChecked = this.$el.prop('defaultChecked');
+	        this.checked = this.el.checked;
+	        this.defaultChecked = this.el.defaultChecked;
 	        this._update();
 	        this.$el.on('change.bcCheckableElement', function () {
 	            _this._onchenge();
@@ -1977,6 +1998,8 @@
 	    }
 	    /**
 	     * 要素の状態を更新する
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.0.1
 	     * @since 0.0.1
@@ -2001,22 +2024,24 @@
 	    /**
 	     * 要素の状態を更新する
 	     *
-	     * @version 0.1.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     *
 	     */
 	    CheckableElement.prototype._update = function () {
-	        var checked = this.$el.prop('checked');
+	        var checked = this.el.checked;
 	        // WAI-ARIA属性
 	        this.$el.attr('aria-checked', '' + checked);
 	        if (checked) {
 	            this.$el.addClass(this._checkedClass);
 	            this.$label.addClass(this._checkedClass);
 	            this.$wrapper.addClass(this._checkedClass);
-	            BaserElement.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
+	            BaserElement.addClass(this.el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
 	            BaserElement.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateChecked);
 	            BaserElement.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
-	            BaserElement.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
+	            BaserElement.removeClass(this.el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
 	            BaserElement.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
 	            BaserElement.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
 	        }
@@ -2024,10 +2049,10 @@
 	            this.$el.removeClass(this._checkedClass);
 	            this.$label.removeClass(this._checkedClass);
 	            this.$wrapper.removeClass(this._checkedClass);
-	            BaserElement.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
+	            BaserElement.addClass(this.el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateUnchecked);
 	            BaserElement.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateUnchecked);
 	            BaserElement.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateUnchecked);
-	            BaserElement.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
+	            BaserElement.removeClass(this.el, FormElement.classNameFormElementCommon, '', CheckableElement.classNameStateChecked);
 	            BaserElement.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, CheckableElement.classNameStateChecked);
 	            BaserElement.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', CheckableElement.classNameStateChecked);
 	        }
@@ -2077,7 +2102,7 @@
 	/**
 	 * フォーム要素の抽象クラス
 	 *
-	 * @version 0.1.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
@@ -2085,6 +2110,8 @@
 	    __extends(FormElement, _super);
 	    /**
 	     * コンストラクタ
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.1
@@ -2127,6 +2154,7 @@
 	        this.setDisabled(this.$el.prop('disabled'));
 	        this._onblur();
 	        // フォーム要素に登録
+	        // TODO: 有要な処理か検討
 	        FormElement.elements.push(this);
 	    }
 	    /**
@@ -2143,22 +2171,24 @@
 	    /**
 	     * ラベル要素内のテキストを取得する
 	     *
-	     * @version 0.4.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     *
 	     */
 	    FormElement.prototype._setLabelText = function () {
 	        var _this = this;
-	        var $labelContents = this.$label.contents();
-	        var $before = $();
-	        var $after = $();
-	        var isBefore = true;
 	        if (this._config.label) {
 	            this.$label.prepend(this._config.label);
 	            this.labelBeforeText = this._config.label;
 	            this.labelAfterText = '';
 	        }
 	        else {
+	            var $labelContents = this.$label.contents();
+	            var $before = $();
+	            var $after = $();
+	            var isBefore = true;
 	            $labelContents.each(function (i, node) {
 	                if (node === _this.$el[0]) {
 	                    isBefore = false;
@@ -2191,30 +2221,30 @@
 	    /**
 	     * ラベル要素を割り当てる
 	     *
-	     * @version 0.5.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     *
 	     */
 	    FormElement.prototype._asignLabel = function () {
-	        var $label;
-	        var hasLabel;
 	        this.hasLabelByForAttr = false;
 	        // 祖先のlabel要素を検索
-	        $label = this.$el.closest('label');
+	        var $label = this.$el.closest('label');
 	        // label要素の存在
-	        hasLabel = !!$label.length;
+	        var hasLabel = !!$label.length;
 	        // labelでネストされていたかどうか
 	        this.isWrappedByLabel = hasLabel;
 	        // for属性に関連づいたlabel要素を取得
 	        if (!hasLabel) {
-	            $label = $('label[for="' + this.id + '"]');
+	            $label = $("label[for=\"" + this.id + "\"]");
 	            hasLabel = !!$label.length;
 	            this.hasLabelByForAttr = hasLabel;
 	        }
 	        // ラベルがないときにラベル要素を生成する
 	        if (this._config.autoLabeling && !hasLabel) {
 	            // label(もしくは別の)要素の生成
-	            $label = $('<' + this._config.labelTag.toLowerCase() + ' />');
+	            $label = $("<" + this._config.labelTag.toLowerCase() + " />");
 	            $label.insertAfter(this.$el);
 	            if (this._config.labelClass) {
 	                $label.addClass(this._config.labelClass);
@@ -2236,7 +2266,9 @@
 	    /**
 	     * ラップ要素を生成
 	     *
-	     * @version 0.5.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     *
 	     */
@@ -2271,7 +2303,9 @@
 	    /**
 	     * イベントの登録
 	     *
-	     * @version 0.4.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     *
 	     */
@@ -2307,70 +2341,79 @@
 	    /**
 	     * フォーカスがあたった時の処理
 	     *
-	     * @version 0.1.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     *
 	     */
 	    FormElement.prototype._onfocus = function () {
 	        this.hasFocus = true;
-	        BaserElement.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
+	        BaserElement.addClass(this.el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
 	        BaserElement.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
 	        BaserElement.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
-	        BaserElement.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
+	        BaserElement.removeClass(this.el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
 	        BaserElement.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
 	        BaserElement.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);
 	    };
 	    /**
 	     * フォーカスがはずれた時の処理
 	     *
-	     * @version 0.1.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     *
 	     */
 	    FormElement.prototype._onblur = function () {
 	        this.hasFocus = false;
-	        BaserElement.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
+	        BaserElement.addClass(this.el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateBlur);
 	        BaserElement.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateBlur);
 	        BaserElement.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateBlur);
-	        BaserElement.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
+	        BaserElement.removeClass(this.el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateFocus);
 	        BaserElement.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateFocus);
 	        BaserElement.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateFocus);
 	    };
 	    /**
 	     * changeイベントを発火する
 	     *
-	     * @version 0.4.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
+	     * @param isSilent イベントを伝達しない
 	     *
 	     */
 	    FormElement.prototype._fireChangeEvent = function (isSilent) {
 	        if (isSilent === void 0) { isSilent = false; }
-	        var e;
-	        var legacyElement;
 	        if (isSilent) {
 	            this.$el.trigger('change.bcFormElement', [{ isSilent: true }]);
 	        }
 	        else if ('createEvent' in document) {
-	            e = document.createEvent('Event');
+	            var e = document.createEvent('Event');
 	            e.initEvent('change', true, true);
-	            this.$el[0].dispatchEvent(e);
+	            this.el.dispatchEvent(e);
 	        }
 	        else {
 	            // IE8
-	            legacyElement = this.$el[0];
+	            var legacyElement = this.el;
 	            legacyElement.fireEvent('onchange');
 	        }
 	    };
 	    /**
 	     * 値を設定する
 	     *
-	     * @version 0.4.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
+	     * @param value 設定する値
+	     * @param isSilent イベントを伝達しない
 	     *
 	     */
 	    FormElement.prototype.setValue = function (value, isSilent) {
 	        if (isSilent === void 0) { isSilent = false; }
-	        var valueString = String(value);
+	        var valueString = '' + value;
 	        var currentValue = this.$el.val();
 	        if (!this.disabled && currentValue !== valueString) {
 	            this.$el.val(valueString);
@@ -2380,20 +2423,23 @@
 	    /**
 	     * 無効状態を設定する
 	     *
-	     * @version 0.4.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
+	     * @param 無効状態かどうか
 	     *
 	     */
 	    FormElement.prototype.setDisabled = function (isDisabled) {
 	        this.disabled = isDisabled;
-	        this.$el.prop('disabled', isDisabled);
+	        this.el.disabled = isDisabled;
 	        if (this.disabled) {
-	            BaserElement.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateDisabled);
+	            BaserElement.addClass(this.el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateDisabled);
 	            BaserElement.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateDisabled);
 	            BaserElement.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateDisabled);
 	        }
 	        else {
-	            BaserElement.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateDisabled);
+	            BaserElement.removeClass(this.el, FormElement.classNameFormElementCommon, '', FormElement.classNameStateDisabled);
 	            BaserElement.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, FormElement.classNameStateDisabled);
 	            BaserElement.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', FormElement.classNameStateDisabled);
 	        }
@@ -2488,7 +2534,7 @@
 	/**
 	 * チェックボックスの拡張クラス
 	 *
-	 * @version 0.1.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
@@ -2496,6 +2542,8 @@
 	    __extends(Checkbox, _super);
 	    /**
 	     * コンストラクタ
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.1
@@ -2544,7 +2592,7 @@
 	/**
 	 * マップ要素
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.0.6
 	 *
 	 */
@@ -2552,6 +2600,8 @@
 	    __extends(GoogleMaps, _super);
 	    /**
 	     * コンストラクタ
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.6
@@ -2569,23 +2619,27 @@
 	        if (!el.querySelector) {
 	            return;
 	        }
-	        this.$el.addClass(GoogleMaps.className);
 	        if ('google' in window && google.maps) {
+	            this.$el.addClass(GoogleMaps.className);
 	            this.mapOption = $.extend({}, options);
 	            this._init();
+	            // TODO: 必要な処理か検討
+	            GoogleMaps.maps.push(this);
+	            this.$el.data(GoogleMaps.className, this);
 	        }
 	        else {
-	            if (console && console.warn) {
+	            if ('console' in window) {
 	                console.warn('ReferenceError: "//maps.google.com/maps/api/js" を先に読み込む必要があります。');
+	                return;
 	            }
 	        }
-	        GoogleMaps.maps.push(this);
-	        this.$el.data(GoogleMaps.className, this);
 	    }
 	    /**
 	     * 初期化
 	     *
-	     * @version 0.6.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.0.6
 	     *
 	     */
@@ -2613,7 +2667,9 @@
 	    /**
 	     * レンダリング
 	     *
-	     * @version 0.8.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.2.0
 	     * @param mapCenterLat 緯度
 	     * @param mapCenterLng 経度
@@ -2645,7 +2701,7 @@
 	        this.info = new google.maps.InfoWindow({
 	            disableAutoPan: true
 	        });
-	        this.gmap = new google.maps.Map(this.$el[0], $.extend({}, this.mapOption, {
+	        this.gmap = new google.maps.Map(this.el, $.extend({}, this.mapOption, {
 	            fitBounds: google.maps.Map.prototype.fitBounds
 	        }));
 	        $.each(coordinates, function (i, coordinate) {
@@ -2660,6 +2716,8 @@
 	    /**
 	     * 再読み込み・再設定
 	     *
+	     * use: jQuery
+	     *
 	     * @version 0.6.0
 	     * @since 0.2.0
 	     *
@@ -2671,7 +2729,7 @@
 	    /**
 	     * 住所文字列から座標を非同期で取得
 	     *
-	     * @version 0.2.0
+	     * @version 0.9.0
 	     * @since 0.2.0
 	     *
 	     */
@@ -2680,28 +2738,29 @@
 	        geocoder.geocode({
 	            address: address
 	        }, function (results, status) {
-	            var lat;
-	            var lng;
 	            switch (status) {
-	                case google.maps.GeocoderStatus.OK:
-	                    lat = results[0].geometry.location.lat();
-	                    lng = results[0].geometry.location.lng();
+	                case google.maps.GeocoderStatus.OK: {
+	                    var lat = results[0].geometry.location.lat();
+	                    var lng = results[0].geometry.location.lng();
+	                    callback(lat, lng);
 	                    break;
+	                }
 	                case google.maps.GeocoderStatus.INVALID_REQUEST:
 	                case google.maps.GeocoderStatus.ZERO_RESULTS:
-	                case google.maps.GeocoderStatus.OVER_QUERY_LIMIT:
+	                case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
 	                    if (console && console.warn) {
 	                        console.warn('ReferenceError: "' + address + 'は不正な住所のだったため結果を返すことができませんでした。"');
 	                    }
 	                    break;
+	                }
 	                case google.maps.GeocoderStatus.ERROR:
-	                case google.maps.GeocoderStatus.UNKNOWN_ERROR:
+	                case google.maps.GeocoderStatus.UNKNOWN_ERROR: {
 	                    if (console && console.warn) {
 	                        console.warn('Error: "エラーが発生しました。"');
 	                    }
 	                    break;
+	                }
 	            }
-	            callback(lat, lng);
 	        });
 	    };
 	    /**
@@ -2743,7 +2802,7 @@
 	/**
 	 * 座標要素
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.0.6
 	 *
 	 */
@@ -2751,13 +2810,18 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.8.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.0.6
+	     * @param el 対象のDOM要素
+	     * @param map GoogleMaps要素
 	     *
 	     */
 	    function Coordinate(el, map) {
 	        var _this = this;
 	        this.icon = null;
+	        this.el = el;
 	        this.$el = $(el);
 	        this._map = map;
 	        var address = this.$el.data('address');
@@ -2771,8 +2835,8 @@
 	            });
 	        }
 	        else {
-	            this.lat = this.$el.data('lat');
-	            this.lng = this.$el.data('lng');
+	            this.lat = +this.$el.data('lat');
+	            this.lng = +this.$el.data('lng');
 	            this.position = new google.maps.LatLng(this.lat, this.lng);
 	            dfd.resolve();
 	        }
@@ -2783,6 +2847,7 @@
 	     *
 	     * @version 0.8.0
 	     * @since 0.0.6
+	     * @param callback 位置情報が取得できた後に実行するコールバック
 	     *
 	     */
 	    Coordinate.prototype.markTo = function (callback) {
@@ -2797,7 +2862,9 @@
 	    /**
 	     * ピンをマップに立てる
 	     *
-	     * @version 0.8.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.0.6
 	     *
 	     */
@@ -2834,12 +2901,14 @@
 	    /**
 	     * インフォウィンドウを開く
 	     *
-	     * @version 0.8.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.8.0
 	     *
 	     */
 	    Coordinate.prototype.openInfoWindow = function () {
-	        this._map.info.setContent(this.$el[0]);
+	        this._map.info.setContent(this.el);
 	        this._map.info.open(this._map.gmap, this.marker);
 	        this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
 	        // マップの中心を移動する
@@ -2875,7 +2944,7 @@
 	/**
 	 * ラジオボタンの拡張クラス
 	 *
-	 * @version 0.1.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
@@ -2883,6 +2952,8 @@
 	    __extends(Radio, _super);
 	    /**
 	     * コンストラクタ
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.1
@@ -2904,6 +2975,7 @@
 	        BaserElement.addClassTo(this.$label, Radio.classNameRadio, FormElement.classNameLabel);
 	        BaserElement.addClassTo(this.$wrapper, Radio.classNameRadio + '-' + FormElement.classNameWrapper);
 	        // ラジオボタングループに登録
+	        // TODO: APIをRadioGroup.add(name, elem)にする
 	        if (!RadioGroup.groups[this.name]) {
 	            RadioGroup.groups[this.name] = new RadioGroup(this.name);
 	        }
@@ -2912,6 +2984,8 @@
 	    /**
 	     * チェンジイベントのハンドラ
 	     *
+	     * use: jQuery
+	     *
 	     * @version 0.7.0
 	     * @since 0.0.1
 	     *
@@ -2919,6 +2993,7 @@
 	    Radio.prototype._onchenge = function () {
 	        _super.prototype._onchenge.call(this);
 	        // 同じname属性のラジオボタン要素も同時に変更をする
+	        // TODO: APIをRadioGroup.update(name, elem)にする
 	        RadioGroup.groups[this.name].update(this);
 	    };
 	    /**
@@ -2941,7 +3016,7 @@
 	/**
 	 * ラジオボタンのname属性値で紐付いたブループを管理するクラス
 	 *
-	 * @since 0.0.1
+	 * @since 0.9.0
 	 *
 	 */
 	var RadioGroup = (function () {
@@ -2956,50 +3031,50 @@
 	        /**
 	         * ラジオボタンのリスト
 	         *
+	         * @version 0.9.0
 	         * @since 0.0.1
 	         *
 	         */
-	        this.radioButtons = [];
+	        this._radioButtons = [];
 	        this.name = name;
 	    }
 	    /**
 	     * 紐づくラジオボタンを追加する
 	     *
-	     * @version 0.0.1
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     * @param radio 拡張ラジオボタン
 	     *
 	     */
 	    RadioGroup.prototype.add = function (radio) {
-	        var i = 0;
-	        var l = this.radioButtons.length;
-	        for (; i < l; i++) {
-	            if (this.radioButtons[i] === radio) {
+	        for (var _i = 0, _a = this._radioButtons; _i < _a.length; _i++) {
+	            var radioButton = _a[_i];
+	            if (radioButton === radio) {
 	                return;
 	            }
 	        }
-	        this.radioButtons.push(radio);
+	        this._radioButtons.push(radio);
 	    };
 	    /**
 	     * 管理するラジオボタンの状態を更新する
 	     *
-	     * @version 0.0.1
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     * @param ignoreRadio 対象外のラジオボタン
 	     *
 	     */
 	    RadioGroup.prototype.update = function (ignoreRadio) {
-	        var i = 0;
-	        var l = this.radioButtons.length;
-	        for (; i < l; i++) {
-	            if (this.radioButtons[i] !== ignoreRadio) {
-	                this.radioButtons[i].update();
+	        for (var _i = 0, _a = this._radioButtons; _i < _a.length; _i++) {
+	            var radioButton = _a[_i];
+	            if (radioButton !== ignoreRadio) {
+	                radioButton.update();
 	            }
 	        }
 	    };
 	    /**
 	     * ラジオボタンのグループを保管するオブジェクト
 	     *
+	     * @version 0.9.0
 	     * @since 0.7.0
 	     *
 	     */
@@ -3017,7 +3092,7 @@
 	/**
 	 * スクロールを管理するクラス
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.8
 	 *
 	 */
@@ -3028,28 +3103,17 @@
 	    /**
 	     * 対象の要素もしくは位置にスクロールを移動させる
 	     *
-	     * @version 0.3.2
+	     * @version 0.9.0
 	     * @since 0.0.8
-	     * @param {string | HTMLElement | JQuery | number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
-	     * @param {ScrollOptions} オプション
-	     * @return {Scroll} 自信のスクロールオブジェクト
+	     * @param selector 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
+	     * @param options オプション
+	     * @return インスタンス自信
 	     *
 	     */
 	    Scroll.prototype.to = function (selector, options) {
 	        var _this = this;
-	        var ele;
-	        var x;
-	        var y;
-	        var docWidth;
-	        var docHeight;
-	        var winWidth;
-	        var winHeight;
-	        var maxScrollX;
-	        var maxScrollY;
-	        var $target;
-	        var offset = 0;
 	        this.options = options || {};
-	        offset += this.options.offset || 0;
+	        var offset = this.options.offset || 0;
 	        if (this.options.wheelCancel) {
 	            // TODO: IE8 wheelイベント対応検討
 	            $(document).on('wheel', function () {
@@ -3069,31 +3133,31 @@
 	            this.targetY = offset;
 	        }
 	        else if (selector) {
-	            $target = $(selector);
+	            var $target = $(selector);
 	            if (!$target.length) {
 	                return this;
 	            }
-	            ele = $target[0];
+	            var elem = $target[0];
 	            // スクロール先座標をセットする
-	            x = 0;
-	            y = 0;
+	            var x = 0;
+	            var y = 0;
 	            // 親のオフセットを足していって自身の座標を確定
-	            while (ele) {
-	                x += ele.offsetLeft;
-	                y += ele.offsetTop;
-	                ele = ele.offsetParent;
+	            while (elem) {
+	                x += elem.offsetLeft;
+	                y += elem.offsetTop;
+	                elem = elem.offsetParent;
 	            }
-	            winWidth = document.documentElement.clientWidth;
-	            winHeight = document.documentElement.clientHeight;
-	            docWidth = document.documentElement.scrollWidth;
-	            docHeight = document.documentElement.scrollHeight;
-	            maxScrollX = Math.max(winWidth, docWidth);
-	            maxScrollY = Math.max(winHeight, docHeight);
+	            var winWidth = document.documentElement.clientWidth;
+	            var winHeight = document.documentElement.clientHeight;
+	            var docWidth = document.documentElement.scrollWidth;
+	            var docHeight = document.documentElement.scrollHeight;
+	            var maxScrollX = Math.max(winWidth, docWidth);
+	            var maxScrollY = Math.max(winHeight, docHeight);
 	            this.targetX = Math.min(x, maxScrollX) + offset;
 	            this.targetY = Math.min(y, maxScrollY) + offset;
 	        }
 	        else {
-	            $target = $(window.location.hash);
+	            var $target = $(window.location.hash);
 	            if ($target.length) {
 	                Timer.wait(Scroll.delayWhenURLHashTarget, function () {
 	                    window.scrollTo(0, 0);
@@ -3111,17 +3175,22 @@
 	            if ($.isFunction(this.options.onScrollStart)) {
 	                this.options.onScrollStart.call(this, new $.Event('scrollstart'));
 	            }
-	            this._scroll();
+	            this._progress();
 	        }
 	        return this;
 	    };
-	    Scroll.prototype._scroll = function () {
+	    /**
+	     * スクロール
+	     *
+	     * @version 0.9.0
+	     * @since 0.0.8
+	     *
+	     */
+	    Scroll.prototype._progress = function () {
 	        var currentX = this._getX();
 	        var currentY = this._getY();
 	        var vx = (this.targetX - currentX) / Scroll.speed;
 	        var vy = (this.targetY - currentY) / Scroll.speed;
-	        var nextX = Math.floor(currentX + vx);
-	        var nextY = Math.floor(currentY + vy);
 	        if ((Math.abs(vx) < 1 && Math.abs(vy) < 1) || (this.prevX === currentX && this.prevY === currentY)) {
 	            // 目標座標付近に到達していたら終了
 	            window.scrollTo(this.targetX, this.targetY);
@@ -3131,6 +3200,8 @@
 	            }
 	        }
 	        else {
+	            var nextX = Math.floor(currentX + vx);
+	            var nextY = Math.floor(currentY + vy);
 	            // 繰り返し
 	            window.scrollTo(nextX, nextY);
 	            this.prevX = currentX;
@@ -3138,15 +3209,38 @@
 	            if ($.isFunction(this.options.onScrollProgress)) {
 	                this.options.onScrollProgress.call(this, new $.Event('scrollprogress'));
 	            }
-	            this.timer.wait(Scroll.interval, this._scroll, this);
+	            this.timer.wait(Scroll.interval, this._progress, this);
 	        }
 	    };
+	    /**
+	     * x位置の取得
+	     *
+	     * @version 0.9.0
+	     * @since 0.0.8
+	     * @return x位置
+	     *
+	     */
 	    Scroll.prototype._getX = function () {
 	        return (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement.scrollLeft || document.body.scrollLeft);
 	    };
+	    /**
+	     * y位置の取得
+	     *
+	     * @version 0.9.0
+	     * @since 0.0.8
+	     * @return y位置
+	     *
+	     */
 	    Scroll.prototype._getY = function () {
 	        return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement.scrollTop || document.body.scrollTop);
 	    };
+	    /**
+	     * スクロールの終了
+	     *
+	     * @version 0.9.0
+	     * @since 0.0.8
+	     *
+	     */
 	    Scroll.prototype._finish = function () {
 	        this.isScroll = false;
 	        this.prevX = null;
@@ -3171,8 +3265,8 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var DispatchEvent = __webpack_require__(8);
-	var EventDispatcher = __webpack_require__(7);
+	var DispatchEvent = __webpack_require__(7);
+	var EventDispatcher = __webpack_require__(6);
 	/**
 	 * 時間管理クラス
 	 *
@@ -3371,11 +3465,11 @@
 	};
 	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
-	var Browser = __webpack_require__(6);
+	var Browser = __webpack_require__(9);
 	/**
 	 * セレクトボックスの拡張クラス
 	 *
-	 * @version 0.1.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
@@ -3383,6 +3477,8 @@
 	    __extends(Select, _super);
 	    /**
 	     * コンストラクタ
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.1
@@ -3418,19 +3514,23 @@
 	    /**
 	     * ラップ要素を生成
 	     *
-	     * @version 0.4.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     * @override
 	     *
 	     */
 	    Select.prototype._createWrapper = function () {
 	        _super.prototype._createWrapper.call(this);
-	        BaserElement.addClassTo(this.$wrapper, Select.classNameSelect + '-' + FormElement.classNameWrapper);
+	        BaserElement.addClassTo(this.$wrapper, Select.classNameSelect + "-" + FormElement.classNameWrapper);
 	    };
 	    /**
 	     * 擬似セレクトボックス要素を生成する
 	     *
-	     * @version 0.4.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     * @override
 	     *
@@ -3438,7 +3538,7 @@
 	    Select.prototype._createPsuedoElements = function () {
 	        var _this = this;
 	        this.$pseudo = $('<a />');
-	        this.$pseudo.attr('href', '#'); // Focusable
+	        this.$pseudo.attr('href', '#'); // href属性がないとフォーカスを当てることができない
 	        this.$pseudo.insertAfter(this.$el);
 	        BaserElement.addClassTo(this.$pseudo, FormElement.classNameFormElementCommon);
 	        BaserElement.addClassTo(this.$pseudo, Select.classNamePseudoSelect);
@@ -3484,7 +3584,9 @@
 	    /**
 	     * イベントの登録
 	     *
-	     * @version 0.4.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     * @override
 	     *
@@ -3529,28 +3631,27 @@
 	    /**
 	     * スクロール位置を調整する
 	     *
-	     * @version 0.1.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.1.0
 	     *
 	     */
 	    Select.prototype._scrollToSelectedPosition = function () {
-	        var $psuedoOptList;
-	        var $psuedoOpt;
-	        var optPos;
-	        var cntPos;
 	        if (this.$options) {
-	            $psuedoOptList = this.$options.find('li');
+	            var $selectedPsuedoOpt;
+	            var $psuedoOptList = this.$options.find('li');
 	            this.$el.find('option').each(function (i, opt) {
 	                var $opt = $(opt);
 	                var isSelected = $opt.prop('selected');
 	                if (isSelected) {
-	                    $psuedoOpt = $psuedoOptList.eq(i);
+	                    $selectedPsuedoOpt = $psuedoOptList.eq(i);
 	                }
 	            });
 	            // ポジションを正しく取得するために一度スクロール位置をリセットする
 	            this.$options.scrollTop(0);
-	            optPos = $psuedoOpt.offset();
-	            cntPos = this.$options.offset();
+	            var optPos = $selectedPsuedoOpt.offset();
+	            var cntPos = this.$options.offset();
 	            if (optPos && cntPos) {
 	                this.$options.scrollTop(optPos.top - cntPos.top);
 	            }
@@ -3558,6 +3659,8 @@
 	    };
 	    /**
 	     * 擬似要素にフォーカスがあったった時のイベントと伝達を制御する
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.4.0
 	     * @since 0.0.1
@@ -3616,10 +3719,12 @@
 	    /**
 	     * フォーカス時のキーボードイベント
 	     *
-	     * @version 0.4.0
-	     * @since 0.4.0
+	     * use: jQuery
 	     *
 	     * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
+	     *
+	     * @version 0.4.0
+	     * @since 0.4.0
 	     *
 	     */
 	    Select.prototype._bindKeybordEvent = function () {
@@ -3657,6 +3762,8 @@
 	    /**
 	     * フォーカスがあたった時の処理
 	     *
+	     * use: jQuery
+	     *
 	     * @version 0.4.1
 	     * @since 0.0.1
 	     * @override
@@ -3680,6 +3787,8 @@
 	    /**
 	     * フォーカスがはずれた時の処理
 	     *
+	     * use: jQuery
+	     *
 	     * @version 0.1.0
 	     * @since 0.0.1
 	     *
@@ -3697,6 +3806,7 @@
 	     *
 	     * @version 0.8.0
 	     * @since 0.0.1
+	     * @return インスタンス自身
 	     *
 	     */
 	    Select.prototype.update = function () {
@@ -3706,30 +3816,28 @@
 	    /**
 	     * 要素の状態を更新する
 	     *
-	     * @version 0.8.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     *
 	     */
 	    Select.prototype._update = function () {
 	        var _this = this;
-	        var $selectedOption;
+	        var $selectedOption = this.$el.find(':selected');
 	        var $psuedoOptList;
-	        $selectedOption = this.$el.find(':selected');
 	        if (this.$options) {
 	            $psuedoOptList = this.$options.find('li');
 	        }
 	        this.$el.find('option').each(function (i, opt) {
 	            var $opt = $(opt);
-	            var isSelected;
-	            var isDisabled;
-	            var $psuedoOpt;
-	            isSelected = $opt.prop('selected');
-	            isDisabled = $opt.prop('disabled');
+	            var isSelected = $opt.prop('selected');
 	            if (isSelected) {
 	                _this.$selected.text($opt.text());
 	            }
 	            if (_this.$options) {
-	                $psuedoOpt = $psuedoOptList.eq(i);
+	                var isDisabled = $opt.prop('disabled');
+	                var $psuedoOpt = $psuedoOptList.eq(i);
 	                $psuedoOpt.attr('aria-selected', '' + isSelected);
 	                $psuedoOpt.attr('aria-disabled', '' + isDisabled);
 	                if (isSelected) {
@@ -3752,24 +3860,31 @@
 	    /**
 	     * 値を設定する
 	     *
-	     * @version 0.4.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     * @override
+	     * @param value 設定したい値
 	     *
 	     */
 	    Select.prototype.setValue = function (value) {
-	        var valueString = String(value);
-	        var $targetOption = this.$el.find('option[value="' + valueString + '"]');
+	        var valueString = '' + value;
+	        var $targetOption = this.$el.find("option[value=\"" + valueString + "\"]");
 	        if ($targetOption.length && !$targetOption.prop('selected')) {
 	            $targetOption.prop('selected', true);
 	            this._fireChangeEvent();
 	        }
 	    };
 	    /**
-	     * 値をインデックス番号から設定する
+	     * インデックス番号から選択する
 	     *
-	     * @version 0.8.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
+	     * @param index 対象のインデックス番号
+	     * @param isSilent イベントを伝達しない
 	     *
 	     */
 	    Select.prototype.setIndex = function (index, isSilent) {
@@ -3783,8 +3898,11 @@
 	    /**
 	     * 現在の選択中のインデックス番号を取得する
 	     *
-	     * @version 0.4.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
+	     * @return インデックス番号
 	     *
 	     */
 	    Select.prototype.getIndex = function () {
@@ -3800,8 +3918,9 @@
 	    /**
 	     * 次の項目を選択する
 	     *
-	     * @version 0.4.0
+	     * @version 0.9.0
 	     * @since 0.4.0
+	     * @param isSilent イベントを伝達しない
 	     *
 	     */
 	    Select.prototype.next = function (isSilent) {
@@ -3813,8 +3932,9 @@
 	    /**
 	     * 前の項目を選択する
 	     *
-	     * @version 0.4.0
+	     * @version 0.9.0
 	     * @since 0.4.0
+	     * @param isSilent イベントを伝達しない
 	     *
 	     */
 	    Select.prototype.prev = function (isSilent) {
@@ -3825,7 +3945,9 @@
 	    /**
 	     * 無効状態を設定する
 	     *
-	     * @version 0.4.1
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.1
 	     * @override
 	     *
@@ -3944,7 +4066,7 @@
 	    __.prototype = b.prototype;
 	    d.prototype = new __();
 	};
-	var EventDispatcher = __webpack_require__(7);
+	var EventDispatcher = __webpack_require__(6);
 	var Timer = __webpack_require__(21);
 	/**
 	 * 非同期逐次処理クラス
@@ -4258,7 +4380,7 @@
 	/**
 	 * テキストフィールドの拡張クラス
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
@@ -4266,6 +4388,8 @@
 	    __extends(TextField, _super);
 	    /**
 	     * コンストラクタ
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.9.0
 	     * @since 0.4.0
@@ -4311,6 +4435,8 @@
 	    /**
 	     * ラップ要素を生成
 	     *
+	     * use: jQuery
+	     *
 	     * @version 0.4.0
 	     * @since 0.4.0
 	     * @override
@@ -4322,6 +4448,8 @@
 	    };
 	    /**
 	     * イベントの登録
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.4.1
 	     * @since 0.4.0
@@ -4361,7 +4489,9 @@
 	    /**
 	     * 要素の状態を更新する
 	     *
-	     * @version 0.4.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     *
 	     */
@@ -4394,33 +4524,39 @@
 	    /**
 	     * 入力されている状態を設定する
 	     *
-	     * @version 0.4.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     *
 	     */
 	    TextField.prototype._setStateInputted = function () {
 	        this.isEmpty = false;
-	        BaserElement.removeClassFrom(this.$el, FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
+	        BaserElement.removeClass(this.el, FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
 	        BaserElement.removeClassFrom(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, TextField.classNameStateUninput);
 	        BaserElement.removeClassFrom(this.$wrapper, FormElement.classNameWrapper, '', TextField.classNameStateUninput);
 	    };
 	    /**
 	     * 入力されていない状態を設定する
 	     *
-	     * @version 0.4.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     *
 	     */
 	    TextField.prototype._setStateUninputted = function () {
 	        this.isEmpty = true;
-	        BaserElement.addClassTo(this.$el, FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
+	        BaserElement.addClass(this.el, FormElement.classNameFormElementCommon, '', TextField.classNameStateUninput);
 	        BaserElement.addClassTo(this.$label, FormElement.classNameFormElementCommon, FormElement.classNameLabel, TextField.classNameStateUninput);
 	        BaserElement.addClassTo(this.$wrapper, FormElement.classNameWrapper, '', TextField.classNameStateUninput);
 	    };
 	    /**
 	     * プレースホルダーと値が同じかどうか
 	     *
-	     * @version 0.4.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     *
 	     */
@@ -4430,6 +4566,8 @@
 	    };
 	    /**
 	     * プレースホルダーの値を設定する
+	     *
+	     * use: jQuery
 	     *
 	     * @version 0.4.0
 	     * @since 0.4.0
@@ -4442,13 +4580,13 @@
 	    /**
 	     * 【IE用】カーソル（キャレット）を先頭に持っていく
 	     *
-	     * @version 0.4.0
+	     * @version 0.9.0
 	     * @since 0.4.0
 	     *
 	     */
 	    TextField.prototype._msCaretMoveToTop = function () {
 	        // TODO: MS用の型を調査して定義
-	        var input = this.$el[0];
+	        var input = this.el;
 	        var range = input.createTextRange();
 	        range.collapse();
 	        range.moveStart('character', 0);
@@ -4655,7 +4793,7 @@
 	/**
 	 * YouTube要素
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.0.7
 	 *
 	 */
@@ -4664,9 +4802,12 @@
 	    /**
 	     * コンストラクタ
 	     *
+	     * use: jQuery
+	     *
 	     * @version 0.9.0
 	     * @since 0.0.7
 	     * @param el 管理するDOM要素
+	     * @param options オプション
 	     *
 	     */
 	    function YouTube(el, options) {
@@ -4696,12 +4837,17 @@
 	    /**
 	     * 初期化
 	     *
+	     * use: jQuery
+	     *
+	     * TODO: 長いので分割
+	     *
 	     * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.7
 	     * @param $el 管理するDOM要素のjQueryオブジェクト
-	     * @return {booelan} 初期化が成功したかどうか
+	     * @param options オプション
+	     * @return 初期化が成功したかどうか
 	     *
 	     */
 	    YouTube.prototype._init = function (options) {
@@ -4760,13 +4906,12 @@
 	            $mov.data('height', this.movieOption.height);
 	        }
 	        $.getScript(protocol + YouTube.API_URL);
-	        var intervalTimer;
-	        intervalTimer = window.setInterval(function () {
+	        var intervalTimer = setInterval(function () {
 	            if (!_this.player && 'YT' in window && YT.Player) {
 	                _this._createPlayer(playerID);
 	            }
 	            if (_this.player && _this.player.pauseVideo && _this.player.playVideo) {
-	                window.clearInterval(intervalTimer);
+	                clearInterval(intervalTimer);
 	                _this._onEmbeded();
 	            }
 	        }, 300);
@@ -4775,7 +4920,9 @@
 	    /**
 	     * プレイヤーを生成する
 	     *
-	     * @version 0.8.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.8.0
 	     * @param playerID プレイヤーのDOM ID
 	     *
@@ -4835,7 +4982,9 @@
 	    /**
 	     * プレイヤーの生成が完了して実行可能になったときに呼ばれる処理
 	     *
-	     * @version 0.8.0
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.8.0
 	     *
 	     */
@@ -4871,6 +5020,7 @@
 	     *
 	     * @version 0.0.7
 	     * @since 0.0.7
+	     * @param options オプション
 	     *
 	     */
 	    YouTube.prototype.reload = function (options) {
@@ -4903,14 +5053,19 @@
 	    /**
 	     * ミュートのオンオフを要素にアサインする
 	     *
-	     * @version 0.8.0
+	     * TODO: 別のクラスにする
+	     *
+	     * use: jQuery
+	     *
+	     * @version 0.9.0
 	     * @since 0.5.0
 	     * @param $el アサインするDOM要素のjQueryオブジェクト
 	     * @param options オプション
 	     *
 	     */
-	    YouTube.prototype.muteController = function ($el, options) {
+	    YouTube.prototype.muteController = function (el, options) {
 	        var _this = this;
+	        var $el = $(el);
 	        var defaults = {
 	            eventType: 'click',
 	            mutedClass: 'is-muted',
@@ -4998,7 +5153,7 @@
 	var UtilMath = __webpack_require__(26);
 	var Timer = __webpack_require__(21);
 	var AnimationFrames = __webpack_require__(13);
-	var Browser = __webpack_require__(6);
+	var Browser = __webpack_require__(9);
 	var BaserElement = __webpack_require__(12);
 	var AlignedBoxes = __webpack_require__(4);
 	var Checkbox = __webpack_require__(16);
@@ -5239,22 +5394,19 @@
 	        }
 	        return self;
 	    };
-	    // @version 0.5.0
+	    // @version 0.9.0
 	    // @since 0.1.0
 	    JQueryAdapter.prototype.bcBoxLink = function () {
-	        var self = $(this);
-	        self.on('click', function (e) {
+	        return $(self).on('click', function (e) {
 	            var $elem = $(this);
 	            var $link = $elem.find('a, area').eq(0);
 	            var href = $link.prop('href');
-	            var isBlank;
 	            if ($link.length && href) {
-	                isBlank = $link.prop('target') === '_blank';
+	                var isBlank = $link.prop('target') === '_blank';
 	                Browser.jumpTo(href, isBlank);
 	                e.preventDefault();
 	            }
 	        });
-	        return self;
 	    };
 	    /**
 	     * WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する
@@ -5272,7 +5424,12 @@
 	    JQueryAdapter.prototype.bcCheckbox = function (options) {
 	        var self = $(this);
 	        return self.each(function (i, elem) {
-	            new Checkbox(elem, options);
+	            if (elem.nodeName === 'INPUT') {
+	                new Checkbox(elem, options);
+	            }
+	            else if ('console' in window) {
+	                console.warn('TypeError: A Node is not HTMLInputElement');
+	            }
 	        });
 	    };
 	    /**
@@ -5291,7 +5448,12 @@
 	    JQueryAdapter.prototype.bcRadio = function (options) {
 	        var self = $(this);
 	        return self.each(function (i, elem) {
-	            new Radio(elem, options);
+	            if (elem.nodeName === 'INPUT') {
+	                new Radio(elem, options);
+	            }
+	            else if ('console' in window) {
+	                console.warn('TypeError: A Node is not HTMLInputElement');
+	            }
 	        });
 	    };
 	    /**
@@ -5319,8 +5481,11 @@
 	                    }
 	                }
 	            }
-	            else {
+	            if (elem.nodeName === 'SELECT') {
 	                new Select(elem, options);
+	            }
+	            else if ('console' in window) {
+	                console.warn('TypeError: A Node is not HTMLSelectElement');
 	            }
 	        });
 	    };

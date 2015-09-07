@@ -311,7 +311,6 @@ class BaserElement extends EventDispatcher implements IElement {
 		$elem.removeClass(className);
 	}
 
-
 	/**
 	 * 【廃止予定】クラス名を取り除く
 	 * 

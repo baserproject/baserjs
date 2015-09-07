@@ -4,8 +4,22 @@ ts = require 'gulp-typescript'
 typedoc = require 'gulp-typedoc'
 uglify = require 'gulp-uglify'
 rename = require 'gulp-rename'
+header = require 'gulp-header'
 qunit = require 'gulp-qunit'
+moment = require 'moment'
 runSequence = require 'run-sequence'
+
+pkg = require './package.json'
+banner = """/**!
+	* <%= pkg.name %> - v<%= pkg.version %> r<%= parseInt(pkg.revision, 10) + 1 %>
+	* update: <%= moment().format("YYYY-MM-DD") %>
+	* Author: <%= pkg.author %> [<%= pkg.website %>]
+	* Github: <%= pkg.repository.url %>
+	* License: Licensed under the <%= pkg.license %> License
+	*/
+	
+	
+"""
 
 project = ts.createProject './tsconfig.json'
 
@@ -18,12 +32,14 @@ gulp.task 'ts', ->
 gulp.task 'pack', ->
 	gulp.src 'dist/src/baserJS.js'
 		.pipe webpack output: filename: 'baser.js'
+		.pipe header banner, pkg: pkg, moment: moment
 		.pipe gulp.dest './'
 
 gulp.task 'compress', ->
 	gulp.src './baser.js'
-		.pipe uglify preserveComments: 'license'
+		.pipe uglify()
 		.pipe rename 'baser.min.js'
+		.pipe header banner, pkg: pkg, moment: moment
 		.pipe gulp.dest './'
 		
 gulp.task 'test', ->

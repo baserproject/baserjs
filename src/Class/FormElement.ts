@@ -5,7 +5,7 @@ import FormElementOption = require('../Interface/FormElementOption');
 /**
  * フォーム要素の抽象クラス
  *
- * @version 0.1.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -87,6 +87,16 @@ class FormElement extends BaserElement implements IFormElement {
 	 *
 	 */
 	static elements: FormElement[] = [];
+	
+	/**
+	 * 管理するDOM要素
+	 *
+	 * @override
+	 * @version 0.9.0
+	 * @since 0.9.0
+	 *
+	 */
+	public el: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
 	/**
 	 * ラベルのテキスト
@@ -178,6 +188,8 @@ class FormElement extends BaserElement implements IFormElement {
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.1
@@ -185,7 +197,7 @@ class FormElement extends BaserElement implements IFormElement {
 	 * @param options オプション
 	 *
 	 */
-	constructor (el: HTMLElement, options: FormElementOption) {
+	constructor (el: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement, options: FormElementOption) {
 
 		super(el);
 
@@ -225,6 +237,7 @@ class FormElement extends BaserElement implements IFormElement {
 		this._onblur();
 
 		// フォーム要素に登録
+		// TODO: 有要な処理か検討
 		FormElement.elements.push(this);
 
 	}
@@ -244,16 +257,14 @@ class FormElement extends BaserElement implements IFormElement {
 
 	/**
 	 * ラベル要素内のテキストを取得する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.1
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
 	private _setLabelText (): void {
-		var $labelContents: JQuery = this.$label.contents();
-		var $before: JQuery = $();
-		var $after: JQuery = $();
-		var isBefore: boolean = true;
 
 		if (this._config.label) {
 
@@ -262,6 +273,11 @@ class FormElement extends BaserElement implements IFormElement {
 			this.labelAfterText = '';
 
 		} else {
+
+			let $labelContents: JQuery = this.$label.contents();
+			let $before: JQuery = $();
+			let $after: JQuery = $();
+			let isBefore: boolean = true;
 
 			$labelContents.each( (i: number, node: Node): void => {
 				if (node === this.$el[0]) {
@@ -302,29 +318,29 @@ class FormElement extends BaserElement implements IFormElement {
 
 	/**
 	 * ラベル要素を割り当てる
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.5.1
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
 	private _asignLabel (): void {
-		var $label: JQuery;
-		var hasLabel: boolean;
 
 		this.hasLabelByForAttr = false;
 
 		// 祖先のlabel要素を検索
-		$label = this.$el.closest('label');
+		let $label: JQuery = this.$el.closest('label');
 
 		// label要素の存在
-		hasLabel = !!$label.length;
+		let hasLabel: boolean = !!$label.length;
 
 		// labelでネストされていたかどうか
 		this.isWrappedByLabel = hasLabel;
 
 		// for属性に関連づいたlabel要素を取得
 		if (!hasLabel) {
-			$label = $('label[for="' + this.id + '"]');
+			$label = $(`label[for="${this.id}"]`);
 			hasLabel = !!$label.length;
 			this.hasLabelByForAttr = hasLabel;
 		}
@@ -332,7 +348,7 @@ class FormElement extends BaserElement implements IFormElement {
 		// ラベルがないときにラベル要素を生成する
 		if (this._config.autoLabeling && !hasLabel) {
 			// label(もしくは別の)要素の生成
-			$label = $('<' + this._config.labelTag.toLowerCase() + ' />');
+			$label = $(`<${this._config.labelTag.toLowerCase()} />`);
 			$label.insertAfter(this.$el);
 			if (this._config.labelClass) {
 				$label.addClass(this._config.labelClass);
@@ -358,14 +374,16 @@ class FormElement extends BaserElement implements IFormElement {
 
 	/**
 	 * ラップ要素を生成
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.5.1
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
 	protected _createWrapper (): void {
-		var wrapperHtml: string = '<span />';
-		var $wrapper = $(wrapperHtml);
+		let wrapperHtml: string = '<span />';
+		let $wrapper = $(wrapperHtml);
 
 		BaserElement.addClassTo($wrapper, FormElement.classNameFormElementCommon);
 		BaserElement.addClassTo($wrapper, FormElement.classNameWrapper);
@@ -395,8 +413,10 @@ class FormElement extends BaserElement implements IFormElement {
 
 	/**
 	 * イベントの登録
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.1
+	 * @version 0.9.0
 	 * @since 0.4.0
 	 *
 	 */
@@ -406,11 +426,9 @@ class FormElement extends BaserElement implements IFormElement {
 				this._onfocus();
 			}
 		});
-
 		this.$el.on('blur.bcFormElement', (): void => {
 			this._onblur();
 		});
-
 		this.$el.on('change.bcFormElement', (e: JQueryEventObject, arg: any): void => {
 			if (arg && arg.isSilent) {
 				this._onSilentChange();
@@ -418,7 +436,6 @@ class FormElement extends BaserElement implements IFormElement {
 				this.trigger('change', null, this);
 			}
 		});
-
 	}
 
 	/**
@@ -435,14 +452,16 @@ class FormElement extends BaserElement implements IFormElement {
 	/**
 	 * フォーカスがあたった時の処理
 	 *
-	 * @version 0.1.0
+	 * use: jQuery
+	 * 
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
 	protected _onfocus (): void {
 		this.hasFocus = true;
-		BaserElement.addClassTo(
-			this.$el,
+		BaserElement.addClass(
+			this.el,
 			FormElement.classNameFormElementCommon,
 			'',
 			FormElement.classNameStateFocus);
@@ -456,8 +475,8 @@ class FormElement extends BaserElement implements IFormElement {
 			FormElement.classNameWrapper,
 			'',
 			FormElement.classNameStateFocus);
-		BaserElement.removeClassFrom(
-			this.$el,
+		BaserElement.removeClass(
+			this.el,
 			FormElement.classNameFormElementCommon,
 			'',
 			FormElement.classNameStateBlur);
@@ -476,14 +495,16 @@ class FormElement extends BaserElement implements IFormElement {
 	/**
 	 * フォーカスがはずれた時の処理
 	 *
-	 * @version 0.1.0
+	 * use: jQuery
+	 * 
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
 	protected _onblur (): void {
 		this.hasFocus = false;
-		BaserElement.addClassTo(
-			this.$el,
+		BaserElement.addClass(
+			this.el,
 			FormElement.classNameFormElementCommon,
 			'',
 			FormElement.classNameStateBlur);
@@ -497,8 +518,8 @@ class FormElement extends BaserElement implements IFormElement {
 			FormElement.classNameWrapper,
 			'',
 			FormElement.classNameStateBlur);
-		BaserElement.removeClassFrom(
-			this.$el,
+		BaserElement.removeClass(
+			this.el,
 			FormElement.classNameFormElementCommon,
 			'',
 			FormElement.classNameStateFocus);
@@ -516,37 +537,42 @@ class FormElement extends BaserElement implements IFormElement {
 
 	/**
 	 * changeイベントを発火する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
+	 * @param isSilent イベントを伝達しない
 	 *
 	 */
 	protected _fireChangeEvent (isSilent: boolean = false): void {
-		var e: Event;
-		var legacyElement: any;
 		if (isSilent) {
 			this.$el.trigger('change.bcFormElement', [{ isSilent: <boolean> true }]);
 		} else if ('createEvent' in document) {
-			e = document.createEvent('Event');
+			let e: Event = document.createEvent('Event');
 			e.initEvent('change', true, true);
-			this.$el[0].dispatchEvent(e);
+			this.el.dispatchEvent(e);
 		} else {
 			// IE8
-			legacyElement = this.$el[0];
+			let legacyElement: any = this.el;
 			legacyElement.fireEvent('onchange');
 		}
 	}
 
 	/**
 	 * 値を設定する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.1
+	 * @version 0.9.0
 	 * @since 0.4.0
+	 * @param value 設定する値
+	 * @param isSilent イベントを伝達しない
 	 *
 	 */
 	public setValue (value: string | number | boolean, isSilent: boolean = false): void {
-		var valueString: string = String(value);
-		var currentValue: string = this.$el.val();
+		let valueString: string = '' + value;
+		let currentValue: string = this.$el.val();
 		if (!this.disabled && currentValue !== valueString) {
 			this.$el.val(valueString);
 			this._fireChangeEvent(isSilent);
@@ -555,17 +581,20 @@ class FormElement extends BaserElement implements IFormElement {
 
 	/**
 	 * 無効状態を設定する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.4.0
+	 * @version 0.9.0
 	 * @since 0.4.0
+	 * @param 無効状態かどうか
 	 *
 	 */
 	public setDisabled (isDisabled: boolean): void {
 		this.disabled = isDisabled;
-		this.$el.prop('disabled', isDisabled);
+		this.el.disabled = isDisabled;
 		if (this.disabled) {
-			BaserElement.addClassTo(
-				this.$el,
+			BaserElement.addClass(
+				this.el,
 				FormElement.classNameFormElementCommon,
 				'',
 				FormElement.classNameStateDisabled);
@@ -580,8 +609,8 @@ class FormElement extends BaserElement implements IFormElement {
 				'',
 				FormElement.classNameStateDisabled);
 		} else {
-			BaserElement.removeClassFrom(
-				this.$el,
+			BaserElement.removeClass(
+				this.el,
 				FormElement.classNameFormElementCommon,
 				'',
 				FormElement.classNameStateDisabled);

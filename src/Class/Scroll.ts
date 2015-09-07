@@ -4,7 +4,7 @@ import ScrollOptions = require('../Interface/ScrollOptions');
 /**
  * スクロールを管理するクラス
  *
- * @version 0.0.8
+ * @version 0.9.0
  * @since 0.0.8
  *
  */
@@ -25,28 +25,17 @@ class Scroll {
 	/**
 	 * 対象の要素もしくは位置にスクロールを移動させる
 	 *
-	 * @version 0.3.2
+	 * @version 0.9.0
 	 * @since 0.0.8
-	 * @param {string | HTMLElement | JQuery | number} 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
-	 * @param {ScrollOptions} オプション
-	 * @return {Scroll} 自信のスクロールオブジェクト
+	 * @param selector 対象の要素のセレクタ・HTMLオブジェクト・jQueryオブジェクトもしくはスクロール位置
+	 * @param options オプション
+	 * @return インスタンス自信
 	 *
 	 */
 	public to (selector: string | HTMLElement | JQuery | number, options?: ScrollOptions): Scroll {
-		var ele: HTMLElement;
-		var x: number;
-		var y: number;
-		var docWidth: number;
-		var docHeight: number;
-		var winWidth: number;
-		var winHeight: number;
-		var maxScrollX: number;
-		var maxScrollY: number;
-		var $target: JQuery;
-		var offset: number = 0;
-
+		
 		this.options = options || {};
-		offset += this.options.offset || 0;
+		let offset: number = this.options.offset || 0;
 
 		if (this.options.wheelCancel) {
 			// TODO: IE8 wheelイベント対応検討
@@ -67,30 +56,30 @@ class Scroll {
 			this.targetX = 0;
 			this.targetY = offset;
 		} else if (selector) {
-			$target = $(selector);
+			let $target: JQuery = $(selector);
 			if (!$target.length) {
 				return this;
 			}
-			ele = $target[0];
+			let elem: HTMLElement = $target[0];
 			// スクロール先座標をセットする
-			x = 0;
-			y = 0;
+			let x: number = 0;
+			let y: number = 0;
 			// 親のオフセットを足していって自身の座標を確定
-			while (ele) {
-				x += ele.offsetLeft;
-				y += ele.offsetTop;
-				ele = <HTMLElement> ele.offsetParent;
+			while (elem) {
+				x += elem.offsetLeft;
+				y += elem.offsetTop;
+				elem = <HTMLElement> elem.offsetParent;
 			}
-			winWidth = document.documentElement.clientWidth;
-			winHeight = document.documentElement.clientHeight;
-			docWidth = document.documentElement.scrollWidth;
-			docHeight = document.documentElement.scrollHeight;
-			maxScrollX = Math.max(winWidth, docWidth);
-			maxScrollY = Math.max(winHeight, docHeight);
+			let winWidth: number = document.documentElement.clientWidth;
+			let winHeight: number = document.documentElement.clientHeight;
+			let docWidth: number = document.documentElement.scrollWidth;
+			let docHeight: number = document.documentElement.scrollHeight;
+			let maxScrollX: number = Math.max(winWidth, docWidth);
+			let maxScrollY: number = Math.max(winHeight, docHeight);
 			this.targetX = Math.min(x, maxScrollX) + offset;
 			this.targetY = Math.min(y, maxScrollY) + offset;
 		} else {
-			$target = $(window.location.hash);
+			let $target: JQuery = $(window.location.hash);
 			if ($target.length) {
 				Timer.wait(Scroll.delayWhenURLHashTarget, (): void => {
 					window.scrollTo(0, 0);
@@ -108,18 +97,23 @@ class Scroll {
 			if ($.isFunction(this.options.onScrollStart)) {
 				this.options.onScrollStart.call(this, new $.Event('scrollstart'));
 			}
-			this._scroll();
+			this._progress();
 		}
 		return this;
 	}
 
-	private _scroll (): void {
-		var currentX: number = this._getX();
-		var currentY: number = this._getY();
-		var vx: number = (this.targetX - currentX) / Scroll.speed;
-		var vy: number = (this.targetY - currentY) / Scroll.speed;
-		var nextX: number = Math.floor(currentX + vx);
-		var nextY: number = Math.floor(currentY + vy);
+	/**
+	 * スクロール
+	 *
+	 * @version 0.9.0
+	 * @since 0.0.8
+	 *
+	 */
+	private _progress (): void {
+		let currentX: number = this._getX();
+		let currentY: number = this._getY();
+		let vx: number = (this.targetX - currentX) / Scroll.speed;
+		let vy: number = (this.targetY - currentY) / Scroll.speed;
 		if ((Math.abs(vx) < 1 && Math.abs(vy) < 1) || (this.prevX === currentX && this.prevY === currentY)) {
 			// 目標座標付近に到達していたら終了
 			window.scrollTo(this.targetX, this.targetY);
@@ -128,6 +122,8 @@ class Scroll {
 				this.options.onScrollEnd.call(this, new $.Event('scrollend'));
 			}
 		} else {
+			let nextX: number = Math.floor(currentX + vx);
+			let nextY: number = Math.floor(currentY + vy);
 			// 繰り返し
 			window.scrollTo(nextX, nextY);
 			this.prevX = currentX;
@@ -135,18 +131,41 @@ class Scroll {
 			if ($.isFunction(this.options.onScrollProgress)) {
 				this.options.onScrollProgress.call(this, new $.Event('scrollprogress'));
 			}
-			this.timer.wait(Scroll.interval, this._scroll, this);
+			this.timer.wait(Scroll.interval, this._progress, this);
 		}
 	}
 
+	/**
+	 * x位置の取得
+	 *
+	 * @version 0.9.0
+	 * @since 0.0.8
+	 * @return x位置
+	 *
+	 */
 	private _getX (): number {
 		return (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement.scrollLeft || document.body.scrollLeft);
 	}
 
+	/**
+	 * y位置の取得
+	 *
+	 * @version 0.9.0
+	 * @since 0.0.8
+	 * @return y位置
+	 *
+	 */
 	private _getY (): number {
 		return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement.scrollTop || document.body.scrollTop);
 	}
 
+	/**
+	 * スクロールの終了
+	 *
+	 * @version 0.9.0
+	 * @since 0.0.8
+	 *
+	 */
 	private _finish (): void {
 		this.isScroll = false;
 		this.prevX = null;

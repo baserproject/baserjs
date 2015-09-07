@@ -6,7 +6,7 @@ import CheckableElementOption = require('../Interface/CheckableElementOption');
 /**
  * ラジオボタンとチェックボックスの抽象クラス
  *
- * @version 0.1.0
+ * @version 0.9.0
  * @since 0.0.1
  *
  */
@@ -39,6 +39,16 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	 *
 	 */
 	static classNameStateUnchecked: string = 'unchecked';
+
+	/**
+	 * 管理するDOM要素
+	 *
+	 * @override
+	 * @version 0.9.0
+	 * @since 0.9.0
+	 *
+	 */
+	public el: HTMLInputElement;
 
 	/**
 	 * チェック状態
@@ -74,6 +84,8 @@ class CheckableElement extends FormElement implements ICheckableElement {
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.1
@@ -81,7 +93,7 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	 * @param options オプション
 	 *
 	 */
-	constructor (el: HTMLElement, options: CheckableElementOption) {
+	constructor (el: HTMLInputElement, options: CheckableElementOption) {
 
 		super(el, $.extend({}, CheckableElement.defaultOption, options));
 
@@ -97,8 +109,8 @@ class CheckableElement extends FormElement implements ICheckableElement {
 
 		this._checkedClass = this._config.checkedClass;
 
-		this.checked = this.$el.prop('checked');
-		this.defaultChecked = this.$el.prop('defaultChecked');
+		this.checked = this.el.checked;
+		this.defaultChecked = this.el.defaultChecked;
 
 		this._update();
 
@@ -110,17 +122,17 @@ class CheckableElement extends FormElement implements ICheckableElement {
 
 	/**
 	 * 要素の状態を更新する
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.0.1
 	 * @since 0.0.1
 	 *
 	 */
 	public update () {
-
 		if (this.$el.prop('checked') !== this.checked) {
 			this._update();
 		}
-
 	}
 
 	/**
@@ -131,26 +143,25 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	 *
 	 */
 	protected _onchenge () {
-
 		this.checked = !this.checked;
-
 		this._update();
-
 	}
 
 	/**
 	 * 要素の状態を更新する
+	 * 
+	 * use: jQuery
 	 *
-	 * @version 0.1.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 */
 	private _update () {
 
-		var checked: boolean = <boolean> this.$el.prop('checked');
+		let checked: boolean = <boolean> this.el.checked;
 
 		// WAI-ARIA属性
-		this.$el.attr('aria-checked', <string> '' + checked);
+		this.$el.attr('aria-checked', '' + checked);
 
 		if (checked) {
 
@@ -158,8 +169,8 @@ class CheckableElement extends FormElement implements ICheckableElement {
 			this.$label.addClass(this._checkedClass);
 			this.$wrapper.addClass(this._checkedClass);
 
-			BaserElement.addClassTo(
-				this.$el, FormElement.classNameFormElementCommon,
+			BaserElement.addClass(
+				this.el, FormElement.classNameFormElementCommon,
 				'',
 				CheckableElement.classNameStateChecked);
 			BaserElement.addClassTo(
@@ -170,8 +181,8 @@ class CheckableElement extends FormElement implements ICheckableElement {
 				this.$wrapper, FormElement.classNameWrapper,
 				'',
 				CheckableElement.classNameStateChecked);
-			BaserElement.removeClassFrom(
-				this.$el, FormElement.classNameFormElementCommon,
+			BaserElement.removeClass(
+				this.el, FormElement.classNameFormElementCommon,
 				'',
 				CheckableElement.classNameStateUnchecked);
 			BaserElement.removeClassFrom(
@@ -191,8 +202,8 @@ class CheckableElement extends FormElement implements ICheckableElement {
 			this.$label.removeClass(this._checkedClass);
 			this.$wrapper.removeClass(this._checkedClass);
 
-			BaserElement.addClassTo(
-				this.$el,
+			BaserElement.addClass(
+				this.el,
 				FormElement.classNameFormElementCommon,
 				'',
 				CheckableElement.classNameStateUnchecked);
@@ -206,8 +217,8 @@ class CheckableElement extends FormElement implements ICheckableElement {
 				FormElement.classNameWrapper,
 				'',
 				CheckableElement.classNameStateUnchecked);
-			BaserElement.removeClassFrom(
-				this.$el,
+			BaserElement.removeClass(
+				this.el,
 				FormElement.classNameFormElementCommon,
 				'',
 				CheckableElement.classNameStateChecked);
