@@ -454,9 +454,10 @@
 	        var words = str.replace(/[A-Z]/g, function ($1) {
 	            return " " + $1.toLowerCase();
 	        }).split(/[^a-z0-9]+/ig);
-	        for (var i = 0, l = words.length; i < l; i++) {
-	            if (words[i]) {
-	                result.push(words[i].toLowerCase());
+	        for (var _i = 0; _i < words.length; _i++) {
+	            var word = words[_i];
+	            if (word) {
+	                result.push(word.toLowerCase());
 	            }
 	        }
 	        return result.join('-');
@@ -509,6 +510,8 @@
 	    /**
 	     * 最初に登場する指定の区切り文字の場所で文字列を一回だけ分割する
 	     *
+	     * TODO: テストを書く
+	     *
 	     * @version 0.9.0
 	     * @since 0.7.0
 	     * @param str 対象の文字列
@@ -558,6 +561,8 @@
 	    __extends(Browser, _super);
 	    /**
 	     * コンストラクタ
+	     *
+	     * use jQuery
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.2
@@ -686,6 +691,8 @@
 	    /**
 	     * 現在のURLのパラメータをリンク先へ引き継がせる
 	     *
+	     * use: jQuery
+	     *
 	     * @version 0.9.0
 	     * @since 0.7.0
 	     *
@@ -783,13 +790,14 @@
 	        else {
 	            types = type;
 	        }
-	        for (var i = 0, l = types.length; i < l; i++) {
-	            var eventHandler = new EventHandler(this, types[i], handler);
+	        for (var _i = 0; _i < types.length; _i++) {
+	            var type_1 = types[_i];
+	            var eventHandler = new EventHandler(this, type_1, handler);
 	            EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
-	            if (!EventDispatcher.types[types[i]]) {
-	                EventDispatcher.types[types[i]] = [];
+	            if (!EventDispatcher.types[type_1]) {
+	                EventDispatcher.types[type_1] = [];
 	            }
-	            EventDispatcher.types[types[i]].push(eventHandler);
+	            EventDispatcher.types[type_1].push(eventHandler);
 	        }
 	        return this;
 	    };
@@ -810,8 +818,9 @@
 	        else {
 	            types = type;
 	        }
-	        for (var i = 0, l = types.length; i < l; i++) {
-	            delete EventDispatcher.types[types[i]];
+	        for (var _i = 0; _i < types.length; _i++) {
+	            var type_2 = types[_i];
+	            delete EventDispatcher.types[type_2];
 	        }
 	        return this;
 	    };
@@ -1023,7 +1032,7 @@
 	/**
 	 * URLの情報を管理するクラス
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 *
 	 */
@@ -1033,6 +1042,7 @@
 	     *
 	     * @version 0.7.0
 	     * @since 0.7.0
+	     * @param originalLocation 元となるロケーションオブジェクト
 	     *
 	     */
 	    function Locational(originalLocation) {
@@ -1065,7 +1075,8 @@
 	        var params = {};
 	        if (queryString) {
 	            var queries = queryString.split(/&/g);
-	            $.each(queries, function (i, query) {
+	            for (var _i = 0; _i < queries.length; _i++) {
+	                var query = queries[_i];
 	                var keyValue = UtilString.divide(query, '=');
 	                var key = keyValue[0];
 	                var value = keyValue[1];
@@ -1085,58 +1096,94 @@
 	                        params[key] = value;
 	                    }
 	                }
-	            });
+	            }
 	        }
 	        return params;
 	    };
+	    /**
+	     * プロパティを最適化する
+	     *
+	     * @version 0.9.0
+	     * @since 0.7.0
+	     * @return インスタンス自身
+	     *
+	     */
 	    Locational.prototype.update = function () {
 	        // ex) http://www.sample.com:80
-	        this.origin = this.protocol + '//' + this.host;
+	        this.origin = this.protocol + "//" + this.host;
 	        // ex) /path/dir/file.ext?key=value&key2=value#hash
-	        this.path = this.pathname + this.search + this.hash;
+	        this.path = "" + this.pathname + this.search + this.hash;
 	        // ex) http://www.sample.com:80/path/dir/file.ext?key=value&key2=value#hash
-	        this.href = this.origin + this.path;
+	        this.href = "" + this.origin + this.path;
 	        // ex) key=value&key2=value
 	        this.query = this.search.replace(/^\?/, '');
 	        // ex) { "key": "value", "key2": "value" }
 	        this.params = Locational.parseQueryString(this.query);
 	        return this;
 	    };
+	    /**
+	     * パラメータを追加する
+	     *
+	     * @version 0.9.0
+	     * @since 0.7.0
+	     * @param key パラメータのキー
+	     * @param value パラメータの値
+	     * @return インスタンス自身
+	     *
+	     */
 	    Locational.prototype.addParam = function (key, value) {
-	        var _this = this;
-	        var eqAndValue = '';
 	        if (typeof value === 'string' || !value) {
+	            var eqAndValue = '';
 	            if (value !== undefined) {
-	                eqAndValue = '=' + value;
+	                eqAndValue = "=" + value;
 	            }
 	            if (this.search) {
-	                this.search += '&' + key + eqAndValue;
+	                this.search += "&" + key + eqAndValue;
 	            }
 	            else {
-	                this.search = '?' + key + eqAndValue;
+	                this.search = "?" + key + eqAndValue;
 	            }
 	        }
 	        else {
-	            $.each(value, function (i, val) {
+	            for (var _i = 0; _i < value.length; _i++) {
+	                var val = value[_i];
+	                var eqAndValue = '';
 	                if (val !== undefined) {
-	                    eqAndValue = '=' + val;
+	                    eqAndValue = "=" + val;
 	                }
-	                if (_this.search) {
-	                    _this.search += '&' + key + '[]' + eqAndValue;
+	                if (this.search) {
+	                    this.search += "&" + key + "[]" + eqAndValue;
 	                }
 	                else {
-	                    _this.search = '?' + key + '[]' + eqAndValue;
+	                    this.search = "?" + key + "[]" + eqAndValue;
 	                }
-	            });
+	            }
 	        }
 	        this.update();
 	        return this;
 	    };
+	    /**
+	     * パラメータを削除する
+	     *
+	     * @version 0.7.0
+	     * @since 0.7.0
+	     * @param key パラメータのキー
+	     * @return インスタンス自身
+	     *
+	     */
 	    Locational.prototype.removeParam = function (key) {
 	        this.search = this.search.replace(new RegExp(key + '(?:\\[\\])?(?:=[^&]*)?(&|$)', 'g'), '');
 	        this.update();
 	        return this;
 	    };
+	    /**
+	     * 暗黙の文字列変換
+	     *
+	     * @version 0.7.0
+	     * @since 0.7.0
+	     * @return 変換された文字列
+	     *
+	     */
 	    Locational.prototype.toString = function () {
 	        this.update();
 	        return this.href;
@@ -1161,7 +1208,7 @@
 	/**
 	 * ブレークポイントの変化に応じた処理をする管理することができるクラス
 	 *
-	 * @version 0.8.1
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 *
 	 * ```
@@ -1218,8 +1265,8 @@
 	        this._setBreakPoints(breakPoints);
 	        Browser.browser.on('resizeend', function () {
 	            var wW = window.document.documentElement.clientWidth;
-	            for (var i = 0, l = _this.breakPoints.length; i < l; i++) {
-	                var overPoint = _this.breakPoints[i];
+	            for (var _i = 0, _a = _this.breakPoints; _i < _a.length; _i++) {
+	                var overPoint = _a[_i];
 	                if (wW <= overPoint) {
 	                    if (_this.currentPoint !== overPoint) {
 	                        _this.currentPoint = overPoint;
@@ -1228,7 +1275,7 @@
 	                            callback(value, overPoint, wW);
 	                        }
 	                        _this.trigger('breakpoint', [value, overPoint, wW], _this);
-	                        _this.trigger('breakpoint:' + overPoint, [value, wW], _this);
+	                        _this.trigger("breakpoint:" + overPoint, [value, wW], _this);
 	                    }
 	                    break;
 	                }
@@ -3876,8 +3923,9 @@
 	         *
 	         */
 	        this._isStop = true;
-	        for (var i = 0, l = tasks.length; i < l; i++) {
-	            this._tasks.push(new Task(tasks[i], this));
+	        for (var _i = 0; _i < tasks.length; _i++) {
+	            var task = tasks[_i];
+	            this._tasks.push(new Task(task, this));
 	        }
 	    }
 	    /**
@@ -4356,6 +4404,9 @@
 	     * 配列中の対象の要素が一番最初に存在するインデックス番号を返す
 	     * 存在しない場合は -1 を返す
 	     *
+	     * IE8のためのpolyfill
+	     * ※Array.prototype.indexOfを完全に再現しているわけではない
+	     *
 	     * @version 0.9.0
 	     * @since 0.2.0
 	     * @param array 対象の配列
@@ -4367,10 +4418,13 @@
 	        if (Array.prototype.indexOf) {
 	            return array.indexOf(searchElement);
 	        }
-	        for (var i = 0, l = array.length; i < l; i++) {
-	            if (searchElement === array[i]) {
+	        var i = 0;
+	        for (var _i = 0; _i < array.length; _i++) {
+	            var item = array[_i];
+	            if (searchElement === item) {
 	                return i;
 	            }
+	            i++;
 	        }
 	        return -1;
 	    };

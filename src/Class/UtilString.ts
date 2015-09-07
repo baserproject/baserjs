@@ -40,9 +40,9 @@ class UtilString {
 		let words: string[] = str.replace(/[A-Z]/g, ($1: string): string => {
 			return ` ${$1.toLowerCase()}`;
 		}).split(/[^a-z0-9]+/ig);
-		for (let i: number = 0, l: number = words.length; i < l; i++) {
-			if (words[i]) {
-				result.push(words[i].toLowerCase());
+		for (let word of words) {
+			if (word) {
+				result.push(word.toLowerCase());
 			}
 		}
 		return result.join('-');
@@ -97,6 +97,8 @@ class UtilString {
 
 	/**
 	 * 最初に登場する指定の区切り文字の場所で文字列を一回だけ分割する
+	 * 
+	 * TODO: テストを書く
 	 *
 	 * @version 0.9.0
 	 * @since 0.7.0

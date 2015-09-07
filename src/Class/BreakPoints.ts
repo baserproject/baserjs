@@ -5,7 +5,7 @@ import BreakPointsOption = require('../Interface/BreakPointsOption');
 /**
  * ブレークポイントの変化に応じた処理をする管理することができるクラス
  *
- * @version 0.8.1
+ * @version 0.9.0
  * @since 0.7.0
  * 
  * ```
@@ -64,8 +64,7 @@ class BreakPoints<T> extends EventDispatcher {
 		this._setBreakPoints<T>(breakPoints);
 		Browser.browser.on('resizeend', (): void => {
 			let wW: number = window.document.documentElement.clientWidth;
-			for (let i: number = 0, l: number = this.breakPoints.length; i < l; i++) {
-				let overPoint: number = this.breakPoints[i];
+			for (let overPoint of this.breakPoints) {
 				if (wW <= overPoint) {
 					if (this.currentPoint !== overPoint) {
 						this.currentPoint = overPoint;
@@ -74,7 +73,7 @@ class BreakPoints<T> extends EventDispatcher {
 							callback(value, overPoint, wW);
 						}
 						this.trigger('breakpoint', [value, overPoint, wW], this);
-						this.trigger('breakpoint:' + overPoint, [value, wW], this);
+						this.trigger(`breakpoint:${overPoint}`, [value, wW], this);
 					}
 					break;
 				}

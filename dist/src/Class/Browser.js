@@ -20,6 +20,8 @@ var Browser = (function (_super) {
     /**
      * コンストラクタ
      *
+     * use jQuery
+     *
      * @version 0.9.0
      * @since 0.0.2
      *
@@ -146,6 +148,8 @@ var Browser = (function (_super) {
     };
     /**
      * 現在のURLのパラメータをリンク先へ引き継がせる
+     *
+     * use: jQuery
      *
      * @version 0.9.0
      * @since 0.7.0

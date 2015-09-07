@@ -2,7 +2,7 @@ var UtilString = require('./UtilString');
 /**
  * URLの情報を管理するクラス
  *
- * @version 0.7.0
+ * @version 0.9.0
  * @since 0.7.0
  *
  */
@@ -12,6 +12,7 @@ var Locational = (function () {
      *
      * @version 0.7.0
      * @since 0.7.0
+     * @param originalLocation 元となるロケーションオブジェクト
      *
      */
     function Locational(originalLocation) {
@@ -44,7 +45,8 @@ var Locational = (function () {
         var params = {};
         if (queryString) {
             var queries = queryString.split(/&/g);
-            $.each(queries, function (i, query) {
+            for (var _i = 0; _i < queries.length; _i++) {
+                var query = queries[_i];
                 var keyValue = UtilString.divide(query, '=');
                 var key = keyValue[0];
                 var value = keyValue[1];
@@ -64,58 +66,94 @@ var Locational = (function () {
                         params[key] = value;
                     }
                 }
-            });
+            }
         }
         return params;
     };
+    /**
+     * プロパティを最適化する
+     *
+     * @version 0.9.0
+     * @since 0.7.0
+     * @return インスタンス自身
+     *
+     */
     Locational.prototype.update = function () {
         // ex) http://www.sample.com:80
-        this.origin = this.protocol + '//' + this.host;
+        this.origin = this.protocol + "//" + this.host;
         // ex) /path/dir/file.ext?key=value&key2=value#hash
-        this.path = this.pathname + this.search + this.hash;
+        this.path = "" + this.pathname + this.search + this.hash;
         // ex) http://www.sample.com:80/path/dir/file.ext?key=value&key2=value#hash
-        this.href = this.origin + this.path;
+        this.href = "" + this.origin + this.path;
         // ex) key=value&key2=value
         this.query = this.search.replace(/^\?/, '');
         // ex) { "key": "value", "key2": "value" }
         this.params = Locational.parseQueryString(this.query);
         return this;
     };
+    /**
+     * パラメータを追加する
+     *
+     * @version 0.9.0
+     * @since 0.7.0
+     * @param key パラメータのキー
+     * @param value パラメータの値
+     * @return インスタンス自身
+     *
+     */
     Locational.prototype.addParam = function (key, value) {
-        var _this = this;
-        var eqAndValue = '';
         if (typeof value === 'string' || !value) {
+            var eqAndValue = '';
             if (value !== undefined) {
-                eqAndValue = '=' + value;
+                eqAndValue = "=" + value;
             }
             if (this.search) {
-                this.search += '&' + key + eqAndValue;
+                this.search += "&" + key + eqAndValue;
             }
             else {
-                this.search = '?' + key + eqAndValue;
+                this.search = "?" + key + eqAndValue;
             }
         }
         else {
-            $.each(value, function (i, val) {
+            for (var _i = 0; _i < value.length; _i++) {
+                var val = value[_i];
+                var eqAndValue = '';
                 if (val !== undefined) {
-                    eqAndValue = '=' + val;
+                    eqAndValue = "=" + val;
                 }
-                if (_this.search) {
-                    _this.search += '&' + key + '[]' + eqAndValue;
+                if (this.search) {
+                    this.search += "&" + key + "[]" + eqAndValue;
                 }
                 else {
-                    _this.search = '?' + key + '[]' + eqAndValue;
+                    this.search = "?" + key + "[]" + eqAndValue;
                 }
-            });
+            }
         }
         this.update();
         return this;
     };
+    /**
+     * パラメータを削除する
+     *
+     * @version 0.7.0
+     * @since 0.7.0
+     * @param key パラメータのキー
+     * @return インスタンス自身
+     *
+     */
     Locational.prototype.removeParam = function (key) {
         this.search = this.search.replace(new RegExp(key + '(?:\\[\\])?(?:=[^&]*)?(&|$)', 'g'), '');
         this.update();
         return this;
     };
+    /**
+     * 暗黙の文字列変換
+     *
+     * @version 0.7.0
+     * @since 0.7.0
+     * @return 変換された文字列
+     *
+     */
     Locational.prototype.toString = function () {
         this.update();
         return this.href;

@@ -9,7 +9,7 @@ var Browser = require('./Browser');
 /**
  * ブレークポイントの変化に応じた処理をする管理することができるクラス
  *
- * @version 0.8.1
+ * @version 0.9.0
  * @since 0.7.0
  *
  * ```
@@ -66,8 +66,8 @@ var BreakPoints = (function (_super) {
         this._setBreakPoints(breakPoints);
         Browser.browser.on('resizeend', function () {
             var wW = window.document.documentElement.clientWidth;
-            for (var i = 0, l = _this.breakPoints.length; i < l; i++) {
-                var overPoint = _this.breakPoints[i];
+            for (var _i = 0, _a = _this.breakPoints; _i < _a.length; _i++) {
+                var overPoint = _a[_i];
                 if (wW <= overPoint) {
                     if (_this.currentPoint !== overPoint) {
                         _this.currentPoint = overPoint;
@@ -76,7 +76,7 @@ var BreakPoints = (function (_super) {
                             callback(value, overPoint, wW);
                         }
                         _this.trigger('breakpoint', [value, overPoint, wW], _this);
-                        _this.trigger('breakpoint:' + overPoint, [value, wW], _this);
+                        _this.trigger("breakpoint:" + overPoint, [value, wW], _this);
                     }
                     break;
                 }

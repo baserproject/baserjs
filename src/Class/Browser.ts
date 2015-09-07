@@ -94,6 +94,8 @@ class Browser extends EventDispatcher {
 
 	/**
 	 * 現在のURLのパラメータをリンク先へ引き継がせる
+	 * 
+	 * use: jQuery
 	 *
 	 * @version 0.9.0
 	 * @since 0.7.0
@@ -155,6 +157,8 @@ class Browser extends EventDispatcher {
 
 	/**
 	 * コンストラクタ
+	 * 
+	 * use jQuery
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.2

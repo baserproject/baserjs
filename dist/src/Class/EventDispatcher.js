@@ -46,13 +46,14 @@ var EventDispatcher = (function () {
         else {
             types = type;
         }
-        for (var i = 0, l = types.length; i < l; i++) {
-            var eventHandler = new EventHandler(this, types[i], handler);
+        for (var _i = 0; _i < types.length; _i++) {
+            var type_1 = types[_i];
+            var eventHandler = new EventHandler(this, type_1, handler);
             EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
-            if (!EventDispatcher.types[types[i]]) {
-                EventDispatcher.types[types[i]] = [];
+            if (!EventDispatcher.types[type_1]) {
+                EventDispatcher.types[type_1] = [];
             }
-            EventDispatcher.types[types[i]].push(eventHandler);
+            EventDispatcher.types[type_1].push(eventHandler);
         }
         return this;
     };
@@ -73,8 +74,9 @@ var EventDispatcher = (function () {
         else {
             types = type;
         }
-        for (var i = 0, l = types.length; i < l; i++) {
-            delete EventDispatcher.types[types[i]];
+        for (var _i = 0; _i < types.length; _i++) {
+            var type_2 = types[_i];
+            delete EventDispatcher.types[type_2];
         }
         return this;
     };

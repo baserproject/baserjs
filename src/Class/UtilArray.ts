@@ -10,6 +10,9 @@ class UtilArray {
 	/**
 	 * 配列中の対象の要素が一番最初に存在するインデックス番号を返す
 	 * 存在しない場合は -1 を返す
+	 * 
+	 * IE8のためのpolyfill
+	 * ※Array.prototype.indexOfを完全に再現しているわけではない
 	 *
 	 * @version 0.9.0
 	 * @since 0.2.0
@@ -22,10 +25,12 @@ class UtilArray {
 		if (Array.prototype.indexOf) {
 			return array.indexOf(searchElement);
 		}
-		for (let i: number = 0, l: number = array.length; i < l; i++) {
-			if (searchElement === array[i]) {
+		let i: number = 0;
+		for (let item of array) {
+			if (searchElement === item) {
 				return i;
 			}
+			i++;
 		}
 		return -1;
 	}
