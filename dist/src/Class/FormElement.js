@@ -17,14 +17,14 @@ var FormElement = (function (_super) {
     /**
      * コンストラクタ
      *
-     * @version 0.8.0
+     * @version 0.9.0
      * @since 0.0.1
-     * @param $el 管理するDOM要素のjQueryオブジェクト
+     * @param el 管理するDOM要素
      * @param options オプション
      *
      */
-    function FormElement($el, options) {
-        _super.call(this, $el);
+    function FormElement(el, options) {
+        _super.call(this, el);
         /**
          * フォーカスがあたっている状態かどうか
          *
@@ -37,7 +37,7 @@ var FormElement = (function (_super) {
             return;
         }
         // IE6・7は反映させない
-        if (!$el[0].querySelector) {
+        if (!el.querySelector) {
             return;
         }
         this._config = $.extend({}, FormElement.defaultOption, options);
@@ -55,7 +55,7 @@ var FormElement = (function (_super) {
         this._bindEvents();
         // 初期状態を設定
         this.defaultValue = this.$el.val();
-        this.setDisabled($el.prop('disabled'));
+        this.setDisabled(this.$el.prop('disabled'));
         this._onblur();
         // フォーム要素に登録
         FormElement.elements.push(this);

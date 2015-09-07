@@ -17,20 +17,20 @@ var GoogleMaps = (function (_super) {
     /**
      * コンストラクタ
      *
-     * @version 0.8.0
+     * @version 0.9.0
      * @since 0.0.6
-     * @param $el 管理するDOM要素のjQueryオブジェクト
+     * @param el 管理するDOM要素
      * @param options マップオプション
      *
      */
-    function GoogleMaps($el, options) {
-        _super.call(this, $el);
+    function GoogleMaps(el, options) {
+        _super.call(this, el);
         // 既にエレメント化されていた場合は何もしない
         if (this._elementized) {
             return;
         }
         // IE6・7は反映させない
-        if (!$el[0].querySelector) {
+        if (!el.querySelector) {
             return;
         }
         this.$el.addClass(GoogleMaps.className);
@@ -44,7 +44,7 @@ var GoogleMaps = (function (_super) {
             }
         }
         GoogleMaps.maps.push(this);
-        $el.data(GoogleMaps.className, this);
+        this.$el.data(GoogleMaps.className, this);
     }
     /**
      * 初期化

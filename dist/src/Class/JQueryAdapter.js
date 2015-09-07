@@ -20,6 +20,8 @@ var JQueryAdapter = (function () {
     /**
      * 自信の要素を基準に、指定の子要素を背景のように扱う
      *
+     * TODO: BaserElement化する
+     *
      * CSSの`background-size`の`contain`と`cover`の振る舞いに対応
      *
      * 基準も縦横のセンター・上下・左右に指定可能
@@ -260,7 +262,7 @@ var JQueryAdapter = (function () {
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する
      *
-     * @version 0.7.0
+     * @version 0.9.0
      * @since 0.0.1
      *
      * * * *
@@ -273,14 +275,13 @@ var JQueryAdapter = (function () {
     JQueryAdapter.prototype.bcCheckbox = function (options) {
         var self = $(this);
         return self.each(function (i, elem) {
-            var $elem = $(elem);
-            new Checkbox($elem, options);
+            new Checkbox(elem, options);
         });
     };
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたラジオボタンに変更する
      *
-     * @version 0.7.0
+     * @version 0.9.0
      * @since 0.0.1
      *
      * * * *
@@ -293,14 +294,13 @@ var JQueryAdapter = (function () {
     JQueryAdapter.prototype.bcRadio = function (options) {
         var self = $(this);
         return self.each(function (i, elem) {
-            var $elem = $(elem);
-            new Radio($elem, options);
+            new Radio(elem, options);
         });
     };
     /**
      * WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する
      *
-     * @version 0.8.0
+     * @version 0.9.0
      * @since 0.0.1
      *
      * * * *
@@ -323,7 +323,7 @@ var JQueryAdapter = (function () {
                 }
             }
             else {
-                new Select($elem, options);
+                new Select(elem, options);
             }
         });
     };
@@ -590,7 +590,7 @@ var JQueryAdapter = (function () {
      *
      * 現在の対応はGoogleMapsのみ
      *
-     * @version 0.0.8
+     * @version 0.9.0
      * @since 0.0.8
      *
      * * * *
@@ -623,14 +623,14 @@ var JQueryAdapter = (function () {
                 data.reload(options);
             }
             else {
-                new GoogleMaps($elem, options);
+                new GoogleMaps(elem, options);
             }
         });
     };
     /**
      * YouTubeを埋め込む
      *
-     * @version 0.0.8
+     * @version 0.9.0
      * @since 0.0.8
      *
      * * * *
@@ -676,7 +676,7 @@ var JQueryAdapter = (function () {
                 data.reload(options);
             }
             else {
-                new YouTube($elem, options);
+                new YouTube(elem, options);
             }
         });
     };

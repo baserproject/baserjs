@@ -80,8 +80,8 @@ test('baser.BaserElement.prototype.addClassのテスト', function() {
 	// リセット
 	baser.BaserElement.classNameDefaultCase = baser.ElementClassNameCase.HYPHEN_DELIMITED;
 
-	var $test = $('#test');
-	var testElem = new baser.BaserElement($test);
+	var test = document.getElementById('test');
+	var testElem = new baser.BaserElement(test);
 
 	testElem.addClass('sample-block');
 	ok(testElem.$el.hasClass('-bc-sample-block'), 'baser.BaserElement.prototype.addClass で問題なくクラスは付加されました');
@@ -103,7 +103,7 @@ test('baser.BaserElement.prototype.getBoolAttrのテスト', function() {
 	// <input type="checkbox" checked data-foo data-bar="bar" data-hoge="" data-fuga="false" data-false="0" data-true="1.0">
 
 	var $test = $('#getBoolAttr input');
-	var testElem = new baser.BaserElement($test);
+	var testElem = new baser.BaserElement($test[0]);
 	ok(testElem.getBoolAttr('checked'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');
 	ok(testElem.getBoolAttr('data-foo'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');
 	ok(testElem.getBoolAttr('data-bar'), 'baser.BaserElement.prototype.getBoolAttr は正しく論理値を返しました');

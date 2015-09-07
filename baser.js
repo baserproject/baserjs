@@ -178,7 +178,9 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.7.0
+	     * TODO: BaserElementのサブクラスにしない
+	     *
+	     * @version 0.9.0
 	     * @since 0.7.0
 	     * @param $el 対象のボックス要素
 	     * @param column カラム数もしくはブレークポイントに寄るカラム数 `0`の場合すべての要素の高さを揃える
@@ -187,7 +189,7 @@
 	    function AlignedBoxes($el, column, callback) {
 	        var _this = this;
 	        if (column === void 0) { column = 0; }
-	        _super.call(this, $el);
+	        _super.call(this, $el[0]);
 	        AlignedBoxes.boot();
 	        var uid = this.$el.data(AlignedBoxes.DATA_KEY_ID);
 	        if (uid) {
@@ -1366,10 +1368,10 @@
 	     *
 	     * @version 0.9.0
 	     * @since 0.0.1
-	     * @param $el 管理するDOM要素のjQueryオブジェクト
+	     * @param $el 管理するDOM要素
 	     *
 	     */
-	    function BaserElement($el) {
+	    function BaserElement(el) {
 	        _super.call(this);
 	        /**
 	         * 管理するDOM要素のname属性値
@@ -1387,29 +1389,23 @@
 	         *
 	         */
 	        this._elementized = false;
-	        this.$el = $el;
-	        this.el = $el[0];
+	        this.el = el;
+	        this.$el = $(el);
 	        // 既にbaserJSのエレメント化している場合
-	        if ($el.data('bc-element')) {
+	        if (this.$el.data('bc-element')) {
 	            if ('console' in window) {
 	                console.warn('This element is elementized of baserJS.');
 	            }
 	            this._elementized = true;
 	            return;
 	        }
-	        $el.data('bc-element', this);
+	        this.$el.data('bc-element', this);
 	        // ID・nameの抽出 & 生成
-	        var ids = [];
-	        var names = [];
-	        this.$el.each(function (i, el) {
-	            var id = el.id || UtilString.UID();
-	            var name = el.getAttribute('name');
-	            el.id = id;
-	            ids.push(id);
-	            names.push(name);
-	        });
-	        this.id = ids.join(' ');
-	        this.name = names.join(' ');
+	        var id = el.id || UtilString.UID();
+	        var name = el.getAttribute('name');
+	        el.id = id;
+	        this.id = id;
+	        this.name = name;
 	        // 共通クラスの付加
 	        this.addClass(BaserElement.classNameElementCommon);
 	    }
@@ -1697,8 +1693,7 @@
 	    BaserElement.prototype.addClass = function (blockNames, elementNames, modifierName) {
 	        if (elementNames === void 0) { elementNames = ''; }
 	        if (modifierName === void 0) { modifierName = ''; }
-	        var className = BaserElement.createClassName(blockNames, elementNames, modifierName);
-	        BaserElement.addClass(this.el, className);
+	        BaserElement.addClass(this.el, blockNames, elementNames, modifierName);
 	    };
 	    /**
 	     * 要素の属性の真偽を判定する
@@ -1955,21 +1950,21 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.1
-	     * @param $el 管理するDOM要素のjQueryオブジェクト
+	     * @param el 管理するDOM要素
 	     * @param options オプション
 	     *
 	     */
-	    function CheckableElement($el, options) {
+	    function CheckableElement(el, options) {
 	        var _this = this;
-	        _super.call(this, $el, $.extend({}, CheckableElement.defaultOption, options));
+	        _super.call(this, el, $.extend({}, CheckableElement.defaultOption, options));
 	        // 既にエレメント化されていた場合は何もしない
 	        if (this._elementized) {
 	            return;
 	        }
 	        // IE6・7は反映させない
-	        if (!$el[0].querySelector) {
+	        if (!el.querySelector) {
 	            return;
 	        }
 	        this._checkedClass = this._config.checkedClass;
@@ -2091,14 +2086,14 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.1
-	     * @param $el 管理するDOM要素のjQueryオブジェクト
+	     * @param el 管理するDOM要素
 	     * @param options オプション
 	     *
 	     */
-	    function FormElement($el, options) {
-	        _super.call(this, $el);
+	    function FormElement(el, options) {
+	        _super.call(this, el);
 	        /**
 	         * フォーカスがあたっている状態かどうか
 	         *
@@ -2111,7 +2106,7 @@
 	            return;
 	        }
 	        // IE6・7は反映させない
-	        if (!$el[0].querySelector) {
+	        if (!el.querySelector) {
 	            return;
 	        }
 	        this._config = $.extend({}, FormElement.defaultOption, options);
@@ -2129,7 +2124,7 @@
 	        this._bindEvents();
 	        // 初期状態を設定
 	        this.defaultValue = this.$el.val();
-	        this.setDisabled($el.prop('disabled'));
+	        this.setDisabled(this.$el.prop('disabled'));
 	        this._onblur();
 	        // フォーム要素に登録
 	        FormElement.elements.push(this);
@@ -2502,20 +2497,20 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.1
-	     * @param $el 管理するDOM要素のjQueryオブジェクト
+	     * @param el 管理するDOM要素
 	     * @param options オプション
 	     *
 	     */
-	    function Checkbox($el, options) {
-	        _super.call(this, $el, options);
+	    function Checkbox(el, options) {
+	        _super.call(this, el, options);
 	        // 既にエレメント化されていた場合は何もしない
 	        if (this._elementized) {
 	            return;
 	        }
 	        // IE6・7は反映させない
-	        if (!$el[0].querySelector) {
+	        if (!el.querySelector) {
 	            return;
 	        }
 	        this.addClass(Checkbox.classNameCheckbox);
@@ -2558,20 +2553,20 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.6
-	     * @param $el 管理するDOM要素のjQueryオブジェクト
+	     * @param el 管理するDOM要素
 	     * @param options マップオプション
 	     *
 	     */
-	    function GoogleMaps($el, options) {
-	        _super.call(this, $el);
+	    function GoogleMaps(el, options) {
+	        _super.call(this, el);
 	        // 既にエレメント化されていた場合は何もしない
 	        if (this._elementized) {
 	            return;
 	        }
 	        // IE6・7は反映させない
-	        if (!$el[0].querySelector) {
+	        if (!el.querySelector) {
 	            return;
 	        }
 	        this.$el.addClass(GoogleMaps.className);
@@ -2585,7 +2580,7 @@
 	            }
 	        }
 	        GoogleMaps.maps.push(this);
-	        $el.data(GoogleMaps.className, this);
+	        this.$el.data(GoogleMaps.className, this);
 	    }
 	    /**
 	     * 初期化
@@ -2889,20 +2884,20 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.1
-	     * @param $el 管理するDOM要素のjQueryオブジェクト
+	     * @param el 管理するDOM要素
 	     * @param options オプション
 	     *
 	     */
-	    function Radio($el, options) {
-	        _super.call(this, $el, options);
+	    function Radio(el, options) {
+	        _super.call(this, el, options);
 	        // 既にエレメント化されていた場合は何もしない
 	        if (this._elementized) {
 	            return;
 	        }
 	        // IE6・7は反映させない
-	        if (!$el[0].querySelector) {
+	        if (!el.querySelector) {
 	            return;
 	        }
 	        this.addClass(Radio.classNameRadio);
@@ -3389,20 +3384,20 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.1
-	     * @param $el 管理するDOM要素のjQueryオブジェクト
+	     * @param el 管理するDOM要素
 	     * @param options オプション
 	     *
 	     */
-	    function Select($el, options) {
-	        _super.call(this, $el, $.extend({}, Select.defaultOption, options));
+	    function Select(el, options) {
+	        _super.call(this, el, $.extend({}, Select.defaultOption, options));
 	        // 既にエレメント化されていた場合は何もしない
 	        if (this._elementized) {
 	            return;
 	        }
 	        // IE6・7は反映させない
-	        if (!$el[0].querySelector) {
+	        if (!el.querySelector) {
 	            return;
 	        }
 	        this._update();
@@ -4272,14 +4267,14 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.4.0
-	     * @param $el 管理するDOM要素のjQueryオブジェクト
+	     * @param el 管理するDOM要素
 	     * @param options オプション
 	     *
 	     */
-	    function TextField($el, options) {
-	        _super.call(this, $el, $.extend({}, TextField.defaultOption, options));
+	    function TextField(el, options) {
+	        _super.call(this, el, $.extend({}, TextField.defaultOption, options));
 	        /**
 	         * プレースホルダーテキスト
 	         *
@@ -4293,7 +4288,7 @@
 	            return;
 	        }
 	        // IE6・7は反映させない
-	        if (!$el[0].querySelector) {
+	        if (!el.querySelector) {
 	            return;
 	        }
 	        this.placeholder = this.$el.attr('placeholder') || '';
@@ -4669,13 +4664,13 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.7
-	     * @param $el 管理するDOM要素のjQueryオブジェクト
+	     * @param el 管理するDOM要素
 	     *
 	     */
-	    function YouTube($el, options) {
-	        _super.call(this, $el);
+	    function YouTube(el, options) {
+	        _super.call(this, el);
 	        /**
 	         * プレイヤーが有効になっているかどうか
 	         *
@@ -4689,13 +4684,13 @@
 	            return;
 	        }
 	        // IE6・7は反映させない
-	        if (!$el[0].querySelector) {
+	        if (!el.querySelector) {
 	            return;
 	        }
 	        if (this._init(options)) {
 	            YouTube.movies.push(this);
 	            this.$el.addClass(YouTube.className);
-	            $el.data(YouTube.className, this);
+	            this.$el.data(YouTube.className, this);
 	        }
 	    }
 	    /**
@@ -5022,6 +5017,8 @@
 	    /**
 	     * 自信の要素を基準に、指定の子要素を背景のように扱う
 	     *
+	     * TODO: BaserElement化する
+	     *
 	     * CSSの`background-size`の`contain`と`cover`の振る舞いに対応
 	     *
 	     * 基準も縦横のセンター・上下・左右に指定可能
@@ -5262,7 +5259,7 @@
 	    /**
 	     * WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する
 	     *
-	     * @version 0.7.0
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     *
 	     * * * *
@@ -5275,14 +5272,13 @@
 	    JQueryAdapter.prototype.bcCheckbox = function (options) {
 	        var self = $(this);
 	        return self.each(function (i, elem) {
-	            var $elem = $(elem);
-	            new Checkbox($elem, options);
+	            new Checkbox(elem, options);
 	        });
 	    };
 	    /**
 	     * WAI-ARIAに対応した装飾可能な汎用要素でラップしたラジオボタンに変更する
 	     *
-	     * @version 0.7.0
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     *
 	     * * * *
@@ -5295,14 +5291,13 @@
 	    JQueryAdapter.prototype.bcRadio = function (options) {
 	        var self = $(this);
 	        return self.each(function (i, elem) {
-	            var $elem = $(elem);
-	            new Radio($elem, options);
+	            new Radio(elem, options);
 	        });
 	    };
 	    /**
 	     * WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する
 	     *
-	     * @version 0.8.0
+	     * @version 0.9.0
 	     * @since 0.0.1
 	     *
 	     * * * *
@@ -5325,7 +5320,7 @@
 	                }
 	            }
 	            else {
-	                new Select($elem, options);
+	                new Select(elem, options);
 	            }
 	        });
 	    };
@@ -5592,7 +5587,7 @@
 	     *
 	     * 現在の対応はGoogleMapsのみ
 	     *
-	     * @version 0.0.8
+	     * @version 0.9.0
 	     * @since 0.0.8
 	     *
 	     * * * *
@@ -5625,14 +5620,14 @@
 	                data.reload(options);
 	            }
 	            else {
-	                new GoogleMaps($elem, options);
+	                new GoogleMaps(elem, options);
 	            }
 	        });
 	    };
 	    /**
 	     * YouTubeを埋め込む
 	     *
-	     * @version 0.0.8
+	     * @version 0.9.0
 	     * @since 0.0.8
 	     *
 	     * * * *
@@ -5678,7 +5673,7 @@
 	                data.reload(options);
 	            }
 	            else {
-	                new YouTube($elem, options);
+	                new YouTube(elem, options);
 	            }
 	        });
 	    };

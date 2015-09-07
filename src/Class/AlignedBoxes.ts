@@ -203,14 +203,16 @@ class AlignedBoxes extends BaserElement {
 	/**
 	 * コンストラクタ
 	 *
-	 * @version 0.7.0
+	 * TODO: BaserElementのサブクラスにしない
+	 * 
+	 * @version 0.9.0
 	 * @since 0.7.0
 	 * @param $el 対象のボックス要素
 	 * @param column カラム数もしくはブレークポイントに寄るカラム数 `0`の場合すべての要素の高さを揃える
 	 * @param callback ボックスの高さ揃えるときのコールバック
 	 */
 	constructor ($el: JQuery, column: number | BreakPointsOption<number> = 0, callback?: AlignedBoxCallback) {
-		super($el);
+		super($el[0]);
 
 		AlignedBoxes.boot();
 

@@ -37,7 +37,7 @@ test('added class names', function() {
 
 	var $target = $('#target');
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	ok(target.$el.parent('span').hasClass('-bc-form-element'), 'class name of wrapper');
 	ok(target.$el.parent('span').hasClass('-bc-wrapper'), 'class name of wrapper');
@@ -68,7 +68,7 @@ test('wrapped label', function() {
 
 	var $target = $('#target-wrapped-label');
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	ok(target.$label.hasClass('-bc-form-element'), 'class name of label element');
 	ok(target.$label.hasClass('-bc-form-element__label'), 'class name of label element');
@@ -84,7 +84,7 @@ test('wrapped label - optional label', function() {
 
 	var $target = $('#target-wrapped-label');
 
-	var target = new baser.FormElement($target, {
+	var target = new baser.FormElement($target[0], {
 		label: 'labelFromOption'
 	});
 
@@ -97,7 +97,7 @@ test('leaved label', function() {
 
 	var $target = $('#target-with-label');
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	ok(target.$label.hasClass('-bc-form-element'), 'class name of label element');
 	ok(target.$label.hasClass('-bc-form-element__label'), 'class name of label element');
@@ -113,7 +113,7 @@ test('leaved label - optional label', function() {
 
 	var $target = $('#target-with-label');
 
-	var target = new baser.FormElement($target, {
+	var target = new baser.FormElement($target[0], {
 		label: 'labelFromOption'
 	});
 
@@ -126,7 +126,7 @@ test('title label - optional label', function() {
 
 	var $target = $('#target-title-label');
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	equal(target.label, 'title-label', 'text of label');
 
@@ -136,7 +136,7 @@ test('default value', function() {
 
 	var $target = $('#target-default-value');
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	equal(target.defaultValue, 'default-value', 'default value');
 
@@ -147,7 +147,7 @@ test('disabled - get', function() {
 
 	var $target = $('#target-disabled');
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	ok(target.disabled, 'disabled is true');
 	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
@@ -166,7 +166,7 @@ test('disabled - change', function() {
 
 	var $target = $('#target-disabled');
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	ok(target.disabled, 'disabled is true');
 	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
@@ -191,7 +191,7 @@ test('disabled - change', function() {
 
 	var $target = $('#target-disabled');
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	ok(target.disabled, 'disabled is true');
 	ok(target.$el.hasClass('-bc-form-element--disabled'), 'class name of disabled this element');
@@ -218,7 +218,7 @@ test('setValue / change event', function() {
 
 	var $target = $('#target');
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	target.on('change', function (e) {
 		equal(target.$el.val(), settingValue, 'fired baserJS change');
@@ -245,7 +245,7 @@ test('baser.FormElement (v0.0.x)', function() {
 	baser.BaserElement.classNameDefaultSeparatorForModifier = baser.ClassNameSeparatorForBEM.HYPHEN;
 	baser.FormElement.classNameWrapper = 'form-element-wrapper';
 
-	var target = new baser.FormElement($target);
+	var target = new baser.FormElement($target[0]);
 
 	ok(target.$el.hasClass('-bc-form-element'), 'class name of this element');
 	ok(target.$el.hasClass('-bc-form-element-blur'), 'class name of this element on blur');

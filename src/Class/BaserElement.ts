@@ -269,7 +269,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 */
 	static addClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
 		let $elem: JQuery = $(elem);
-		var className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.addClass(className);
 	}
 
@@ -288,7 +288,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 *
 	 */
 	static addClassTo ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
-		var className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.addClass(className);
 	}
 
@@ -307,7 +307,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 */
 	static removeClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
 		let $elem: JQuery = $(elem);
-		var className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.removeClass(className);
 	}
 
@@ -327,7 +327,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 *
 	 */
 	static removeClassFrom ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
-		var className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.removeClass(className);
 	}
 	
@@ -396,34 +396,28 @@ class BaserElement extends EventDispatcher implements IElement {
 	 *
 	 * @version 0.9.0
 	 * @since 0.0.1
-	 * @param $el 管理するDOM要素のjQueryオブジェクト
+	 * @param $el 管理するDOM要素
 	 *
 	 */
-	constructor ($el: JQuery) {
+	constructor (el: HTMLElement) {
 		super();
-		this.$el = $el;
-		this.el = <HTMLElement> $el[0];
+		this.el = el;
+		this.$el = $(el);
 		// 既にbaserJSのエレメント化している場合
-		if ($el.data('bc-element')) {
+		if (this.$el.data('bc-element')) {
 			if ('console' in window) {
 				console.warn('This element is elementized of baserJS.');
 			}
 			this._elementized = true;
 			return;
 		}
-		$el.data('bc-element', this);
+		this.$el.data('bc-element', this);
 		// ID・nameの抽出 & 生成
-		let ids: string[] = [];
-		let names: string[] = [];
-		this.$el.each( (i: number, el: HTMLElement): void => {
-			var id: string = el.id || UtilString.UID();
-			var name: string = el.getAttribute('name');
-			el.id = id;
-			ids.push(id);
-			names.push(name);
-		});
-		this.id = ids.join(' ');
-		this.name = names.join(' ');
+		let id: string = el.id || UtilString.UID();
+		let name: string = el.getAttribute('name');
+		el.id = id;
+		this.id = id;
+		this.name = name;
 		// 共通クラスの付加
 		this.addClass(BaserElement.classNameElementCommon);
 	}
@@ -436,8 +430,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 *
 	 */
 	public addClass (blockNames: string, elementNames: string = '', modifierName: string = ''): void {
-		var className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
-		BaserElement.addClass(this.el, className);
+		BaserElement.addClass(this.el, blockNames, elementNames, modifierName);
 	}
 
 	/**
@@ -489,6 +482,5 @@ class BaserElement extends EventDispatcher implements IElement {
 	}
 
 }
-
 
 export = BaserElement;

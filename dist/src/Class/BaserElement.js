@@ -34,10 +34,10 @@ var BaserElement = (function (_super) {
      *
      * @version 0.9.0
      * @since 0.0.1
-     * @param $el 管理するDOM要素のjQueryオブジェクト
+     * @param $el 管理するDOM要素
      *
      */
-    function BaserElement($el) {
+    function BaserElement(el) {
         _super.call(this);
         /**
          * 管理するDOM要素のname属性値
@@ -55,29 +55,23 @@ var BaserElement = (function (_super) {
          *
          */
         this._elementized = false;
-        this.$el = $el;
-        this.el = $el[0];
+        this.el = el;
+        this.$el = $(el);
         // 既にbaserJSのエレメント化している場合
-        if ($el.data('bc-element')) {
+        if (this.$el.data('bc-element')) {
             if ('console' in window) {
                 console.warn('This element is elementized of baserJS.');
             }
             this._elementized = true;
             return;
         }
-        $el.data('bc-element', this);
+        this.$el.data('bc-element', this);
         // ID・nameの抽出 & 生成
-        var ids = [];
-        var names = [];
-        this.$el.each(function (i, el) {
-            var id = el.id || UtilString.UID();
-            var name = el.getAttribute('name');
-            el.id = id;
-            ids.push(id);
-            names.push(name);
-        });
-        this.id = ids.join(' ');
-        this.name = names.join(' ');
+        var id = el.id || UtilString.UID();
+        var name = el.getAttribute('name');
+        el.id = id;
+        this.id = id;
+        this.name = name;
         // 共通クラスの付加
         this.addClass(BaserElement.classNameElementCommon);
     }
@@ -365,8 +359,7 @@ var BaserElement = (function (_super) {
     BaserElement.prototype.addClass = function (blockNames, elementNames, modifierName) {
         if (elementNames === void 0) { elementNames = ''; }
         if (modifierName === void 0) { modifierName = ''; }
-        var className = BaserElement.createClassName(blockNames, elementNames, modifierName);
-        BaserElement.addClass(this.el, className);
+        BaserElement.addClass(this.el, blockNames, elementNames, modifierName);
     };
     /**
      * 要素の属性の真偽を判定する

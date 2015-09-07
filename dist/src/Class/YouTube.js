@@ -17,13 +17,13 @@ var YouTube = (function (_super) {
     /**
      * コンストラクタ
      *
-     * @version 0.8.0
+     * @version 0.9.0
      * @since 0.0.7
-     * @param $el 管理するDOM要素のjQueryオブジェクト
+     * @param el 管理するDOM要素
      *
      */
-    function YouTube($el, options) {
-        _super.call(this, $el);
+    function YouTube(el, options) {
+        _super.call(this, el);
         /**
          * プレイヤーが有効になっているかどうか
          *
@@ -37,13 +37,13 @@ var YouTube = (function (_super) {
             return;
         }
         // IE6・7は反映させない
-        if (!$el[0].querySelector) {
+        if (!el.querySelector) {
             return;
         }
         if (this._init(options)) {
             YouTube.movies.push(this);
             this.$el.addClass(YouTube.className);
-            $el.data(YouTube.className, this);
+            this.$el.data(YouTube.className, this);
         }
     }
     /**

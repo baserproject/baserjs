@@ -20,7 +20,9 @@ var AlignedBoxes = (function (_super) {
     /**
      * コンストラクタ
      *
-     * @version 0.7.0
+     * TODO: BaserElementのサブクラスにしない
+     *
+     * @version 0.9.0
      * @since 0.7.0
      * @param $el 対象のボックス要素
      * @param column カラム数もしくはブレークポイントに寄るカラム数 `0`の場合すべての要素の高さを揃える
@@ -29,7 +31,7 @@ var AlignedBoxes = (function (_super) {
     function AlignedBoxes($el, column, callback) {
         var _this = this;
         if (column === void 0) { column = 0; }
-        _super.call(this, $el);
+        _super.call(this, $el[0]);
         AlignedBoxes.boot();
         var uid = this.$el.data(AlignedBoxes.DATA_KEY_ID);
         if (uid) {

@@ -27,6 +27,8 @@ class JQueryAdapter {
 
 	/**
 	 * 自信の要素を基準に、指定の子要素を背景のように扱う
+	 * 
+	 * TODO: BaserElement化する
 	 *
 	 * CSSの`background-size`の`contain`と`cover`の振る舞いに対応
 	 *
@@ -291,7 +293,7 @@ class JQueryAdapter {
 	/**
 	 * WAI-ARIAに対応した装飾可能な汎用要素でラップしたチェックボックスに変更する
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 * * * *
@@ -304,15 +306,14 @@ class JQueryAdapter {
 	public bcCheckbox (options: CheckableElementOption): JQuery {
 		var self = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
-			var $elem: JQuery = $(elem);
-			new Checkbox($elem, options);
+			new Checkbox(elem, options);
 		});
 	}
 
 	/**
 	 * WAI-ARIAに対応した装飾可能な汎用要素でラップしたラジオボタンに変更する
 	 *
-	 * @version 0.7.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 * * * *
@@ -325,15 +326,14 @@ class JQueryAdapter {
 	public bcRadio (options: CheckableElementOption): JQuery {
 		var self = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
-			var $elem: JQuery = $(elem);
-			new Radio($elem, options);
+			new Radio(elem, options);
 		});
 	}
 
 	/**
 	 * WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
 	 * * * *
@@ -355,7 +355,7 @@ class JQueryAdapter {
 					}
 				}
 			} else {
-				new Select($elem, options);
+				new Select(elem, options);
 			}
 		});
 	}
@@ -639,7 +639,7 @@ class JQueryAdapter {
 	 *
 	 * 現在の対応はGoogleMapsのみ
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.8
 	 *
 	 * * * *
@@ -671,7 +671,7 @@ class JQueryAdapter {
 			if (data) {
 				data.reload(options);
 			} else {
-				new GoogleMaps($elem, options);
+				new GoogleMaps(elem, options);
 			}
 		});
 	}
@@ -679,7 +679,7 @@ class JQueryAdapter {
 	/**
 	 * YouTubeを埋め込む
 	 *
-	 * @version 0.0.8
+	 * @version 0.9.0
 	 * @since 0.0.8
 	 *
 	 * * * *
@@ -724,7 +724,7 @@ class JQueryAdapter {
 			if (data) {
 				data.reload(options);
 			} else {
-				new YouTube($elem, options);
+				new YouTube(elem, options);
 			}
 		});
 	}

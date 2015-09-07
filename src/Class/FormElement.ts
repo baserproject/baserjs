@@ -179,15 +179,15 @@ class FormElement extends BaserElement implements IFormElement {
 	/**
 	 * コンストラクタ
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.0.1
-	 * @param $el 管理するDOM要素のjQueryオブジェクト
+	 * @param el 管理するDOM要素
 	 * @param options オプション
 	 *
 	 */
-	constructor ($el: JQuery, options: FormElementOption) {
+	constructor (el: HTMLElement, options: FormElementOption) {
 
-		super($el);
+		super(el);
 
 		// 既にエレメント化されていた場合は何もしない
 		if (this._elementized) {
@@ -195,7 +195,7 @@ class FormElement extends BaserElement implements IFormElement {
 		}
 
 		// IE6・7は反映させない
-		if (!$el[0].querySelector) {
+		if (!el.querySelector) {
 			return;
 		}
 
@@ -221,7 +221,7 @@ class FormElement extends BaserElement implements IFormElement {
 
 		// 初期状態を設定
 		this.defaultValue = this.$el.val();
-		this.setDisabled(<boolean> $el.prop('disabled'));
+		this.setDisabled(<boolean> this.$el.prop('disabled'));
 		this._onblur();
 
 		// フォーム要素に登録

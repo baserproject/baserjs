@@ -19,20 +19,20 @@ var Select = (function (_super) {
     /**
      * コンストラクタ
      *
-     * @version 0.8.0
+     * @version 0.9.0
      * @since 0.0.1
-     * @param $el 管理するDOM要素のjQueryオブジェクト
+     * @param el 管理するDOM要素
      * @param options オプション
      *
      */
-    function Select($el, options) {
-        _super.call(this, $el, $.extend({}, Select.defaultOption, options));
+    function Select(el, options) {
+        _super.call(this, el, $.extend({}, Select.defaultOption, options));
         // 既にエレメント化されていた場合は何もしない
         if (this._elementized) {
             return;
         }
         // IE6・7は反映させない
-        if (!$el[0].querySelector) {
+        if (!el.querySelector) {
             return;
         }
         this._update();

@@ -18,21 +18,21 @@ var CheckableElement = (function (_super) {
     /**
      * コンストラクタ
      *
-     * @version 0.8.0
+     * @version 0.9.0
      * @since 0.0.1
-     * @param $el 管理するDOM要素のjQueryオブジェクト
+     * @param el 管理するDOM要素
      * @param options オプション
      *
      */
-    function CheckableElement($el, options) {
+    function CheckableElement(el, options) {
         var _this = this;
-        _super.call(this, $el, $.extend({}, CheckableElement.defaultOption, options));
+        _super.call(this, el, $.extend({}, CheckableElement.defaultOption, options));
         // 既にエレメント化されていた場合は何もしない
         if (this._elementized) {
             return;
         }
         // IE6・7は反映させない
-        if (!$el[0].querySelector) {
+        if (!el.querySelector) {
             return;
         }
         this._checkedClass = this._config.checkedClass;

@@ -75,15 +75,15 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	/**
 	 * コンストラクタ
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.0.1
-	 * @param $el 管理するDOM要素のjQueryオブジェクト
+	 * @param el 管理するDOM要素
 	 * @param options オプション
 	 *
 	 */
-	constructor ($el: JQuery, options: CheckableElementOption) {
+	constructor (el: HTMLElement, options: CheckableElementOption) {
 
-		super($el, $.extend({}, CheckableElement.defaultOption, options));
+		super(el, $.extend({}, CheckableElement.defaultOption, options));
 
 		// 既にエレメント化されていた場合は何もしない
 		if (this._elementized) {
@@ -91,7 +91,7 @@ class CheckableElement extends FormElement implements ICheckableElement {
 		}
 
 		// IE6・7は反映させない
-		if (!$el[0].querySelector) {
+		if (!el.querySelector) {
 			return;
 		}
 

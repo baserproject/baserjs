@@ -114,15 +114,15 @@ class GoogleMaps extends BaserElement {
 	/**
 	 * コンストラクタ
 	 *
-	 * @version 0.8.0
+	 * @version 0.9.0
 	 * @since 0.0.6
-	 * @param $el 管理するDOM要素のjQueryオブジェクト
+	 * @param el 管理するDOM要素
 	 * @param options マップオプション
 	 *
 	 */
-	constructor ($el: JQuery, options?: GoogleMapsOption) {
+	constructor (el: HTMLElement, options?: GoogleMapsOption) {
 
-		super($el);
+		super(el);
 
 		// 既にエレメント化されていた場合は何もしない
 		if (this._elementized) {
@@ -130,7 +130,7 @@ class GoogleMaps extends BaserElement {
 		}
 
 		// IE6・7は反映させない
-		if (!$el[0].querySelector) {
+		if (!el.querySelector) {
 			return;
 		}
 
@@ -147,7 +147,7 @@ class GoogleMaps extends BaserElement {
 
 		GoogleMaps.maps.push(this);
 
-		$el.data(GoogleMaps.className, this);
+		this.$el.data(GoogleMaps.className, this);
 
 	}
 

@@ -18,14 +18,14 @@ var TextField = (function (_super) {
     /**
      * コンストラクタ
      *
-     * @version 0.8.0
+     * @version 0.9.0
      * @since 0.4.0
-     * @param $el 管理するDOM要素のjQueryオブジェクト
+     * @param el 管理するDOM要素
      * @param options オプション
      *
      */
-    function TextField($el, options) {
-        _super.call(this, $el, $.extend({}, TextField.defaultOption, options));
+    function TextField(el, options) {
+        _super.call(this, el, $.extend({}, TextField.defaultOption, options));
         /**
          * プレースホルダーテキスト
          *
@@ -39,7 +39,7 @@ var TextField = (function (_super) {
             return;
         }
         // IE6・7は反映させない
-        if (!$el[0].querySelector) {
+        if (!el.querySelector) {
             return;
         }
         this.placeholder = this.$el.attr('placeholder') || '';
