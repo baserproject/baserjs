@@ -1,6 +1,6 @@
 /**!
-* baserjs - v0.9.0-beta r271
-* update: 2015-09-08
+* baserjs - v0.9.0-rc r271
+* update: 2015-09-17
 * Author: baserCMS Users Community [https://github.com/baserproject/]
 * Github: https://github.com/baserproject/baserjs
 * License: Licensed under the MIT License
@@ -167,8 +167,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var UtilString = __webpack_require__(5);
 	var EventDispatcher = __webpack_require__(6);
@@ -850,8 +849,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var EventDispatcher = __webpack_require__(6);
 	var Locational = __webpack_require__(10);
@@ -1221,8 +1219,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var EventDispatcher = __webpack_require__(6);
 	var Browser = __webpack_require__(9);
@@ -1354,8 +1351,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var UtilString = __webpack_require__(5);
 	var EventDispatcher = __webpack_require__(6);
@@ -1811,8 +1807,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var DispatchEvent = __webpack_require__(7);
 	var EventDispatcher = __webpack_require__(6);
@@ -1952,8 +1947,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
@@ -2095,8 +2089,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
 	/**
@@ -2525,8 +2518,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
@@ -2585,8 +2577,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
 	/**
@@ -2820,7 +2811,7 @@
 	     */
 	    function Coordinate(el, map) {
 	        var _this = this;
-	        this.icon = null;
+	        this.icon = {};
 	        this.el = el;
 	        this.$el = $(el);
 	        this._map = map;
@@ -2874,7 +2865,6 @@
 	        var iconURL = this.$el.data('icon');
 	        var iconSize = this.$el.data('iconSize');
 	        if (iconURL) {
-	            this.icon = new google.maps.MarkerImage(iconURL);
 	            if (iconSize) {
 	                var sizeQ = iconSize.split(/\s+/);
 	                var width = +sizeQ[0] || null;
@@ -2934,8 +2924,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
@@ -3262,8 +3251,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var DispatchEvent = __webpack_require__(7);
 	var EventDispatcher = __webpack_require__(6);
@@ -3460,8 +3448,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
@@ -4063,8 +4050,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var EventDispatcher = __webpack_require__(6);
 	var Timer = __webpack_require__(21);
@@ -4372,8 +4358,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
 	var FormElement = __webpack_require__(15);
@@ -4786,8 +4771,7 @@
 	var __extends = (this && this.__extends) || function (d, b) {
 	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 	    function __() { this.constructor = d; }
-	    __.prototype = b.prototype;
-	    d.prototype = new __();
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
 	/**

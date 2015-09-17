@@ -1,6 +1,7 @@
 gulp = require 'gulp'
 webpack = require 'gulp-webpack'
 ts = require 'gulp-typescript'
+tsc = require 'typescript'
 typedoc = require 'gulp-typedoc'
 uglify = require 'gulp-uglify'
 rename = require 'gulp-rename'
@@ -21,7 +22,8 @@ banner = """/**!
 	
 """
 
-project = ts.createProject './tsconfig.json'
+project = ts.createProject './tsconfig.json',
+	typescript: tsc
 
 gulp.task 'ts', ->
 	result = project.src()

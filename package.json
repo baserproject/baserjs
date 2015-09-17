@@ -1,6 +1,6 @@
 {
   "name": "baserjs",
-  "version": "0.9.0-beta",
+  "version": "0.9.0-rc",
   "revision": 270,
   "description": "Client side JavaScript libraries for baserCMS",
   "main": "baser.js",
@@ -39,6 +39,7 @@
     "gulp-webpack": "^1.5.0",
     "moment": "^2.10.6",
     "qunitjs": "^1.19.0",
-    "run-sequence": "^1.1.2"
+    "run-sequence": "^1.1.2",
+    "typescript": "^1.6.2"
   }
 }
