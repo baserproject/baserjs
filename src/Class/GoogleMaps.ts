@@ -313,7 +313,7 @@ class GoogleMaps extends BaserElement {
 class Coordinate {
 
 	public title: string;
-	public icon: google.maps.MarkerImage = null;
+	public icon: google.maps.Icon = {};
 	public el: HTMLElement;
 	public $el: JQuery;
 	public lat: number;
@@ -392,7 +392,6 @@ class Coordinate {
 		let iconURL: string = this.$el.data('icon');
 		let iconSize: string = this.$el.data('iconSize');
 		if (iconURL) {
-			this.icon = new google.maps.MarkerImage(iconURL);
 			if (iconSize) {
 				let sizeQ: string[] = iconSize.split(/\s+/);
 				let width: number = +sizeQ[0] || null;
@@ -432,7 +431,7 @@ class Coordinate {
 		this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
 
 		// マップの中心を移動する
-		let content: HTMLElement = this._map.info.getContent();
+		let content: HTMLElement = <HTMLElement> this._map.info.getContent();
 		let proj: google.maps.Projection = this._map.gmap.getProjection();
 		let currentPoint: google.maps.Point = proj.fromLatLngToPoint(this.position);
 		let scale: number = Math.pow(2, this._map.gmap.getZoom());
