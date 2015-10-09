@@ -340,7 +340,7 @@ var JQueryAdapter = (function () {
     /**
      * 要素内の画像の読み込みが完了してからコールバックを実行する
      *
-     * @version 0.0.9
+     * @version 0.9.0
      * @since 0.0.9
      *
      * * * *
@@ -350,12 +350,13 @@ var JQueryAdapter = (function () {
      * comming soon...
      *
      */
-    JQueryAdapter.prototype.bcImageLoaded = function (callback) {
+    JQueryAdapter.prototype.bcImageLoaded = function (success, error) {
         var self = $(this);
         return self.each(function (i, elem) {
             var $elem = $(elem);
             var manifest = [];
-            var $imgs = $elem.find('img');
+            var $imgs;
+            $imgs = $elem.filter('img').add($elem.find('img'));
             if ($imgs.length) {
                 $imgs.hide();
                 $imgs.each(function () {
@@ -366,16 +367,25 @@ var JQueryAdapter = (function () {
                         img.onload = null; // GC
                         img = null; // GC
                     };
+                    img.onabort = img.onerror = function (e) {
+                        loaded.reject(e);
+                        img.onload = null; // GC
+                        img = null; // GC
+                    };
                     img.src = this.src;
                     manifest.push(loaded.promise());
                 });
                 $.when.apply($, manifest).done(function () {
                     $imgs.show();
-                    callback.call(elem);
+                    success.call(elem);
+                }).fail(function (e) {
+                    if (error) {
+                        error.call(elem, e);
+                    }
                 });
             }
             else {
-                callback.call(elem);
+                success.call(elem);
             }
         });
     };

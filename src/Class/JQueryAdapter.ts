@@ -370,7 +370,7 @@ class JQueryAdapter {
 	/**
 	 * 要素内の画像の読み込みが完了してからコールバックを実行する
 	 *
-	 * @version 0.0.9
+	 * @version 0.9.0
 	 * @since 0.0.9
 	 *
 	 * * * *
@@ -380,12 +380,13 @@ class JQueryAdapter {
 	 * comming soon...
 	 *
 	 */
-	public bcImageLoaded (callback: () => any): JQuery {
+	public bcImageLoaded (success: () => any, error?: (e: Event) => any): JQuery {
 		var self = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
-			var $elem: JQuery = $(elem);
-			var manifest: JQueryPromise<any>[] = [];
-			var $imgs: JQuery = $elem.find('img');
+			let $elem: JQuery = $(elem);
+			let manifest: JQueryPromise<any>[] = [];
+			let $imgs: JQuery;
+			$imgs = $elem.filter('img').add($elem.find('img'));
 			if ($imgs.length) {
 				$imgs.hide();
 				$imgs.each(function (): void {
@@ -396,15 +397,24 @@ class JQueryAdapter {
 						img.onload = null; // GC
 						img = null; // GC
 					};
+					img.onabort = img.onerror = function (e: Event): any {
+						loaded.reject(e);
+						img.onload = null; // GC
+						img = null; // GC
+					};
 					img.src = this.src;
 					manifest.push(loaded.promise());
 				});
 				$.when.apply($, manifest).done( (): void => {
 					$imgs.show();
-					callback.call(elem);
+					success.call(elem);
+				}).fail( (e: Event): void => {
+					if (error) {
+						error.call(elem, e);
+					}
 				});
 			} else {
-				callback.call(elem);
+				success.call(elem);
 			}
 		});
 	}
