@@ -313,7 +313,7 @@ class GoogleMaps extends BaserElement {
 class Coordinate {
 
 	public title: string;
-	public icon: google.maps.Icon = {};
+	public icon: google.maps.Icon = null;
 	public el: HTMLElement;
 	public $el: JQuery;
 	public lat: number;
@@ -392,8 +392,10 @@ class Coordinate {
 		let iconURL: string = this.$el.data('icon');
 		let iconSize: string = this.$el.data('iconSize');
 		if (iconURL) {
+			this.icon = {};
+			this.icon.url = iconURL;
 			if (iconSize) {
-				let sizeQ: string[] = iconSize.split(/\s+/);
+				let sizeQ: string[] = `${iconSize}`.split(/\s+/);
 				let width: number = +sizeQ[0] || null;
 				if (width) {
 					let height: number = +sizeQ[1] || width;

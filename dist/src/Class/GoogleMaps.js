@@ -235,7 +235,7 @@ var Coordinate = (function () {
      */
     function Coordinate(el, map) {
         var _this = this;
-        this.icon = {};
+        this.icon = null;
         this.el = el;
         this.$el = $(el);
         this._map = map;
@@ -289,8 +289,10 @@ var Coordinate = (function () {
         var iconURL = this.$el.data('icon');
         var iconSize = this.$el.data('iconSize');
         if (iconURL) {
+            this.icon = {};
+            this.icon.url = iconURL;
             if (iconSize) {
-                var sizeQ = iconSize.split(/\s+/);
+                var sizeQ = ("" + iconSize).split(/\s+/);
                 var width = +sizeQ[0] || null;
                 if (width) {
                     var height = +sizeQ[1] || width;
