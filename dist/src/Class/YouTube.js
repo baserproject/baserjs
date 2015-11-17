@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var BaserElement = require('./BaserElement');
+var Browser = require('./Browser');
 /**
  * YouTube要素
  *
@@ -49,6 +50,24 @@ var YouTube = (function (_super) {
         }
     }
     /**
+     * YouTubeのiframeのソースURIを生成する
+     *
+     * @version 0.9.1
+     * @since 0.9.1
+     */
+    YouTube.getURI = function (movieId, param) {
+        var paramQuery = $.param(param);
+        return "" + Browser.apiScheme + YouTube.PLAYER_URL + movieId + "?" + paramQuery;
+    };
+    /**
+     * YouTubeのサムネイル画像を取得する
+     */
+    YouTube.getPosterImage = function (movieId) {
+        var THUMB_URL = '//img.youtube.com/vi/';
+        var THUMB_FILE_NAME = '/0.jpg'; // /mqdefault.jpgでも可能
+        return "" + Browser.apiScheme + THUMB_URL + movieId + THUMB_FILE_NAME;
+    };
+    /**
      * 初期化
      *
      * use: jQuery
@@ -57,7 +76,7 @@ var YouTube = (function (_super) {
      *
      * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
      *
-     * @version 0.9.0
+     * @version 0.9.1
      * @since 0.0.7
      * @param $el 管理するDOM要素のjQueryオブジェクト
      * @param options オプション
@@ -65,9 +84,7 @@ var YouTube = (function (_super) {
      *
      */
     YouTube.prototype._init = function (options) {
-        var _this = this;
-        var protocol = location.protocol === 'file:' ? 'http:' : '';
-        var defaultOptions = {
+        this.movieOption = this.mergeOptions({
             rel: false,
             autoplay: true,
             stopOnInactive: false,
@@ -79,17 +96,19 @@ var YouTube = (function (_super) {
             width: 400,
             height: 300,
             index: 0,
+            poster: null,
             startSeconds: 0,
             suggestedQuality: 'default'
-        };
-        this.movieOption = this.mergeOptions(defaultOptions, options);
-        this.$el.empty();
-        this.movieId = this.movieOption.id.split(/\s*,\s*/);
-        var $mov = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
-        var param = $.param({
+        }, options);
+        var movieIdList = this.movieOption.id.split(/\s*,\s*/);
+        var movieId = movieIdList[this.movieOption.index];
+        if (this.movieOption.poster === '') {
+            this.movieOption.poster = YouTube.getPosterImage(movieId);
+        }
+        var param = {
             version: 3,
             rel: this.movieOption.rel ? 1 : 0,
-            autoplay: this.movieOption.autoplay ? 1 : 0,
+            autoplay: (this.movieOption.autoplay || !!this.movieOption.poster) ? 1 : 0,
             controls: this.movieOption.controls ? 1 : 0,
             disablekb: 1,
             iv_load_policy: 3,
@@ -98,18 +117,74 @@ var YouTube = (function (_super) {
             showinfo: this.movieOption.showinfo ? 1 : 0,
             wmode: 'transparent',
             enablejsapi: 1
+        };
+        this.src = YouTube.getURI(movieId, param);
+        this.movieId = movieIdList;
+        this.playerDomId = this.id + '-Player';
+        if (this.movieOption.poster && !this.movieOption.autoplay) {
+            this._createPosterImage();
+        }
+        else {
+            this._createContainer();
+            this._loadYouTubeAPI();
+        }
+        return true;
+    };
+    /**
+     * ポスターイメージの生成
+     *
+     * use: JQuery
+     *
+     * data-poster属性の中からポスター画像を生成する
+     *
+     * data-posterが 値なし もしくは 空文字 の場合、YouTubeのサムネイル画像を参照する
+     * data-posterの値が `/^@contents?$/i` にマッチする場合、要素の中身をそのまま使う
+     * それ以外の場合は パスと見なして画像を参照する
+     *
+     * @version 0.9.1
+     * @since 0.9.1
+     *
+     */
+    YouTube.prototype._createPosterImage = function () {
+        var _this = this;
+        var $imgContainer = $('<div class="-bc-element -bc-youtube-pseudo-poster-element" />');
+        if (this.movieOption.width) {
+            $imgContainer.width(this.movieOption.width);
+        }
+        if (this.movieOption.height) {
+            $imgContainer.height(this.movieOption.height);
+        }
+        if (!/^@contents?$/i.test(this.movieOption.poster)) {
+            this.$el.empty();
+            $imgContainer.appendTo(this.$el);
+            $imgContainer.css('background-image', "url(\"" + this.movieOption.poster + "\")");
+        }
+        var handler = function (e) {
+            $imgContainer.off('click.-bc-youtube-poster', handler);
+            _this._createContainer();
+            _this._loadYouTubeAPI();
+        };
+        this.$el.on('click.-bc-youtube-poster', handler);
+    };
+    /**
+     * プレイヤーコンテナを生成する
+     *
+     * @version 0.9.1
+     * @since 0.9.1
+     */
+    YouTube.prototype._createContainer = function () {
+        var $mov = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
+        $mov.prop({
+            src: this.src,
+            id: this.playerDomId
         });
-        var id = this.movieId[this.movieOption.index];
-        var src = protocol + YouTube.PLAYER_URL + id + '?' + param;
-        $mov.prop('src', src);
-        var playerID = this.id + '-Player';
-        $mov.prop('id', playerID);
         $mov.css({
             position: 'relative',
             display: 'block',
             width: '100%',
             height: '100%'
         });
+        this.$el.empty();
         $mov.appendTo(this.$el);
         if (this.movieOption.width) {
             $mov.width(this.movieOption.width);
@@ -119,17 +194,25 @@ var YouTube = (function (_super) {
             $mov.height(this.movieOption.height);
             $mov.data('height', this.movieOption.height);
         }
-        $.getScript(protocol + YouTube.API_URL);
+    };
+    /**
+     * YouTube APIをロードする
+     *
+     * @version 0.9.1
+     * @since 0.9.1
+     */
+    YouTube.prototype._loadYouTubeAPI = function () {
+        var _this = this;
+        $.getScript("" + Browser.apiScheme + YouTube.API_URL);
         var intervalTimer = setInterval(function () {
             if (!_this.player && 'YT' in window && YT.Player) {
-                _this._createPlayer(playerID);
+                _this._createPlayer(_this.playerDomId);
             }
             if (_this.player && _this.player.pauseVideo && _this.player.playVideo) {
                 clearInterval(intervalTimer);
                 _this._onEmbeded();
             }
         }, 300);
-        return true;
     };
     /**
      * プレイヤーを生成する
@@ -219,7 +302,7 @@ var YouTube = (function (_super) {
         // TODO: youtube.d.ts に loadPlaylist() と cuePlaylist() が登録されていない
         var _player = this.player;
         if (this.movieId.length >= 2) {
-            if (this.movieOption.autoplay) {
+            if (this.movieOption.autoplay || this.movieOption.poster) {
                 _player.loadPlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);
             }
             else {

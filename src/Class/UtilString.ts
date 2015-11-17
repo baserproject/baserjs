@@ -17,9 +17,9 @@ class UtilString {
 	 *
 	 */
 	static UID (prefix: string = 'uid'): string {
-		let random: number = Math.random() * 1e8;
-		let seed = new Date().valueOf();
-		let uniqueNumber: number = Math.abs(Math.floor(random + seed));
+		const random: number = Math.random() * 1e8;
+		const seed = new Date().valueOf();
+		const uniqueNumber: number = Math.abs(Math.floor(random + seed));
 		if (prefix) {
 			prefix += '-';
 		}
@@ -36,8 +36,8 @@ class UtilString {
 	 *
 	 */
 	static hyphenDelimited (str: string): string {
-		let result: string[] = [];
-		let words: string[] = str.replace(/[A-Z]/g, ($1: string): string => {
+		const result: string[] = [];
+		const words: string[] = str.replace(/[A-Z]/g, ($1: string): string => {
 			return ` ${$1.toLowerCase()}`;
 		}).split(/[^a-z0-9]+/ig);
 		for (let word of words) {
@@ -108,7 +108,7 @@ class UtilString {
 	 *
 	 */
 	static divide (str: string, separator: string): string[] {
-		let splited: string[] = str.split(separator);
+		const splited: string[] = str.split(separator);
 		let prefix: string;
 		let suffix: string;
 		if (splited) {

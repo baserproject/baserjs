@@ -1,6 +1,6 @@
 /**!
-* baserjs - v0.9.0-rc r271
-* update: 2015-09-17
+* baserjs - v0.9.1-rc r271
+* update: 2015-11-17
 * Author: baserCMS Users Community [https://github.com/baserproject/]
 * Github: https://github.com/baserproject/baserjs
 * License: Licensed under the MIT License
@@ -1038,6 +1038,14 @@
 	        isTouchable: 'ontouchstart' in window,
 	        ua: Browser.getUA()
 	    };
+	    /**
+	     * 参照するAPIのスキーム
+	     *
+	     * @version 0.9.1
+	     * @since 0.9.1
+	     *
+	     */
+	    Browser.apiScheme = /https?:/i.test(location.protocol) ? '' : 'http:';
 	    return Browser;
 	})(EventDispatcher);
 	module.exports = Browser;
@@ -1247,7 +1255,7 @@
 	    /**
 	     * コンストラクタ
 	     *
-	     * @version 0.9.0
+	     * @version 0.9.1
 	     * @since 0.7.0
 	     * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
 	     * @param callback 変化に応じたコールバック
@@ -1282,7 +1290,7 @@
 	        this._values = {};
 	        this._setBreakPoints(breakPoints);
 	        Browser.browser.on('resizeend', function () {
-	            var wW = window.document.documentElement.clientWidth;
+	            var wW = Math.max(window.document.documentElement.clientWidth, window.innerWidth);
 	            for (var _i = 0, _a = _this.breakPoints; _i < _a.length; _i++) {
 	                var overPoint = _a[_i];
 	                if (wW <= overPoint) {
@@ -1730,15 +1738,14 @@
 	     * TODO: テストを書く
 	     * TODO: サブクラスに反映させる
 	     *
-	     * @version 0.9.0
+	     * @version 0.9.1
 	     * @since 0.8.0
 	     *
 	     */
 	    BaserElement.prototype.mergeOptions = function (defaultOptions, options) {
 	        var attrs = {};
 	        var dataAttrs = {};
-	        var optName;
-	        for (optName in defaultOptions) {
+	        for (var optName in defaultOptions) {
 	            if (defaultOptions.hasOwnProperty(optName)) {
 	                // 属性はidとclassは除外する
 	                switch (optName) {
@@ -2811,7 +2818,7 @@
 	     */
 	    function Coordinate(el, map) {
 	        var _this = this;
-	        this.icon = {};
+	        this.icon = null;
 	        this.el = el;
 	        this.$el = $(el);
 	        this._map = map;
@@ -2865,8 +2872,10 @@
 	        var iconURL = this.$el.data('icon');
 	        var iconSize = this.$el.data('iconSize');
 	        if (iconURL) {
+	            this.icon = {};
+	            this.icon.url = iconURL;
 	            if (iconSize) {
-	                var sizeQ = iconSize.split(/\s+/);
+	                var sizeQ = ("" + iconSize).split(/\s+/);
 	                var width = +sizeQ[0] || null;
 	                if (width) {
 	                    var height = +sizeQ[1] || width;
@@ -4774,6 +4783,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
+	var Browser = __webpack_require__(9);
 	/**
 	 * YouTube要素
 	 *
@@ -4819,6 +4829,24 @@
 	        }
 	    }
 	    /**
+	     * YouTubeのiframeのソースURIを生成する
+	     *
+	     * @version 0.9.1
+	     * @since 0.9.1
+	     */
+	    YouTube.getURI = function (movieId, param) {
+	        var paramQuery = $.param(param);
+	        return "" + Browser.apiScheme + YouTube.PLAYER_URL + movieId + "?" + paramQuery;
+	    };
+	    /**
+	     * YouTubeのサムネイル画像を取得する
+	     */
+	    YouTube.getPosterImage = function (movieId) {
+	        var THUMB_URL = '//img.youtube.com/vi/';
+	        var THUMB_FILE_NAME = '/0.jpg'; // /mqdefault.jpgでも可能
+	        return "" + Browser.apiScheme + THUMB_URL + movieId + THUMB_FILE_NAME;
+	    };
+	    /**
 	     * 初期化
 	     *
 	     * use: jQuery
@@ -4827,7 +4855,7 @@
 	     *
 	     * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
 	     *
-	     * @version 0.9.0
+	     * @version 0.9.1
 	     * @since 0.0.7
 	     * @param $el 管理するDOM要素のjQueryオブジェクト
 	     * @param options オプション
@@ -4835,9 +4863,7 @@
 	     *
 	     */
 	    YouTube.prototype._init = function (options) {
-	        var _this = this;
-	        var protocol = location.protocol === 'file:' ? 'http:' : '';
-	        var defaultOptions = {
+	        this.movieOption = this.mergeOptions({
 	            rel: false,
 	            autoplay: true,
 	            stopOnInactive: false,
@@ -4849,17 +4875,19 @@
 	            width: 400,
 	            height: 300,
 	            index: 0,
+	            poster: null,
 	            startSeconds: 0,
 	            suggestedQuality: 'default'
-	        };
-	        this.movieOption = this.mergeOptions(defaultOptions, options);
-	        this.$el.empty();
-	        this.movieId = this.movieOption.id.split(/\s*,\s*/);
-	        var $mov = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
-	        var param = $.param({
+	        }, options);
+	        var movieIdList = this.movieOption.id.split(/\s*,\s*/);
+	        var movieId = movieIdList[this.movieOption.index];
+	        if (this.movieOption.poster === '') {
+	            this.movieOption.poster = YouTube.getPosterImage(movieId);
+	        }
+	        var param = {
 	            version: 3,
 	            rel: this.movieOption.rel ? 1 : 0,
-	            autoplay: this.movieOption.autoplay ? 1 : 0,
+	            autoplay: (this.movieOption.autoplay || !!this.movieOption.poster) ? 1 : 0,
 	            controls: this.movieOption.controls ? 1 : 0,
 	            disablekb: 1,
 	            iv_load_policy: 3,
@@ -4868,18 +4896,74 @@
 	            showinfo: this.movieOption.showinfo ? 1 : 0,
 	            wmode: 'transparent',
 	            enablejsapi: 1
+	        };
+	        this.src = YouTube.getURI(movieId, param);
+	        this.movieId = movieIdList;
+	        this.playerDomId = this.id + '-Player';
+	        if (this.movieOption.poster && !this.movieOption.autoplay) {
+	            this._createPosterImage();
+	        }
+	        else {
+	            this._createContainer();
+	            this._loadYouTubeAPI();
+	        }
+	        return true;
+	    };
+	    /**
+	     * ポスターイメージの生成
+	     *
+	     * use: JQuery
+	     *
+	     * data-poster属性の中からポスター画像を生成する
+	     *
+	     * data-posterが 値なし もしくは 空文字 の場合、YouTubeのサムネイル画像を参照する
+	     * data-posterの値が `/^@contents?$/i` にマッチする場合、要素の中身をそのまま使う
+	     * それ以外の場合は パスと見なして画像を参照する
+	     *
+	     * @version 0.9.1
+	     * @since 0.9.1
+	     *
+	     */
+	    YouTube.prototype._createPosterImage = function () {
+	        var _this = this;
+	        var $imgContainer = $('<div class="-bc-element -bc-youtube-pseudo-poster-element" />');
+	        if (this.movieOption.width) {
+	            $imgContainer.width(this.movieOption.width);
+	        }
+	        if (this.movieOption.height) {
+	            $imgContainer.height(this.movieOption.height);
+	        }
+	        if (!/^@contents?$/i.test(this.movieOption.poster)) {
+	            this.$el.empty();
+	            $imgContainer.appendTo(this.$el);
+	            $imgContainer.css('background-image', "url(\"" + this.movieOption.poster + "\")");
+	        }
+	        var handler = function (e) {
+	            $imgContainer.off('click.-bc-youtube-poster', handler);
+	            _this._createContainer();
+	            _this._loadYouTubeAPI();
+	        };
+	        this.$el.on('click.-bc-youtube-poster', handler);
+	    };
+	    /**
+	     * プレイヤーコンテナを生成する
+	     *
+	     * @version 0.9.1
+	     * @since 0.9.1
+	     */
+	    YouTube.prototype._createContainer = function () {
+	        var $mov = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
+	        $mov.prop({
+	            src: this.src,
+	            id: this.playerDomId
 	        });
-	        var id = this.movieId[this.movieOption.index];
-	        var src = protocol + YouTube.PLAYER_URL + id + '?' + param;
-	        $mov.prop('src', src);
-	        var playerID = this.id + '-Player';
-	        $mov.prop('id', playerID);
 	        $mov.css({
 	            position: 'relative',
 	            display: 'block',
 	            width: '100%',
 	            height: '100%'
 	        });
+	        this.$el.empty();
 	        $mov.appendTo(this.$el);
 	        if (this.movieOption.width) {
 	            $mov.width(this.movieOption.width);
@@ -4889,17 +4973,25 @@
 	            $mov.height(this.movieOption.height);
 	            $mov.data('height', this.movieOption.height);
 	        }
-	        $.getScript(protocol + YouTube.API_URL);
+	    };
+	    /**
+	     * YouTube APIをロードする
+	     *
+	     * @version 0.9.1
+	     * @since 0.9.1
+	     */
+	    YouTube.prototype._loadYouTubeAPI = function () {
+	        var _this = this;
+	        $.getScript("" + Browser.apiScheme + YouTube.API_URL);
 	        var intervalTimer = setInterval(function () {
 	            if (!_this.player && 'YT' in window && YT.Player) {
-	                _this._createPlayer(playerID);
+	                _this._createPlayer(_this.playerDomId);
 	            }
 	            if (_this.player && _this.player.pauseVideo && _this.player.playVideo) {
 	                clearInterval(intervalTimer);
 	                _this._onEmbeded();
 	            }
 	        }, 300);
-	        return true;
 	    };
 	    /**
 	     * プレイヤーを生成する
@@ -4989,7 +5081,7 @@
 	        // TODO: youtube.d.ts に loadPlaylist() と cuePlaylist() が登録されていない
 	        var _player = this.player;
 	        if (this.movieId.length >= 2) {
-	            if (this.movieOption.autoplay) {
+	            if (this.movieOption.autoplay || this.movieOption.poster) {
 	                _player.loadPlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);
 	            }
 	            else {
@@ -5476,7 +5568,7 @@
 	    /**
 	     * 要素内の画像の読み込みが完了してからコールバックを実行する
 	     *
-	     * @version 0.0.9
+	     * @version 0.9.0
 	     * @since 0.0.9
 	     *
 	     * * * *
@@ -5486,12 +5578,13 @@
 	     * comming soon...
 	     *
 	     */
-	    JQueryAdapter.prototype.bcImageLoaded = function (callback) {
+	    JQueryAdapter.prototype.bcImageLoaded = function (success, error) {
 	        var self = $(this);
 	        return self.each(function (i, elem) {
 	            var $elem = $(elem);
 	            var manifest = [];
-	            var $imgs = $elem.find('img');
+	            var $imgs;
+	            $imgs = $elem.filter('img').add($elem.find('img'));
 	            if ($imgs.length) {
 	                $imgs.hide();
 	                $imgs.each(function () {
@@ -5502,16 +5595,25 @@
 	                        img.onload = null; // GC
 	                        img = null; // GC
 	                    };
+	                    img.onabort = img.onerror = function (e) {
+	                        loaded.reject(e);
+	                        img.onload = null; // GC
+	                        img = null; // GC
+	                    };
 	                    img.src = this.src;
 	                    manifest.push(loaded.promise());
 	                });
 	                $.when.apply($, manifest).done(function () {
 	                    $imgs.show();
-	                    callback.call(elem);
+	                    success.call(elem);
+	                }).fail(function (e) {
+	                    if (error) {
+	                        error.call(elem, e);
+	                    }
 	                });
 	            }
 	            else {
-	                callback.call(elem);
+	                success.call(elem);
 	            }
 	        });
 	    };

@@ -190,6 +190,14 @@ var Browser = (function (_super) {
         isTouchable: 'ontouchstart' in window,
         ua: Browser.getUA()
     };
+    /**
+     * 参照するAPIのスキーム
+     *
+     * @version 0.9.1
+     * @since 0.9.1
+     *
+     */
+    Browser.apiScheme = /https?:/i.test(location.protocol) ? '' : 'http:';
     return Browser;
 })(EventDispatcher);
 module.exports = Browser;

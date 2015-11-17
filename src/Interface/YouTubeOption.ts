@@ -94,16 +94,24 @@ interface YouTubeOption {
 	 *
 	 */
 	index?: number;
-
+	
+	/**
+	 * サムネイル画像のパス
+	 * 
+	 * @version 0.9.1
+	 * @since 0.9.1
+	 */
+	poster?: string;
+	
 	/**
 	 * 再生リストの中から最初に再生する動画の再生位置
 	 * 
 	 * 単位: 秒
 	 *
-	 * @since 0.8.0
+	 * @since 0.9.1
 	 *
 	 */
-	startSeconds: number;
+	startSeconds?: number;
 
 	/**
 	 * 動画の推奨再生画質を指定
@@ -116,10 +124,10 @@ interface YouTubeOption {
 	 * - 画質レベル highres: プレーヤーの高さが 1080 ピクセル以上、つまりプレーヤーのアスペクト比が 1920x1080 ピクセル以上。
 	 * - 画質レベル default: YouTube が適切な再生画質を選択します。この設定は、画質レベルをデフォルトの状態に戻します。それまでに cueVideoById、loadVideoById または setPlaybackQuality の各関数で行った再生画質の設定は無効になります。
 	 *
-	 * @since 0.8.0
+	 * @since 0.9.1
 	 *
 	 */
-	suggestedQuality: string;
+	suggestedQuality?: string;
 
 }
 

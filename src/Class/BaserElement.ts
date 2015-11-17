@@ -453,16 +453,15 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * TODO: テストを書く
 	 * TODO: サブクラスに反映させる
 	 * 
-	 * @version 0.9.0
+	 * @version 0.9.1
 	 * @since 0.8.0
 	 *
 	 */
 	public mergeOptions (defaultOptions: any, options: any): any {
-		let attrs: { [option: string ]: any } = {};
-		let dataAttrs: { [option: string ]: any } = {};
+		const attrs: { [option: string ]: any } = {};
+		const dataAttrs: { [option: string ]: any } = {};
 
-		let optName: string;
-		for (optName in defaultOptions) {
+		for (let optName in defaultOptions) {
 			if (defaultOptions.hasOwnProperty(optName)) {
 				// 属性はidとclassは除外する
 				switch (optName) {

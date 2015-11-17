@@ -38,6 +38,16 @@ class Browser extends EventDispatcher {
 		isTouchable: 'ontouchstart' in window,
 		ua: Browser.getUA()
 	};
+	
+
+	/**
+	 * 参照するAPIのスキーム
+	 *
+	 * @version 0.9.1
+	 * @since 0.9.1
+	 *
+	 */
+	static apiScheme: string = /https?:/i.test(location.protocol) ? '' : 'http:';
 
 	/**
 	 * ページ遷移する

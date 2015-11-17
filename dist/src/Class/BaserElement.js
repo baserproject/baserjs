@@ -380,15 +380,14 @@ var BaserElement = (function (_super) {
      * TODO: テストを書く
      * TODO: サブクラスに反映させる
      *
-     * @version 0.9.0
+     * @version 0.9.1
      * @since 0.8.0
      *
      */
     BaserElement.prototype.mergeOptions = function (defaultOptions, options) {
         var attrs = {};
         var dataAttrs = {};
-        var optName;
-        for (optName in defaultOptions) {
+        for (var optName in defaultOptions) {
             if (defaultOptions.hasOwnProperty(optName)) {
                 // 属性はidとclassは除外する
                 switch (optName) {
