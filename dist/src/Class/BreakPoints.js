@@ -29,7 +29,7 @@ var BreakPoints = (function (_super) {
     /**
      * コンストラクタ
      *
-     * @version 0.9.0
+     * @version 0.9.1
      * @since 0.7.0
      * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
      * @param callback 変化に応じたコールバック
@@ -64,7 +64,7 @@ var BreakPoints = (function (_super) {
         this._values = {};
         this._setBreakPoints(breakPoints);
         Browser.browser.on('resizeend', function () {
-            var wW = window.document.documentElement.clientWidth;
+            var wW = Math.max(window.document.documentElement.clientWidth, window.innerWidth);
             for (var _i = 0, _a = _this.breakPoints; _i < _a.length; _i++) {
                 var overPoint = _a[_i];
                 if (wW <= overPoint) {

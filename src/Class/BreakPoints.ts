@@ -53,7 +53,7 @@ class BreakPoints<T> extends EventDispatcher {
 	/**
 	 * コンストラクタ
 	 *
-	 * @version 0.9.0
+	 * @version 0.9.1
 	 * @since 0.7.0
 	 * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
 	 * @param callback 変化に応じたコールバック
@@ -63,7 +63,7 @@ class BreakPoints<T> extends EventDispatcher {
 		super();
 		this._setBreakPoints<T>(breakPoints);
 		Browser.browser.on('resizeend', (): void => {
-			let wW: number = window.document.documentElement.clientWidth;
+			const wW: number = Math.max(window.document.documentElement.clientWidth, window.innerWidth);
 			for (let overPoint of this.breakPoints) {
 				if (wW <= overPoint) {
 					if (this.currentPoint !== overPoint) {
