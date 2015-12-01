@@ -16,7 +16,7 @@
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 
 <!-- Core Module -->
-<script src="../baser.js"></script>
+<script src="../dist/baser.js"></script>
 
 <!-- Qunit -->
 <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
@@ -27,11 +27,11 @@
 
 
 test('baser.AnimationFrames.start/stop のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
-	
+
 	var counter = 0;
 	var af = new baser.AnimationFrames(function () {
 		if (counter >= 10) {
@@ -43,20 +43,20 @@ test('baser.AnimationFrames.start/stop のテスト', 13, function(assert) {
 		}
 		counter++;
 	});
-	
+
 	assert.ok(af, 'baser.AnimationFrames インスタンス');
-	
+
 	af.start();
 
 });
 
 
 test('baser.AnimationFrames.start/this.stop のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
-	
+
 	var counter = 0;
 	var af = new baser.AnimationFrames(function () {
 		if (counter >= 10) {
@@ -68,19 +68,19 @@ test('baser.AnimationFrames.start/this.stop のテスト', 13, function(assert) 
 		}
 		counter++;
 	});
-	
+
 	assert.ok(af, 'baser.AnimationFrames インスタンス');
-	
+
 	af.start();
 
 });
 
 test('baser.AnimationFrames.start/context.stop のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
-	
+
 	var counter = 0;
 	var af = new baser.AnimationFrames(function (now, start, context) {
 		if (counter >= 10) {
@@ -92,23 +92,23 @@ test('baser.AnimationFrames.start/context.stop のテスト', 13, function(asser
 		}
 		counter++;
 	});
-	
+
 	assert.ok(af, 'baser.AnimationFrames インスタンス');
-	
+
 	af.start();
 
 });
 
 test('baser.AnimationFrames enterframeイベント stop のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
-	
+
 	var af = new baser.AnimationFrames();
-	
+
 	assert.ok(af, 'baser.AnimationFrames インスタンス');
-	
+
 	var counter = 0;
 	af.on('enterframe', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
@@ -124,15 +124,15 @@ test('baser.AnimationFrames enterframeイベント stop のテスト', 13, funct
 });
 
 test('baser.AnimationFrames enterframeイベント this.stop のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
-	
+
 	var af = new baser.AnimationFrames();
-	
+
 	assert.ok(af, 'baser.AnimationFrames インスタンス');
-	
+
 	var counter = 0;
 	af.on('enterframe', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
@@ -148,15 +148,15 @@ test('baser.AnimationFrames enterframeイベント this.stop のテスト', 13, 
 });
 
 test('baser.AnimationFrames enterframeイベント context.stop のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
-	
+
 	var af = new baser.AnimationFrames();
-	
+
 	assert.ok(af, 'baser.AnimationFrames インスタンス');
-	
+
 	var counter = 0;
 	af.on('enterframe', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
@@ -172,15 +172,15 @@ test('baser.AnimationFrames enterframeイベント context.stop のテスト', 1
 });
 
 test('baser.AnimationFrames enterframeイベント cancelとstopイベント のテスト', 14, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
-	
+
 	var af = new baser.AnimationFrames();
-	
+
 	assert.ok(af, 'baser.AnimationFrames インスタンス');
-	
+
 	var counter = 0;
 	af.on('enterframe', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
@@ -198,18 +198,18 @@ test('baser.AnimationFrames enterframeイベント cancelとstopイベント の
 });
 
 test('baser.AnimationFrames enterframeイベント 強制setTimeout のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.AnimationFrames, 'baser.AnimationFrames 存在確認');
-	
+
 	var af = new baser.AnimationFrames();
-	
+
 	// 強制setTimeout
 	af._isPolyfill = true;
-	
+
 	assert.ok(af, 'baser.AnimationFrames インスタンス');
-	
+
 	var counter = 0;
 	af.on('enterframe', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {

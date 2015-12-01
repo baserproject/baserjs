@@ -16,7 +16,7 @@
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 
 <!-- Core Module -->
-<script src="../baser.js"></script>
+<script src="../dist/baser.js"></script>
 
 <!-- Qunit -->
 <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
@@ -26,15 +26,15 @@
 "use strict";
 
 test('baser.Timer.start/stop のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.Timer, 'baser.Timer 存在確認');
-	
+
 	var timer = new baser.Timer();
-	
+
 	assert.ok(timer, 'baser.Timer インスタンス');
-	
+
 	var counter = 0;
 	timer.on('progress', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
@@ -50,15 +50,15 @@ test('baser.Timer.start/stop のテスト', 13, function(assert) {
 });
 
 test('baser.Timer.start/this.stop のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.Timer, 'baser.Timer 存在確認');
-	
+
 	var timer = new baser.Timer();
-	
+
 	assert.ok(timer, 'baser.Timer インスタンス');
-	
+
 	var counter = 0;
 	timer.on('progress', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
@@ -75,15 +75,15 @@ test('baser.Timer.start/this.stop のテスト', 13, function(assert) {
 
 
 test('baser.Timer.start/context.stop のテスト', 13, function(assert) {
-	
+
 	var done = assert.async();
-	
+
 	assert.ok(baser.Timer, 'baser.Timer 存在確認');
-	
+
 	var timer = new baser.Timer();
-	
+
 	assert.ok(timer, 'baser.Timer インスタンス');
-	
+
 	var counter = 0;
 	timer.on('progress', function (e, currentTime, startTime, context) {
 		if (counter >= 10) {
@@ -99,7 +99,7 @@ test('baser.Timer.start/context.stop のテスト', 13, function(assert) {
 });
 
 test('baser.Timer stopイベント return false のテスト', 14, function(assert) {
-	
+
 	var done = assert.async();
 	var timer = new baser.Timer();
 	var counter = 0;
@@ -124,7 +124,7 @@ test('baser.Timer stopイベント return false のテスト', 14, function(asse
 });
 
 test('baser.Timer stopイベント preventDefault のテスト', 14, function(assert) {
-	
+
 	var done = assert.async();
 	var timer = new baser.Timer();
 	var counter = 0;

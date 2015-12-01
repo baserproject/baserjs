@@ -16,7 +16,7 @@
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 
 <!-- Core Module -->
-<script src="../baser.js"></script>
+<script src="../dist/baser.js"></script>
 
 <!-- Qunit -->
 <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
@@ -132,7 +132,7 @@ test('baser.Locational addParam のテスト', function() {
 		search: '?notrycatch&noglobals&key=Z&key%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D',
 		hash: '#hogehoge'
 	});
-	
+
 	loc.addParam('smartphone', 'on');
 
 	deepEqual(loc.params, {
@@ -157,7 +157,7 @@ test('baser.Locational addParam のテスト2', function() {
 		search: '',
 		hash: '#hogehoge'
 	});
-	
+
 	loc.addParam('smartphone', 'on');
 
 	equal(loc.search, '?smartphone=on', 'search');
@@ -178,7 +178,7 @@ test('baser.Locational addParam のテスト3', function() {
 		search: '',
 		hash: '#hogehoge'
 	});
-	
+
 	loc.addParam('smartphone');
 
 	equal(loc.search, '?smartphone', 'search');
@@ -199,7 +199,7 @@ test('baser.Locational addParam のテスト4', function() {
 		search: '',
 		hash: '#hogehoge'
 	});
-	
+
 	loc.addParam('smartphone', null);
 
 	equal(loc.search, '?smartphone=null', 'search');
@@ -220,7 +220,7 @@ test('baser.Locational addParam のテスト5', function() {
 		search: '',
 		hash: '#hogehoge'
 	});
-	
+
 	loc.addParam('smartphone', '');
 
 	equal(loc.search, '?smartphone=', 'search');
@@ -242,7 +242,7 @@ test('baser.Locational addParam のテスト6', function() {
 		search: '',
 		hash: '#hogehoge'
 	});
-	
+
 	loc.addParam('smartphone', [1, 2, 3]);
 
 	equal(loc.search, '?smartphone[]=1&smartphone[]=2&smartphone[]=3', 'search');
@@ -265,7 +265,7 @@ test('baser.Locational removeParam のテスト', function() {
 		search: '?notrycatch&noglobals&key=Z&key[]=234&key[]=%5B%5D=asdf&a%5B%5D=123%2C234234%2C234234key%5B%5D&key=1',
 		hash: '#hogehoge'
 	});
-	
+
 	loc.removeParam('key');
 
 	equal(loc.query, 'notrycatch&noglobals&a%5B%5D=123%2C234234%2C234234key%5B%5D&', 'query');

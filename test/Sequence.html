@@ -18,7 +18,7 @@
 <script src="../bower_components/jquery/dist/jquery.js"></script>
 
 <!-- Core Module -->
-<script src="../baser.js"></script>
+<script src="../dist/baser.js"></script>
 
 <!-- Qunit -->
 <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
@@ -282,7 +282,7 @@ test('jQuery Animation Test2', function (assert) {
 test('jQuery Ajax Test', function (assert) {
 
 	var done = assert.async();
-	
+
 	// ローカルではテストしない
 	if (location.protocol === 'file:') {
 		assert.ok(true, 'ignore test');

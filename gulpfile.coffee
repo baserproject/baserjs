@@ -18,8 +18,8 @@ banner = """/**!
 	* Github: <%= pkg.repository.url %>
 	* License: Licensed under the <%= pkg.license %> License
 	*/
-	
-	
+
+
 """
 
 project = ts.createProject './tsconfig.json',
@@ -27,23 +27,23 @@ project = ts.createProject './tsconfig.json',
 
 gulp.task 'ts', ->
 	result = project.src()
-		.pipe ts project 
+		.pipe ts project
 	result.js
-		.pipe gulp.dest './dist/'
+		.pipe gulp.dest './out/'
 
 gulp.task 'pack', ->
-	gulp.src 'dist/src/baserJS.js'
+	gulp.src './out/src/baserJS.js'
 		.pipe webpack output: filename: 'baser.js'
 		.pipe header banner, pkg: pkg, moment: moment
-		.pipe gulp.dest './'
+		.pipe gulp.dest './dist/'
 
 gulp.task 'compress', ->
-	gulp.src './baser.js'
+	gulp.src './dist/baser.js'
 		.pipe uglify()
 		.pipe rename 'baser.min.js'
 		.pipe header banner, pkg: pkg, moment: moment
-		.pipe gulp.dest './'
-		
+		.pipe gulp.dest './dist/'
+
 gulp.task 'test', ->
 	gulp.src './test/*.html'
 		.pipe qunit timeout: 30
@@ -83,4 +83,3 @@ gulp.task 'default', (cb) -> runSequence(
 	'test',
 	cb
 )
-	
