@@ -253,8 +253,8 @@ class FormElement extends BaserElement implements IFormElement {
 	 *
 	 */
 	public setValue (value: string | number | boolean, isSilent: boolean = false): void {
-		let valueString: string = '' + value;
-		let currentValue: string = this.$el.val();
+		const valueString: string = `${value}`;
+		const currentValue: string = this.$el.val();
 		if (!this.disabled && currentValue !== valueString) {
 			this.$el.val(valueString);
 			this._fireChangeEvent(isSilent);
@@ -331,8 +331,8 @@ class FormElement extends BaserElement implements IFormElement {
 	 *
 	 */
 	protected _createWrapper (): void {
-		let wrapperHtml: string = '<span />';
-		let $wrapper = $(wrapperHtml);
+		const wrapperHtml: string = '<span />';
+		const $wrapper: JQuery = $(wrapperHtml);
 
 		BaserElement.addClassTo($wrapper, FormElement.classNameFormElementCommon);
 		BaserElement.addClassTo($wrapper, FormElement.classNameWrapper);
@@ -498,12 +498,12 @@ class FormElement extends BaserElement implements IFormElement {
 		if (isSilent) {
 			this.$el.trigger('change.bcFormElement', [{ isSilent: <boolean> true }]);
 		} else if ('createEvent' in document) {
-			let e: Event = document.createEvent('Event');
+			const e: Event = document.createEvent('Event');
 			e.initEvent('change', true, true);
 			this.el.dispatchEvent(e);
 		} else {
 			// IE8
-			let legacyElement: any = this.el;
+			const legacyElement: any = this.el;
 			legacyElement.fireEvent('onchange');
 		}
 	}
@@ -527,7 +527,7 @@ class FormElement extends BaserElement implements IFormElement {
 
 		} else {
 
-			let $labelContents: JQuery = this.$label.contents();
+			const $labelContents: JQuery = this.$label.contents();
 			let $before: JQuery = $();
 			let $after: JQuery = $();
 			let isBefore: boolean = true;

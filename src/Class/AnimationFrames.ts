@@ -85,32 +85,32 @@ class AnimationFrames extends EventDispatcher {
 		const START_TIMESTAMP: number = new Date().getTime();
 		if (!this._isPolyfill) {
 			// call: 0 define function
-			let onEnterFrame: { (timestamp: number): void } = (timestamp: number): void => {
+			const onEnterFrame: { (timestamp: number): void } = (timestamp: number): void => {
 				cancelAnimationFrame(this._requestId);
 				// call: 3 fire callback
-				let e: DispatchEvent = this._enterFrame(context, timestamp, START_TIMESTAMP);
+				const e: DispatchEvent = this._enterFrame(context, timestamp, START_TIMESTAMP);
 				// call: 4 cancel continue
 				if (!e.isDefaultPrevented() && !this._isStop) {
 					// continue
 					this._requestId = requestAnimationFrame(onEnterFrame);
 					// call 5: stack continue
 				} else {
-					let e: DispatchEvent = new DispatchEvent('stop');
+					const e: DispatchEvent = new DispatchEvent('stop');
 					this.trigger(e, [timestamp, START_TIMESTAMP, context], context);
 				}
 			};
 			this._requestId = requestAnimationFrame(onEnterFrame);
 			// call: 1 first stacked
 		} else {
-			let interval: number = 1000 / AnimationFrames.FRAME_RATE;
-			let onEnterFrame: { (): void } = (): void => {
+			const interval: number = 1000 / AnimationFrames.FRAME_RATE;
+			const onEnterFrame: { (): void } = (): void => {
 				clearTimeout(this._requestId);
-				let timestamp: number = new Date().getTime();
-				let e: DispatchEvent = this._enterFrame(context, timestamp, START_TIMESTAMP);
+				const timestamp: number = new Date().getTime();
+				const e: DispatchEvent = this._enterFrame(context, timestamp, START_TIMESTAMP);
 				if (!e.isDefaultPrevented() && !this._isStop) {
 					this._requestId = setTimeout(onEnterFrame, interval);
 				} else {
-					let e: DispatchEvent = new DispatchEvent('stop');
+					const e: DispatchEvent = new DispatchEvent('stop');
 					this.trigger(e, [timestamp, START_TIMESTAMP, context], context);
 				}
 			};
@@ -146,11 +146,11 @@ class AnimationFrames extends EventDispatcher {
 	 * @return イベント
 	 *
 	 */
-	private _enterFrame (context: any, now: number, startTimestamp): DispatchEvent {
+	private _enterFrame (context: any, now: number, startTimestamp: number): DispatchEvent {
 		if (this._callback) {
 			this._callback.call(context, now, startTimestamp, context);
 		}
-		let e: DispatchEvent = new DispatchEvent('enterframe');
+		const e: DispatchEvent = new DispatchEvent('enterframe');
 		this.trigger(e, [now, startTimestamp, context], this);
 		return e;
 	}

@@ -94,10 +94,10 @@ class JQueryAdapter {
 			const css: any = {};
 
 			const calc: Function = function (): void {
-				let containerWidth: number;
-				let containerHeight: number;
 				let scale: number = 1;
 
+				let containerWidth: number;
+				let containerHeight: number;
 				if (config.outer) {
 					containerWidth = $elem.outerWidth();
 					containerHeight = $elem.outerHeight();
@@ -272,11 +272,11 @@ class JQueryAdapter {
 	// @since 0.1.0
 	public bcBoxLink (): JQuery {
 		return $(self).on('click', function (e: JQueryEventObject): void {
-			let $elem: JQuery = $(this);
-			let $link: JQuery = $elem.find('a, area').eq(0);
-			let href: string = $link.prop('href');
+			const $elem: JQuery = $(this);
+			const $link: JQuery = $elem.find('a, area').eq(0);
+			const href: string = $link.prop('href');
 			if ($link.length && href) {
-				let isBlank: boolean = $link.prop('target') === '_blank';
+				const isBlank: boolean = $link.prop('target') === '_blank';
 				Browser.jumpTo(href, isBlank);
 				e.preventDefault();
 			}
@@ -297,7 +297,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcCheckbox (options: CheckableElementOption): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		return self.each( (i: number, elem: HTMLInputElement): void => {
 			if (elem.nodeName === 'INPUT') {
 				/* tslint:disable */
@@ -323,7 +323,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcRadio (options: CheckableElementOption): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		return self.each( (i: number, elem: HTMLInputElement): void => {
 			if (elem.nodeName === 'INPUT') {
 				/* tslint:disable */
@@ -349,7 +349,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcSelect (options: string | SelectOption): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		return self.each( (i: number, elem: HTMLSelectElement): void => {
 			const $elem: JQuery = $(elem);
 			if (typeof options === 'string') {
@@ -387,12 +387,11 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcImageLoaded (success: () => any, error?: (e: Event) => any): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
-			let $elem: JQuery = $(elem);
-			let manifest: JQueryPromise<any>[] = [];
-			let $imgs: JQuery;
-			$imgs = $elem.filter('img').add($elem.find('img'));
+			const $elem: JQuery = $(elem);
+			const manifest: JQueryPromise<any>[] = [];
+			const $imgs: JQuery = $elem.filter('img').add($elem.find('img'));
 			if ($imgs.length) {
 				$imgs.hide();
 				$imgs.each(function (): void {
@@ -456,7 +455,7 @@ class JQueryAdapter {
 	 */
 	public bcKeepAspectRatio (): JQuery {
 		const $w: JQuery = $(window);
-		const self = $(this);
+		const self: JQuery = $(this);
 		self.each( (i: number, elem: HTMLElement): void => {
 			const $elem: JQuery = $(elem);
 			const baseWidth: number = <number> +$elem.data('width');
@@ -492,7 +491,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcScrollTo (options?: ScrollOptions): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		return self.on('click', function (e: JQueryMouseEventObject): void {
 			const $this: JQuery = $(this);
 			let href: string = $this.attr('href');
@@ -500,7 +499,7 @@ class JQueryAdapter {
 			if (href) {
 				// キーワードを一番に優先する
 				if (options && $.isPlainObject(options.keywords)) {
-					for (let keyword in options.keywords) {
+					for (const keyword in options.keywords) {
 						if (options.keywords.hasOwnProperty(keyword)) {
 							const target: string = options.keywords[keyword];
 							if (keyword === href) {
@@ -545,7 +544,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcSplitList (columnSize: number, options: any): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		const CLASS_NAME: string = 'splited-list';
 		const CLASS_NAME_NTH: string = 'nth';
 		const CLASS_NAME_ITEM: string = 'item';
@@ -576,13 +575,13 @@ class JQueryAdapter {
 			const splited: number[] = UtilMath.split(size, columnSize);
 			const itemArray: HTMLElement[] = $items.toArray();
 
-			for (let i = 0; i < columnSize; i++) {
+			for (let i: number = 0; i < columnSize; i++) {
 				const sizeByColumn: number = splited[i];
 				const $col: JQuery = $('<ul></ul>');
 				BaserElement.addClassTo($col, CLASS_NAME);
 				BaserElement.addClassTo($col, CLASS_NAME, '', CLASS_NAME_NTH + columnSize);
 				$col.appendTo($container);
-				for (let j = 0; j < sizeByColumn; j++) {
+				for (let j: number = 0; j < sizeByColumn; j++) {
 					const $item: JQuery = $(itemArray.shift());
 					$item.appendTo($col);
 					$item.data(config.dataKey, i);
@@ -605,7 +604,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcWink (options: any): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		const config: any = $.extend(
 			{
 				close: 50,
@@ -619,8 +618,8 @@ class JQueryAdapter {
 		self.each( (i: number, elem: HTMLElement): void => {
 
 			const $this: JQuery = $(elem);
-			let $target: JQuery;
 
+			let $target: JQuery;
 			if (config.target) {
 				$target = $this.find(config.target);
 			} else {
@@ -680,7 +679,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcMaps (options?: GoogleMapsOption): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
 			const $elem: JQuery = $(elem);
 			const data: GoogleMaps = $elem.data(GoogleMaps.className);
@@ -718,7 +717,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcYoutube (options?: YouTubeOption): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
 			const $elem: JQuery = $(elem);
 			const data: YouTube = $elem.data(YouTube.className);
@@ -744,7 +743,7 @@ class JQueryAdapter {
 	 */
 	public bcRollover (options: any): JQuery {
 
-		const self = $(this);
+		const self: JQuery = $(this);
 
 		const config: any = $.extend(
 			{
@@ -831,7 +830,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcShy (options: any): JQuery {
-		const self = $(this);
+		const self: JQuery = $(this);
 		const config: any = $.extend(
 			{
 				close: 300,

@@ -234,7 +234,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * 値あり属性の場合は偽相等の文字列でなければ全て真とする
 	 * ただし値なし属性の場合は値が空文字列のため、偽相等の文字列の例外とする
 	 *
-	 * @version 0.9.0
+	 * @version 0.10.0
 	 * @since 0.2.0
 	 * @param elem 対象のDOM要素
 	 * @param attrName 確認したい属性名
@@ -248,14 +248,14 @@ class BaserElement extends EventDispatcher implements IElement {
 		if (value === true) {
 			return true;
 		}
-		let attr: Attr = elem.attributes.getNamedItem(attrName);
+		const attr: Attr = elem.attributes.getNamedItem(attrName);
 		if (attr) {
 			value = attr.value;
 			if (value === '') {
 				// 値なし属性の場合は存在すれば真
 				return true;
 			} else {
-				return !UtilString.isFalsy('' + value);
+				return !UtilString.isFalsy(`${value}`);
 			}
 		} else {
 			// 属性がない場合は偽
@@ -277,8 +277,8 @@ class BaserElement extends EventDispatcher implements IElement {
 	 *
 	 */
 	public static addClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
-		let $elem: JQuery = $(elem);
-		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		const $elem: JQuery = $(elem);
+		const className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.addClass(className);
 	}
 
@@ -297,7 +297,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 *
 	 */
 	public static addClassTo ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
-		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		const className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.addClass(className);
 	}
 
@@ -315,8 +315,8 @@ class BaserElement extends EventDispatcher implements IElement {
 	 *
 	 */
 	public static removeClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
-		let $elem: JQuery = $(elem);
-		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		const $elem: JQuery = $(elem);
+		const className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.removeClass(className);
 	}
 
@@ -335,7 +335,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 *
 	 */
 	public static removeClassFrom ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
-		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
+		const className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.removeClass(className);
 	}
 
@@ -349,10 +349,10 @@ class BaserElement extends EventDispatcher implements IElement {
 	 *
 	 */
 	public static removeCSSProp (elem: HTMLElement, propName: string): void {
-		let style: CSSStyleDeclaration = elem.style;
+		const style: CSSStyleDeclaration = elem.style;
 		// IE8以下はCSSStyleDeclarationのインターフェイスが標準でないのでメソッド定義チェックでエラーになる
 		if (style) {
-			let styleIE8lt: any = <any> style;
+			const styleIE8lt: any = <any> style;
 			if (style.removeProperty) {
 				style.removeProperty(propName);
 			} else if (styleIE8lt.removeAttribute) {
@@ -421,8 +421,8 @@ class BaserElement extends EventDispatcher implements IElement {
 		}
 		this.$el.data('bc-element', this);
 		// ID・nameの抽出 & 生成
-		let id: string = el.id || UtilString.UID();
-		let name: string = el.getAttribute('name');
+		const id: string = el.id || UtilString.UID();
+		const name: string = el.getAttribute('name');
 		el.id = id;
 		this.id = id;
 		this.name = name;
@@ -470,7 +470,7 @@ class BaserElement extends EventDispatcher implements IElement {
 		const attrs: { [option: string ]: any } = {};
 		const dataAttrs: { [option: string ]: any } = {};
 
-		for (let optName in defaultOptions) {
+		for (const optName in defaultOptions) {
 			if (defaultOptions.hasOwnProperty(optName)) {
 				// 属性はidとclassは除外する
 				switch (optName) {

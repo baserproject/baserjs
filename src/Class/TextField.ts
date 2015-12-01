@@ -206,8 +206,8 @@ class TextField extends FormElement implements ITextField {
 	 */
 	private _update (): void {
 
-		let currentValue: string = this.$el.val() || '';
-		let isEmpty: boolean = !currentValue;
+		const currentValue: string = this.$el.val() || '';
+		const isEmpty: boolean = !currentValue;
 
 		if (TextField.supportPlaceholder) {
 			if (isEmpty) {
@@ -296,7 +296,7 @@ class TextField extends FormElement implements ITextField {
 	 *
 	 */
 	private _equalPlaceholder (): boolean {
-		let currentValue: string = this.$el.val() || '';
+		const currentValue: string = this.$el.val() || '';
 		return this.placeholder === currentValue;
 	}
 

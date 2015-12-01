@@ -153,29 +153,29 @@ class Locational {
 	/**
 	 * クエリー文字列をハッシュにして返す
 	 *
-	 * @version 0.9.0
+	 * @version 0.10.0
 	 * @since 0.7.0
 	 * @param queryString クエリー文字列
 	 * @return ハッシュデータ
 	 *
 	 */
 	public static parseQueryString (queryString: string): { [index: string]: string | string[] } {
-		let params: { [index: string]: string | string[] } = {};
+		const params: { [index: string]: string | string[] } = {};
 		if (queryString) {
-			let queries: string[] = queryString.split(/&/g);
-			for (let query of queries) {
-				let keyValue: string[] = UtilString.divide(query, '=');
-				let key: string = keyValue[0];
-				let value: string = keyValue[1];
+			const queries: string[] = queryString.split(/&/g);
+			for (const query of queries) {
+				const keyValue: string[] = UtilString.divide(query, '=');
+				const key: string = keyValue[0];
+				const value: string = keyValue[1];
 				if (key) {
 					if (/\[\]$/.test(key)) {
-						key = key.replace(/\[\]$/, '');
-						let child: string | string[] = params[key];
+						const key2: string = key.replace(/\[\]$/, '');
+						const child: string | string[] = params[key];
 						if (child && child instanceof Array) {
 							child.push(value);
-							params[key] = child;
+							params[key2] = child;
 						} else {
-							params[key] = [value];
+							params[key2] = [value];
 						}
 					} else {
 						params[key] = value;
@@ -235,7 +235,7 @@ class Locational {
 				this.search = `?${key}${eqAndValue}`;
 			}
 		} else {
-			for (let val of value) {
+			for (const val of value) {
 				let eqAndValue: string = '';
 				if (val !== undefined) {
 					eqAndValue = `=${val}`;

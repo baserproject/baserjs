@@ -56,7 +56,7 @@ class Scroll {
 			this.targetX = 0;
 			this.targetY = offset;
 		} else if (selector) {
-			let $target: JQuery = $(selector);
+			const $target: JQuery = $(selector);
 			if (!$target.length) {
 				return this;
 			}
@@ -70,16 +70,16 @@ class Scroll {
 				y += elem.offsetTop;
 				elem = <HTMLElement> elem.offsetParent;
 			}
-			let winWidth: number = document.documentElement.clientWidth;
-			let winHeight: number = document.documentElement.clientHeight;
-			let docWidth: number = document.documentElement.scrollWidth;
-			let docHeight: number = document.documentElement.scrollHeight;
-			let maxScrollX: number = Math.max(winWidth, docWidth);
-			let maxScrollY: number = Math.max(winHeight, docHeight);
+			const winWidth: number = document.documentElement.clientWidth;
+			const winHeight: number = document.documentElement.clientHeight;
+			const docWidth: number = document.documentElement.scrollWidth;
+			const docHeight: number = document.documentElement.scrollHeight;
+			const maxScrollX: number = Math.max(winWidth, docWidth);
+			const maxScrollY: number = Math.max(winHeight, docHeight);
 			this.targetX = Math.min(x, maxScrollX) + offset;
 			this.targetY = Math.min(y, maxScrollY) + offset;
 		} else {
-			let $target: JQuery = $(window.location.hash);
+			const $target: JQuery = $(window.location.hash);
 			if ($target.length) {
 				Timer.wait(Scroll.delayWhenURLHashTarget, (): void => {
 					window.scrollTo(0, 0);
@@ -110,10 +110,10 @@ class Scroll {
 	 *
 	 */
 	private _progress (): void {
-		let currentX: number = this._getX();
-		let currentY: number = this._getY();
-		let vx: number = (this.targetX - currentX) / Scroll.speed;
-		let vy: number = (this.targetY - currentY) / Scroll.speed;
+		const currentX: number = this._getX();
+		const currentY: number = this._getY();
+		const vx: number = (this.targetX - currentX) / Scroll.speed;
+		const vy: number = (this.targetY - currentY) / Scroll.speed;
 		if ((Math.abs(vx) < 1 && Math.abs(vy) < 1) || (this.prevX === currentX && this.prevY === currentY)) {
 			// 目標座標付近に到達していたら終了
 			window.scrollTo(this.targetX, this.targetY);
@@ -122,8 +122,8 @@ class Scroll {
 				this.options.onScrollEnd.call(this, new $.Event('scrollend'));
 			}
 		} else {
-			let nextX: number = Math.floor(currentX + vx);
-			let nextY: number = Math.floor(currentY + vy);
+			const nextX: number = Math.floor(currentX + vx);
+			const nextY: number = Math.floor(currentY + vy);
 			// 繰り返し
 			window.scrollTo(nextX, nextY);
 			this.prevX = currentX;

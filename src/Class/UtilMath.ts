@@ -18,9 +18,9 @@ class UtilMath {
 	 *
 	 */
 	public static random (base: number = 1, dist: number = 0): number {
-		let random: number = Math.random();
-		let from: number = Math.min(base, dist);
-		let to: number = Math.max(base, dist);
+		const random: number = Math.random();
+		const from: number = Math.min(base, dist);
+		const to: number = Math.max(base, dist);
 		return random * (to - from) + from;
 	}
 
@@ -34,7 +34,7 @@ class UtilMath {
 	 *
 	 */
 	public static sum (numberList: number[]): number {
-		let numbers: number[] = numberList.slice();
+		const numbers: number[] = numberList.slice();
 		let result: number = 0;
 		while (numbers.length) {
 			result += numbers.shift();
@@ -53,15 +53,15 @@ class UtilMath {
 	 *
 	 */
 	public static split (n: number, devide: number): number[] {
-		let result: number[] = [];
+		const result: number[] = [];
 		n = Math.floor(n);
 		devide = Math.floor(devide);
 		// 分割した数
-		let splited: number = Math.floor(n / devide);
+		const splited: number = Math.floor(n / devide);
 		if (0 < devide) {
 			let i: number = devide;
 			// 余り
-			let rem: number = n % devide;
+			const rem: number = n % devide;
 			// 余りの数だけ+1される
 			let addtion: number = rem;
 			while (i--) {

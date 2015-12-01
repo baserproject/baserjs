@@ -7,6 +7,8 @@ import YoutubeMuteControllerOptions = require('../Interface/YoutubeMuteControlle
 /**
  * YouTube要素
  *
+ * TODO: YouTubeのURLパラメータのinterfaceをつくる
+ *
  * @version 0.9.0
  * @since 0.0.7
  *
@@ -225,16 +227,16 @@ class YouTube extends BaserElement {
 	 *
 	 */
 	public muteController (el: HTMLElement | JQuery, options: YoutubeMuteControllerOptions): void {
-		let $el: JQuery = $(el);
-		let defaults: YoutubeMuteControllerOptions = {
+		const $el: JQuery = $(el);
+		const defaults: YoutubeMuteControllerOptions = {
 			eventType: 'click',
 			mutedClass: 'is-muted',
 			unmutedClass: 'is-unmuted',
 			baseClass: 'youtube-mute-ctrl',
 		};
-		let conf: YoutubeMuteControllerOptions = $.extend(defaults, options);
+		const conf: YoutubeMuteControllerOptions = $.extend(defaults, options);
 		BaserElement.addClassTo($el, conf.baseClass);
-		let update: () => void = (): void => {
+		const update: () => void = (): void => {
 			if (this._isMuted) {
 				BaserElement.addClassTo($el, conf.baseClass, '', conf.mutedClass);
 				BaserElement.removeClassFrom($el, conf.baseClass, '', conf.unmutedClass);
@@ -243,7 +245,7 @@ class YouTube extends BaserElement {
 				BaserElement.removeClassFrom($el, conf.baseClass, '', conf.mutedClass);
 			}
 		};
-		let bindCtrl: () => void = (): void => {
+		const bindCtrl: () => void = (): void => {
 			$el.on(conf.eventType, (e: JQueryEventObject): any => {
 				if (this._isMuted) {
 					this.unMute();
@@ -313,7 +315,7 @@ class YouTube extends BaserElement {
 			this.movieOption.poster = YouTube.getPosterImage(movieId);
 		}
 
-		const param = {
+		const param: any = {
 			version: 3,
 			rel: this.movieOption.rel ? 1 : 0,
 			autoplay: (this.movieOption.autoplay || !!this.movieOption.poster) ? 1 : 0,
@@ -357,22 +359,19 @@ class YouTube extends BaserElement {
 	 *
 	 */
 	private _createPosterImage (): void {
-		const $imgContainer = $('<div class="-bc-element -bc-youtube-pseudo-poster-element" />');
-
+		const $imgContainer: JQuery = $('<div class="-bc-element -bc-youtube-pseudo-poster-element" />');
 		if (this.movieOption.width) {
 			$imgContainer.width(this.movieOption.width);
 		}
 		if (this.movieOption.height) {
 			$imgContainer.height(this.movieOption.height);
 		}
-
 		if (!/^@contents?$/i.test(this.movieOption.poster)) {
 			this.$el.empty();
 			$imgContainer.appendTo(this.$el);
 			$imgContainer.css('background-image', `url("${this.movieOption.poster}")`);
 		}
-
-		const handler = (e: JQueryEventObject): void => {
+		const handler: (e: JQueryEventObject) => void = (e: JQueryEventObject): void => {
 			$imgContainer.off('click.-bc-youtube-poster', handler);
 			this._createContainer();
 			this._loadYouTubeAPI();
@@ -450,7 +449,7 @@ class YouTube extends BaserElement {
 					switch (e.data) {
 						case -1: {
 							this.trigger('unstarted', [this.player]);
-							let listIndex: number = this.player.getPlaylistIndex();
+							const listIndex: number = this.player.getPlaylistIndex();
 							if (this.currentCueIndex !== listIndex) {
 								this.trigger('changecue', [this.player]);
 							}
@@ -499,6 +498,8 @@ class YouTube extends BaserElement {
 	 *
 	 * use: jQuery
 	 *
+	 * TODO: embeddedyoutubeplayイベント廃止予定(v1.0.0)
+	 *
 	 * @version 0.9.0
 	 * @since 0.8.0
 	 *
@@ -520,7 +521,7 @@ class YouTube extends BaserElement {
 		}
 
 		// TODO: youtube.d.ts に loadPlaylist() と cuePlaylist() が登録されていない
-		let _player: any = this.player;
+		const _player: any = this.player;
 		if (this.movieId.length >= 2) {
 			if (this.movieOption.autoplay || this.movieOption.poster) {
 				_player.loadPlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);

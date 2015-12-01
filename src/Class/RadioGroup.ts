@@ -54,7 +54,7 @@ class RadioGroup {
 	 *
 	 */
 	public add (radio: Radio): void {
-		for (let radioButton of this._radioButtons) {
+		for (const radioButton of this._radioButtons) {
 			if (radioButton === radio) {
 				return;
 			}
@@ -71,7 +71,7 @@ class RadioGroup {
 	 *
 	 */
 	public update (ignoreRadio: Radio): void {
-		for (let radioButton of this._radioButtons) {
+		for (const radioButton of this._radioButtons) {
 			if (radioButton !== ignoreRadio) {
 				radioButton.update();
 			}

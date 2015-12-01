@@ -120,18 +120,18 @@ class Timer extends EventDispatcher {
 		const START_TIMESTAMP: number = this.now();
 		clearTimeout(this._timerId);
 		// call: 1
-		let tick = (time: number): void => {
+		const tick: (time: number) => void = (time: number): void => {
 			// call: 3, 7, 12... onTick
 			this._timerId = setTimeout(
 				(): void => {
 					// call: 5, 10... onProgress
-					let now: number = this.now();
-					let period: number = now - START_TIMESTAMP;
+					const now: number = this.now();
+					const period: number = now - START_TIMESTAMP;
 					if (period < time) {
 						// call: 6, 11... onKickTick
 						tick(time);
 						// call: 9, 14... onFireProgressHandler
-						let e: DispatchEvent = new DispatchEvent('progress');
+						const e: DispatchEvent = new DispatchEvent('progress');
 						this.trigger(e, [now, START_TIMESTAMP, this], this);
 						if (e.isDefaultPrevented()) {
 							this.stop();
@@ -159,8 +159,8 @@ class Timer extends EventDispatcher {
 	 *
 	 */
 	public stop (): Timer {
-		let now: number = this.now();
-		let e: DispatchEvent = new DispatchEvent('stop');
+		const now: number = this.now();
+		const e: DispatchEvent = new DispatchEvent('stop');
 		this.trigger(e, [now, this._timerId, this], this);
 		if (!e.isDefaultPrevented()) {
 			clearTimeout(this._timerId);
@@ -195,7 +195,7 @@ class Timer extends EventDispatcher {
 		this._timerId = setTimeout(
 			(): void => {
 				this.stop();
-				let now: number = this.now();
+				const now: number = this.now();
 				callback.call(context, now, START_TIMESTAMP, context);
 			},
 			delay

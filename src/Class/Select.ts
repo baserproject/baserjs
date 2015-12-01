@@ -309,8 +309,8 @@ class Select extends FormElement implements ISelect {
 
 		// 擬似option要素を選択した時に実行する
 		this.$pseudo.on('click.bcSelect', 'li', (e: JQueryEventObject): void => {
-			let $li: JQuery = $(e.target);
-			let index: number = $li.index();
+			const $li: JQuery = $(e.target);
+			const index: number = $li.index();
 			this._onblur();
 			this.setIndex(index);
 			e.stopPropagation();
@@ -365,8 +365,8 @@ class Select extends FormElement implements ISelect {
 	 *
 	 */
 	public setValue (value: string | number | boolean): void {
-		let valueString: string = '' + value;
-		let $targetOption: JQuery = this.$el.find(`option[value="${valueString}"]`);
+		const valueString: string = `${value}`;
+		const $targetOption: JQuery = this.$el.find(`option[value="${valueString}"]`);
 		if ($targetOption.length && !$targetOption.prop('selected')) {
 			$targetOption.prop('selected', true);
 			this._fireChangeEvent();
@@ -385,7 +385,7 @@ class Select extends FormElement implements ISelect {
 	 *
 	 */
 	public setIndex (index: number, isSilent: boolean = false): void {
-		let $targetOption: JQuery = this.$el.find('option').eq(index);
+		const $targetOption: JQuery = this.$el.find('option').eq(index);
 		if ($targetOption.length && !$targetOption.prop('selected') && !$targetOption.prop('disabled')) {
 			$targetOption.prop('selected', true);
 			this._fireChangeEvent(isSilent);
@@ -405,7 +405,7 @@ class Select extends FormElement implements ISelect {
 	public getIndex (): number {
 		let currentIndex: number = 0;
 		this.$el.find('option').each( (i: number, el: HTMLElement): void => {
-			let $opt: JQuery = $(el);
+			const $opt: JQuery = $(el);
 			if ($opt.prop('selected')) {
 				currentIndex = $opt.index();
 			}
@@ -422,9 +422,9 @@ class Select extends FormElement implements ISelect {
 	 *
 	 */
 	public next (isSilent: boolean): void {
-		let currentIndex: number = this.getIndex();
-		let max: number = this.$el.find('option').length;
-		let nextIndex: number = currentIndex + 1;
+		const currentIndex: number = this.getIndex();
+		const max: number = this.$el.find('option').length;
+		const nextIndex: number = currentIndex + 1;
 		this.setIndex(Math.min(nextIndex, max), isSilent);
 	}
 
@@ -437,8 +437,8 @@ class Select extends FormElement implements ISelect {
 	 *
 	 */
 	public prev (isSilent: boolean): void {
-		let currentIndex: number = this.getIndex();
-		let prevIndex: number = currentIndex - 1;
+		const currentIndex: number = this.getIndex();
+		const prevIndex: number = currentIndex - 1;
 		this.setIndex(Math.max(prevIndex, 0), isSilent);
 	}
 
@@ -510,6 +510,8 @@ class Select extends FormElement implements ISelect {
 	 *
 	 * use: jQuery
 	 *
+	 * FIXME: 要素が足りない場合の考慮が不足している気がする
+	 *
 	 * @version 0.9.0
 	 * @since 0.0.1
 	 *
@@ -522,16 +524,16 @@ class Select extends FormElement implements ISelect {
 		}
 
 		this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
-			let $opt: JQuery = $(opt);
-			let isSelected: boolean = <boolean> $opt.prop('selected');
+			const $opt: JQuery = $(opt);
+			const isSelected: boolean = <boolean> $opt.prop('selected');
 			if (isSelected) {
 				this.$selected.text($opt.text());
 			}
 			if (this.$options) {
-				let isDisabled: boolean = <boolean> $opt.prop('disabled');
-				let $psuedoOpt: JQuery = $psuedoOptList.eq(i);
-				$psuedoOpt.attr('aria-selected', '' + isSelected);
-				$psuedoOpt.attr('aria-disabled', '' + isDisabled);
+				const isDisabled: boolean = <boolean> $opt.prop('disabled');
+				const $psuedoOpt: JQuery = $psuedoOptList.eq(i);
+				$psuedoOpt.attr('aria-selected', `${isSelected}`);
+				$psuedoOpt.attr('aria-disabled', `${isDisabled}`);
 				if (isSelected) {
 					BaserElement.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
 					BaserElement.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);

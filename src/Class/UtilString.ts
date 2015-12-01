@@ -18,7 +18,7 @@ class UtilString {
 	 */
 	public static UID (prefix: string = 'uid'): string {
 		const random: number = Math.random() * 1e8;
-		const seed = new Date().valueOf();
+		const seed: number = new Date().valueOf();
 		const uniqueNumber: number = Math.abs(Math.floor(random + seed));
 		if (prefix) {
 			prefix += '-';
@@ -40,7 +40,7 @@ class UtilString {
 		const words: string[] = str.replace(/[A-Z]/g, ($1: string): string => {
 			return ` ${$1.toLowerCase()}`;
 		}).split(/[^a-z0-9]+/ig);
-		for (let word of words) {
+		for (const word of words) {
 			if (word) {
 				result.push(word.toLowerCase());
 			}

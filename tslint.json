@@ -94,8 +94,10 @@
     ],
     "typedef": [
       true,
+      "parameter",
       "property-declaration",
-      "member-variable-declaration"
+      "member-variable-declaration",
+      "variable-declaration"
     ],
     "typedef-whitespace": [
       true,

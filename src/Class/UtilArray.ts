@@ -26,7 +26,7 @@ class UtilArray {
 			return array.indexOf(searchElement);
 		}
 		let i: number = 0;
-		for (let item of array) {
+		for (const item of array) {
 			if (searchElement === item) {
 				return i;
 			}

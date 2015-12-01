@@ -92,7 +92,7 @@ class Sequence extends EventDispatcher {
 	 */
 	constructor (tasks: Function[]) {
 		super();
-		for (let task of tasks) {
+		for (const task of tasks) {
 			this._tasks.push(new Task(task, this));
 		}
 	}
@@ -117,10 +117,10 @@ class Sequence extends EventDispatcher {
 		this.trigger('beforeact');
 
 		// タスク取得
-		let task: Task = this._tasks[this._currentTaskIndex];
+		const task: Task = this._tasks[this._currentTaskIndex];
 
 		// タスク実行
-		let result: any = task.act(value);
+		const result: any = task.act(value);
 
 		// 戻り値によるプロミスの設定
 		this._setPromiseFrom(result);
@@ -265,7 +265,7 @@ class Sequence extends EventDispatcher {
 		} else {
 			object = Object(object);
 			while (PROPS.length) {
-				let propsName: string = PROPS.shift();
+				const propsName: string = PROPS.shift();
 				if (!(propsName in object && $.isFunction(object[propsName]))) {
 					return false;
 				}
@@ -327,7 +327,7 @@ class Task {
 	 *
 	 */
 	public act (value: any): any {
-		let result: any = this._func.call(this._sequencer, this._sequencer.getCount(), value);
+		const result: any = this._func.call(this._sequencer, this._sequencer.getCount(), value);
 		return result;
 	}
 

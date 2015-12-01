@@ -76,7 +76,7 @@ class EventHandler {
 	 *
 	 */
 	public fire (context: any, e: DispatchEvent, args: any[]): boolean {
-		let handlerReturn: boolean | void = this._handler.apply(context, [e].concat(args));
+		const handlerReturn: boolean | void = this._handler.apply(context, [e].concat(args));
 		return handlerReturn !== undefined && !handlerReturn;
 	}
 

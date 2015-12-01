@@ -67,8 +67,8 @@ class EventDispatcher implements IEventDispatcher {
 		} else {
 			types = type;
 		}
-		for (let type of types) {
-			let eventHandler: EventHandler = new EventHandler(this, type, handler);
+		for (const type of types) {
+			const eventHandler: EventHandler = new EventHandler(this, type, handler);
 			EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
 			if (!EventDispatcher.types[type]) {
 				EventDispatcher.types[type] = [];
@@ -94,7 +94,7 @@ class EventDispatcher implements IEventDispatcher {
 		} else {
 			types = type;
 		}
-		for (let type of types) {
+		for (const type of types) {
 			delete EventDispatcher.types[type];
 		}
 		return this;
@@ -124,11 +124,11 @@ class EventDispatcher implements IEventDispatcher {
 		}
 		if (EventDispatcher.types[typeName]) {
 			// sliceをつかってオブジェクトのコピーを渡し参照を切る
-			let handlers: EventHandler[] = EventDispatcher.types[typeName].slice();
+			const handlers: EventHandler[] = EventDispatcher.types[typeName].slice();
 			while (handlers.length) {
-				let eventHandler: EventHandler = handlers.shift();
+				const eventHandler: EventHandler = handlers.shift();
 				if (eventHandler.context === this) {
-					let isCancel: boolean = eventHandler.fire(context, e, args);
+					const isCancel: boolean = eventHandler.fire(context, e, args);
 					if (isCancel) {
 						e.preventDefault();
 						e.stopImmediatePropagation();

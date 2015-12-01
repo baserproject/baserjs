@@ -152,16 +152,16 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	 *
 	 * use: jQuery
 	 *
-	 * @version 0.9.0
+	 * @version 0.10.0
 	 * @since 0.0.1
 	 *
 	 */
 	private _update () {
 
-		let checked: boolean = <boolean> this.el.checked;
+		const checked: boolean = <boolean> this.el.checked;
 
 		// WAI-ARIA属性
-		this.$el.attr('aria-checked', '' + checked);
+		this.$el.attr('aria-checked', `${checked}`);
 
 		if (checked) {
 

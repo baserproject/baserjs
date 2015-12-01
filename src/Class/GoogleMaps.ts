@@ -155,12 +155,12 @@ class GoogleMaps extends BaserElement {
 	/**
 	 * 住所文字列から座標を非同期で取得
 	 *
-	 * @version 0.9.0
+	 * @version 0.10.0
 	 * @since 0.2.0
 	 *
 	 */
 	public static getLatLngByAddress (address: string, callback: (lat: number, lng: number) => void): void {
-		let geocoder: google.maps.Geocoder = new google.maps.Geocoder();
+		const geocoder: google.maps.Geocoder = new google.maps.Geocoder();
 		geocoder.geocode(
 			<google.maps.GeocoderRequest> {
 				address: address
@@ -168,8 +168,8 @@ class GoogleMaps extends BaserElement {
 			(results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus): void => {
 				switch (status) {
 					case google.maps.GeocoderStatus.OK: {
-						let lat: number = results[0].geometry.location.lat();
-						let lng: number = results[0].geometry.location.lng();
+						const lat: number = results[0].geometry.location.lat();
+						const lng: number = results[0].geometry.location.lng();
 						callback(lat, lng);
 					}
 					break;
@@ -177,7 +177,7 @@ class GoogleMaps extends BaserElement {
 					case google.maps.GeocoderStatus.ZERO_RESULTS:
 					case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
 						if (console && console.warn) {
-							console.warn('ReferenceError: "' + address + 'は不正な住所のだったため結果を返すことができませんでした。"');
+							console.warn(`ReferenceError: "${address}は不正な住所のだったため結果を返すことができませんでした。"`);
 						}
 					}
 					break;
@@ -229,10 +229,10 @@ class GoogleMaps extends BaserElement {
 
 		this.markerBounds = new google.maps.LatLngBounds();
 
-		let mapCenterLat: number = <number>this.$el.data('lat') || GoogleMaps.defaultLat;
-		let mapCenterLng: number = <number>this.$el.data('lng') || GoogleMaps.defaultLng;
+		const mapCenterLat: number = <number>this.$el.data('lat') || GoogleMaps.defaultLat;
+		const mapCenterLng: number = <number>this.$el.data('lng') || GoogleMaps.defaultLng;
 
-		let mapCenterAddress: string = this.$el.data('address') || '';
+		const mapCenterAddress: string = this.$el.data('address') || '';
 
 		if (mapCenterAddress) {
 			// 住所から緯度・経度を検索する（非同期）
@@ -263,10 +263,10 @@ class GoogleMaps extends BaserElement {
 			this.$coordinates = this.$el;
 		}
 
-		let coordinates: Coordinate[] = [];
+		const coordinates: Coordinate[] = [];
 
 		this.$coordinates.each( (i: number, el: HTMLElement): void => {
-			let coordinate: Coordinate = new Coordinate(el, this);
+			const coordinate: Coordinate = new Coordinate(el, this);
 			coordinates.push(coordinate);
 		});
 
@@ -344,8 +344,8 @@ class Coordinate {
 		this.$el = $(el);
 		this._map = map;
 
-		let address: string = this.$el.data('address');
-		let dfd: JQueryDeferred<void> = $.Deferred<void>();
+		const address: string = this.$el.data('address');
+		const dfd: JQueryDeferred<void> = $.Deferred<void>();
 
 		if (address) {
 			GoogleMaps.getLatLngByAddress(address, (lat: number, lng: number): void => {
@@ -397,14 +397,14 @@ class Coordinate {
 		this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
 
 		// マップの中心を移動する
-		let content: HTMLElement = <HTMLElement> this._map.info.getContent();
-		let proj: google.maps.Projection = this._map.gmap.getProjection();
-		let currentPoint: google.maps.Point = proj.fromLatLngToPoint(this.position);
-		let scale: number = Math.pow(2, this._map.gmap.getZoom());
-		let height: number = $(content).height();
-		let y: number = (currentPoint.y * scale - height) / scale;
-		let newPoint: google.maps.Point = new google.maps.Point(currentPoint.x, y);
-		let newPosition: google.maps.LatLng = proj.fromPointToLatLng(newPoint);
+		const content: HTMLElement = <HTMLElement> this._map.info.getContent();
+		const proj: google.maps.Projection = this._map.gmap.getProjection();
+		const currentPoint: google.maps.Point = proj.fromLatLngToPoint(this.position);
+		const scale: number = Math.pow(2, this._map.gmap.getZoom());
+		const height: number = $(content).height();
+		const y: number = (currentPoint.y * scale - height) / scale;
+		const newPoint: google.maps.Point = new google.maps.Point(currentPoint.x, y);
+		const newPosition: google.maps.LatLng = proj.fromPointToLatLng(newPoint);
 		this._map.gmap.panTo(newPosition);
 	}
 
@@ -419,17 +419,17 @@ class Coordinate {
 	 */
 	private _markTo (): void {
 		this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
-		let iconURL: string = this.$el.data('icon');
-		let iconSize: string = this.$el.data('iconSize');
+		const iconURL: string = this.$el.data('icon');
+		const iconSize: string = this.$el.data('iconSize');
 		if (iconURL) {
 			this.icon = {};
 			this.icon.url = iconURL;
 			if (iconSize) {
-				let sizeQ: string[] = `${iconSize}`.split(/\s+/);
-				let width: number = +sizeQ[0] || null;
+				const sizeQ: string[] = `${iconSize}`.split(/\s+/);
+				const width: number = +sizeQ[0] || null;
 				if (width) {
-					let height: number = +sizeQ[1] || width;
-					let size: google.maps.Size = new google.maps.Size(width, height);
+					const height: number = +sizeQ[1] || width;
+					const size: google.maps.Size = new google.maps.Size(width, height);
 					this.icon.size = size;
 					this.icon.scaledSize = size;
 				}

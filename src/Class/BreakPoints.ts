@@ -64,11 +64,11 @@ class BreakPoints<T> extends EventDispatcher {
 		this._setBreakPoints<T>(breakPoints);
 		Browser.browser.on('resizeend', (): void => {
 			const wW: number = Math.max(window.document.documentElement.clientWidth, window.innerWidth);
-			for (let overPoint of this.breakPoints) {
+			for (const overPoint of this.breakPoints) {
 				if (wW <= overPoint) {
 					if (this.currentPoint !== overPoint) {
 						this.currentPoint = overPoint;
-						let value: T = <T> this._values[overPoint];
+						const value: T = <T> this._values[overPoint];
 						if (callback) {
 							callback(value, overPoint, wW);
 						}
@@ -103,7 +103,7 @@ class BreakPoints<T> extends EventDispatcher {
 	 *
 	 */
 	private _setBreakPoints<T> (breakPoints: BreakPointsOption<T>): void {
-		for (let breakPointStr in breakPoints) {
+		for (const breakPointStr in breakPoints) {
 			if (breakPoints.hasOwnProperty(breakPointStr)) {
 				let breakPoint: number;
 				if (/^defaults?$/i.test(breakPointStr)) {
@@ -113,7 +113,7 @@ class BreakPoints<T> extends EventDispatcher {
 				}
 				if (breakPoint >= 1) {
 					this.breakPoints.push(breakPoint);
-					let value: T = breakPoints[breakPointStr];
+					const value: T = breakPoints[breakPointStr];
 					this._values[breakPoint] = value;
 				}
 			}

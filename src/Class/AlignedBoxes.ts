@@ -155,7 +155,6 @@ class AlignedBoxes extends EventDispatcher {
 		AlignedBoxes.groups[uid] = this;
 
 		let columnInfo: BreakPointsOption<number>;
-
 		if (typeof column === 'number') {
 			columnInfo = {
 				Infinity: column
@@ -244,7 +243,7 @@ class AlignedBoxes extends EventDispatcher {
 	 *
 	 */
 	public static reAlign (): void {
-		for (let uid in AlignedBoxes.groups) {
+		for (const uid in AlignedBoxes.groups) {
 			if (AlignedBoxes.groups.hasOwnProperty(uid)) {
 				AlignedBoxes.groups[uid].trigger('realign');
 			}
@@ -283,8 +282,8 @@ class AlignedBoxes extends EventDispatcher {
 	 */
 	public destroy (): void {
 		this.$el.each( (i: number, elem: HTMLElement): void => {
-			let $this: JQuery = $(elem);
-			let uid: string = $this.data(AlignedBoxes.DATA_KEY_ID);
+			const $this: JQuery = $(elem);
+			const uid: string = $this.data(AlignedBoxes.DATA_KEY_ID);
 			$this.removeData(AlignedBoxes.DATA_KEY_ID);
 			if (uid in AlignedBoxes.groups) {
 				delete AlignedBoxes.groups[uid];
@@ -297,22 +296,22 @@ class AlignedBoxes extends EventDispatcher {
 	 *
 	 * use: jQuery
 	 *
-	 * @version 0.9.0
+	 * @version 0.10.0
 	 * @since 0.8.1
 	 *
 	 */
 	private _align (): void {
 		let $boxArray: JQuery[] = [];
 		let maxHeight: number = 0;
-		let lastIndex: number = this.$el.length - 1;
+		const lastIndex: number = this.$el.length - 1;
 		this.$el.each( (i: number, elem: HTMLElement): any => {
-			let $box: JQuery = $(elem);
+			const $box: JQuery = $(elem);
 
 			// 要素の高さを強制に無効にする
 			BaserElement.removeCSSPropertyFromDOMElement('height', elem);
 
 			// column が 0 だと最初の要素の意味
-			let column: number = i % this._currentColumn;
+			const column: number = i % this._currentColumn;
 			if (column === 0) {
 				// 配列をリセットする
 				$boxArray = [];
@@ -323,14 +322,14 @@ class AlignedBoxes extends EventDispatcher {
 
 			// 現在の高さと最大の高さを比べて最大の高さを更新
 			// column が 0 ならばリセットさせるので最大の高さもリセット
-			let currentHeight = $box.height();
+			const currentHeight: number = $box.height();
 			if (column === 0 || currentHeight > maxHeight) {
 				maxHeight = currentHeight;
 			}
 			if (i === lastIndex || column === this._currentColumn - 1) {
-				for (let $box of $boxArray) {
+				for (const $box of $boxArray) {
 					if ($box) {
-						let cancel: boolean;
+						let cancel: boolean = false;
 						// コールバックを実行
 						if (this._callback) {
 							cancel = !this._callback(maxHeight, currentHeight, this);

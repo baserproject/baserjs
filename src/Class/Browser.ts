@@ -98,7 +98,7 @@ class Browser extends EventDispatcher {
 
 		super();
 
-		let $window: JQuery = $(window);
+		const $window: JQuery = $(window);
 
 		// リサイズイベント
 		let resizeEndTimer: number;
@@ -168,8 +168,8 @@ class Browser extends EventDispatcher {
 	 *
 	 */
 	public static getUA (): BrowserUserAgent {
-		let ua: string = navigator.userAgent;
-		let bua: BrowserUserAgent = {
+		const ua: string = navigator.userAgent;
+		const bua: BrowserUserAgent = {
 			iOS: false,
 			android: /android/i.test(ua),
 			iPad: /ipad/i.test(ua),
@@ -201,16 +201,16 @@ class Browser extends EventDispatcher {
 	 *
 	 */
 	public static inheritParams (targetParam: string): void {
-		let $target: JQuery = $('a, area').filter('[href]');
-		let thisLocation: Locational = new Locational(location);
+		const $target: JQuery = $('a, area').filter('[href]');
+		const thisLocation: Locational = new Locational(location);
 		if (!(targetParam in thisLocation.params)) {
 			return;
 		}
-		let query: string = targetParam;
-		let value: string | string[] = thisLocation.params[targetParam];
+		const query: string = targetParam;
+		const value: string | string[] = thisLocation.params[targetParam];
 		$target.each( (i: number, elem: Element): any => {
-			let targetElem: LinkElement = <LinkElement> elem;
-			let loc: Locational = new Locational(targetElem);
+			const targetElem: LinkElement = <LinkElement> elem;
+			const loc: Locational = new Locational(targetElem);
 			if (thisLocation.host === loc.host) {
 				loc.addParam(query, value);
 				targetElem.href = loc.href;
