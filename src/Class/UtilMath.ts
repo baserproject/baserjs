@@ -17,7 +17,7 @@ class UtilMath {
 	 * @return 乱数
 	 *
 	 */
-	static random (base: number = 1, dist: number = 0): number {
+	public static random (base: number = 1, dist: number = 0): number {
 		let random: number = Math.random();
 		let from: number = Math.min(base, dist);
 		let to: number = Math.max(base, dist);
@@ -33,7 +33,7 @@ class UtilMath {
 	 * @return 合計値
 	 *
 	 */
-	static sum (numberList: number[]): number {
+	public static sum (numberList: number[]): number {
 		let numbers: number[] = numberList.slice();
 		let result: number = 0;
 		while (numbers.length) {
@@ -52,7 +52,7 @@ class UtilMath {
 	 * @return 分割された数値で構成された配列
 	 *
 	 */
-	static split (n: number, devide: number): number[] {
+	public static split (n: number, devide: number): number[] {
 		let result: number[] = [];
 		n = Math.floor(n);
 		devide = Math.floor(devide);

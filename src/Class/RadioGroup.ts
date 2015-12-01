@@ -15,7 +15,15 @@ class RadioGroup {
 	 * @since 0.7.0
 	 *
 	 */
-	static groups: { [name: string]: RadioGroup } = {};
+	public static groups: { [name: string]: RadioGroup } = {};
+
+	/**
+	 * 紐づくname属性値
+	 *
+	 * @since 0.0.1
+	 *
+	 */
+	public name: string;
 
 	/**
 	 * ラジオボタンのリスト
@@ -25,14 +33,6 @@ class RadioGroup {
 	 *
 	 */
 	private _radioButtons: Radio[] = [];
-
-	/**
-	 * 紐づくname属性値
-	 *
-	 * @since 0.0.1
-	 *
-	 */
-	public name: string;
 
 	/**
 	 * コンストラクタ

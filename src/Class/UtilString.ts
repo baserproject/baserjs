@@ -16,7 +16,7 @@ class UtilString {
 	 * @return ユニークID
 	 *
 	 */
-	static UID (prefix: string = 'uid'): string {
+	public static UID (prefix: string = 'uid'): string {
 		const random: number = Math.random() * 1e8;
 		const seed = new Date().valueOf();
 		const uniqueNumber: number = Math.abs(Math.floor(random + seed));
@@ -35,7 +35,7 @@ class UtilString {
 	 * @return ハイフンチェインケース化された文字列
 	 *
 	 */
-	static hyphenDelimited (str: string): string {
+	public static hyphenDelimited (str: string): string {
 		const result: string[] = [];
 		const words: string[] = str.replace(/[A-Z]/g, ($1: string): string => {
 			return ` ${$1.toLowerCase()}`;
@@ -57,7 +57,7 @@ class UtilString {
 	 * @return スネークケース化された文字列
 	 *
 	 */
-	static snakeCase (str: string): string {
+	public static snakeCase (str: string): string {
 		return UtilString.hyphenDelimited(str).replace(/-/g, '_');
 	}
 
@@ -71,7 +71,7 @@ class UtilString {
 	 * @return キャメルケース化された文字列
 	 *
 	 */
-	static camelCase (str: string, upperCase: boolean = false): string {
+	public static camelCase (str: string, upperCase: boolean = false): string {
 		let result: string = UtilString.hyphenDelimited(str);
 		if (upperCase && /^[a-z]/.test(result)) {
 			result = `-${result}`;
@@ -90,14 +90,14 @@ class UtilString {
 	 * @return 文字列が論理値の偽相等であるかどうか
 	 *
 	 */
-	static isFalsy (str: string): boolean {
+	public static isFalsy (str: string): boolean {
 		const FALSY_PATTERN: RegExp = /^\s*(?:false|null|undefined|0|0?(?:\.0+)?)?\s*$/i;
 		return FALSY_PATTERN.test(str.toLowerCase());
 	}
 
 	/**
 	 * 最初に登場する指定の区切り文字の場所で文字列を一回だけ分割する
-	 * 
+	 *
 	 * TODO: テストを書く
 	 *
 	 * @version 0.9.0
@@ -107,7 +107,7 @@ class UtilString {
 	 * @return 分割した文字列
 	 *
 	 */
-	static divide (str: string, separator: string): string[] {
+	public static divide (str: string, separator: string): string[] {
 		const splited: string[] = str.split(separator);
 		let prefix: string;
 		let suffix: string;

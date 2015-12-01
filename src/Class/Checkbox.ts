@@ -20,11 +20,11 @@ class Checkbox extends CheckableElement implements ICheckbox {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameCheckbox: string = 'form-checkbox';
+	public static classNameCheckbox: string = 'form-checkbox';
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0

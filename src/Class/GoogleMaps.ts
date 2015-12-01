@@ -18,7 +18,7 @@ class GoogleMaps extends BaserElement {
 	 * @since 0.0.6
 	 *
 	 */
-	static defaultLat: number = 35.681382;
+	public static defaultLat: number = 35.681382;
 
 	/**
 	 * 初期設定用の経度
@@ -28,7 +28,25 @@ class GoogleMaps extends BaserElement {
 	 * @since 0.0.6
 	 *
 	 */
-	static defaultLng: number = 139.766084;
+	public static defaultLng: number = 139.766084;
+
+	/**
+	 * 管理対象の要素に付加するclass属性値のプレフィックス
+	 *
+	 * @version 0.0.6
+	 * @since 0.0.6
+	 *
+	 */
+	public static className: string = '-bc-map-element';
+
+	/**
+	 * 管理するマップ要素リスト
+	 *
+	 * @version 0.0.6
+	 * @since 0.0.6
+	 *
+	 */
+	public static maps: GoogleMaps[] = [];
 
 	/**
 	 * 緯度
@@ -47,24 +65,6 @@ class GoogleMaps extends BaserElement {
 	 *
 	 */
 	public lng: number;
-
-	/**
-	 * 管理対象の要素に付加するclass属性値のプレフィックス
-	 *
-	 * @version 0.0.6
-	 * @since 0.0.6
-	 *
-	 */
-	static className: string = '-bc-map-element';
-
-	/**
-	 * 管理するマップ要素リスト
-	 *
-	 * @version 0.0.6
-	 * @since 0.0.6
-	 *
-	 */
-	static maps: GoogleMaps[] = [];
 
 	/**
 	 * Google Mapsのインスタンス
@@ -113,7 +113,7 @@ class GoogleMaps extends BaserElement {
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -123,7 +123,6 @@ class GoogleMaps extends BaserElement {
 	 *
 	 */
 	constructor (el: HTMLElement, options?: GoogleMapsOption) {
-
 		super(el);
 
 		// 既にエレメント化されていた場合は何もしない
@@ -136,30 +135,84 @@ class GoogleMaps extends BaserElement {
 			return;
 		}
 
-
 		if ('google' in window && google.maps) {
 			this.$el.addClass(GoogleMaps.className);
-	
+
 			this.mapOption = $.extend({}, options);
 			this._init();
 
 			// TODO: 必要な処理か検討
 			GoogleMaps.maps.push(this);
 			this.$el.data(GoogleMaps.className, this);
-
 		} else {
 			if ('console' in window) {
 				console.warn('ReferenceError: "//maps.google.com/maps/api/js" を先に読み込む必要があります。');
 				return;
 			}
 		}
+	}
 
+	/**
+	 * 住所文字列から座標を非同期で取得
+	 *
+	 * @version 0.9.0
+	 * @since 0.2.0
+	 *
+	 */
+	public static getLatLngByAddress (address: string, callback: (lat: number, lng: number) => void): void {
+		let geocoder: google.maps.Geocoder = new google.maps.Geocoder();
+		geocoder.geocode(
+			<google.maps.GeocoderRequest> {
+				address: address
+			},
+			(results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus): void => {
+				switch (status) {
+					case google.maps.GeocoderStatus.OK: {
+						let lat: number = results[0].geometry.location.lat();
+						let lng: number = results[0].geometry.location.lng();
+						callback(lat, lng);
+					}
+					break;
+					case google.maps.GeocoderStatus.INVALID_REQUEST:
+					case google.maps.GeocoderStatus.ZERO_RESULTS:
+					case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
+						if (console && console.warn) {
+							console.warn('ReferenceError: "' + address + 'は不正な住所のだったため結果を返すことができませんでした。"');
+						}
+					}
+					break;
+					case google.maps.GeocoderStatus.ERROR:
+					case google.maps.GeocoderStatus.UNKNOWN_ERROR: {
+						if (console && console.warn) {
+							console.warn('Error: "エラーが発生しました。"');
+						}
+					}
+					break;
+					default: {
+						// void
+					}
+				}
+			}
+		);
+	}
 
+	/**
+	 * 再読み込み・再設定
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.6.0
+	 * @since 0.2.0
+	 *
+	 */
+	public reload (options?: GoogleMapsOption): void {
+		this.mapOption = options ? $.extend({}, options) : this.mapOption;
+		this._init();
 	}
 
 	/**
 	 * 初期化
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -171,7 +224,7 @@ class GoogleMaps extends BaserElement {
 		// data-*属性からの継承
 		this.mapOption = <GoogleMapsOption> $.extend(this.mapOption, {
 			zoom: this.$el.data('zoom'),
-			fitBounds: this.$el.data('fit-bounds')
+			fitBounds: this.$el.data('fit-bounds'),
 		});
 
 		this.markerBounds = new google.maps.LatLngBounds();
@@ -194,7 +247,7 @@ class GoogleMaps extends BaserElement {
 
 	/**
 	 * レンダリング
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -217,18 +270,21 @@ class GoogleMaps extends BaserElement {
 			coordinates.push(coordinate);
 		});
 
-		this.mapOption = <GoogleMapsOption> $.extend({
-			zoom: 14,
-			mapTypeControlOptions: <google.maps.MapTypeControlOptions> {
-				mapTypeIds: <google.maps.MapTypeId[]> [
-					google.maps.MapTypeId.HYBRID,
-					google.maps.MapTypeId.ROADMAP
-				]
+		this.mapOption = <GoogleMapsOption> $.extend(
+			{
+				zoom: 14,
+				mapTypeControlOptions: <google.maps.MapTypeControlOptions> {
+					mapTypeIds: <google.maps.MapTypeId[]> [
+						google.maps.MapTypeId.HYBRID,
+						google.maps.MapTypeId.ROADMAP,
+					],
+				},
+				scrollwheel: <boolean> false,
+				center: <google.maps.LatLng> new google.maps.LatLng(mapCenterLat, mapCenterLng),
+				styles: null,
 			},
-			scrollwheel: <boolean> false,
-			center: <google.maps.LatLng> new google.maps.LatLng(mapCenterLat, mapCenterLng),
-			styles: null
-		}, this.mapOption);
+			this.mapOption
+		);
 
 		this.info = new google.maps.InfoWindow({
 			disableAutoPan: <boolean> true
@@ -247,58 +303,6 @@ class GoogleMaps extends BaserElement {
 			});
 		});
 
-	}
-
-	/**
-	 * 再読み込み・再設定
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.6.0
-	 * @since 0.2.0
-	 *
-	 */
-	public reload (options?: GoogleMapsOption): void {
-		this.mapOption = options ? $.extend({}, options) : this.mapOption;
-		this._init();
-	}
-
-	/**
-	 * 住所文字列から座標を非同期で取得
-	 *
-	 * @version 0.9.0
-	 * @since 0.2.0
-	 *
-	 */
-	static getLatLngByAddress (address: string, callback: (lat: number, lng: number) => void): void {
-		let geocoder: google.maps.Geocoder = new google.maps.Geocoder();
-		geocoder.geocode(<google.maps.GeocoderRequest> {
-			address: address
-		}, (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus): void => {
-			switch (status) {
-				case google.maps.GeocoderStatus.OK: {
-					let lat: number = results[0].geometry.location.lat();
-					let lng: number = results[0].geometry.location.lng();
-					callback(lat, lng);
-					break;
-				}
-				case google.maps.GeocoderStatus.INVALID_REQUEST:
-				case google.maps.GeocoderStatus.ZERO_RESULTS:
-				case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
-					if (console && console.warn) {
-						console.warn('ReferenceError: "' + address + 'は不正な住所のだったため結果を返すことができませんでした。"');
-					}
-					break;
-				}
-				case google.maps.GeocoderStatus.ERROR:
-				case google.maps.GeocoderStatus.UNKNOWN_ERROR: {
-					if (console && console.warn) {
-						console.warn('Error: "エラーが発生しました。"');
-					}
-					break;
-				}
-			}
-		});
 	}
 
 }
@@ -325,7 +329,7 @@ class Coordinate {
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -379,8 +383,34 @@ class Coordinate {
 	}
 
 	/**
+	 * インフォウィンドウを開く
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.9.0
+	 * @since 0.8.0
+	 *
+	 */
+	public openInfoWindow (): void {
+		this._map.info.setContent(this.el);
+		this._map.info.open(this._map.gmap, this.marker);
+		this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
+
+		// マップの中心を移動する
+		let content: HTMLElement = <HTMLElement> this._map.info.getContent();
+		let proj: google.maps.Projection = this._map.gmap.getProjection();
+		let currentPoint: google.maps.Point = proj.fromLatLngToPoint(this.position);
+		let scale: number = Math.pow(2, this._map.gmap.getZoom());
+		let height: number = $(content).height();
+		let y: number = (currentPoint.y * scale - height) / scale;
+		let newPoint: google.maps.Point = new google.maps.Point(currentPoint.x, y);
+		let newPosition: google.maps.LatLng = proj.fromPointToLatLng(newPoint);
+		this._map.gmap.panTo(newPosition);
+	}
+
+	/**
 	 * ピンをマップに立てる
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -409,39 +439,13 @@ class Coordinate {
 			position: this.position,
 			title: this.title,
 			icon: this.icon,
-			map: this._map.gmap
+			map: this._map.gmap,
 		});
 		if (this._map.$coordinates !== this._map.$el) {
 			google.maps.event.addListener(this.marker, 'click', (): void => {
 				this.openInfoWindow();
 			});
 		}
-	}
-
-	/**
-	 * インフォウィンドウを開く
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.9.0
-	 * @since 0.8.0
-	 *
-	 */
-	public openInfoWindow (): void {
-		this._map.info.setContent(this.el);
-		this._map.info.open(this._map.gmap, this.marker);
-		this.marker.setZIndex(google.maps.Marker.MAX_ZINDEX + 1);
-
-		// マップの中心を移動する
-		let content: HTMLElement = <HTMLElement> this._map.info.getContent();
-		let proj: google.maps.Projection = this._map.gmap.getProjection();
-		let currentPoint: google.maps.Point = proj.fromLatLngToPoint(this.position);
-		let scale: number = Math.pow(2, this._map.gmap.getZoom());
-		let height: number = $(content).height();
-		let y: number = (currentPoint.y * scale - height) / scale;
-		let newPoint: google.maps.Point = new google.maps.Point(currentPoint.x, y);
-		let newPosition: google.maps.LatLng = proj.fromPointToLatLng(newPoint);
-		this._map.gmap.panTo(newPosition);
 	}
 
 }

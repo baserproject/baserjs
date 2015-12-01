@@ -7,7 +7,7 @@ import BreakPointsOption = require('../Interface/BreakPointsOption');
  *
  * @version 0.9.0
  * @since 0.7.0
- * 
+ *
  * ```
  * new BreakPoints({
  * 	340: 'sp',
@@ -24,30 +24,30 @@ import BreakPointsOption = require('../Interface/BreakPointsOption');
 class BreakPoints<T> extends EventDispatcher {
 
 	/**
-	* 現在のブレークポイント（ウィンドウの幅）
-	*
-	* @version 0.8.1
-	* @since 0.7.0
-	*
-	*/
+	 * 現在のブレークポイント（ウィンドウの幅）
+	 *
+	 * @version 0.8.1
+	 * @since 0.7.0
+	 *
+	 */
 	public currentPoint: number = 0;
 
 	/**
-	* ブレークポイント
-	*
-	* @version 0.8.1
-	* @since 0.7.0
-	*
-	*/
+	 * ブレークポイント
+	 *
+	 * @version 0.8.1
+	 * @since 0.7.0
+	 *
+	 */
 	public breakPoints: number[] = [];
 
 	/**
-	* ブレークポイントに対してハンドラに渡す値
-	*
-	* @version 0.8.1
-	* @since 0.7.0
-	*
-	*/
+	 * ブレークポイントに対してハンドラに渡す値
+	 *
+	 * @version 0.8.1
+	 * @since 0.7.0
+	 *
+	 */
 	private _values: BreakPointsOption<any> = {};
 
 	/**
@@ -57,7 +57,7 @@ class BreakPoints<T> extends EventDispatcher {
 	 * @since 0.7.0
 	 * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
 	 * @param callback 変化に応じたコールバック
-	 * 
+	 *
 	 */
 	constructor (breakPoints: BreakPointsOption<T>, callback?: { (value: T, breakPoint: number, windowWidth: number): void } ) {
 		super();
@@ -83,12 +83,24 @@ class BreakPoints<T> extends EventDispatcher {
 	}
 
 	/**
+	 * ブレークポイントを追加する
+	 *
+	 * @version 0.7.0
+	 * @since 0.7.0
+	 * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
+	 *
+	 */
+	public add<T> (breakPoints: BreakPointsOption<T>): void {
+		this._setBreakPoints<T>(breakPoints);
+	}
+
+	/**
 	 * ブレークポイントの登録処理
 	 *
 	 * @version 0.8.1
 	 * @since 0.7.0
 	 * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
-	 * 
+	 *
 	 */
 	private _setBreakPoints<T> (breakPoints: BreakPointsOption<T>): void {
 		for (let breakPointStr in breakPoints) {
@@ -107,18 +119,6 @@ class BreakPoints<T> extends EventDispatcher {
 			}
 		}
 		this.breakPoints.sort( (a: number, b: number): any => { return a - b; } );
-	}
-
-	/**
-	 * ブレークポイントを追加する
-	 *
-	 * @version 0.7.0
-	 * @since 0.7.0
-	 * @param breakPoints ブレークポイントとコールバックに渡す値を設定する
-	 * 
-	 */
-	public add<T> (breakPoints: BreakPointsOption<T>): void {
-		this._setBreakPoints<T>(breakPoints);
 	}
 
 }

@@ -1,6 +1,5 @@
 import BaserElement = require('./BaserElement');
 import FormElement = require('./FormElement');
-import CheckableElement = require('./CheckableElement');
 import Browser = require('./Browser');
 import ISelect = require('../Interface/ISelect');
 import SelectOption = require('../Interface/SelectOption');
@@ -21,7 +20,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.4.0
 	 *
 	 */
-	static defaultOption: SelectOption = {
+	public static defaultOption: SelectOption = {
 		useDefaultOptionList: Browser.spec.isTouchable && Browser.spec.ua.iPhone || Browser.spec.ua.iPod || Browser.spec.ua.android
 	};
 
@@ -32,7 +31,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameSelect: string = 'form-select';
+	public static classNameSelect: string = 'form-select';
 
 	/**
 	 * Select要素の擬似要素のクラス
@@ -41,7 +40,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNamePseudoSelect: string = 'pseudo-select';
+	public static classNamePseudoSelect: string = 'pseudo-select';
 
 	/**
 	 * Select要素の選択した値を表示する擬似要素のクラス
@@ -50,7 +49,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNamePseudoSelectedDisplay: string = 'selected-display';
+	public static classNamePseudoSelectedDisplay: string = 'selected-display';
 
 	/**
 	 * Select要素のoption要素をのクラス
@@ -59,7 +58,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameSelectOptionList: string = 'option-list';
+	public static classNameSelectOptionList: string = 'option-list';
 
 	/**
 	 * Select要素のoption要素のクラス
@@ -68,7 +67,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameSelectOption: string = 'item';
+	public static classNameSelectOption: string = 'item';
 
 	/**
 	 * iOSの場合に付加されるクラス
@@ -77,7 +76,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameOsIOs: string = 'os-i-os';
+	public static classNameOsIOs: string = 'os-i-os';
 
 	/**
 	 * Androidの場合に付加されるクラス
@@ -86,7 +85,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameOsAndroid: string = 'os-android';
+	public static classNameOsAndroid: string = 'os-android';
 
 	/**
 	 * ブラウザデフォルトの選択リストを使用する場合に付加されるクラス
@@ -95,7 +94,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.4.0
 	 *
 	 */
-	static classNameUseDefaultOptionList: string = 'use-default-option-list';
+	public static classNameUseDefaultOptionList: string = 'use-default-option-list';
 
 	/**
 	 * Select要素の擬似option要素の選択時に付加されるクラス
@@ -104,7 +103,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameStateSelected: string = 'selected';
+	public static classNameStateSelected: string = 'selected';
 
 	/**
 	 * Select要素の擬似option要素の選択がはずれた時に付加されるクラス
@@ -113,7 +112,7 @@ class Select extends FormElement implements ISelect {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameStateUnselected: string = 'unselected';
+	public static classNameStateUnselected: string = 'unselected';
 
 	/**
 	 * 管理するDOM要素
@@ -175,7 +174,7 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -217,7 +216,7 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * ラップ要素を生成
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -232,7 +231,7 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * 擬似セレクトボックス要素を生成する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -258,10 +257,10 @@ class Select extends FormElement implements ISelect {
 			BaserElement.addClassTo(this.$options, FormElement.classNameFormElementCommon);
 			BaserElement.addClassTo(this.$options, Select.classNamePseudoSelect, Select.classNameSelectOptionList);
 			this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
-				var $opt: JQuery = $(opt);
-				var value: string = $opt.val();
-				var text: string = $opt.text();
-				var $psuedoOpt: JQuery = $('<li />');
+				const $opt: JQuery = $(opt);
+				const value: string = $opt.val();
+				const text: string = $opt.text();
+				const $psuedoOpt: JQuery = $('<li />');
 				$psuedoOpt.appendTo(this.$options);
 				$psuedoOpt.data('value', value);
 				$psuedoOpt.text(text);
@@ -292,7 +291,7 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * イベントの登録
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -341,10 +340,218 @@ class Select extends FormElement implements ISelect {
 	protected _onSilentChange (): void {
 		this._update();
 	}
+	/**
+	 * 要素の状態を更新する
+	 *
+	 * @version 0.8.0
+	 * @since 0.0.1
+	 * @return インスタンス自身
+	 *
+	 */
+	public update (): Select {
+		this._update();
+		return this;
+	}
+
+	/**
+	 * 値を設定する
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.9.0
+	 * @since 0.4.0
+	 * @override
+	 * @param value 設定したい値
+	 *
+	 */
+	public setValue (value: string | number | boolean): void {
+		let valueString: string = '' + value;
+		let $targetOption: JQuery = this.$el.find(`option[value="${valueString}"]`);
+		if ($targetOption.length && !$targetOption.prop('selected')) {
+			$targetOption.prop('selected', true);
+			this._fireChangeEvent();
+		}
+	}
+
+	/**
+	 * インデックス番号から選択する
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.9.0
+	 * @since 0.4.0
+	 * @param index 対象のインデックス番号
+	 * @param isSilent イベントを伝達しない
+	 *
+	 */
+	public setIndex (index: number, isSilent: boolean = false): void {
+		let $targetOption: JQuery = this.$el.find('option').eq(index);
+		if ($targetOption.length && !$targetOption.prop('selected') && !$targetOption.prop('disabled')) {
+			$targetOption.prop('selected', true);
+			this._fireChangeEvent(isSilent);
+		}
+	}
+
+	/**
+	 * 現在の選択中のインデックス番号を取得する
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.9.0
+	 * @since 0.4.0
+	 * @return インデックス番号
+	 *
+	 */
+	public getIndex (): number {
+		let currentIndex: number = 0;
+		this.$el.find('option').each( (i: number, el: HTMLElement): void => {
+			let $opt: JQuery = $(el);
+			if ($opt.prop('selected')) {
+				currentIndex = $opt.index();
+			}
+		});
+		return currentIndex;
+	}
+
+	/**
+	 * 次の項目を選択する
+	 *
+	 * @version 0.9.0
+	 * @since 0.4.0
+	 * @param isSilent イベントを伝達しない
+	 *
+	 */
+	public next (isSilent: boolean): void {
+		let currentIndex: number = this.getIndex();
+		let max: number = this.$el.find('option').length;
+		let nextIndex: number = currentIndex + 1;
+		this.setIndex(Math.min(nextIndex, max), isSilent);
+	}
+
+	/**
+	 * 前の項目を選択する
+	 *
+	 * @version 0.9.0
+	 * @since 0.4.0
+	 * @param isSilent イベントを伝達しない
+	 *
+	 */
+	public prev (isSilent: boolean): void {
+		let currentIndex: number = this.getIndex();
+		let prevIndex: number = currentIndex - 1;
+		this.setIndex(Math.max(prevIndex, 0), isSilent);
+	}
+
+	/**
+	 * 無効状態を設定する
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.9.0
+	 * @since 0.4.1
+	 * @override
+	 *
+	 */
+	public setDisabled (isDisabled: boolean): void {
+		super.setDisabled(isDisabled);
+		if (this.disabled) {
+			this.$pseudo.attr('tabindex', -1);
+		} else {
+			this.$pseudo.removeAttr('tabindex');
+		}
+	}
+
+	/**
+	 * フォーカスがあたった時の処理
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.4.1
+	 * @since 0.0.1
+	 * @override
+	 *
+	 */
+	protected _onfocus (): void {
+		if (!this.hasFocus) {
+			// 全体のフォーカスを外す
+			$(document).triggerHandler('click.bcSelect');
+			// 親クラスのフォーカスを実行
+			super._onfocus();
+			// DOMのclassを制御
+			BaserElement.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
+			BaserElement.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
+			// スクロール位置を調整する
+			this._scrollToSelectedPosition();
+			// 一覧を開いた時のインデックス番号を記録する
+			this._currentIndex = this.getIndex();
+		}
+	}
+
+	/**
+	 * フォーカスがはずれた時の処理
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.1.0
+	 * @since 0.0.1
+	 *
+	 */
+	protected _onblur (): void {
+		// 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
+		if (this.$pseudo) {
+			super._onblur();
+			BaserElement.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
+			BaserElement.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
+		}
+	}
+
+	/**
+	 * 要素の状態を更新する
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.9.0
+	 * @since 0.0.1
+	 *
+	 */
+	private _update (): void {
+
+		let $psuedoOptList: JQuery;
+		if (this.$options) {
+			$psuedoOptList = this.$options.find('li');
+		}
+
+		this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
+			let $opt: JQuery = $(opt);
+			let isSelected: boolean = <boolean> $opt.prop('selected');
+			if (isSelected) {
+				this.$selected.text($opt.text());
+			}
+			if (this.$options) {
+				let isDisabled: boolean = <boolean> $opt.prop('disabled');
+				let $psuedoOpt: JQuery = $psuedoOptList.eq(i);
+				$psuedoOpt.attr('aria-selected', '' + isSelected);
+				$psuedoOpt.attr('aria-disabled', '' + isDisabled);
+				if (isSelected) {
+					BaserElement.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+					BaserElement.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
+				} else {
+					BaserElement.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
+					BaserElement.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
+				}
+				if (isDisabled) {
+					BaserElement.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateDisabled);
+				} else {
+					BaserElement.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateDisabled);
+				}
+			}
+		});
+
+	}
 
 	/**
 	 * スクロール位置を調整する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -354,18 +561,18 @@ class Select extends FormElement implements ISelect {
 	private _scrollToSelectedPosition (): void {
 		if (this.$options) {
 			let $selectedPsuedoOpt: JQuery;
-			let $psuedoOptList: JQuery = this.$options.find('li');
+			const $psuedoOptList: JQuery = this.$options.find('li');
 			this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
-				var $opt: JQuery = $(opt);
-				var isSelected: boolean = <boolean> $opt.prop('selected');
+				const $opt: JQuery = $(opt);
+				const isSelected: boolean = <boolean> $opt.prop('selected');
 				if (isSelected) {
 					$selectedPsuedoOpt = $psuedoOptList.eq(i);
 				}
 			});
 			// ポジションを正しく取得するために一度スクロール位置をリセットする
 			this.$options.scrollTop(0);
-			let optPos: JQueryCoordinates = $selectedPsuedoOpt.offset();
-			let cntPos: JQueryCoordinates = this.$options.offset();
+			const optPos: JQueryCoordinates = $selectedPsuedoOpt.offset();
+			const cntPos: JQueryCoordinates = this.$options.offset();
 			if (optPos && cntPos) {
 				this.$options.scrollTop(optPos.top - cntPos.top);
 			}
@@ -374,7 +581,7 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * 擬似要素にフォーカスがあったった時のイベントと伝達を制御する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.4.0
@@ -439,11 +646,11 @@ class Select extends FormElement implements ISelect {
 
 	/**
 	 * フォーカス時のキーボードイベント
-	 * 
+	 *
 	 * use: jQuery
-	 * 
+	 *
 	 * TODO: KeyCodeの数値をマジックナンバーにせずに定数から参照するようにする
-	 * 
+	 *
 	 * @version 0.4.0
 	 * @since 0.4.0
 	 *
@@ -452,244 +659,37 @@ class Select extends FormElement implements ISelect {
 		$(document).on('keydown', (e: JQueryKeyEventObject): void => {
 			if (this.hasFocus) {
 				switch (e.keyCode) {
-					// keyUp
 					case 38: {
+						// keyUp
 						this.prev(true);
 						this._scrollToSelectedPosition();
 						e.preventDefault();
-						break;
 					}
-					// keyDown
+					break;
 					case 40: {
+						// keyDown
 						this.next(true);
 						this._scrollToSelectedPosition();
 						e.preventDefault();
-						break;
 					}
-					// Return (Enter)
+					break;
 					case 13: {
+						// Return (Enter)
 						if (this._currentIndex !== this.getIndex()) {
 							this._fireChangeEvent();
 						}
 						this._onblur();
 						e.preventDefault();
-						break;
+					}
+					break;
+					default: {
+						// void
 					}
 				}
 			}
 		});
 	}
 
-	/**
-	 * フォーカスがあたった時の処理
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.4.1
-	 * @since 0.0.1
-	 * @override
-	 *
-	 */
-	protected _onfocus (): void {
-		if (!this.hasFocus) {
-			// 全体のフォーカスを外す
-			$(document).triggerHandler('click.bcSelect');
-			// 親クラスのフォーカスを実行
-			super._onfocus();
-			// DOMのclassを制御
-			BaserElement.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
-			BaserElement.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
-			// スクロール位置を調整する
-			this._scrollToSelectedPosition();
-			// 一覧を開いた時のインデックス番号を記録する
-			this._currentIndex = this.getIndex();
-		}
-	}
-
-	/**
-	 * フォーカスがはずれた時の処理
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.1.0
-	 * @since 0.0.1
-	 *
-	 */
-	protected _onblur (): void {
-		// 一旦 コンストラクタのsuper()の中で_onblur()が$pseudoプロパティを作成する前に呼び出されるため
-		if (this.$pseudo) {
-			super._onblur();
-			BaserElement.addClassTo(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateBlur);
-			BaserElement.removeClassFrom(this.$pseudo, Select.classNamePseudoSelect, '', FormElement.classNameStateFocus);
-		}
-	}
-
-	/**
-	 * 要素の状態を更新する
-	 *
-	 * @version 0.8.0
-	 * @since 0.0.1
-	 * @return インスタンス自身
-	 *
-	 */
-	public update (): Select {
-		this._update();
-		return this;
-	}
-
-	/**
-	 * 要素の状態を更新する
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.9.0
-	 * @since 0.0.1
-	 *
-	 */
-	private _update (): void {
-
-		let $selectedOption: JQuery = this.$el.find(':selected');
-
-		let $psuedoOptList: JQuery;
-		if (this.$options) {
-			$psuedoOptList = this.$options.find('li');
-		}
-
-		this.$el.find('option').each( (i: number, opt: HTMLElement): void => {
-			let $opt: JQuery = $(opt);
-			let isSelected: boolean = <boolean> $opt.prop('selected');
-			if (isSelected) {
-				this.$selected.text($opt.text());
-			}
-			if (this.$options) {
-				let isDisabled: boolean = <boolean> $opt.prop('disabled');
-				let $psuedoOpt: JQuery = $psuedoOptList.eq(i);
-				$psuedoOpt.attr('aria-selected', '' + isSelected);
-				$psuedoOpt.attr('aria-disabled', '' + isDisabled);
-				if (isSelected) {
-					BaserElement.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
-					BaserElement.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
-				} else {
-					BaserElement.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateUnselected);
-					BaserElement.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateSelected);
-				}
-				if (isDisabled) {
-					BaserElement.addClassTo($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateDisabled);
-				} else {
-					BaserElement.removeClassFrom($psuedoOpt, Select.classNameSelectOptionList, Select.classNameSelectOption, Select.classNameStateDisabled);
-				}
-			}
-		});
-
-	}
-
-	/**
-	 * 値を設定する
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.9.0
-	 * @since 0.4.0
-	 * @override
-	 * @param value 設定したい値
-	 *
-	 */
-	public setValue (value: string | number | boolean): void {
-		let valueString: string = '' + value;
-		let $targetOption: JQuery = this.$el.find(`option[value="${valueString}"]`);
-		if ($targetOption.length && !$targetOption.prop('selected')) {
-			$targetOption.prop('selected', true);
-			this._fireChangeEvent();
-		}
-	}
-
-	/**
-	 * インデックス番号から選択する
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.9.0
-	 * @since 0.4.0
-	 * @param index 対象のインデックス番号
-	 * @param isSilent イベントを伝達しない
-	 * 
-	 */
-	public setIndex (index: number, isSilent: boolean = false): void {
-		let $targetOption: JQuery = this.$el.find('option').eq(index);
-		if ($targetOption.length && !$targetOption.prop('selected') && !$targetOption.prop('disabled')) {
-			$targetOption.prop('selected', true);
-			this._fireChangeEvent(isSilent);
-		}
-	}
-
-	/**
-	 * 現在の選択中のインデックス番号を取得する
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.9.0
-	 * @since 0.4.0
-	 * @return インデックス番号
-	 *
-	 */
-	public getIndex (): number {
-		let currentIndex: number = 0;
-		this.$el.find('option').each( (i: number, el: HTMLElement): void => {
-			let $opt: JQuery = $(el);
-			if ($opt.prop('selected')) {
-				currentIndex = $opt.index();
-			}
-		});
-		return currentIndex;
-	}
-
-	/**
-	 * 次の項目を選択する
-	 *
-	 * @version 0.9.0
-	 * @since 0.4.0
-	 * @param isSilent イベントを伝達しない
-	 *
-	 */
-	public next (isSilent: boolean): void {
-		let currentIndex: number = this.getIndex();
-		let max: number = this.$el.find('option').length;
-		let nextIndex: number = currentIndex + 1;
-		this.setIndex(Math.min(nextIndex, max), isSilent);
-	}
-
-	/**
-	 * 前の項目を選択する
-	 *
-	 * @version 0.9.0
-	 * @since 0.4.0
-	 * @param isSilent イベントを伝達しない
-	 *
-	 */
-	public prev (isSilent: boolean): void {
-		let currentIndex: number = this.getIndex();
-		let prevIndex: number = currentIndex - 1;
-		this.setIndex(Math.max(prevIndex, 0), isSilent);
-	}
-
-	/**
-	 * 無効状態を設定する
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.9.0
-	 * @since 0.4.1
-	 * @override
-	 *
-	 */
-	public setDisabled (isDisabled: boolean): void {
-		super.setDisabled(isDisabled);
-		if (this.disabled) {
-			this.$pseudo.attr('tabindex', -1);
-		} else {
-			this.$pseudo.removeAttr('tabindex');
-		}
-	}
 
 }
 

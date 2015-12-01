@@ -22,7 +22,7 @@ class AlignedBoxes extends EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	static DATA_KEY: string = 'bc-box';
+	public static DATA_KEY: string = 'bc-box';
 
 	/**
 	 * jQuery dataにUIDを登録するキー
@@ -31,7 +31,7 @@ class AlignedBoxes extends EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	static DATA_KEY_ID: string = AlignedBoxes.DATA_KEY + '-id';
+	public static DATA_KEY_ID: string = AlignedBoxes.DATA_KEY + '-id';
 
 	/**
 	 * 監視タイマーID
@@ -40,7 +40,7 @@ class AlignedBoxes extends EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	static watchTimer: number;
+	public static watchTimer: number;
 
 	/**
 	 * 監視の間隔
@@ -49,7 +49,7 @@ class AlignedBoxes extends EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	static watchInterval: number = 1000;
+	public static watchInterval: number = 1000;
 
 	/**
 	 * 監視タイマーが起動しているかどうか
@@ -58,7 +58,7 @@ class AlignedBoxes extends EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	static isBooted: boolean = false;
+	public static isBooted: boolean = false;
 
 	/**
 	 * 現在の基準のフォントサイズ
@@ -67,7 +67,7 @@ class AlignedBoxes extends EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	static currentFontSize: number;
+	public static currentFontSize: number;
 
 	/**
 	 * 監視対象のボックスグループ
@@ -76,7 +76,7 @@ class AlignedBoxes extends EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	static groups: { [id: string]: AlignedBoxes } = {};
+	public static groups: { [id: string]: AlignedBoxes } = {};
 
 	/**
 	 * 基準の文字要素
@@ -85,98 +85,7 @@ class AlignedBoxes extends EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	static dummyCharElement: HTMLElement;
-
-	/**
-	 * 基準の文字要素を生成する
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.9.0
-	 * @since 0.7.0
-	 *
-	 */
-	static createChar (): void {
-		var $dummyChar: JQuery = $('<del>M</del>').css({
-			display: 'block',
-			visibility: 'hidden',
-			position: 'absolute',
-			padding: 0,
-			top: 0,
-			zIndex: -1
-		});
-		$dummyChar.appendTo('body');
-		AlignedBoxes.dummyCharElement = $dummyChar[0];
-		AlignedBoxes.currentFontSize = AlignedBoxes.dummyCharElement.offsetHeight;
-	}
-
-	/**
-	 * 文字の大きさが変わったかどうか
-	 * 
-	 * TODO: 破壊的変更を加えていて単純な評価関数ではない
-	 * 
-	 * @version 0.7.0
-	 * @since 0.7.0
-	 * @return 文字の大きさが変わったかどうか
-	 *
-	 */
-	static isChanged (): boolean {
-		if (AlignedBoxes.currentFontSize === AlignedBoxes.dummyCharElement.offsetHeight) {
-			return false;
-		}
-		AlignedBoxes.currentFontSize = AlignedBoxes.dummyCharElement.offsetHeight;
-		return true;
-	}
-
-	/**
-	 * 文字の大きさが変わったかどうかを監視するルーチン
-	 *
-	 * 文字の大きさが変わればボックスのサイズを再設定する
-	 *
-	 * @version 0.7.0
-	 * @since 0.7.0
-	 *
-	 */
-	static observerForFontSize (): void {
-		if (AlignedBoxes.isChanged()) {
-			AlignedBoxes.reAlign();
-		}
-		return;
-	}
-
-	/**
-	 * ボックスのサイズを再設定する
-	 *
-	 * @version 0.9.0
-	 * @since 0.7.0
-	 *
-	 */
-	static reAlign (): void {
-		for (var uid in AlignedBoxes.groups) {
-			AlignedBoxes.groups[uid].trigger('realign');
-		}
-		return;
-	}
-
-	/**
-	 * 監視タイマーを起動する
-	 * 
-	 * use: jQuery
-	 *
-	 * @version 0.9.0
-	 * @since 0.7.0
-	 *
-	 */
-	static boot (): void {
-		if (!AlignedBoxes.isBooted) {
-			$(window).on('load', AlignedBoxes.reAlign);
-			Browser.browser.on('resizeend', AlignedBoxes.reAlign);
-			AlignedBoxes.isBooted = true;
-			AlignedBoxes.createChar();
-			// TODO: タイマーによる監視をオプションでオフにできるようにする
-			AlignedBoxes.watchTimer = setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
-		}
-	}
+	public static dummyCharElement: HTMLElement;
 
 	/**
 	 * 対象のDOM要素
@@ -216,7 +125,7 @@ class AlignedBoxes extends EventDispatcher {
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -227,7 +136,7 @@ class AlignedBoxes extends EventDispatcher {
 	 */
 	constructor ($el: JQuery, column: number | BreakPointsOption<number> = 0, callback?: AlignedBoxCallback) {
 		super();
-		
+
 		this.$el = $el;
 
 		AlignedBoxes.boot();
@@ -271,61 +180,101 @@ class AlignedBoxes extends EventDispatcher {
 	}
 
 	/**
-	 * ボックスの高さ揃える
-	 * 
+	 * 基準の文字要素を生成する
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
-	 * @since 0.8.1
+	 * @since 0.7.0
 	 *
 	 */
-	private _align (): void {
-		let $box_array: JQuery[] = [];
-		let maxHeight: number = 0;
-		let lastIndex: number = this.$el.length - 1;
-		this.$el.each( (i: number, elem: HTMLElement): any => {
-			let $box: JQuery = $(elem);
-
-			// 要素の高さを強制に無効にする
-			BaserElement.removeCSSPropertyFromDOMElement('height', elem);
-
-			// column が 0 だと最初の要素の意味
-			let column: number = i % this._currentColumn;
-			if (column === 0) {
-				// 配列をリセットする
-				$box_array = [];
-			}
-
-			// 配列に追加
-			$box_array[column] = $box;
-
-			// 現在の高さと最大の高さを比べて最大の高さを更新
-			// column が 0 ならばリセットさせるので最大の高さもリセット
-			let currentHeight = $box.height();
-			if (column === 0 || currentHeight > maxHeight) {
-				maxHeight = currentHeight;
-			}
-			if (i === lastIndex || column === this._currentColumn - 1) {
-				for (let $box of $box_array) {
-					if ($box) {
-						let cancel: boolean;
-						// コールバックを実行
-						if (this._callback) {
-							cancel = !this._callback(maxHeight, currentHeight, this);
-						}
-						// コールバックの戻り値がfalseでなければ高さを変更
-						if (!cancel) {
-							$box.height(maxHeight);
-						}
-					}
-				}
-			}
+	public static createChar (): void {
+		const $dummyChar: JQuery = $('<del>M</del>').css({
+			display: 'block',
+			visibility: 'hidden',
+			position: 'absolute',
+			padding: 0,
+			top: 0,
+			zIndex: -1,
 		});
+		$dummyChar.appendTo('body');
+		AlignedBoxes.dummyCharElement = $dummyChar[0];
+		AlignedBoxes.currentFontSize = AlignedBoxes.dummyCharElement.offsetHeight;
+	}
+
+	/**
+	 * 文字の大きさが変わったかどうか
+	 *
+	 * TODO: 破壊的変更を加えていて単純な評価関数ではない
+	 *
+	 * @version 0.7.0
+	 * @since 0.7.0
+	 * @return 文字の大きさが変わったかどうか
+	 *
+	 */
+	public static isChanged (): boolean {
+		if (AlignedBoxes.currentFontSize === AlignedBoxes.dummyCharElement.offsetHeight) {
+			return false;
+		}
+		AlignedBoxes.currentFontSize = AlignedBoxes.dummyCharElement.offsetHeight;
+		return true;
+	}
+
+	/**
+	 * 文字の大きさが変わったかどうかを監視するルーチン
+	 *
+	 * 文字の大きさが変わればボックスのサイズを再設定する
+	 *
+	 * @version 0.7.0
+	 * @since 0.7.0
+	 *
+	 */
+	public static observerForFontSize (): void {
+		if (AlignedBoxes.isChanged()) {
+			AlignedBoxes.reAlign();
+		}
+		return;
+	}
+
+	/**
+	 * ボックスのサイズを再設定する
+	 *
+	 * @version 0.9.0
+	 * @since 0.7.0
+	 *
+	 */
+	public static reAlign (): void {
+		for (let uid in AlignedBoxes.groups) {
+			if (AlignedBoxes.groups.hasOwnProperty(uid)) {
+				AlignedBoxes.groups[uid].trigger('realign');
+			}
+		}
+		return;
+	}
+
+	/**
+	 * 監視タイマーを起動する
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.9.0
+	 * @since 0.7.0
+	 *
+	 */
+	public static boot (): void {
+		if (!AlignedBoxes.isBooted) {
+			$(window).on('load', AlignedBoxes.reAlign);
+			Browser.browser.on('resizeend', AlignedBoxes.reAlign);
+			AlignedBoxes.isBooted = true;
+			AlignedBoxes.createChar();
+			// TODO: タイマーによる監視をオプションでオフにできるようにする
+			AlignedBoxes.watchTimer = setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
+		}
 	}
 
 	/**
 	 * 高さ揃えを解除する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -339,6 +288,59 @@ class AlignedBoxes extends EventDispatcher {
 			$this.removeData(AlignedBoxes.DATA_KEY_ID);
 			if (uid in AlignedBoxes.groups) {
 				delete AlignedBoxes.groups[uid];
+			}
+		});
+	}
+
+	/**
+	 * ボックスの高さ揃える
+	 *
+	 * use: jQuery
+	 *
+	 * @version 0.9.0
+	 * @since 0.8.1
+	 *
+	 */
+	private _align (): void {
+		let $boxArray: JQuery[] = [];
+		let maxHeight: number = 0;
+		let lastIndex: number = this.$el.length - 1;
+		this.$el.each( (i: number, elem: HTMLElement): any => {
+			let $box: JQuery = $(elem);
+
+			// 要素の高さを強制に無効にする
+			BaserElement.removeCSSPropertyFromDOMElement('height', elem);
+
+			// column が 0 だと最初の要素の意味
+			let column: number = i % this._currentColumn;
+			if (column === 0) {
+				// 配列をリセットする
+				$boxArray = [];
+			}
+
+			// 配列に追加
+			$boxArray[column] = $box;
+
+			// 現在の高さと最大の高さを比べて最大の高さを更新
+			// column が 0 ならばリセットさせるので最大の高さもリセット
+			let currentHeight = $box.height();
+			if (column === 0 || currentHeight > maxHeight) {
+				maxHeight = currentHeight;
+			}
+			if (i === lastIndex || column === this._currentColumn - 1) {
+				for (let $box of $boxArray) {
+					if ($box) {
+						let cancel: boolean;
+						// コールバックを実行
+						if (this._callback) {
+							cancel = !this._callback(maxHeight, currentHeight, this);
+						}
+						// コールバックの戻り値がfalseでなければ高さを変更
+						if (!cancel) {
+							$box.height(maxHeight);
+						}
+					}
+				}
 			}
 		});
 	}

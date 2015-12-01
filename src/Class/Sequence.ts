@@ -1,4 +1,3 @@
-import DispatchEvent = require('./DispatchEvent');
 import EventDispatcher = require('./EventDispatcher');
 import Timer = require('./Timer');
 
@@ -19,7 +18,7 @@ class Sequence extends EventDispatcher {
 	 *
 	 */
 	private _tasks: Task[] = [];
-	
+
 	/**
 	 * 現在実行中のタスク番号
 	 *
@@ -28,7 +27,7 @@ class Sequence extends EventDispatcher {
 	 *
 	 */
 	private _currentTaskIndex: number = 0;
-	
+
 	/**
 	 * タスクを実行したトータルカウント数
 	 *
@@ -37,7 +36,7 @@ class Sequence extends EventDispatcher {
 	 *
 	 */
 	private _iterator: number = 0;
-	
+
 	/**
 	 * シーケンスのプロミスオブジェクト
 	 *
@@ -46,7 +45,7 @@ class Sequence extends EventDispatcher {
 	 *
 	 */
 	private _promise: JQueryPromise<any> = null;
-	
+
 	/**
 	 * シーケンスのリゾルバ
 	 *
@@ -55,7 +54,7 @@ class Sequence extends EventDispatcher {
 	 *
 	 */
 	private _resolver: JQueryDeferred<any> = null;
-	
+
 	/**
 	 * 遅延時間
 	 *
@@ -64,7 +63,7 @@ class Sequence extends EventDispatcher {
 	 *
 	 */
 	private _waitingTime: number = 0;
-	
+
 	/**
 	 * 遅延用タイマー
 	 *
@@ -73,7 +72,7 @@ class Sequence extends EventDispatcher {
 	 *
 	 */
 	private _waitTimer: Timer = new Timer();
-	
+
 	/**
 	 * 停止状態
 	 *
@@ -119,13 +118,13 @@ class Sequence extends EventDispatcher {
 
 		// タスク取得
 		let task: Task = this._tasks[this._currentTaskIndex];
-		
+
 		// タスク実行
 		let result: any = task.act(value);
 
 		// 戻り値によるプロミスの設定
 		this._setPromiseFrom(result);
-		
+
 		// プロミスの結果から次のタスクを実行
 		this._promise.done( (doneResult: any): void => {
 			this._reset();
@@ -147,6 +146,54 @@ class Sequence extends EventDispatcher {
 			this.trigger('stop');
 		});
 		return this;
+	}
+
+	/**
+	 * ループでタスクの実行
+	 *
+	 * @version 0.4.0
+	 * @since 0.4.0
+	 *
+	 */
+	public loop (value: any): Sequence {
+		return this.act(value, true);
+	}
+
+	/**
+	 * シーケンス処理から抜ける
+	 *
+	 * @version 0.9.0
+	 * @since 0.4.0
+	 *
+	 */
+	public exit (): Sequence {
+		this._isStop = true;
+		if (this._resolver) {
+			this._resolver.reject();
+		}
+		return this;
+	}
+
+	/**
+	 * 遅延時間を設定する
+	 *
+	 * @version 0.4.0
+	 * @since 0.4.0
+	 *
+	 */
+	public wait (watingTime: number): void {
+		this._waitingTime = watingTime;
+	}
+
+	/**
+	 * タスクを実行したトータルカウント数を取得
+	 *
+	 * @version 0.9.0
+	 * @since 0.9.0
+	 *
+	 */
+	public getCount (): number {
+		return this._iterator;
 	}
 
 	/**
@@ -177,7 +224,7 @@ class Sequence extends EventDispatcher {
 			});
 		}
 	}
-	
+
 	/**
 	 * 次のタスクを実行するために一時的なオブジェクトをリセットする
 	 *
@@ -211,7 +258,7 @@ class Sequence extends EventDispatcher {
 			'progress',
 			'promise',
 			'state',
-			'then'
+			'then',
 		];
 		if (object instanceof jQuery) {
 			return !!object.promise;
@@ -226,55 +273,6 @@ class Sequence extends EventDispatcher {
 			return true;
 		}
 	}
-
-	/**
-	 * ループでタスクの実行
-	 *
-	 * @version 0.4.0
-	 * @since 0.4.0
-	 *
-	 */
-	public loop (value: any): Sequence {
-		return this.act(value, true);
-	}
-
-	/**
-	 * シーケンス処理から抜ける
-	 *
-	 * @version 0.9.0
-	 * @since 0.4.0
-	 *
-	 */
-	public exit (): Sequence {
-		this._isStop = true;
-		if (this._resolver) {
-			this._resolver.reject();
-		}
-		return this;
-	}
-
-	/**
-	* ___
-	*
-	* @version 0.4.0
-	* @since 0.4.0
-	*
-	*/
-	public wait (watingTime: number): void {
-		this._waitingTime = watingTime;
-	}
-
-	/**
-	 * タスクを実行したトータルカウント数を取得
-	 *
-	 * @version 0.9.0
-	 * @since 0.9.0
-	 *
-	 */
-	public getCount (): number {
-		return this._iterator;
-	}
-
 
 }
 
@@ -304,7 +302,7 @@ class Task {
 	 * @version 0.4.0
 	 * @since 0.4.0
 	 *
-	*/
+	 */
 	private _func: Function;
 
 	/**
@@ -316,7 +314,7 @@ class Task {
 	 */
 	constructor (func: Function, sequencer: Sequence) {
 		this._func = func;
-		this._sequencer = sequencer
+		this._sequencer = sequencer;
 	}
 
 	/**

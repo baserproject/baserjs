@@ -7,37 +7,37 @@ import IEventDispatcher = require('../Interface/IEventDispatcher');
  *
  * @version 0.9.0
  * @since 0.0.10
- * 
+ *
  * ```
  * let dispatcher = new EventDispatcher();
- * 
+ *
  * dispatcher.on('event', (e) -> {
  * 	// handler
  * });
- * 
+ *
  * dispatcher.trigger('event');
  * ```
- * 
+ *
  */
 class EventDispatcher implements IEventDispatcher {
 
 	/**
-	* イベント駆動できるクラス
-	*
-	* @version 0.7.0
-	* @since 0.7.0
-	*
-	*/
-	static eventHandlers: { [id: string]: EventHandler } = {};
+	 * イベント駆動できるクラス
+	 *
+	 * @version 0.7.0
+	 * @since 0.7.0
+	 *
+	 */
+	public static eventHandlers: { [id: string]: EventHandler } = {};
 
 	/**
-	* イベント駆動できるクラス
-	*
-	* @version 0.7.0
-	* @since 0.7.0
-	*
-	*/
-	static types: { [type: string]: EventHandler[] } = {};
+	 * イベント駆動できるクラス
+	 *
+	 * @version 0.7.0
+	 * @since 0.7.0
+	 *
+	 */
+	public static types: { [type: string]: EventHandler[] } = {};
 
 	/**
 	 * コンストラクタ
@@ -56,7 +56,7 @@ class EventDispatcher implements IEventDispatcher {
 	 * @version 0.9.0
 	 * @since 0.0.10
 	 * @param type イベントのタイプ（複数可）
-	 * @param handler 
+	 * @param handler
 	 * @return インスタンス自身
 	 *
 	 */

@@ -10,48 +10,11 @@ import UtilString = require('./UtilString');
 class Locational {
 
 	/**
-	 * クエリー文字列をハッシュにして返す
-	 *
-	 * @version 0.9.0
-	 * @since 0.7.0
-	 * @param queryString クエリー文字列
-	 * @return ハッシュデータ
-	 *
-	 */
-	static parseQueryString (queryString: string): { [index: string]: string | string[] } {
-		let params: { [index: string]: string | string[] } = {};
-		if (queryString) {
-			let queries: string[] = queryString.split(/&/g);
-			for (let query of queries) {
-				let keyValue: string[] = UtilString.divide(query, '=');
-				let key: string = keyValue[0];
-				let value: string = keyValue[1];
-				if (key) {
-					if (/\[\]$/.test(key)) {
-						key = key.replace(/\[\]$/, '');
-						let child: string | string[] = params[key];
-						if (child && child instanceof Array) {
-							child.push(value);
-							params[key] = child;
-						} else {
-							params[key] = [value];
-						}
-					} else {
-						params[key] = value;
-					}
-				}
-			}
-		}
-		return <{ [index: string]: string[] | string }> params;
-	}
-
-
-	/**
 	 * #hash
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public hash: string;
 
@@ -60,7 +23,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public host: string;
 
@@ -69,7 +32,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public hostname: string;
 
@@ -78,7 +41,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public href: string;
 
@@ -87,7 +50,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public origin: string;
 
@@ -96,7 +59,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public path: string;
 
@@ -105,7 +68,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public pathname: string;
 
@@ -114,7 +77,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public port: string;
 
@@ -123,7 +86,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public protocol: string;
 
@@ -132,7 +95,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public search: string;
 
@@ -141,7 +104,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public query: string;
 
@@ -150,7 +113,7 @@ class Locational {
 	 *
 	 * @version 0.7.0
 	 * @since 0.7.0
-	 * 
+	 *
 	 */
 	public params: { [ index: string ]: string | string[] };
 
@@ -188,12 +151,48 @@ class Locational {
 	}
 
 	/**
+	 * クエリー文字列をハッシュにして返す
+	 *
+	 * @version 0.9.0
+	 * @since 0.7.0
+	 * @param queryString クエリー文字列
+	 * @return ハッシュデータ
+	 *
+	 */
+	public static parseQueryString (queryString: string): { [index: string]: string | string[] } {
+		let params: { [index: string]: string | string[] } = {};
+		if (queryString) {
+			let queries: string[] = queryString.split(/&/g);
+			for (let query of queries) {
+				let keyValue: string[] = UtilString.divide(query, '=');
+				let key: string = keyValue[0];
+				let value: string = keyValue[1];
+				if (key) {
+					if (/\[\]$/.test(key)) {
+						key = key.replace(/\[\]$/, '');
+						let child: string | string[] = params[key];
+						if (child && child instanceof Array) {
+							child.push(value);
+							params[key] = child;
+						} else {
+							params[key] = [value];
+						}
+					} else {
+						params[key] = value;
+					}
+				}
+			}
+		}
+		return <{ [index: string]: string[] | string }> params;
+	}
+
+	/**
 	 * プロパティを最適化する
 	 *
 	 * @version 0.9.0
 	 * @since 0.7.0
 	 * @return インスタンス自身
-	 * 
+	 *
 	 */
 	public update (): Locational {
 		// ex) http://www.sample.com:80
@@ -222,13 +221,13 @@ class Locational {
 	 * @param key パラメータのキー
 	 * @param value パラメータの値
 	 * @return インスタンス自身
-	 * 
+	 *
 	 */
 	public addParam (key: string, value?: string | string[]): Locational {
 		if (typeof value === 'string' || !value) {
 			let eqAndValue: string = '';
 			if (value !== undefined) {
-				 eqAndValue = `=${value}`;
+				eqAndValue = `=${value}`;
 			}
 			if (this.search) {
 				this.search += `&${key}${eqAndValue}`;
@@ -260,7 +259,7 @@ class Locational {
 	 * @since 0.7.0
 	 * @param key パラメータのキー
 	 * @return インスタンス自身
-	 * 
+	 *
 	 */
 	public removeParam (key: string): Locational {
 		this.search = this.search.replace(new RegExp(key + '(?:\\[\\])?(?:=[^&]*)?(&|$)', 'g'), '');
@@ -274,7 +273,7 @@ class Locational {
 	 * @version 0.7.0
 	 * @since 0.7.0
 	 * @return 変換された文字列
-	 * 
+	 *
 	 */
 	public toString (): string {
 		this.update();

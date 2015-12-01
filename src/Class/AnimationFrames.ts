@@ -18,7 +18,7 @@ class AnimationFrames extends EventDispatcher {
 	 * @since 0.0.10
 	 *
 	 */
-	static FRAME_RATE = 60;
+	public static FRAME_RATE: number = 60;
 
 	/**
 	 * フレーム毎に実行するコールバック
@@ -98,7 +98,7 @@ class AnimationFrames extends EventDispatcher {
 					let e: DispatchEvent = new DispatchEvent('stop');
 					this.trigger(e, [timestamp, START_TIMESTAMP, context], context);
 				}
-			}
+			};
 			this._requestId = requestAnimationFrame(onEnterFrame);
 			// call: 1 first stacked
 		} else {
@@ -120,24 +120,6 @@ class AnimationFrames extends EventDispatcher {
 	}
 
 	/**
-	 * フレーム毎の処理
-	 *
-	 * @version 0.9.0
-	 * @since 0.9.0
-	 * @param context コンテキスト
-	 * @return イベント
-	 *
-	 */
-	private _enterFrame (context: any, now: number, startTimestamp): DispatchEvent {
-		if (this._callback) {
-			this._callback.call(context, now, startTimestamp, context);
-		}
-		let e: DispatchEvent = new DispatchEvent('enterframe');
-		this.trigger(e, [now, startTimestamp, context], this);
-		return e;
-	}
-
-	/**
 	 * リクエストしたコールバックを停止する
 	 *
 	 * @version 0.9.0
@@ -153,6 +135,24 @@ class AnimationFrames extends EventDispatcher {
 			clearTimeout(this._requestId);
 		}
 		return this;
+	}
+
+	/**
+	 * フレーム毎の処理
+	 *
+	 * @version 0.9.0
+	 * @since 0.9.0
+	 * @param context コンテキスト
+	 * @return イベント
+	 *
+	 */
+	private _enterFrame (context: any, now: number, startTimestamp): DispatchEvent {
+		if (this._callback) {
+			this._callback.call(context, now, startTimestamp, context);
+		}
+		let e: DispatchEvent = new DispatchEvent('enterframe');
+		this.trigger(e, [now, startTimestamp, context], this);
+		return e;
 	}
 
 }

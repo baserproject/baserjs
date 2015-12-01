@@ -1,6 +1,5 @@
 import BaserElement = require('./BaserElement');
 import FormElement = require('./FormElement');
-import CheckableElement = require('./CheckableElement');
 import ITextField = require('../Interface/ITextField');
 import TextFieldOption = require('../Interface/TextFieldOption');
 
@@ -20,9 +19,7 @@ class TextField extends FormElement implements ITextField {
 	 * @since 0.4.0
 	 *
 	 */
-	static defaultOption: TextFieldOption = {
-
-	};
+	public static defaultOption: TextFieldOption = {};
 
 	/**
 	 * TextField要素のクラス
@@ -31,7 +28,7 @@ class TextField extends FormElement implements ITextField {
 	 * @since 0.4.0
 	 *
 	 */
-	static classNameTextField: string = 'form-text-field';
+	public static classNameTextField: string = 'form-text-field';
 
 	/**
 	 * 未入力状態に付加されるクラス
@@ -40,7 +37,7 @@ class TextField extends FormElement implements ITextField {
 	 * @since 0.4.0
 	 *
 	 */
-	static classNameStateUninput: string = 'uninput';
+	public static classNameStateUninput: string = 'uninput';
 
 	/**
 	 * プレースホルダー属性に対応しているかどうか
@@ -49,7 +46,7 @@ class TextField extends FormElement implements ITextField {
 	 * @since 0.4.0
 	 *
 	 */
-	static supportPlaceholder: boolean = $('<input />').prop('placeholder') !== undefined;
+	public static supportPlaceholder: boolean = $('<input />').prop('placeholder') !== undefined;
 
 	/**
 	 * 管理するDOM要素
@@ -97,7 +94,7 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -142,7 +139,7 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * ラップ要素を生成
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.4.0
@@ -157,7 +154,7 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * イベントの登録
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.4.1
@@ -200,7 +197,7 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * 要素の状態を更新する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -235,7 +232,7 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * 入力されている状態を設定する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -263,7 +260,7 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * 入力されていない状態を設定する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -291,7 +288,7 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * プレースホルダーと値が同じかどうか
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -305,7 +302,7 @@ class TextField extends FormElement implements ITextField {
 
 	/**
 	 * プレースホルダーの値を設定する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.4.0
@@ -326,8 +323,8 @@ class TextField extends FormElement implements ITextField {
 	 */
 	private _msCaretMoveToTop (): void {
 		// TODO: MS用の型を調査して定義
-		var input: any = this.el;
-		var range: any = input.createTextRange();
+		const input: any = this.el;
+		const range: any = input.createTextRange();
 		range.collapse();
 		range.moveStart('character', 0);
 		range.moveEnd('character', 0);

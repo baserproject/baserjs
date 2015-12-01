@@ -20,14 +20,14 @@ import YouTubeOption = require('../Interface/YouTubeOption');
 
 class JQueryAdapter {
 
-	static bcScrollTo (selector: any, options?: ScrollOptions): void {
-		var scroll: Scroll = new Scroll();
+	public static bcScrollTo (selector: any, options?: ScrollOptions): void {
+		const scroll: Scroll = new Scroll();
 		scroll.to(selector, options);
 	}
 
 	/**
 	 * 自信の要素を基準に、指定の子要素を背景のように扱う
-	 * 
+	 *
 	 * TODO: BaserElement化する
 	 *
 	 * CSSの`background-size`の`contain`と`cover`の振る舞いに対応
@@ -60,24 +60,27 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcBackground (options: any): JQuery {
-		var self: JQuery = $(this);
+		const self: JQuery = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
-			var config: any = $.extend({
-				align: 'center',
-				valign: 'center',
-				size: 'contain',
-				child: '>*:first',
-				outer: false
-			}, options);
+			const config: any = $.extend(
+				{
+					align: 'center',
+					valign: 'center',
+					size: 'contain',
+					child: '>*:first',
+					outer: false,
+				},
+				options
+			);
 
-			var $elem: JQuery = $(elem);
-			var $child: JQuery = $elem.find(config.child);
+			const $elem: JQuery = $(elem);
+			const $child: JQuery = $elem.find(config.child);
 
-			var objectWidth: number = +($elem.data('width') || $child.data('width') || $child.attr('width') || $child.width()) || 400;
-			var objectHeight: number = +($elem.data('height') || $child.data('height') || $child.attr('height') || $child.height()) || 300;
-			var objectAspectRatio: number = objectWidth / objectHeight;
+			const objectWidth: number = +($elem.data('width') || $child.data('width') || $child.attr('width') || $child.width()) || 400;
+			const objectHeight: number = +($elem.data('height') || $child.data('height') || $child.attr('height') || $child.height()) || 300;
+			const objectAspectRatio: number = objectWidth / objectHeight;
 
-			var currentCSSPosition: string = $elem.css('position');
+			const currentCSSPosition: string = $elem.css('position');
 			if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
 				$elem.css('position', 'relative');
 			}
@@ -85,16 +88,15 @@ class JQueryAdapter {
 			$child.css({
 				position: 'absolute',
 				top: 0,
-				left: 0
+				left: 0,
 			});
 
-			var css: any = {};
+			const css: any = {};
 
-			var calc: Function = function (): void {
-				var containerWidth: number;
-				var containerHeight: number;
-				var containerAspectRatio: number;
-				var scale: number;
+			const calc: Function = function (): void {
+				let containerWidth: number;
+				let containerHeight: number;
+				let scale: number = 1;
 
 				if (config.outer) {
 					containerWidth = $elem.outerWidth();
@@ -103,7 +105,7 @@ class JQueryAdapter {
 					containerWidth = $elem.width();
 					containerHeight = $elem.height();
 				}
-				containerAspectRatio = containerWidth / containerHeight;
+				const containerAspectRatio: number = containerWidth / containerHeight;
 
 				// 画像の拡縮率の算出
 				// アス比が1以上なら横長/1以下なら縦長
@@ -149,48 +151,47 @@ class JQueryAdapter {
 						return;
 				}
 				// 画像の幅と高さ
-				var newWidth: number = objectWidth * scale;
-				var newHeight: number = objectHeight * scale;
+				const newWidth: number = objectWidth * scale;
+				const newHeight: number = objectHeight * scale;
 
-				var top: number;
+				let top: number;
 				switch (config.valign) {
-					case 'top':
+					case 'top': {
 						top = 0;
-						break;
-					case 'bottom':
+					}
+					break;
+					case 'bottom': {
 						top = containerHeight - newHeight;
-						break;
-					case 'center':
+					}
+					break;
 					default: {
 						top = (containerHeight / 2) - (newHeight / 2);
 					}
 				}
 
-				var left: number;
+				let left: number;
 				switch (config.align) {
-					case 'left':
+					case 'left': {
 						left = 0;
-						break;
-					case 'right':
+					}
+					break;
+					case 'right': {
 						left = containerWidth - newWidth;
-						break;
-					case 'center':
+					}
+					break;
 					default: {
 						left = (containerWidth / 2) - (newWidth / 2);
 					}
 				}
 
-				var none: string = 'none';
-				css = {
-					width: newWidth,
-					height: newHeight,
-					maxWidth: none,
-					minWidth: 0,
-					maxHeight: none,
-					minHeight: 0,
-					top: top,
-					left: left
-				};
+				css.width = newWidth;
+				css.height = newHeight;
+				css.maxWidth = 'none';
+				css.minWidth = 0;
+				css.maxHeight = 'none';
+				css.minHeight = 0;
+				css.top = top;
+				css.left = left;
 			};
 
 			// 初期計算
@@ -199,7 +200,7 @@ class JQueryAdapter {
 			$child.css(css);
 
 			// 計算結果をアニメーションフレーム毎にDOMに反映
-			var animation: AnimationFrames = new AnimationFrames( (): void => {
+			const animation: AnimationFrames = new AnimationFrames( (): void => {
 				$child.css(css);
 			});
 
@@ -229,42 +230,37 @@ class JQueryAdapter {
 	 */
 	public bcBoxAlignHeight (columnOrKeyword: string | number | BreakPointsOption<number> = 0, detailTarget?: string, callback?: AlignedBoxCallback): JQuery {
 
-		var self: JQuery = $(this);
-
-		var keyword: string;
-		var column: number | BreakPointsOption<number>;
-		
-		var boxes: AlignedBoxes;
-
+		const self: JQuery = $(this);
 		if (typeof columnOrKeyword === 'string') {
-
-			keyword = columnOrKeyword;
-
+			const keyword: string = columnOrKeyword;
 			switch (keyword) {
 				case 'destroy': {
-					boxes = <AlignedBoxes> self.data(AlignedBoxes.DATA_KEY);
+					const boxes: AlignedBoxes = <AlignedBoxes> self.data(AlignedBoxes.DATA_KEY);
 					boxes.destroy();
-					break;
+				}
+				break;
+				default: {
+					// void
 				}
 			}
 
 		} else {
-			
-			column = columnOrKeyword;
-
-			var $detailTarget: JQuery;
-
+			const column: number | BreakPointsOption<number> = columnOrKeyword;
 			// 要素群の高さを揃え、setsに追加
 			if (detailTarget) {
-				$detailTarget = self.find(detailTarget);
+				const $detailTarget: JQuery = self.find(detailTarget);
 				if ($detailTarget.length) {
 					self.each(function () {
-						var $split: JQuery = $(this).find(detailTarget);
+						const $split: JQuery = $(this).find(detailTarget);
+						/* tslint:disable */
 						new AlignedBoxes($split, column, callback);
+						/* tslint:enable */
 					});
 				}
 			} else {
+				/* tslint:disable */
 				new AlignedBoxes(self, column, callback);
+				/* tslint:enable */
 			}
 		}
 
@@ -301,10 +297,12 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcCheckbox (options: CheckableElementOption): JQuery {
-		var self = $(this);
+		const self = $(this);
 		return self.each( (i: number, elem: HTMLInputElement): void => {
 			if (elem.nodeName === 'INPUT') {
+				/* tslint:disable */
 				new Checkbox(elem, options);
+				/* tslint:enable */
 			} else if ('console' in window) {
 				console.warn('TypeError: A Node is not HTMLInputElement');
 			}
@@ -325,10 +323,12 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcRadio (options: CheckableElementOption): JQuery {
-		var self = $(this);
+		const self = $(this);
 		return self.each( (i: number, elem: HTMLInputElement): void => {
 			if (elem.nodeName === 'INPUT') {
+				/* tslint:disable */
 				new Radio(elem, options);
+				/* tslint:enable */
 			} else if ('console' in window) {
 				console.warn('TypeError: A Node is not HTMLInputElement');
 			}
@@ -338,7 +338,7 @@ class JQueryAdapter {
 	/**
 	 * WAI-ARIAに対応した装飾可能な汎用要素でラップしたセレクトボックスに変更する
 	 *
-	 * @version 0.9.0
+	 * @version 0.9.2
 	 * @since 0.0.1
 	 *
 	 * * * *
@@ -349,18 +349,24 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcSelect (options: string | SelectOption): JQuery {
-		var self = $(this);
+		const self = $(this);
 		return self.each( (i: number, elem: HTMLSelectElement): void => {
-			var $elem: JQuery = $(elem);
+			const $elem: JQuery = $(elem);
 			if (typeof options === 'string') {
 				switch (options) {
 					case 'update': {
-						var select: Select = <Select> $elem.data('bc-element');
+						const select: Select = <Select> $elem.data('bc-element');
 						select.update();
 					}
+					break;
+					default: {
+						// void
+					}
 				}
-			} if (elem.nodeName === 'SELECT') {
+			} else if (elem.nodeName === 'SELECT') {
+				/* tslint:disable */
 				new Select(elem, options);
+				/* tslint:enable */
 			} else if ('console' in window) {
 				console.warn('TypeError: A Node is not HTMLSelectElement');
 			}
@@ -381,7 +387,7 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcImageLoaded (success: () => any, error?: (e: Event) => any): JQuery {
-		var self = $(this);
+		const self = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
 			let $elem: JQuery = $(elem);
 			let manifest: JQueryPromise<any>[] = [];
@@ -390,8 +396,8 @@ class JQueryAdapter {
 			if ($imgs.length) {
 				$imgs.hide();
 				$imgs.each(function (): void {
-					var loaded: JQueryDeferred<any> = $.Deferred();
-					var img: HTMLImageElement = new Image();
+					const loaded: JQueryDeferred<any> = $.Deferred();
+					let img: HTMLImageElement = new Image();
 					img.onload = function (): any {
 						loaded.resolve();
 						img.onload = null; // GC
@@ -449,18 +455,18 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcKeepAspectRatio (): JQuery {
-		var $w: JQuery = $(window);
-		var self = $(this);
+		const $w: JQuery = $(window);
+		const self = $(this);
 		self.each( (i: number, elem: HTMLElement): void => {
-			var $elem: JQuery = $(elem);
-			var baseWidth: number = <number> +$elem.data('width');
-			var baseHeight: number = <number> +$elem.data('height');
-			var aspectRatio: number = baseWidth / baseHeight;
+			const $elem: JQuery = $(elem);
+			const baseWidth: number = <number> +$elem.data('width');
+			const baseHeight: number = <number> +$elem.data('height');
+			const aspectRatio: number = baseWidth / baseHeight;
 			$w.on('resize', (): void => {
-				var width: number = $elem.width();
+				const width: number = $elem.width();
 				$elem.css({
 					width: '100%',
-					height: width / aspectRatio
+					height: width / aspectRatio,
 				});
 			}).trigger('resize');
 		});
@@ -486,21 +492,17 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcScrollTo (options?: ScrollOptions): JQuery {
-		var self = $(this);
+		const self = $(this);
 		return self.on('click', function (e: JQueryMouseEventObject): void {
-			var $this: JQuery = $(this);
-			var href: string = $this.attr('href');
-			var keyword: string;
-			var target: any;
-			var scroll: Scroll = new Scroll();
-			var absPath: string;
-			var currentReferer: string;
+			const $this: JQuery = $(this);
+			let href: string = $this.attr('href');
+			const scroll: Scroll = new Scroll();
 			if (href) {
 				// キーワードを一番に優先する
 				if (options && $.isPlainObject(options.keywords)) {
-					for (keyword in options.keywords) {
+					for (let keyword in options.keywords) {
 						if (options.keywords.hasOwnProperty(keyword)) {
-							target = options.keywords[keyword];
+							const target: string = options.keywords[keyword];
 							if (keyword === href) {
 								scroll.to(target, options);
 								e.preventDefault();
@@ -510,9 +512,9 @@ class JQueryAdapter {
 					}
 				}
 				// 「/pathname/#hash」のリンクパターンの場合
-				//「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
-				absPath = $this.prop('href');
-				currentReferer = location.protocol + '//' + location.host + location.pathname + location.search;
+				// 「/pathname/」が現在のURLだった場合「#hash」に飛ばすようにする
+				const absPath: string = $this.prop('href');
+				const currentReferer: string = location.protocol + '//' + location.host + location.pathname + location.search;
 				href = absPath.replace(currentReferer, '');
 				// #top はHTML5ではページトップを意味する
 				if (href === '#top') {
@@ -523,7 +525,7 @@ class JQueryAdapter {
 				// セレクタとして要素が存在する場合はその要素に移動
 				// 「/」で始まるなどセレクターとして不正な場合、例外を投げることがあるので無視する
 				try {
-					target = $(href);
+					const target: JQuery = $(href);
 					if (target.length) {
 						scroll.to(target, options);
 						e.preventDefault();
@@ -543,19 +545,22 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcSplitList (columnSize: number, options: any): JQuery {
-		var self = $(this);
-		var CLASS_NAME: string = 'splited-list';
-		var CLASS_NAME_NTH: string = 'nth';
-		var CLASS_NAME_ITEM: string = 'item';
-		var config: any = $.extend({
-			dataKey: '-bc-split-list-index',
-			splitChildren: true
-		}, options);
-		self.each( (i: number, elem: HTMLElement): void => {
+		const self = $(this);
+		const CLASS_NAME: string = 'splited-list';
+		const CLASS_NAME_NTH: string = 'nth';
+		const CLASS_NAME_ITEM: string = 'item';
+		const config: any = $.extend(
+			{
+				dataKey: '-bc-split-list-index',
+				splitChildren: true,
+			},
+			options
+		);
+		self.each( (index: number, elem: HTMLElement): void => {
 
-			var $container: JQuery = $(elem);
-			var $list: JQuery = $container.find('>ul');
-			var $items: JQuery;
+			const $container: JQuery = $(elem);
+			const $list: JQuery = $container.find('>ul');
+			let $items: JQuery;
 			if (!config.splitChildren) {
 				// 直下のliのみ取得
 				$items = $list.find('>li').detach();
@@ -567,32 +572,23 @@ class JQueryAdapter {
 			}
 
 			// リストアイテムの総数
-			var size: number = $items.length;
+			const size: number = $items.length;
+			const splited: number[] = UtilMath.split(size, columnSize);
+			const itemArray: HTMLElement[] = $items.toArray();
 
-			var splited: number[] = UtilMath.split(size, columnSize);
-
-			var i: number;
-			var j: number;
-			var sizeByColumn: number;
-
-			var itemArray: HTMLElement[] = $items.toArray();
-			var $col: JQuery;
-			var $item: JQuery;
-
-			for (i = 0; i < columnSize; i++) {
-				sizeByColumn = splited[i];
-				$col = $('<ul></ul>');
+			for (let i = 0; i < columnSize; i++) {
+				const sizeByColumn: number = splited[i];
+				const $col: JQuery = $('<ul></ul>');
 				BaserElement.addClassTo($col, CLASS_NAME);
 				BaserElement.addClassTo($col, CLASS_NAME, '', CLASS_NAME_NTH + columnSize);
 				$col.appendTo($container);
-				for (j = 0; j < sizeByColumn; j++) {
-					$item = $(itemArray.shift());
+				for (let j = 0; j < sizeByColumn; j++) {
+					const $item: JQuery = $(itemArray.shift());
 					$item.appendTo($col);
 					$item.data(config.dataKey, i);
 					BaserElement.addClassTo($item, CLASS_NAME, CLASS_NAME_ITEM);
 					BaserElement.addClassTo($item, CLASS_NAME, CLASS_NAME_ITEM, CLASS_NAME_NTH + i);
 				}
-				$col = null;
 			}
 
 			$list.remove();
@@ -609,18 +605,21 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcWink (options: any): JQuery {
-		var self = $(this);
-		var config: any = $.extend({
-			close: 50,
-			open: 200,
-			opacity: 0.4,
-			target: null,
-			stopOnTouch: true
-		}, options);
+		const self = $(this);
+		const config: any = $.extend(
+			{
+				close: 50,
+				open: 200,
+				opacity: 0.4,
+				target: null,
+				stopOnTouch: true,
+			},
+			options
+		);
 		self.each( (i: number, elem: HTMLElement): void => {
 
-			var $this: JQuery = $(elem);
-			var $target: JQuery;
+			const $this: JQuery = $(elem);
+			let $target: JQuery;
 
 			if (config.target) {
 				$target = $this.find(config.target);
@@ -681,14 +680,16 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcMaps (options?: GoogleMapsOption): JQuery {
-		var self = $(this);
+		const self = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
-			var $elem: JQuery = $(elem);
-			var data: GoogleMaps = $elem.data(GoogleMaps.className);
+			const $elem: JQuery = $(elem);
+			const data: GoogleMaps = $elem.data(GoogleMaps.className);
 			if (data) {
 				data.reload(options);
 			} else {
+				/* tslint:disable */
 				new GoogleMaps(elem, options);
+				/* tslint:enable */
 			}
 		});
 	}
@@ -715,33 +716,18 @@ class JQueryAdapter {
 	 * $('.sample').bcYoutube();
 	 * ```
 	 *
-	 * ### Result
-	 *
-	 * <div data-height="400"
-	     data-theme-id="9760"
-	     data-slug-hash="pboIt"
-	     data-default-tab="result"
-	     data-user="YusukeHirao"
-	     class='codepen'>
-	     <pre>
-	       <code>$(&#39;.sample&#39;).bcYoutube();</code>
-	     </pre>
-	     <p>See the Pen <a href='http://codepen.io/YusukeHirao/pen/pboIt/'>bcYoutube</a>
-	     by Yusuke Hirao (<a href='http://codepen.io/YusukeHirao'>@YusukeHirao</a>)
-	     on <a href='http://codepen.io'>CodePen</a>.</p>
-	   </div>
-	   <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
-	 *
 	 */
 	public bcYoutube (options?: YouTubeOption): JQuery {
-		var self = $(this);
+		const self = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
-			var $elem: JQuery = $(elem);
-			var data: YouTube = $elem.data(YouTube.className);
+			const $elem: JQuery = $(elem);
+			const data: YouTube = $elem.data(YouTube.className);
 			if (data) {
 				data.reload(options);
 			} else {
+				/* tslint:disable */
 				new YouTube(elem, options);
+				/* tslint:enable */
 			}
 		});
 	}
@@ -757,36 +743,32 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcRollover (options: any): JQuery {
-		
-		var self = $(this);
-		
-		var config: any = $.extend({
-			pattern: /_off(\.(?:[a-z0-9]{1,6}))$/i,
-			replace: '_on$1',
-			dataPrefix: '-bc-rollover-',
-			ignore: '',
-			filter: null,
-			stopOnTouch: true
-		}, options);
 
-		var $doc: JQuery = $(document);
+		const self = $(this);
 
-		var dataKeyOff: string = config.dataPrefix + 'off';
-		var dataKeyOn: string = config.dataPrefix + 'on';
+		const config: any = $.extend(
+			{
+				pattern: /_off(\.(?:[a-z0-9]{1,6}))$/i,
+				replace: '_on$1',
+				dataPrefix: '-bc-rollover-',
+				ignore: '',
+				filter: null,
+				stopOnTouch: true,
+			},
+			options
+		);
+
+		const dataKeyOff: string = config.dataPrefix + 'off';
+		const dataKeyOn: string = config.dataPrefix + 'on';
 
 		self.each( (i: number, elem: HTMLElement): void => {
 
-			var nodeName: string = elem.nodeName.toLowerCase();
-
-			var avail: boolean;
-			var src: string;
-			var onSrc: string;
-			var $img: JQuery = $(elem).not(config.ignore);
+			const nodeName: string = elem.nodeName.toLowerCase();
+			const $img: JQuery = $(elem).not(config.ignore);
 
 			if ($img.length && nodeName === 'img' || (nodeName === 'input' && $img.prop('type') === 'image')) {
 
-				avail = true;
-
+				let avail: boolean = true;
 				if ($.isFunction(config.filter)) {
 					avail = !!config.filter.call(elem);
 				} else if (config.filter) {
@@ -794,9 +776,9 @@ class JQueryAdapter {
 				}
 
 				if (avail) {
-					src = $img.attr('src');
+					const src: string = $img.attr('src');
 					if (src.match(config.pattern)) {
-						onSrc = src.replace(config.pattern, config.replace);
+						const onSrc: string = src.replace(config.pattern, config.replace);
 						$img.data(dataKeyOff, src);
 						$img.data(dataKeyOn, onSrc);
 					}
@@ -807,31 +789,29 @@ class JQueryAdapter {
 		});
 
 		self.on('mouseenter', function (e: JQueryEventObject): boolean {
-			var $this: JQuery = $(this);
-			var onSrc: string;
+			const $this: JQuery = $(this);
 			if (config.stopOnTouch && $this.data('-bc-is-touchstarted')) {
 				$this.data('-bc-is-touchstarted', false);
 				return true;
 			}
-			onSrc = <string> $this.data(dataKeyOn);
+			const onSrc: string = <string> $this.data(dataKeyOn);
 			$this.prop('src', onSrc);
 			return true;
 		});
 		self.on('mouseleave', function (e: JQueryEventObject): boolean {
-			var $this: JQuery = $(this);
-			var offSrc: string;
+			const $this: JQuery = $(this);
 			if (config.stopOnTouch && $this.data('-bc-is-touchstarted')) {
 				$this.data('-bc-is-touchstarted', false);
 				return true;
 			}
-			offSrc = <string> $this.data(dataKeyOff);
+			const offSrc: string = <string> $this.data(dataKeyOff);
 			$this.prop('src', offSrc);
 			return true;
 		});
 
 		if (config.stopOnTouch) {
 			self.on('touchstart', function (e: JQueryEventObject): boolean {
-				var $this: JQuery = $(this);
+				const $this: JQuery = $(this);
 				$this.data('-bc-is-touchstarted', true);
 				return true;
 			});
@@ -851,19 +831,22 @@ class JQueryAdapter {
 	 *
 	 */
 	public bcShy (options: any): JQuery {
-		var self = $(this);
-		var config: any = $.extend({
-			close: 300,
-			open: 300,
-			opacity: 0.6,
-			target: null,
-			stopOnTouch: true
-		}, options);
+		const self = $(this);
+		const config: any = $.extend(
+			{
+				close: 300,
+				open: 300,
+				opacity: 0.6,
+				target: null,
+				stopOnTouch: true,
+			},
+			options
+		);
 		self.each( (i: number, elem: HTMLElement): void => {
 
-			var $this: JQuery = $(elem);
-			var $target: JQuery;
+			const $this: JQuery = $(elem);
 
+			let $target: JQuery;
 			if (config.target) {
 				$target = $this.find(config.target);
 			} else {

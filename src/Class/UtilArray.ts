@@ -10,7 +10,7 @@ class UtilArray {
 	/**
 	 * 配列中の対象の要素が一番最初に存在するインデックス番号を返す
 	 * 存在しない場合は -1 を返す
-	 * 
+	 *
 	 * IE8のためのpolyfill
 	 * ※Array.prototype.indexOfを完全に再現しているわけではない
 	 *
@@ -21,7 +21,7 @@ class UtilArray {
 	 * @return 検索結果の番号
 	 *
 	 */
-	static indexOf<T> (array: any[], searchElement: T): number {
+	public static indexOf<T> (array: any[], searchElement: T): number {
 		if (Array.prototype.indexOf) {
 			return array.indexOf(searchElement);
 		}
@@ -45,7 +45,7 @@ class UtilArray {
 	 * @return 削除された配列
 	 *
 	 */
-	static remove (array: any[], index: number): any[] {
+	public static remove (array: any[], index: number): any[] {
 		array.splice(index, 1);
 		return array;
 	}

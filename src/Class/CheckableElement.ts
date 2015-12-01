@@ -18,7 +18,7 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	 * @since 0.0.1
 	 *
 	 */
-	static defaultOption: CheckableElementOption = {
+	public static defaultOption: CheckableElementOption = {
 		checkedClass: ''
 	};
 
@@ -29,7 +29,7 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameStateChecked: string = 'checked';
+	public static classNameStateChecked: string = 'checked';
 
 	/**
 	 * CheckableElement関連の要素のチェックがはずれた時に付加されるクラス
@@ -38,7 +38,7 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameStateUnchecked: string = 'unchecked';
+	public static classNameStateUnchecked: string = 'unchecked';
 
 	/**
 	 * 管理するDOM要素
@@ -67,14 +67,6 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	public defaultChecked: boolean;
 
 	/**
-	 * チェック状態の時に付加されるclass属性値
-	 *
-	 * @since 0.0.1
-	 *
-	 */
-	private _checkedClass: string;
-
-	/**
 	 * オプション情報
 	 *
 	 * @since 0.4.1
@@ -83,8 +75,16 @@ class CheckableElement extends FormElement implements ICheckableElement {
 	protected _config: CheckableElementOption;
 
 	/**
+	 * チェック状態の時に付加されるclass属性値
+	 *
+	 * @since 0.0.1
+	 *
+	 */
+	private _checkedClass: string;
+
+	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -122,7 +122,7 @@ class CheckableElement extends FormElement implements ICheckableElement {
 
 	/**
 	 * 要素の状態を更新する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.0.1
@@ -149,7 +149,7 @@ class CheckableElement extends FormElement implements ICheckableElement {
 
 	/**
 	 * 要素の状態を更新する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0

@@ -11,7 +11,7 @@ const DOUBLE_UNDERSCORE: string = '__';
 
 /**
  * DOM要素の抽象クラス
- * 
+ *
  * DOM要素操作に関するjQueryのメソッドは極力ここに集約したい
  * 脱jQueryの際にこのクラスを改修するだけで済むようにする
  *
@@ -28,7 +28,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameDefaultPrefix: string = '-bc';
+	public static classNameDefaultPrefix: string = '-bc';
 
 	/**
 	 * インスタンスに付加するデフォルトのクラス名
@@ -37,7 +37,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameElementCommon: string = 'element';
+	public static classNameElementCommon: string = 'element';
 
 	/**
 	 * クラス名のデフォルトの単語繋ぎの形式
@@ -46,7 +46,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameDefaultCase: ElementClassNameCase = ElementClassNameCase.HYPHEN_DELIMITED;
+	public static classNameDefaultCase: ElementClassNameCase = ElementClassNameCase.HYPHEN_DELIMITED;
 
 	/**
 	 * BEMのエレメントのクラス名の繋ぎ文字
@@ -55,7 +55,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameDefaultSeparatorForElement: ClassNameSeparatorForBEM = ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE;
+	public static classNameDefaultSeparatorForElement: ClassNameSeparatorForBEM = ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE;
 
 	/**
 	 * BEMのモディファイアのクラス名の繋ぎ文字
@@ -64,7 +64,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameDefaultSeparatorForModifier: ClassNameSeparatorForBEM = ClassNameSeparatorForBEM.DOUBLE_HYPHEN;
+	public static classNameDefaultSeparatorForModifier: ClassNameSeparatorForBEM = ClassNameSeparatorForBEM.DOUBLE_HYPHEN;
 
 	/**
 	 * 【廃止予定】管理するDOM要素のjQueryオブジェクト
@@ -105,10 +105,10 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * baserJSのエレメント化してたかどうか
-	 * 
+	 *
 	 * @version 0.8.0
 	 * @since 0.8.0
-	 * 
+	 *
 	 */
 	protected _elementized: boolean = false;
 
@@ -123,7 +123,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @return 生成されたクラス名
 	 *
 	 */
-	static createClassName (blockNames: string, elementNames: string = '', modifierName: string = ''): string {
+	public static createClassName (blockNames: string, elementNames: string = '', modifierName: string = ''): string {
 		let className: string = '';
 		let prefix: string;
 		let separator: string;
@@ -135,65 +135,74 @@ class BaserElement extends EventDispatcher implements IElement {
 				blockNames = UtilString.hyphenDelimited(blockNames);
 				elementNames = UtilString.hyphenDelimited(elementNames);
 				modifierName = UtilString.hyphenDelimited(modifierName);
-				break;
 			}
+			break;
 			case ElementClassNameCase.SNAKE_CASE: {
 				separator = UNDERSCORE;
 				blockNames = UtilString.snakeCase(blockNames);
 				elementNames = UtilString.snakeCase(elementNames);
 				modifierName = UtilString.snakeCase(modifierName);
-				break;
 			}
+			break;
 			case ElementClassNameCase.CAMEL_CASE: {
 				separator = '';
 				blockNames = UtilString.camelCase(blockNames, true);
 				elementNames = UtilString.camelCase(elementNames);
 				modifierName = UtilString.camelCase(modifierName);
-				break;
+			}
+			break;
+			default: {
+				// void
 			}
 		}
 		switch (BaserElement.classNameDefaultSeparatorForElement) {
 			case ClassNameSeparatorForBEM.HYPHEN: {
 				elementSeparator = HYPHEN;
-				break;
 			}
+			break;
 			case ClassNameSeparatorForBEM.DOUBLE_HYPHEN: {
 				elementSeparator = DOUBLE_HYPHEN;
-				break;
 			}
+			break;
 			case ClassNameSeparatorForBEM.UNDERSCORE: {
 				elementSeparator = UNDERSCORE;
-				break;
 			}
+			break;
 			case ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE: {
 				elementSeparator = DOUBLE_UNDERSCORE;
-				break;
 			}
+			break;
 			case ClassNameSeparatorForBEM.CAMEL_CASE: {
 				elementSeparator = '';
-				break;
+			}
+			break;
+			default: {
+				// void
 			}
 		}
 		switch (BaserElement.classNameDefaultSeparatorForModifier) {
 			case ClassNameSeparatorForBEM.HYPHEN: {
 				modifierSeparator = HYPHEN;
-				break;
 			}
+			break;
 			case ClassNameSeparatorForBEM.DOUBLE_HYPHEN: {
 				modifierSeparator = DOUBLE_HYPHEN;
-				break;
 			}
+			break;
 			case ClassNameSeparatorForBEM.UNDERSCORE: {
 				modifierSeparator = UNDERSCORE;
-				break;
 			}
+			break;
 			case ClassNameSeparatorForBEM.DOUBLE_UNDERSCORE: {
 				modifierSeparator = DOUBLE_UNDERSCORE;
-				break;
 			}
+			break;
 			case ClassNameSeparatorForBEM.CAMEL_CASE: {
 				modifierSeparator = '';
-				break;
+			}
+			break;
+			default: {
+				// void
 			}
 		}
 		if (BaserElement.classNameDefaultPrefix) {
@@ -232,7 +241,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @return 結果
 	 *
 	 */
-	static getBoolAttr (elem: HTMLElement, attrName: string): boolean {
+	public static getBoolAttr (elem: HTMLElement, attrName: string): boolean {
 		let value: any;
 		// DOM APIの標準で判定できるものはそれで判断
 		value = elem[attrName];
@@ -250,13 +259,13 @@ class BaserElement extends EventDispatcher implements IElement {
 			}
 		} else {
 			// 属性がない場合は偽
-			return false
+			return false;
 		}
 	}
 
 	/**
 	 * クラス名を付加する
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -267,7 +276,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @param modifierName 状態名
 	 *
 	 */
-	static addClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
+	public static addClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
 		let $elem: JQuery = $(elem);
 		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.addClass(className);
@@ -275,9 +284,9 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * 【廃止予定】クラス名を付加する
-	 * 
+	 *
 	 * use: jQuery
-	 * 
+	 *
 	 * @deprecated
 	 * @version 0.1.0
 	 * @since 0.1.0
@@ -287,16 +296,16 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @param modifierName 状態名
 	 *
 	 */
-	static addClassTo ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
+	public static addClassTo ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
 		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.addClass(className);
 	}
 
 	/**
 	 * クラス名を取り除く
-	 * 
+	 *
 	 * use: jQuery
-	 * 
+	 *
 	 * @version 0.9.0
 	 * @since 0.1.0
 	 * @param elem 対象のDOM要素
@@ -305,7 +314,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @param modifierName 状態名
 	 *
 	 */
-	static removeClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
+	public static removeClass (elem: HTMLElement, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
 		let $elem: JQuery = $(elem);
 		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.removeClass(className);
@@ -313,7 +322,7 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * 【廃止予定】クラス名を取り除く
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @deprecated
@@ -325,11 +334,11 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @param modifierName 状態名
 	 *
 	 */
-	static removeClassFrom ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
+	public static removeClassFrom ($elem: JQuery, blockNames: string, elementNames: string = '', modifierName: string = ''): void {
 		let className: string = BaserElement.createClassName(blockNames, elementNames, modifierName);
 		$elem.removeClass(className);
 	}
-	
+
 	/**
 	 * CSSプロパティをDOM要素から取り除く
 	 *
@@ -339,7 +348,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @param propName 取り除くCSSプロパティ
 	 *
 	 */
-	static removeCSSProp (elem: HTMLElement, propName: string): void {
+	public static removeCSSProp (elem: HTMLElement, propName: string): void {
 		let style: CSSStyleDeclaration = elem.style;
 		// IE8以下はCSSStyleDeclarationのインターフェイスが標準でないのでメソッド定義チェックでエラーになる
 		if (style) {
@@ -354,7 +363,7 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * 【廃止予定】CSSプロパティをDOM要素から取り除く
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @deprecated
@@ -364,13 +373,13 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @param elem 対象のDOM要素
 	 *
 	 */
-	static removeCSSPropertyFromDOMElement (propertyName: string, elem: HTMLElement): void {
+	public static removeCSSPropertyFromDOMElement (propertyName: string, elem: HTMLElement): void {
 		BaserElement.removeCSSProp(elem, propertyName);
 	}
 
 	/**
 	 * 【廃止予定】CSSプロパティを取り除く
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -379,7 +388,7 @@ class BaserElement extends EventDispatcher implements IElement {
 	 * @param $elem 対象のDOM要素
 	 *
 	 */
-	static removeCSSProperty (propertyName: string, $elem: JQuery): void {
+	public static removeCSSProperty (propertyName: string, $elem: JQuery): void {
 		$elem.each( (i: number, elem: HTMLElement) => {
 			BaserElement.removeCSSProp(elem, propertyName);
 		});
@@ -387,9 +396,9 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * use: jQuery
-	 * 
+	 *
 	 * TODO: クラス名のつき方の規則をきちんと決める
 	 * TODO: コンストラクタの引数をネイティブのDOM要素にする
 	 *
@@ -423,7 +432,7 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * クラス名を付加する
-	 * 
+	 *
 	 * @version 0.9.0
 	 * @since 0.1.0
 	 *
@@ -434,7 +443,7 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * 要素の属性の真偽を判定する
-	 * 
+	 *
 	 * `BaserElement.getBoolAttr` のインスタンスメソッド版
 	 *
 	 * @version 0.9.0
@@ -447,12 +456,12 @@ class BaserElement extends EventDispatcher implements IElement {
 
 	/**
 	 * オプションとdata属性の値、属性の値をマージする
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * TODO: テストを書く
 	 * TODO: サブクラスに反映させる
-	 * 
+	 *
 	 * @version 0.9.1
 	 * @since 0.8.0
 	 *
@@ -466,9 +475,8 @@ class BaserElement extends EventDispatcher implements IElement {
 				// 属性はidとclassは除外する
 				switch (optName) {
 					case 'id':
-					case 'class': {
-						break;
-					}
+					case 'class':
+					break;
 					default: {
 						attrs[optName] = this.$el.attr(optName);
 					}

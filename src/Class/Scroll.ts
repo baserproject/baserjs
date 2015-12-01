@@ -10,9 +10,9 @@ import ScrollOptions = require('../Interface/ScrollOptions');
  */
 class Scroll {
 
-	static speed: number = 4;
-	static interval: number = 20;
-	static delayWhenURLHashTarget: number = 30;
+	public static speed: number = 4;
+	public static interval: number = 20;
+	public static delayWhenURLHashTarget: number = 30;
 
 	public targetX: number;
 	public targetY: number;
@@ -33,7 +33,7 @@ class Scroll {
 	 *
 	 */
 	public to (selector: string | HTMLElement | JQuery | number, options?: ScrollOptions): Scroll {
-		
+
 		this.options = options || {};
 		let offset: number = this.options.offset || 0;
 

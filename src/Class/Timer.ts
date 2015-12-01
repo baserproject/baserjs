@@ -11,6 +11,17 @@ import EventDispatcher = require('./EventDispatcher');
 class Timer extends EventDispatcher {
 
 	/**
+	 * インターバル
+	 *
+	 * `13`は[jQuery](http://jquery.com/)を参考
+	 *
+	 * @version 0.0.8
+	 * @since 0.0.8
+	 *
+	 */
+	public interval: number = 13;
+
+	/**
 	 * インスタンスの最終更新時間
 	 *
 	 * @version 0.0.1
@@ -29,17 +40,6 @@ class Timer extends EventDispatcher {
 	private _timerId: number = null;
 
 	/**
-	 * インターバル
-	 *
-	 * `13`は[jQuery](http://jquery.com/)を参考
-	 *
-	 * @version 0.0.8
-	 * @since 0.0.8
-	 *
-	 */
-	public interval: number = 13;
-
-	/**
 	 * コンストラクタ
 	 *
 	 * @version 0.9.0
@@ -49,6 +49,24 @@ class Timer extends EventDispatcher {
 	constructor () {
 		super();
 		this.now();
+	}
+
+	/**
+	 * 遅延処理
+	 *
+	 * `wait`メソッドを実行したインスタンスを返す
+	 * そのインスタンスは`stop`メソッドで止めることが可能
+	 *
+	 * @version 0.9.0
+	 * @since 0.0.8
+	 * @param delay 遅延時間
+	 * @param callback 遅延後の処理
+	 * @param context コンテクスト
+	 * @return `wait`メソッドを実行したインスタンス
+	 *
+	 */
+	public static wait (time: number, callback: { (currentTime: number, startTime: number, context?: any): void }, context?: any): Timer {
+		return new Timer().wait(time, callback, context);
 	}
 
 	/**
@@ -80,7 +98,7 @@ class Timer extends EventDispatcher {
 	 * タイマーをスタートする
 	 * 継続中`progress`イベントを発行し続ける
 	 * 継続時間を指定しなければずっと作動する
-	 * 
+	 *
 	 * 継続時間を指定して`stop`イベントだけを利用するようなケースでは
 	 * `wait`メソッドを利用したほうが効率がよい
 	 *
@@ -88,7 +106,7 @@ class Timer extends EventDispatcher {
 	 * @since 0.0.8
 	 * @param time 継続時間
 	 * @return インスタンス自身
-	 * 
+	 *
 	 * ```
 	 * let timer = new Timer();
 	 * timer.on('progress', (e, currentTime, startTime, context) => {
@@ -104,24 +122,27 @@ class Timer extends EventDispatcher {
 		// call: 1
 		let tick = (time: number): void => {
 			// call: 3, 7, 12... onTick
-			this._timerId = setTimeout( (): void => {
-				// call: 5, 10... onProgress
-				let now: number = this.now();
-				let period: number = now - START_TIMESTAMP;
-				if (period < time) {
-					// call: 6, 11... onKickTick
-					tick(time);
-					// call: 9, 14... onFireProgressHandler
-					let e: DispatchEvent = new DispatchEvent('progress');
-					this.trigger(e, [now, START_TIMESTAMP, this], this);
-					if (e.isDefaultPrevented()) {
+			this._timerId = setTimeout(
+				(): void => {
+					// call: 5, 10... onProgress
+					let now: number = this.now();
+					let period: number = now - START_TIMESTAMP;
+					if (period < time) {
+						// call: 6, 11... onKickTick
+						tick(time);
+						// call: 9, 14... onFireProgressHandler
+						let e: DispatchEvent = new DispatchEvent('progress');
+						this.trigger(e, [now, START_TIMESTAMP, this], this);
+						if (e.isDefaultPrevented()) {
+							this.stop();
+							// didn't calling onProgress
+						}
+					} else {
 						this.stop();
-						// didn't calling onProgress 
 					}
-				} else {
-					this.stop();
-				}
-			}, this.interval);
+				},
+				this.interval
+			);
 			// call: 4, 8, 13... onStacked
 		};
 		// call: 2
@@ -158,43 +179,28 @@ class Timer extends EventDispatcher {
 	 * @param callback 遅延後の処理
 	 * @param context コンテクスト
 	 * @return インスタンス自身
-	 * 
+	 *
 	 * ```
 	 * let timer = new Timer();
 	 * timer.wait( (currentTime, startTime, context) => {
 	 * 	context.stop();
 	 * }).start();
 	 * ```
-	 * 
+	 *
 	 */
 	public wait (delay: number, callback: { (currentTime: number, startTime: number, context?: any): void }, context?: any): Timer {
 		context = context || this;
 		const START_TIMESTAMP: number = this.now();
 		clearTimeout(this._timerId);
-		this._timerId = setTimeout( (): void => {
-			this.stop();
-			let now: number = this.now();
-			callback.call(context, now, START_TIMESTAMP, context);
-		}, delay);
+		this._timerId = setTimeout(
+			(): void => {
+				this.stop();
+				let now: number = this.now();
+				callback.call(context, now, START_TIMESTAMP, context);
+			},
+			delay
+		);
 		return this;
-	}
-
-	/**
-	 * 遅延処理
-	 * 
-	 * `wait`メソッドを実行したインスタンスを返す
-	 * そのインスタンスは`stop`メソッドで止めることが可能
-	 *
-	 * @version 0.9.0
-	 * @since 0.0.8
-	 * @param delay 遅延時間
-	 * @param callback 遅延後の処理
-	 * @param context コンテクスト
-	 * @return `wait`メソッドを実行したインスタンス
-	 *
-	 */
-	static wait (time: number, callback: { (currentTime: number, startTime: number, context?: any): void }, context?: any): Timer {
-		return new Timer().wait(time, callback, context);
 	}
 
 }

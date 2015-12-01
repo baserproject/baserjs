@@ -21,11 +21,11 @@ class Radio extends CheckableElement implements IRadio {
 	 * @since 0.1.0
 	 *
 	 */
-	static classNameRadio: string = 'form-radio';
+	public static classNameRadio: string = 'form-radio';
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.9.0
@@ -63,7 +63,7 @@ class Radio extends CheckableElement implements IRadio {
 
 	/**
 	 * チェンジイベントのハンドラ
-	 * 
+	 *
 	 * use: jQuery
 	 *
 	 * @version 0.7.0
