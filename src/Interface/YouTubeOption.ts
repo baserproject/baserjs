@@ -94,18 +94,26 @@ interface YouTubeOption {
 	 *
 	 */
 	index?: number;
-	
+
 	/**
 	 * サムネイル画像のパス
-	 * 
+	 *
 	 * @version 0.9.1
 	 * @since 0.9.1
 	 */
 	poster?: string;
-	
+
+	/**
+	 * サムネイル画像が高画質かどうか
+	 *
+	 * @version 0.10.0
+	 * @since 0.9.1
+	 */
+	posterHighQuality?: boolean;
+
 	/**
 	 * 再生リストの中から最初に再生する動画の再生位置
-	 * 
+	 *
 	 * 単位: 秒
 	 *
 	 * @since 0.9.1
@@ -115,7 +123,7 @@ interface YouTubeOption {
 
 	/**
 	 * 動画の推奨再生画質を指定
-	 * 
+	 *
 	 * - 画質レベル small: プレーヤーの高さが 240 ピクセル、サイズが 320x240 ピクセル（アスペクト比 4:3）以上。
 	 * - 画質レベル medium: プレーヤーの高さが 360 ピクセル、サイズが 640x360 ピクセル（アスペクト比 16:9）または 480x360 ピクセル（アスペクト比 4:3）。
 	 * - 画質レベル large: プレーヤーの高さが 480 ピクセル、サイズが 853x480 ピクセル（アスペクト比 16:9）または 640x480 ピクセル（アスペクト比 4:3）。
@@ -128,6 +136,14 @@ interface YouTubeOption {
 	 *
 	 */
 	suggestedQuality?: string;
+
+	/**
+	 * シャッフル再生するかどうか
+	 *
+	 * @since 0.10.0
+	 *
+	 */
+	shuffle?: boolean;
 
 }
 

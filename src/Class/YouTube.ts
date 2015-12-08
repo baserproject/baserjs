@@ -10,7 +10,7 @@ import YoutubeMuteControllerOptions = require('../Interface/YoutubeMuteControlle
  *
  * TODO: YouTubeのURLパラメータのinterfaceをつくる
  *
- * @version 0.9.0
+ * @version 0.10.0
  * @since 0.0.7
  *
  */
@@ -129,6 +129,21 @@ class YouTube extends BaserElement {
 	private _isMuted: boolean;
 
 	/**
+	 * プレイヤーフレーム
+	 *
+	 * @since 0.10.0
+	 *
+	 */
+	private _$frame: JQuery;
+
+	/**
+	 * ポスター要素
+	 *
+	 * @since 0.10.0
+	 */
+	private _$posterContainer: JQuery;
+
+	/**
 	 * YouTubeのiframeのソースURIを生成する
 	 *
 	 * @version 0.9.1
@@ -141,10 +156,14 @@ class YouTube extends BaserElement {
 
 	/**
 	 * YouTubeのサムネイル画像を取得する
+	 *
+	 * @version 0.10.0
+	 * @since 0.9.1
+	 *
 	 */
-	public static getPosterImage (movieId: string): string {
-		const THUMB_URL: string = '//img.youtube.com/vi/';
-		const THUMB_FILE_NAME: string = '/0.jpg'; // /mqdefault.jpgでも可能
+	public static getPosterImage (movieId: string, highQuality: boolean = false): string {
+		const THUMB_URL: string = highQuality ? '//i.ytimg.com/vi/' : '//img.youtube.com/vi/';
+		const THUMB_FILE_NAME: string = highQuality ? '/maxresdefault.jpg' : '/0.jpg';
 		return `${Browser.apiScheme}${THUMB_URL}${movieId}${THUMB_FILE_NAME}`;
 	}
 
@@ -280,7 +299,7 @@ class YouTube extends BaserElement {
 	 *
 	 * ※ `this.$el` の `embeddedyoutubeplay` イベント非推奨
 	 *
-	 * @version 0.9.1
+	 * @version 0.10.0
 	 * @since 0.0.7
 	 * @param $el 管理するDOM要素のjQueryオブジェクト
 	 * @param options オプション
@@ -303,6 +322,7 @@ class YouTube extends BaserElement {
 				height: 300,
 				index: 0,
 				poster: null,
+				posterHighQuality: false,
 				startSeconds: 0,
 				suggestedQuality: 'default',
 				shuffle: false,
@@ -321,7 +341,7 @@ class YouTube extends BaserElement {
 		const param: any = {
 			version: 3,
 			rel: this.movieOption.rel ? 1 : 0,
-			autoplay: (this.movieOption.autoplay || !!this.movieOption.poster) ? 1 : 0,
+			autoplay: 0, // YT.Player.playVideo()を使ってコントロールする
 			controls: this.movieOption.controls ? 1 : 0,
 			disablekb: 1,
 			iv_load_policy: 3,
@@ -336,10 +356,10 @@ class YouTube extends BaserElement {
 		this.movieId = movieIdList;
 		this.playerDomId = this.id + '-Player';
 
-		if (this.movieOption.poster && !this.movieOption.autoplay) {
-			this._createPosterImage();
+		if (this.movieOption.poster !== null && !this.movieOption.autoplay) {
+			this._createPosterImage(movieId);
 		} else {
-			this._createContainer();
+			this._createPlayerFrame();
 			this._loadYouTubeAPI();
 		}
 
@@ -357,60 +377,87 @@ class YouTube extends BaserElement {
 	 * data-posterの値が `/^@contents?$/i` にマッチする場合、要素の中身をそのまま使う
 	 * それ以外の場合は パスと見なして画像を参照する
 	 *
-	 * @version 0.9.1
+	 * @version 0.10.0
 	 * @since 0.9.1
+	 * @param movieId 動画のID
 	 *
 	 */
-	private _createPosterImage (): void {
-		const $imgContainer: JQuery = $('<div class="-bc-element -bc-youtube-pseudo-poster-element" />');
+	private _createPosterImage (movieId: string): void {
+		const $posterContainer: JQuery = $('<div class="-bc-element -bc-youtube-pseudo-poster-element" />');
+
 		if (this.movieOption.width) {
-			$imgContainer.width(this.movieOption.width);
+			$posterContainer.width(this.movieOption.width);
 		}
 		if (this.movieOption.height) {
-			$imgContainer.height(this.movieOption.height);
+			$posterContainer.height(this.movieOption.height);
 		}
-		if (!/^@contents?$/i.test(this.movieOption.poster)) {
-			this.$el.empty();
-			$imgContainer.appendTo(this.$el);
-			$imgContainer.css('background-image', `url("${this.movieOption.poster}")`);
-		}
-		const handler: (e: JQueryEventObject) => void = (e: JQueryEventObject): void => {
-			$imgContainer.off('click.-bc-youtube-poster', handler);
-			this._createContainer();
+		if (/^@contents?$/i.test(this.movieOption.poster)) {
+			this.$el.wrapInner($posterContainer);
+			this._createPlayerFrame();
 			this._loadYouTubeAPI();
-		};
-		this.$el.on('click.-bc-youtube-poster', handler);
+			// 要素を一番最後に移動
+			this.$el.find('.-bc-youtube-pseudo-poster-element').appendTo(this.$el);
+		} else {
+			if (this.movieOption.poster === '') {
+				this.movieOption.poster = YouTube.getPosterImage(movieId, this.movieOption.posterHighQuality);
+			}
+			this.$el.empty();
+			this._createPlayerFrame();
+			this._loadYouTubeAPI();
+			$posterContainer.appendTo(this.$el);
+			$posterContainer.css({
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				width: '100%',
+				height: '100%',
+				backgroundImage: `url("${this.movieOption.poster}")`,
+				backgroundRepeat: 'no-repeat',
+				backgroundSize: 'cover',
+				backgroundPosition: 'center center',
+				backgroundColor: '#000',
+				pointerEvents: 'none',
+			});
+			if (this.movieOption.width) {
+				$posterContainer.width(this.movieOption.width);
+			}
+			if (this.movieOption.height) {
+				$posterContainer.height(this.movieOption.height);
+			}
+		}
+		this._$posterContainer = $posterContainer;
 	}
 
 	/**
-	 * プレイヤーコンテナを生成する
+	 * プレイヤーフレームを生成する
 	 *
-	 * @version 0.9.1
+	 * @version 0.10.0
 	 * @since 0.9.1
 	 */
-	private _createContainer (): void {
-		const $mov: JQuery = $('<iframe frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>');
-		$mov.prop({
+	private _createPlayerFrame (): void {
+		const $frame: JQuery = $('<iframe class="-bc-youtube-player-frame-element" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen />');
+		$frame.prop({
 			src: this.src,
 			id: this.playerDomId,
 		});
-		$mov.css({
+		$frame.css({
 			position: 'relative',
 			display: 'block',
 			width: '100%',
 			height: '100%',
 		});
 		this.$el.empty();
-		$mov.appendTo(this.$el);
+		$frame.appendTo(this.$el);
 
 		if (this.movieOption.width) {
-			$mov.width(this.movieOption.width);
-			$mov.data('width', this.movieOption.width);
+			$frame.width(this.movieOption.width);
+			$frame.data('width', this.movieOption.width);
 		}
 		if (this.movieOption.height) {
-			$mov.height(this.movieOption.height);
-			$mov.data('height', this.movieOption.height);
+			$frame.height(this.movieOption.height);
+			$frame.data('height', this.movieOption.height);
 		}
+		this._$frame = $frame;
 	}
 
 	/**
@@ -481,6 +528,7 @@ class YouTube extends BaserElement {
 						}
 						break;
 						case YT.PlayerState.PLAYING: {
+							this._hidePoster();
 							this.trigger('playing', [this.player]);
 							this.currentCueIndex = this.player.getPlaylistIndex();
 						}
@@ -503,7 +551,7 @@ class YouTube extends BaserElement {
 	 *
 	 * TODO: embeddedyoutubeplayイベント廃止予定(v1.0.0)
 	 *
-	 * @version 0.9.0
+	 * @version 0.10.0
 	 * @since 0.8.0
 	 *
 	 */
@@ -526,15 +574,29 @@ class YouTube extends BaserElement {
 		// TODO: youtube.d.ts に loadPlaylist() と cuePlaylist() が登録されていない
 		const _player: any = this.player;
 		if (this.movieId.length >= 2) {
-			if (this.movieOption.autoplay || this.movieOption.poster) {
+			if (this.movieOption.autoplay) {
 				_player.loadPlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);
 			} else {
 				_player.cuePlaylist(this.movieId, this.movieOption.index, this.movieOption.startSeconds, this.movieOption.suggestedQuality);
 			}
+		} else if (this.movieOption.autoplay) {
+			this.player.playVideo();
 		}
 
 		this.$el.trigger('embeddedyoutubeplay', [this.player]); // TODO: 廃止予定(v1.0.0)
 		this.trigger('embeded', [this.player]);
+	}
+
+	/**
+	 * ポスター要素を非表示にする
+	 *
+	 * @version 0.10.0
+	 * @since 0.10.0
+	 */
+	private _hidePoster (): void {
+		if (this._$posterContainer) {
+			this._$posterContainer.detach();
+		}
 	}
 
 }
