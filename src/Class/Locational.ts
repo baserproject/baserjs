@@ -165,17 +165,17 @@ class Locational {
 			const queries: string[] = queryString.split(/&/g);
 			for (const query of queries) {
 				const keyValue: string[] = UtilString.divide(query, '=');
-				const key: string = keyValue[0];
+				let key: string = keyValue[0];
 				const value: string = keyValue[1];
 				if (key) {
 					if (/\[\]$/.test(key)) {
-						const key2: string = key.replace(/\[\]$/, '');
+						key = key.replace(/\[\]$/, '');
 						const child: string | string[] = params[key];
 						if (child && child instanceof Array) {
 							child.push(value);
-							params[key2] = child;
+							params[key] = child;
 						} else {
-							params[key2] = [value];
+							params[key] = [value];
 						}
 					} else {
 						params[key] = value;
@@ -183,7 +183,7 @@ class Locational {
 				}
 			}
 		}
-		return <{ [index: string]: string[] | string }> params;
+		return params;
 	}
 
 	/**
