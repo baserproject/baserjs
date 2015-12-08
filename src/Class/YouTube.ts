@@ -1,3 +1,4 @@
+import UtilArray = require('./UtilArray');
 import DispatchEvent = require('./DispatchEvent');
 import BaserElement = require('./BaserElement');
 import Browser = require('./Browser');
@@ -304,16 +305,18 @@ class YouTube extends BaserElement {
 				poster: null,
 				startSeconds: 0,
 				suggestedQuality: 'default',
+				shuffle: false,
 			},
 			options
 		);
 
-		const movieIdList: string[] = this.movieOption.id.split(/\s*,\s*/);
-		const movieId: string = movieIdList[this.movieOption.index];
+		let movieIdList: string[] = this.movieOption.id.split(/\s*,\s*/);
 
-		if (this.movieOption.poster === '') {
-			this.movieOption.poster = YouTube.getPosterImage(movieId);
+		if (this.movieOption.shuffle) {
+			movieIdList = UtilArray.shuffle<string>(movieIdList);
 		}
+
+		const movieId: string = movieIdList[this.movieOption.index];
 
 		const param: any = {
 			version: 3,
