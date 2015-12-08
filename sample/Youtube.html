@@ -31,6 +31,20 @@
 		.mute-ctrl.-bc-youtube-mute-ctrl--is-unmuted:before {
 			content: "MUTE";
 		}
+
+		.youtube {
+			position: relative;
+		}
+		.-bc-youtube-player-frame-element {
+		}
+		.-bc-youtube-pseudo-poster-element {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			/*background: #000;*/
+		}
 	</style>
 </head>
 <body>
@@ -43,7 +57,11 @@
 
 		<button class="mute-ctrl"></button>
 
-		<div class="youtube" data-id="WHvuHj5ssEc" data-width="1920" data-height="1080"></div>
+		<div class="youtube" data-id="WHvuHj5ssEc" data-width="480" data-height="270" data-poster  data-poster-high-quality="1" data-autoplay="false"></div>
+		<div class="youtube" data-id="WHvuHj5ssEc" data-width="480" data-height="270" data-autoplay="false"></div>
+		<div class="youtube" data-id="WHvuHj5ssEc" data-width="480" data-height="270" data-poster  data-poster-high-quality="1" data-autoplay="true"></div>
+		<div class="youtube" data-id="WHvuHj5ssEc, vaQcUMU0YeM, FUgM105uN4c" data-width="480" data-height="270" data-poster  data-poster-high-quality="1" data-autoplay="true" data-shuffle="true"></div>
+		<div class="youtube" data-id="FUgM105uN4c" data-width="480" data-height="270" data-poster  data-poster-high-quality="1" data-autoplay="false" data-shuffle="true"></div>
 
 		<hr>
 
