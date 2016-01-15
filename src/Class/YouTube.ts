@@ -377,7 +377,7 @@ class YouTube extends BaserElement {
 	 * data-posterの値が `/^@contents?$/i` にマッチする場合、要素の中身をそのまま使う
 	 * それ以外の場合は パスと見なして画像を参照する
 	 *
-	 * @version 0.10.0
+	 * @version 0.10.1
 	 * @since 0.9.1
 	 * @param movieId 動画のID
 	 *
@@ -417,6 +417,13 @@ class YouTube extends BaserElement {
 				backgroundPosition: 'center center',
 				backgroundColor: '#000',
 				pointerEvents: 'none',
+				cursor: 'pointer',
+			});
+			// pointer-eventsが効かないIE9の対応
+			$posterContainer.on('click', () => {
+				if (this.player) {
+					this.player.playVideo();
+				}
 			});
 			if (this.movieOption.width) {
 				$posterContainer.width(this.movieOption.width);
