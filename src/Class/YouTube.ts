@@ -470,10 +470,13 @@ class YouTube extends BaserElement {
 	/**
 	 * YouTube APIをロードする
 	 *
-	 * @version 0.9.1
+	 * @version 0.10.1
 	 * @since 0.9.1
 	 */
 	private _loadYouTubeAPI (): void {
+		if (!this.player && 'YT' in window && YT.Player) {
+			return;
+		}
 		$.getScript(`${Browser.apiScheme}${YouTube.API_URL}`);
 		const intervalTimer: number = setInterval(
 			() => {
