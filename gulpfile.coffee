@@ -1,5 +1,5 @@
 gulp = require 'gulp'
-webpack = require 'gulp-webpack'
+webpack = require 'webpack-stream'
 ts = require 'gulp-typescript'
 tsc = require 'typescript'
 typedoc = require 'gulp-typedoc'
