@@ -36,6 +36,7 @@ gulp.task 'pack', ->
 		.pipe webpack output: filename: 'baser.js'
 		.pipe header banner, pkg: pkg, moment: moment
 		.pipe gulp.dest './dist/'
+		.pipe gulp.dest "./dist/v#{pkg.version}/"
 
 gulp.task 'compress', ->
 	gulp.src './dist/baser.js'
@@ -43,6 +44,7 @@ gulp.task 'compress', ->
 		.pipe rename 'baser.min.js'
 		.pipe header banner, pkg: pkg, moment: moment
 		.pipe gulp.dest './dist/'
+		.pipe gulp.dest "./dist/v#{pkg.version}/"
 
 gulp.task 'test', ->
 	gulp.src './test/*.html'
