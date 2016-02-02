@@ -377,7 +377,7 @@ class YouTube extends BaserElement {
 	 * data-posterの値が `/^@contents?$/i` にマッチする場合、要素の中身をそのまま使う
 	 * それ以外の場合は パスと見なして画像を参照する
 	 *
-	 * @version 0.10.1
+	 * @version 0.10.2
 	 * @since 0.9.1
 	 * @param movieId 動画のID
 	 *
@@ -392,11 +392,11 @@ class YouTube extends BaserElement {
 			$posterContainer.height(this.movieOption.height);
 		}
 		if (/^@contents?$/i.test(this.movieOption.poster)) {
-			this.$el.wrapInner($posterContainer);
+			const $children: JQuery = this.$el.children().detach();
 			this._createPlayerFrame();
 			this._loadYouTubeAPI();
-			// 要素を一番最後に移動
-			this.$el.find('.-bc-youtube-pseudo-poster-element').appendTo(this.$el);
+			$posterContainer.append($children);
+			$posterContainer.appendTo(this.$el);
 		} else {
 			if (this.movieOption.poster === '') {
 				this.movieOption.poster = YouTube.getPosterImage(movieId, this.movieOption.posterHighQuality);
@@ -405,33 +405,36 @@ class YouTube extends BaserElement {
 			this._createPlayerFrame();
 			this._loadYouTubeAPI();
 			$posterContainer.appendTo(this.$el);
-			$posterContainer.css({
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				width: '100%',
-				height: '100%',
-				backgroundImage: `url("${this.movieOption.poster}")`,
-				backgroundRepeat: 'no-repeat',
-				backgroundSize: 'cover',
-				backgroundPosition: 'center center',
-				backgroundColor: '#000',
-				pointerEvents: 'none',
-				cursor: 'pointer',
-			});
-			// pointer-eventsが効かないIE9の対応
-			$posterContainer.on('click', () => {
-				if (this.player) {
-					this.player.playVideo();
-				}
-			});
 			if (this.movieOption.width) {
 				$posterContainer.width(this.movieOption.width);
 			}
 			if (this.movieOption.height) {
 				$posterContainer.height(this.movieOption.height);
 			}
+			$posterContainer.css({
+				backgroundImage: `url("${this.movieOption.poster}")`,
+				backgroundRepeat: 'no-repeat',
+				backgroundSize: 'cover',
+				backgroundPosition: 'center center',
+				backgroundColor: '#000',
+			});
 		}
+		$posterContainer.css({
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			width: '100%',
+			height: '100%',
+			pointerEvents: 'none',
+			cursor: 'pointer',
+		});
+		// pointer-eventsが効かないIE9の対応
+		$posterContainer.on('click', () => {
+			if (this.player) {
+				this._$posterContainer.addClass('-bc-youtube-pseudo-poster-element--loading');
+				this.player.playVideo();
+			}
+		});
 		this._$posterContainer = $posterContainer;
 	}
 
@@ -470,14 +473,13 @@ class YouTube extends BaserElement {
 	/**
 	 * YouTube APIをロードする
 	 *
-	 * @version 0.10.1
+	 * @version 0.10.2
 	 * @since 0.9.1
 	 */
 	private _loadYouTubeAPI (): void {
-		if (!this.player && 'YT' in window && YT.Player) {
-			return;
+		if (!('YT' in window && YT.Player)) {
+			$.getScript(`${Browser.apiScheme}${YouTube.API_URL}`);
 		}
-		$.getScript(`${Browser.apiScheme}${YouTube.API_URL}`);
 		const intervalTimer: number = setInterval(
 			() => {
 				if (!this.player && 'YT' in window && YT.Player) {
@@ -517,6 +519,7 @@ class YouTube extends BaserElement {
 						}
 						break;
 						case YT.PlayerState.BUFFERING: {
+							this._$posterContainer.addClass('-bc-youtube-pseudo-poster-element--loading');
 							this.trigger('buffering', [this.player]);
 						}
 						break;
@@ -600,11 +603,12 @@ class YouTube extends BaserElement {
 	/**
 	 * ポスター要素を非表示にする
 	 *
-	 * @version 0.10.0
+	 * @version 0.10.2
 	 * @since 0.10.0
 	 */
 	private _hidePoster (): void {
 		if (this._$posterContainer) {
+			this._$posterContainer.removeClass('-bc-youtube-pseudo-poster-element--loading');
 			this._$posterContainer.detach();
 		}
 	}
