@@ -145,6 +145,13 @@ interface YouTubeOption {
 	 */
 	shuffle?: boolean;
 
+	/**
+	 * 自動再生でないとき、且つサムネイルの指定があるときに仮埋め込みを実行するかどうか
+	 *
+	 * @since 0.10.3
+	 */
+	preEmbed?: boolean;
+
 }
 
 export = YouTubeOption;
