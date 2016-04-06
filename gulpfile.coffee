@@ -9,10 +9,12 @@ header = require 'gulp-header'
 qunit = require 'gulp-qunit'
 moment = require 'moment'
 runSequence = require 'run-sequence'
+git = require 'git-rev-sync'
 
 pkg = require './package.json'
 banner = """/**!
-	* <%= pkg.name %> - v<%= pkg.version %> r<%= parseInt(pkg.revision, 10) + 1 %>
+	* <%= pkg.name %> - v<%= pkg.version %>
+	* revision: <%= git.long() %>
 	* update: <%= moment().format("YYYY-MM-DD") %>
 	* Author: <%= pkg.author %> [<%= pkg.website %>]
 	* Github: <%= pkg.repository.url %>
@@ -34,7 +36,7 @@ gulp.task 'ts', ->
 gulp.task 'pack', ->
 	gulp.src './out/src/baserJS.js'
 		.pipe webpack output: filename: 'baser.js'
-		.pipe header banner, pkg: pkg, moment: moment
+		.pipe header banner, pkg: pkg, moment: moment, git: git
 		.pipe gulp.dest './dist/'
 		.pipe gulp.dest "./dist/v#{pkg.version}/"
 
@@ -42,7 +44,7 @@ gulp.task 'compress', ->
 	gulp.src './dist/baser.js'
 		.pipe uglify()
 		.pipe rename 'baser.min.js'
-		.pipe header banner, pkg: pkg, moment: moment
+		.pipe header banner, pkg: pkg, moment: moment, git: git
 		.pipe gulp.dest './dist/'
 		.pipe gulp.dest "./dist/v#{pkg.version}/"
 
