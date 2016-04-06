@@ -8,6 +8,7 @@ export var ElementClassNameCase = _ElementClassNameCase;
 
 import _AlignedBoxes = require('./Class/AlignedBoxes');
 import _AnimationFrames = require('./Class/AnimationFrames');
+import _BackgroundContainer = require('./Class/BackgroundContainer');
 import _BaserElement = require('./Class/BaserElement');
 import _BreakPoints = require('./Class/BreakPoints');
 import _Browser = require('./Class/Browser');
@@ -34,6 +35,7 @@ import _YouTube = require('./Class/YouTube');
 /* tslint:disable: variable-name */
 export var AlignedBoxes = _AlignedBoxes;
 export var AnimationFrames = _AnimationFrames;
+export var BackgroundContainer = _BackgroundContainer;
 export var BaserElement = _BaserElement;
 export var BreakPoints = _BreakPoints;
 export var Browser = _Browser;
