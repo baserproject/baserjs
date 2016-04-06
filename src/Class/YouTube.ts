@@ -422,7 +422,7 @@ class YouTube extends BaserElement {
 				this._loadYouTubeAPI();
 			} else {
 				$posterContainer.css({
-					position: 'relative'
+					position: 'relative',
 				});
 			}
 			$posterContainer.appendTo(this.$el);
@@ -450,7 +450,7 @@ class YouTube extends BaserElement {
 			});
 		} else {
 			$posterContainer.css({
-				pointerEvents: 'all'
+				pointerEvents: 'all',
 			});
 			if (/^@contents?$/i.test(this.movieOption.poster)) {
 				const $children: JQuery = this.$el.children().detach();
