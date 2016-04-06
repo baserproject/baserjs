@@ -1,3 +1,5 @@
+import IDimension = require('../Interface/IDimension');
+
 /**
  * ユーティリティ算術クラス
  *
@@ -75,6 +77,110 @@ class UtilMath {
 		}
 		return result;
 	}
+
+	/**
+	 * コンテナオブジェクトとターゲットオブジェクトのサイズから、
+	 * ターゲットオブジェクトの収まる位置とサイズを算出する
+	 *
+	 * @param containerWidth コンテナの幅
+	 * @param containerHeight コンテナの高さ
+	 * @param targetWidth ターゲットの幅
+	 * @param targetHeight ターゲットの高さ
+	 * @param sizing ターゲットを収める基準 `"contain" | "cover"`
+	 * @param align 水平位置 `"left" | "center" | "right"`
+	 * @param valign 垂直位置 `"top" | "center" | "bottom"`
+	 * @return 算出された位置とサイズ
+	 */
+	public static stretchDimension (containerWidth: number, containerHeight: number, targetWidth: number, targetHeight: number, sizing: string = 'contain', align: string = 'center', valign: string = 'center'): IDimension {
+		let scale: number = 1;
+		const objectAspectRatio: number = targetWidth / targetHeight;
+		const containerAspectRatio: number = containerWidth / containerHeight;
+
+		// オブジェクトの拡縮率の算出
+		// アス比が1以上なら横長/1以下なら縦長
+		// コンテナが横長
+		switch (sizing) {
+			case 'contain':
+				if (1 < containerAspectRatio) {
+					// オブジェクトが横長 もしくは コンテナのアス比の方が大きい
+					if (1 < targetWidth && objectAspectRatio < containerAspectRatio) {
+						scale = containerWidth / targetWidth;
+					} else {
+						scale = containerHeight / targetHeight;
+					}
+				// コンテナが縦長
+				} else {
+					// オブジェクトが横長 もしくは オブジェクトのアス比の方が大きい
+					if (1 < targetHeight && containerAspectRatio < objectAspectRatio) {
+						scale = containerHeight / targetHeight;
+					} else {
+						scale = containerWidth / targetWidth;
+					}
+				}
+				break;
+			case 'cover':
+				if (1 < containerAspectRatio) {
+					// オブジェクトが横長 もしくは コンテナのアス比の方が大きい
+					if (1 < targetWidth && objectAspectRatio < containerAspectRatio) {
+						scale = containerHeight / targetHeight;
+					} else {
+						scale = containerWidth / targetWidth;
+					}
+				// コンテナが縦長
+				} else {
+					// オブジェクトが横長 もしくは オブジェクトのアス比の方が大きい
+					if (1 < targetHeight && containerAspectRatio < objectAspectRatio) {
+						scale = containerWidth / targetWidth;
+					} else {
+						scale = containerHeight / targetHeight;
+					}
+				}
+				break;
+			default:
+				// void
+		}
+		// オブジェクトの幅と高さ
+		const width: number = targetWidth * scale;
+		const height: number = targetHeight * scale;
+
+		let top: number;
+		switch (valign) {
+			case 'top': {
+				top = 0;
+			}
+			break;
+			case 'bottom': {
+				top = containerHeight - height;
+			}
+			break;
+			default: {
+				top = (containerHeight / 2) - (height / 2);
+			}
+		}
+
+		let left: number;
+		switch (align) {
+			case 'left': {
+				left = 0;
+			}
+			break;
+			case 'right': {
+				left = containerWidth - width;
+			}
+			break;
+			default: {
+				left = (containerWidth / 2) - (width / 2);
+			}
+		}
+
+		return {
+			width,
+			height,
+			top,
+			left,
+		};
+	}
+
 }
 
 export = UtilMath;
