@@ -14,6 +14,15 @@ import BackgroundContainerOption = require('../Interface/BackgroundContainerOpti
 class BackgroundContainer extends BaserElement {
 
 	/**
+	 * 管理対象の要素に付加するclass属性値のプレフィックス
+	 *
+	 * @version 0.11.0
+	 * @since 0.11.0
+	 *
+	 */
+	public static className: string = '-bc-background-container-element';
+
+	/**
 	 * オプションのデフォルト値
 	 *
 	 * @since 0.11.0
@@ -97,7 +106,10 @@ class BackgroundContainer extends BaserElement {
 			return;
 		}
 
-		this._config = $.extend(BackgroundContainer.defaultOption, options);
+		this.$el.addClass(BackgroundContainer.className);
+		this.$el.data(BackgroundContainer.className, this);
+
+		this._config = $.extend({}, BackgroundContainer.defaultOption, options);
 
 		this._$bgElement = this.$el.find(this._config.child);
 

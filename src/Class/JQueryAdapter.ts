@@ -64,8 +64,9 @@ class JQueryAdapter {
 
 		const self: JQuery = $(this);
 		return self.each( (i: number, elem: HTMLElement): void => {
-			const bgc: BackgroundContainer = new BackgroundContainer(elem, options);
-			$(elem).data('bcBackgroundContainer', bgc);
+			/* tslint:disable */
+			new BackgroundContainer(elem, options);
+			/* tslint:enable */
 		});
 	}
 
