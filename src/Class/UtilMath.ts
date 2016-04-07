@@ -91,7 +91,7 @@ class UtilMath {
 	 * @param valign 垂直位置 `"top" | "center" | "bottom"`
 	 * @return 算出された位置とサイズ
 	 */
-	public static stretchDimension (containerWidth: number, containerHeight: number, targetWidth: number, targetHeight: number, sizing: string = 'contain', align: string = 'center', valign: string = 'center'): IDimension {
+	public static stretchDimension (containerWidth: number, containerHeight: number, targetWidth: number, targetHeight: number, sizing: 'contain' | 'cover' = 'contain', align: 'left' | 'center' | 'right' = 'center', valign: 'top' | 'center' | 'bottom' = 'center'): IDimension {
 		let scale: number = 1;
 		const objectAspectRatio: number = targetWidth / targetHeight;
 		const containerAspectRatio: number = containerWidth / containerHeight;
