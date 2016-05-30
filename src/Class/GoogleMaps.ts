@@ -155,7 +155,7 @@ class GoogleMaps extends BaserElement {
 	/**
 	 * 住所文字列から座標を非同期で取得
 	 *
-	 * @version 0.10.0
+	 * @version 0.12.0
 	 * @since 0.2.0
 	 *
 	 */
@@ -163,7 +163,7 @@ class GoogleMaps extends BaserElement {
 		const geocoder: google.maps.Geocoder = new google.maps.Geocoder();
 		geocoder.geocode(
 			<google.maps.GeocoderRequest> {
-				address: address
+				address: address,
 			},
 			(results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus): void => {
 				switch (status) {
@@ -174,17 +174,22 @@ class GoogleMaps extends BaserElement {
 					}
 					break;
 					case google.maps.GeocoderStatus.INVALID_REQUEST:
-					case google.maps.GeocoderStatus.ZERO_RESULTS:
+					case google.maps.GeocoderStatus.ZERO_RESULTS: {
+						if (console && console.warn) {
+							console.warn(`ReferenceError: "${address}は不正な住所だったため結果を返すことができませんでした。"`);
+						}
+					}
+					break;
 					case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
 						if (console && console.warn) {
-							console.warn(`ReferenceError: "${address}は不正な住所のだったため結果を返すことができませんでした。"`);
+							console.warn(`Error: "リクエスト数の上限を超えました。${address}は処理されません。"`);
 						}
 					}
 					break;
 					case google.maps.GeocoderStatus.ERROR:
 					case google.maps.GeocoderStatus.UNKNOWN_ERROR: {
 						if (console && console.warn) {
-							console.warn('Error: "エラーが発生しました。"');
+							console.warn(`Error: "エラーが発生しました。${address}は処理されません。"`);
 						}
 					}
 					break;
