@@ -1,7 +1,7 @@
 /**!
-* baserjs - v0.11.0
-* revision: d20640e03eb3bfedd655f4a68c0bf8dfeca4c554
-* update: 2016-04-07
+* baserjs - v0.12.0
+* revision: 52965de560aec664718f7c2eb342403b9d613203
+* update: 2016-05-30
 * Author: baserCMS Users Community [https://github.com/baserproject/]
 * Github: https://github.com/baserproject/baserjs
 * License: Licensed under the MIT License
@@ -2942,6 +2942,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var BaserElement = __webpack_require__(12);
+	var Browser = __webpack_require__(9);
 	/**
 	 * マップ要素
 	 *
@@ -2990,14 +2991,14 @@
 	    /**
 	     * 住所文字列から座標を非同期で取得
 	     *
-	     * @version 0.10.0
+	     * @version 0.12.0
 	     * @since 0.2.0
 	     *
 	     */
 	    GoogleMaps.getLatLngByAddress = function (address, callback) {
 	        var geocoder = new google.maps.Geocoder();
 	        geocoder.geocode({
-	            address: address
+	            address: address,
 	        }, function (results, status) {
 	            switch (status) {
 	                case google.maps.GeocoderStatus.OK:
@@ -3009,10 +3010,16 @@
 	                    break;
 	                case google.maps.GeocoderStatus.INVALID_REQUEST:
 	                case google.maps.GeocoderStatus.ZERO_RESULTS:
+	                    {
+	                        if (console && console.warn) {
+	                            console.warn("ReferenceError: \"" + address + "\u306F\u4E0D\u6B63\u306A\u4F4F\u6240\u3060\u3063\u305F\u305F\u3081\u7D50\u679C\u3092\u8FD4\u3059\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002\"");
+	                        }
+	                    }
+	                    break;
 	                case google.maps.GeocoderStatus.OVER_QUERY_LIMIT:
 	                    {
 	                        if (console && console.warn) {
-	                            console.warn("ReferenceError: \"" + address + "\u306F\u4E0D\u6B63\u306A\u4F4F\u6240\u306E\u3060\u3063\u305F\u305F\u3081\u7D50\u679C\u3092\u8FD4\u3059\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002\"");
+	                            console.warn("Error: \"\u30EA\u30AF\u30A8\u30B9\u30C8\u6570\u306E\u4E0A\u9650\u3092\u8D85\u3048\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002\"");
 	                        }
 	                    }
 	                    break;
@@ -3020,7 +3027,7 @@
 	                case google.maps.GeocoderStatus.UNKNOWN_ERROR:
 	                    {
 	                        if (console && console.warn) {
-	                            console.warn('Error: "エラーが発生しました。"');
+	                            console.warn("Error: \"\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002\"");
 	                        }
 	                    }
 	                    break;
@@ -3077,7 +3084,7 @@
 	     *
 	     * use: jQuery
 	     *
-	     * @version 0.9.0
+	     * @version 0.12.0
 	     * @since 0.2.0
 	     * @param mapCenterLat 緯度
 	     * @param mapCenterLng 経度
@@ -3107,10 +3114,10 @@
 	            styles: null,
 	        }, this.mapOption);
 	        this.info = new google.maps.InfoWindow({
-	            disableAutoPan: true
+	            disableAutoPan: true,
 	        });
 	        this.gmap = new google.maps.Map(this.el, $.extend({}, this.mapOption, {
-	            fitBounds: google.maps.Map.prototype.fitBounds
+	            fitBounds: google.maps.Map.prototype.fitBounds,
 	        }));
 	        $.each(coordinates, function (i, coordinate) {
 	            coordinate.markTo(function (coordinate) {
@@ -3246,15 +3253,16 @@
 	     *
 	     * use: jQuery
 	     *
-	     * @version 0.9.0
+	     * @version 0.12.0
 	     * @since 0.0.6
 	     *
 	     */
 	    Coordinate.prototype._markTo = function () {
-	        var _this = this;
 	        this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
 	        var iconURL = this.$el.data('icon');
 	        var iconSize = this.$el.data('iconSize');
+	        var iconHref = this.$el.data('iconHref');
+	        var iconTarget = (this.$el.data('iconTarget') === '_blank') || false;
 	        if (iconURL) {
 	            this.icon = {};
 	            this.icon.url = iconURL;
@@ -3275,10 +3283,11 @@
 	            icon: this.icon,
 	            map: this._map.gmap,
 	        });
-	        if (this._map.$coordinates !== this._map.$el) {
-	            google.maps.event.addListener(this.marker, 'click', function () {
-	                _this.openInfoWindow();
-	            });
+	        if (iconHref) {
+	            google.maps.event.addListener(this.marker, 'click', Browser.jumpTo.bind(null, iconHref, iconTarget));
+	        }
+	        else if (this._map.$coordinates !== this._map.$el) {
+	            google.maps.event.addListener(this.marker, 'click', this.openInfoWindow.bind(this));
 	        }
 	    };
 	    return Coordinate;
