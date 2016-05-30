@@ -1,4 +1,5 @@
 import BaserElement = require('./BaserElement');
+import Browser = require('./Browser');
 import GoogleMapsOption = require('../Interface/GoogleMapsOption');
 
 /**
@@ -255,7 +256,7 @@ class GoogleMaps extends BaserElement {
 	 *
 	 * use: jQuery
 	 *
-	 * @version 0.9.0
+	 * @version 0.12.0
 	 * @since 0.2.0
 	 * @param mapCenterLat 緯度
 	 * @param mapCenterLng 経度
@@ -292,11 +293,11 @@ class GoogleMaps extends BaserElement {
 		);
 
 		this.info = new google.maps.InfoWindow({
-			disableAutoPan: <boolean> true
+			disableAutoPan: <boolean> true,
 		});
 
 		this.gmap = new google.maps.Map(this.el, $.extend({}, this.mapOption, {
-			fitBounds: google.maps.Map.prototype.fitBounds
+			fitBounds: google.maps.Map.prototype.fitBounds,
 		}));
 
 		$.each(coordinates, (i: number, coordinate: Coordinate ): void => {
@@ -418,7 +419,7 @@ class Coordinate {
 	 *
 	 * use: jQuery
 	 *
-	 * @version 0.9.0
+	 * @version 0.12.0
 	 * @since 0.0.6
 	 *
 	 */
@@ -426,6 +427,8 @@ class Coordinate {
 		this.title = this.$el.attr('title') || this.$el.data('title') || this.$el.find('h1,h2,h3,h4,h5,h6').text() || null;
 		const iconURL: string = this.$el.data('icon');
 		const iconSize: string = this.$el.data('iconSize');
+		const iconHref: string = this.$el.data('iconHref');
+		const iconTarget: boolean = (this.$el.data('iconTarget') === '_blank') || false;
 		if (iconURL) {
 			this.icon = {};
 			this.icon.url = iconURL;
@@ -446,10 +449,10 @@ class Coordinate {
 			icon: this.icon,
 			map: this._map.gmap,
 		});
-		if (this._map.$coordinates !== this._map.$el) {
-			google.maps.event.addListener(this.marker, 'click', (): void => {
-				this.openInfoWindow();
-			});
+		if (iconHref) {
+			google.maps.event.addListener(this.marker, 'click', Browser.jumpTo.bind(null, iconHref, iconTarget));
+		} else if (this._map.$coordinates !== this._map.$el) {
+			google.maps.event.addListener(this.marker, 'click', this.openInfoWindow.bind(this));
 		}
 	}
 
