@@ -34,7 +34,7 @@ gulp.task 'ts', ->
 		.pipe gulp.dest './out/'
 
 gulp.task 'pack', ->
-	gulp.src './out/src/baserJS.js'
+	gulp.src './out/baserJS.js'
 		.pipe webpack output: filename: 'baser.js'
 		.pipe header banner, pkg: pkg, moment: moment, git: git
 		.pipe gulp.dest './dist/'
