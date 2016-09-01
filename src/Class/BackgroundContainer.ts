@@ -25,13 +25,13 @@ class BackgroundContainer extends BaserElement {
 	/**
 	 * オプションのデフォルト値
 	 *
-	 * @since 0.11.0
+	 * @since 0.13.0
 	 *
 	 */
 	public static defaultOption: BackgroundContainerOption = {
 		align: 'center',
 		valign: 'center',
-		size: 'contain',
+		size: 'cover',
 		child: '>*:first',
 		outer: false,
 		useCSSBackgroundImage: false,
