@@ -82,6 +82,8 @@ class UtilMath {
 	 * コンテナオブジェクトとターゲットオブジェクトのサイズから、
 	 * ターゲットオブジェクトの収まる位置とサイズを算出する
 	 *
+	 * @version 0.13.0
+	 *
 	 * @param containerWidth コンテナの幅
 	 * @param containerHeight コンテナの高さ
 	 * @param targetWidth ターゲットの幅
@@ -100,7 +102,7 @@ class UtilMath {
 		// アス比が1以上なら横長/1以下なら縦長
 		// コンテナが横長
 		switch (sizing) {
-			case 'contain':
+			case 'cover':
 				if (1 < containerAspectRatio) {
 					// オブジェクトが横長 もしくは コンテナのアス比の方が大きい
 					if (1 < targetWidth && objectAspectRatio < containerAspectRatio) {
@@ -118,7 +120,7 @@ class UtilMath {
 					}
 				}
 				break;
-			case 'cover':
+			case 'contain':
 				if (1 < containerAspectRatio) {
 					// オブジェクトが横長 もしくは コンテナのアス比の方が大きい
 					if (1 < targetWidth && objectAspectRatio < containerAspectRatio) {

@@ -4,6 +4,7 @@ interface BackgroundContainerOption {
 	size?: 'contain' | 'cover';
 	child?: string;
 	outer?: boolean;
+	useCSSBackgroundImage?: boolean;
 }
 
 export = BackgroundContainerOption;

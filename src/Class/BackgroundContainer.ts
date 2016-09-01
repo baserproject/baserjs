@@ -5,9 +5,9 @@ import IDimension = require('../Interface/IDimension');
 import BackgroundContainerOption = require('../Interface/BackgroundContainerOption');
 
 /**
- * ラジオボタンとチェックボックスの抽象クラス
+ * 背景化要素
  *
- * @version 0.11.0
+ * @version 0.13.0
  * @since 0.11.0
  *
  */
@@ -34,6 +34,7 @@ class BackgroundContainer extends BaserElement {
 		size: 'contain',
 		child: '>*:first',
 		outer: false,
+		useCSSBackgroundImage: false,
 	};
 
 	/**
@@ -86,7 +87,7 @@ class BackgroundContainer extends BaserElement {
 	 *
 	 * use: jQuery
 	 *
-	 * @version 0.11.0
+	 * @version 0.13.0
 	 * @since 0.11.0
 	 * @param el 管理するDOM要素
 	 * @param options オプション
@@ -113,33 +114,49 @@ class BackgroundContainer extends BaserElement {
 
 		this._$bgElement = this.$el.find(this._config.child);
 
+		const isImage: boolean = this._$bgElement.is('img');
+
 		this._bgWidth = +(this.$el.data('width') || this._$bgElement.data('width') || this._$bgElement.attr('width') || this._$bgElement.width()) || 400;
 		this._bgHeight = +(this.$el.data('height') || this._$bgElement.data('height') || this._$bgElement.attr('height') || this._$bgElement.height()) || 300;
 
-		const currentCSSPosition: string = this.$el.css('position');
-		if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
-			this.$el.css('position', 'relative');
+		if (isImage && this._config.useCSSBackgroundImage) {
+
+			const img: HTMLImageElement = this._$bgElement[0] as HTMLImageElement;
+			this.$el.css({
+				backgroundImage: `url(${img.src})`,
+				backgroundSize: this._config.size,
+				backgroundPosition: `${this._config.align} ${this._config.valign}`,
+				backgroundRepeat: 'no-repeat',
+			});
+
+			this._$bgElement.detach();
+
+		} else {
+			const currentCSSPosition: string = this.$el.css('position');
+			if (currentCSSPosition === 'static' || currentCSSPosition === '' || currentCSSPosition == null) {
+				this.$el.css('position', 'relative');
+			}
+
+			this._$bgElement.css({
+				position: 'absolute',
+			});
+
+			this._bgStyle = {
+				width: 0,
+				height: 0,
+				top: 0,
+				left: 0,
+				maxWidth: 'none',
+				minWidth: 0,
+				maxHeight: 'none',
+				minHeight: 0,
+			};
+
+			// 初期計算
+			this.calc();
+
+			Browser.browser.on('resizeend', this.calc.bind(this));
 		}
-
-		this._$bgElement.css({
-			position: 'absolute',
-		});
-
-		this._bgStyle = {
-			width: 0,
-			height: 0,
-			top: 0,
-			left: 0,
-			maxWidth: 'none',
-			minWidth: 0,
-			maxHeight: 'none',
-			minHeight: 0,
-		};
-
-		// 初期計算
-		this.calc();
-
-		Browser.browser.on('resizeend', this.calc.bind(this));
 
 	}
 
