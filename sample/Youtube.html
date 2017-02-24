@@ -3,24 +3,26 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test - Form</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 	<script src="../dist/baser.js"></script>
 	<script>
 	$(function() {
 
-		var yt = $('.youtube').bcYoutube({
-			controls: false,
-			mute: true
-		}).data(baser.YouTube.className);
+		$('.youtube').each(function () {
+			var el = new baser.YouTube(this, {
+				controls: false,
+				mute: true
+			});
+			el.on('buffering', function (e, ytplayer) { console.log(el, e.type, ytplayer) });
+			el.on('cued', function (e, ytplayer) { console.log(el, e.type, ytplayer) });
+			el.on('ended', function (e, ytplayer) { console.log(el, e.type, ytplayer) });
+			el.on('paused', function (e, ytplayer) { console.log(el, e.type, ytplayer) });
+			el.on('playing', function (e, ytplayer) { console.log(el, e.type, ytplayer) });
+			el.on('embeded', function (e, ytplayer) { console.log(el, e.type, ytplayer) });
+		});
 
-		yt.muteController($('.mute-ctrl'));
+		// yt.muteController($('.mute-ctrl'));
 
-		yt.on('buffering', function (e, ytplayer) { console.log(e.type, ytplayer) });
-		yt.on('cued', function (e, ytplayer) { console.log(e.type, ytplayer) });
-		yt.on('ended', function (e, ytplayer) { console.log(e.type, ytplayer) });
-		yt.on('paused', function (e, ytplayer) { console.log(e.type, ytplayer) });
-		yt.on('playing', function (e, ytplayer) { console.log(e.type, ytplayer) });
-		yt.on('embeded', function (e, ytplayer) { console.log(e.type, ytplayer) });
 
 	});
 	</script>
@@ -34,16 +36,15 @@
 
 		.youtube {
 			position: relative;
+			background-size: cover;
+			background-position: center top;
 		}
-		.-bc-youtube-player-frame-element {
+		.youtube iframe {
+			opacity: 0;
+			transition: opacity 500ms ease-in;
 		}
-		.-bc-youtube-pseudo-poster-element {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			/*background: #000;*/
+		.youtube[data-youtube-state="playing"] iframe {
+			opacity: 1;
 		}
 	</style>
 </head>
@@ -55,10 +56,14 @@
 
 		<h2>sample1</h2>
 
-		<button class="mute-ctrl"></button>
+		<button class="mute-ctrl">MUTE</button>
 
-		<div class="youtube" data-id="WHvuHj5ssEc" data-width="480" data-height="270" data-poster data-poster-high-quality="1" data-autoplay="false"></div>
-		<div class="youtube" data-id="WHvuHj5ssEc" data-width="480" data-height="270" data-poster data-pre-embed="false" data-poster-high-quality="1" data-autoplay="false"></div>
+		<div class="youtube" data-video-id="WHvuHj5ssEc" data-width="480" data-height="270" data-poster data-poster-high-quality="1" data-autoplay="false">
+			<!-- Comments -->
+			<div>Fallback</div>
+			Free Text
+		</div>
+		<!--<div class="youtube" data-id="WHvuHj5ssEc" data-width="480" data-height="270" data-poster data-pre-embed="false" data-poster-high-quality="1" data-autoplay="false"></div>
 		<div class="youtube" data-id="WHvuHj5ssEc" data-width="480" data-height="270" data-autoplay="false"></div>
 		<div class="youtube" data-id="WHvuHj5ssEc" data-width="480" data-height="270" data-poster  data-poster-high-quality="1" data-autoplay="true"></div>
 		<div class="youtube" data-id="WHvuHj5ssEc, vaQcUMU0YeM, FUgM105uN4c" data-width="480" data-height="270" data-poster  data-poster-high-quality="1" data-autoplay="true" data-shuffle="true"></div>
@@ -69,7 +74,7 @@
 		</div>
 		<div class="youtube" data-id="FUgM105uN4c" data-width="480" data-height="270" data-poster="@content" data-pre-embed="false" data-poster-high-quality="1" data-autoplay="false" data-shuffle="true">
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam fugiat, perspiciatis sunt ea officiis ratione obcaecati quisquam beatae. Quidem non dolores quas maxime rerum reprehenderit perspiciatis fugit. Dignissimos, aliquid facilis.</p>
-		</div>
+		</div>-->
 
 		<hr>
 

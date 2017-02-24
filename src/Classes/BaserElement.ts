@@ -43,6 +43,10 @@ export default class BaserElement<E extends HTMLElement | SVGElement> extends Ev
 	constructor (el: E) {
 		super();
 
+		if (!(el instanceof Element)) {
+			throw new TypeError(`A argument is not Element.`);
+		}
+
 		// 以下と同等扱いだがthis.elはreadonly
 		// this.el = el;
 		elements.set(this, el);

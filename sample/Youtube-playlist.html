@@ -8,19 +8,18 @@
 	<script>
 	$(function() {
 
-		var yt = $('.youtube').bcYoutube({
-			mute: true
-		}).data(baser.YouTube.className);
-
-		yt.on('buffering', function (e, ytplayer) { console.log(e.type, ytplayer) });
-		yt.on('cued', function (e, ytplayer) { console.log(e.type, ytplayer) });
-		yt.on('ended', function (e, ytplayer) { console.log(e.type, ytplayer) });
-		yt.on('paused', function (e, ytplayer) { console.log(e.type, ytplayer) });
-		yt.on('playing', function (e, ytplayer) {
-			console.log(e.type, ytplayer);
-			console.log('現在のキューインデックス: ' + this.currentCueIndex);
+		$('.youtube').each(function () {
+			var yt = new baser.YouTube(this, { mute: true });
+			// yt.on('buffering', function (e, ytplayer) { console.log(e.type, ytplayer) });
+			// yt.on('cued', function (e, ytplayer) { console.log(e.type, ytplayer) });
+			// yt.on('ended', function (e, ytplayer) { console.log(e.type, ytplayer) });
+			// yt.on('paused', function (e, ytplayer) { console.log(e.type, ytplayer) });
+			// yt.on('playing', function (e, ytplayer) {
+			// 	console.log(e.type, ytplayer);
+			// 	console.log('現在のキューインデックス: ' + this.currentCueIndex);
+			// });
+			// yt.on('embeded', function (e, ytplayer) { console.log(e.type, ytplayer) });
 		});
-		yt.on('embeded', function (e, ytplayer) { console.log(e.type, ytplayer) });
 
 	});
 	</script>
@@ -33,43 +32,43 @@
 
 		<h2>sample1</h2>
 
-		<div class="youtube" data-poster="http://placehold.jp/150x150.png" data-id="vaQcUMU0YeM, u8-nJgtbtcE, lx-lTgO4PUc, NjVVunOZEO8, 3K-vcUOnaZA" data-autoplay="1" data-controls="1" data-width="400" data-height="300"></div>
+		<div class="youtube" data-poster="http://placehold.jp/150x150.png" data-video-id="vaQcUMU0YeM, u8-nJgtbtcE, lx-lTgO4PUc, NjVVunOZEO8, 3K-vcUOnaZA" data-autoplay="1" data-controls="1" data-width="400" data-height="300"></div>
 
 		<hr>
 
 		<h2>sample1.1</h2>
 
-		<div class="youtube" data-poster data-id="vaQcUMU0YeM, u8-nJgtbtcE, lx-lTgO4PUc, NjVVunOZEO8, 3K-vcUOnaZA" data-index="2" data-autoplay="1" data-controls="1" data-width="400" data-height="300"></div>
+		<div class="youtube" data-poster data-video-id="vaQcUMU0YeM, u8-nJgtbtcE, lx-lTgO4PUc, NjVVunOZEO8, 3K-vcUOnaZA" data-index="2" data-autoplay="1" data-controls="1" data-width="400" data-height="300"></div>
 
 		<hr>
 
 		<h2>sample2</h2>
 
-		<div class="youtube" data-poster data-id="vaQcUMU0YeM, u8-nJgtbtcE, lx-lTgO4PUc, NjVVunOZEO8, 3K-vcUOnaZA" data-autoplay="0" data-controls="1" data-width="400" data-height="300"></div>
+		<div class="youtube" data-poster data-video-id="vaQcUMU0YeM, u8-nJgtbtcE, lx-lTgO4PUc, NjVVunOZEO8, 3K-vcUOnaZA" data-autoplay="0" data-controls="1" data-width="400" data-height="300"></div>
 
 		<hr>
 
 		<h2>sample3</h2>
 
-		<div class="youtube" data-id="vaQcUMU0YeM" data-autoplay="1" data-controls="1" data-width="400" data-height="300"></div>
+		<div class="youtube" data-video-id="vaQcUMU0YeM" data-autoplay="1" data-controls="1" data-width="400" data-height="300"></div>
 
 		<hr>
 
 		<h2>sample4</h2>
 
-		<div class="youtube" data-id="vaQcUMU0YeM" data-autoplay="0" data-controls="1" data-width="400" data-height="300"></div>
+		<div class="youtube" data-video-id="vaQcUMU0YeM" data-autoplay="0" data-controls="1" data-width="400" data-height="300"></div>
 
 		<hr>
 
 		<h2>sample5</h2>
 
-		<div class="youtube" data-poster data-id="vaQcUMU0YeM" data-autoplay="0" data-controls="1" data-width="400" data-height="300"></div>
+		<div class="youtube" data-poster data-video-id="vaQcUMU0YeM" data-autoplay="0" data-controls="1" data-width="400" data-height="300"></div>
 
 		<hr>
 
 		<h2>sample6</h2>
 
-		<div class="youtube" data-poster="@contents" data-id="vaQcUMU0YeM" data-autoplay="0" data-controls="1" data-width="400" data-height="300">
+		<div class="youtube" data-poster="@contents" data-video-id="vaQcUMU0YeM" data-autoplay="0" data-controls="1" data-width="400" data-height="300">
 			<h3>sample6 Movie</h3>
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo saepe quos velit vitae ea consequatur earum sit quaerat fuga dolorum! Quod voluptatem alias illum reiciendis dolor rerum quos similique cum.</p>
 		</div>

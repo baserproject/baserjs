@@ -610,7 +610,6 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 		this._apiIsLoaded = 'YT' in window;
 
 		this._config = this.merge<YouTubeOption, YouTubeOption>(
-			options,
 			{
 				videoId: '',
 				rel: false,
@@ -630,6 +629,7 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 				shuffle: false,
 				preEmbed: true,
 			},
+			options,
 		);
 
 		if (!this._config.videoId) {
