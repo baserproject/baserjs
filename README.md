@@ -20,8 +20,19 @@ baserJS
 	- [ ] Expander
 	- [ ] Tabs
 	- [ ] Dropdown Navigation
-	- [ ] Maps (Google Maps)
-	- [ ] Video (YouTube / Vimeo)
+	- [ ] Maps
+		- [ ] GoogleMaps
+			- [x] Standard
+			- [x] Multi pins
+			- [x] Fit bounds
+			- [ ] Info window
+	- [ ] Video
+		- [ ] General API & UI `<video>`, YouTube and Vimeo
+		- [ ] YouTube
+			- [x] Standard
+			- [x] Loading a thumbnail image
+			- [ ] Multi Tracks
+		- [ ] Vimeo
 - [ ] Display Helper
 	- [ ] Aligning height
 	- [ ] Object Fit (CSS `object-fit`)
@@ -32,7 +43,7 @@ baserJS
 	- [ ] Detection when descendant image loaded
 	- [ ] Detection when element resized
 	- [ ] Promise sequencer
-	- [ ] Scroll to position or elements
+	- [ ] Scroll spy for elements
 	- [ ] Converting units of length
 - [ ] DOM Helper
 	- [ ] Node walker
