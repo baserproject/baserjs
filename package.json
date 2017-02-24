@@ -1,21 +1,19 @@
 {
   "name": "baserjs",
-  "version": "0.13.0",
+  "version": "1.0.0-beta",
   "description": "Client side JavaScript libraries for baserCMS",
   "main": "baser.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "ava -v"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/baserproject/baserjs"
   },
   "keywords": [
-    "jQuery",
     "baser",
     "baserCMS",
     "baserJS",
-    "JavaScript",
     "DOM",
     "Form",
     "YouTube",
@@ -27,21 +25,28 @@
   "website": "https://github.com/baserproject/",
   "license": "MIT",
   "devDependencies": {
-    "coffee-script": "^1.10.0",
-    "git-rev-sync": "^1.6.0",
+    "@types/qs": "^6.2.30",
+    "@types/youtube": "^0.0.28",
+    "ava": "^0.18.1",
+    "browser-env": "^2.0.21",
+    "coffee-script": "^1.12.3",
+    "git-rev-sync": "^1.8.0",
     "gulp": "^3.9.1",
     "gulp-header": "^1.8.8",
-    "gulp-qunit": "^1.4.0",
+    "gulp-qunit": "^1.5.0",
     "gulp-rename": "^1.2.2",
-    "gulp-typedoc": "^2.0.0",
-    "gulp-typescript": "^2.13.6",
-    "gulp-uglify": "^2.0.0",
-    "moment": "^2.14.1",
-    "qunitjs": "^1.23.1",
+    "gulp-typedoc": "^2.0.2",
+    "gulp-typescript": "^3.1.4",
+    "gulp-uglify": "^2.0.1",
+    "moment": "^2.17.1",
+    "nightmare": "^2.9.1",
     "run-sequence": "^1.2.2",
-    "tslint": "^3.15.1",
-    "typedoc": "^0.4.5",
-    "typescript": "^1.8.10",
+    "tslint": "^4.4.2",
+    "typescript": "^2.1.6",
+    "typings": "^2.1.0",
     "webpack-stream": "^3.2.0"
+  },
+  "dependencies": {
+    "qs": "^6.3.1"
   }
 }
