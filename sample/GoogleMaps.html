@@ -14,12 +14,6 @@
 			var bGM = new baser.GoogleMaps(this);
 		});
 
-		$('.map2_trigger').on('click', function() {
-			$('.map2').slideToggle(600, function() {
-				$('.map2').bcMaps();
-			});
-		});
-
 	});
 	</script>
 	<style>
@@ -89,11 +83,11 @@
 
 		<h2 class="map6_trigger">sample6</h2>
 
-		<div class="map6 map" data-fit-bounds="true">
+		<div class="map6 map" data-fit-bounds="true" data-pin="true">
 			<div class="pin" data-address="福岡市中央区舞鶴2丁目2番1筑邦ビル4F">
 				<p>テキストテキスト</p>
 			</div>
-			<div class="pin2" data-address="東京都庁" data-title="東京都庁">
+			<div class="pin2" data-address="名古屋駅" data-title="名古屋駅">
 				<p>テキストテキスト</p>
 			</div>
 		</div>

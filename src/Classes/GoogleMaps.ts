@@ -12,17 +12,24 @@ import linkTo from '../fn/linkTo';
 export interface GoogleMapsOption {
 
 	/**
+	 * 緯度
 	 *
+	 * 数値でない場合は`TypeError`の例外を投げる。
 	 */
 	lat?: number;
 
 	/**
+	 * 経度
 	 *
+	 * 数値でない場合は`TypeError`の例外を投げる。
 	 */
 	lng?: number;
 
 	/**
+	 * 住所
 	 *
+	 * Geocoder APIを利用するので検索結果が失敗する可能性がある。
+	 * `lat`と`lng`がある場合は無視される。
 	 */
 	address?: string;
 
@@ -186,11 +193,12 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 	constructor (el: HTMLDivElement, options: GoogleMapsOption = {}) {
 		super(el);
 
-		if ('google' in window && google.maps) {
-			this._init(options);
-		} else {
+		if (!('google' in window && google.maps)) {
 			throw new ReferenceError(`"//maps.google.com/maps/api/js" を先に読み込む必要があります。`);
 		}
+
+		this._init(options)
+			.then(this._render.bind(this));
 	}
 
 	/**
@@ -224,18 +232,16 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 			options,
 		);
 
-		if (this._config.address) {
-			// 住所から緯度・経度を検索する（非同期）
-			const latLng = await GoogleMaps.getLatLngByAddress(this._config.address);
-			this._render(latLng.lat(), latLng.lng());
+		if (
+			typeof this._config.lat === 'number'
+			&&
+			typeof this._config.lng === 'number'
+		) {
+			return new google.maps.LatLng(this._config.lat, this._config.lng);
+		} else if (this._config.address) {
+			return await GoogleMaps.getLatLngByAddress(this._config.address);
 		} else {
-			const lat = this._config.lat;
-			const lng = this._config.lng;
-			if (typeof lat === 'number' && typeof lng === 'number') {
-				this._render(lat, lng);
-			} else {
-				throw new TypeError(`"Latitude and Longitude are to expect numeric value."`);
-			}
+			throw new TypeError(`"Latitude and Longitude are to expect numeric value."`);
 		}
 	}
 
@@ -248,25 +254,26 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 	 * @param lng 経度
 	 *
 	 */
-	private _render (lat: number, lng: number) {
+	private _render (center: google.maps.LatLng) {
 		this._gmap = new google.maps.Map(this.el, {
 			zoom: this._config.zoom,
 			mapTypeControlOptions: this._config.mapTypeControlOptions,
-			center: new google.maps.LatLng(lat, lng),
+			center,
 			scrollwheel: this._config.scrollwheel,
 			styles: this._config.styles,
 			disableDefaultUI: this._config.disableDefaultUI,
 		});
 
-		const markerBounds = new google.maps.LatLngBounds();
-
-		const pins = this.detachedChildrenMap((el: HTMLElement) => {
-			return new Pin(el, this);
-		});
+		const pins = this.detachedChildrenMap((el: HTMLElement) => new Pin(el, this));
 
 		if (this._config.pin) {
-			pins.unshift(new Pin(this.el, this));
+			const centerEl = document.createElement('div');
+			centerEl.setAttribute('lat', `${center.lat()}`);
+			centerEl.setAttribute('lng', `${center.lng()}`);
+			pins.unshift(new Pin(centerEl, this));
 		}
+
+		const markerBounds = new google.maps.LatLngBounds();
 
 		pins.forEach(async (pin) => {
 			await pin.markTo(this._gmap);
