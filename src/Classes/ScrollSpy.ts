@@ -1,4 +1,6 @@
-let _definedEventHandler = false;
+let _isDefined = false;
+let _rqfId = 0;
+const handlers = new Set<() => boolean>();
 
 export interface ScrollSpyHandler {
 	(y: number, viewportHeight: number): boolean;
@@ -27,30 +29,48 @@ export default class ScrollSpy<R> {
 		this._returnValue = returnValue;
 	}
 
+	/**
+	 * - scrollEvent -> requestAnimationFrame の定義は一箇所で、呼び出しも1回
+	 * - リストに登録されたhandlerだけ実行される
+	 * - resolveしたものはリストから除外して実行しない
+	 */
 	public on (handler: ScrollSpyHandler) {
+		_def();
 		return new Promise<R>((resolve, reject) => {
-			window.addEventListener('scroll', () => {
-				requestAnimationFrame(() => {
-					const y = window.scrollY;
-					const viewportHeight = window.innerHeight;
-					if (handler(y, viewportHeight)) {
-						resolve(this._returnValue);
-					}
-				});
-			});
+			const handlerWrapper = () => {
+				const y = window.scrollY;
+				const viewportHeight = window.innerHeight;
+				if (handler(y, viewportHeight)) {
+					console.log('resolve!!!!');
+					resolve(this._returnValue);
+					return true;
+				}
+				return false;
+			};
+			handlers.add(handlerWrapper);
 		});
 	}
 
 }
 
 function _def () {
-	if (_definedEventHandler) {
+	if (_isDefined) {
 		return;
 	}
+	_isDefined = true;
 	window.addEventListener('scroll', _onScroll);
-	_definedEventHandler = true;
 }
 
 function _onScroll (e: UIEvent) {
+	cancelAnimationFrame(_rqfId);
+	_rqfId = requestAnimationFrame(_onFrame);
+}
 
+function _onFrame () {
+	handlers.forEach((handler) => {
+		const resolved = handler();
+		if (resolved) {
+			handlers.delete(handler);
+		}
+	});
 }

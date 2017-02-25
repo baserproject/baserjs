@@ -48,7 +48,7 @@ baserJS
 	- [ ] Promise sequencer
 	- [ ] Scroll spy for elements
 		- [x] Standard
-		- [ ] High performance
+		- [x] High performance
 		- [ ] Support `IntersectionObserver`
 	- [ ] Converting units of length
 - [ ] DOM Helper
