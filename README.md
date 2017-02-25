@@ -25,6 +25,9 @@ baserJS
 			- [x] Standard
 			- [x] Multi pins
 			- [x] Fit bounds
+			- [x] Rendering on scroll spy
+			- [ ] Pinning on scroll spy
+			- [ ] Animation pinning
 			- [ ] Info window
 	- [ ] Video
 		- [ ] General API & UI `<video>`, YouTube and Vimeo
@@ -44,6 +47,9 @@ baserJS
 	- [ ] Detection when element resized
 	- [ ] Promise sequencer
 	- [ ] Scroll spy for elements
+		- [x] Standard
+		- [ ] High performance
+		- [ ] Support `IntersectionObserver`
 	- [ ] Converting units of length
 - [ ] DOM Helper
 	- [ ] Node walker

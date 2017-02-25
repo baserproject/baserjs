@@ -2,6 +2,8 @@ import BaserElement from './BaserElement';
 
 import linkTo from '../fn/linkTo';
 
+export type GoogleMapsScrollSpy = 'render' | 'pin';
+
 /**
  * GoogleMapsクラスのオプションハッシュのインターフェイス
  *
@@ -90,6 +92,11 @@ export interface GoogleMapsOption {
 	 * ピンを刺すかどうか
 	 */
 	pin?: boolean;
+
+	/**
+	 *
+	 */
+	scrollSpy?: GoogleMapsScrollSpy;
 
 }
 
@@ -198,6 +205,7 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 		}
 
 		this._init(options)
+			.then(this.scrollSpy(this._config.scrollSpy === 'render'))
 			.then(this._render.bind(this));
 	}
 
@@ -228,6 +236,7 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 				disableDefaultUI: false,
 				fitBounds: false,
 				pin: true,
+				scrollSpy: undefined,
 			},
 			options,
 		);

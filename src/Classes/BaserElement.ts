@@ -1,4 +1,5 @@
 import EventDispatcher from './EventDispatcher';
+import ScrollSpy from './ScrollSpy';
 
 import createUID from '../fn/createUID';
 import hyphenize from '../fn/hyphenize';
@@ -232,6 +233,20 @@ export default class BaserElement<E extends HTMLElement | SVGElement> extends Ev
 	public changeState<S extends string> (state: S) {
 		this.el.setAttribute(`data-${this.stateKeyName}-state`, state);
 		return this;
+	}
+
+	protected scrollSpy (watch: boolean = true) {
+		return (result) => {
+			const pResult = Promise.resolve(result);
+			if (!watch) {
+				return pResult;
+			}
+			return ScrollSpy.return(pResult).on((y, height) => {
+				const top = this.el.getBoundingClientRect().top;
+				const halfLine = height / 2;
+				return top < halfLine;
+			});
+		};
 	}
 
 }
