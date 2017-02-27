@@ -2,6 +2,24 @@ let _isDefined = false;
 let _rqfId = 0;
 const handlers = new Set<() => boolean>();
 
+/**
+ * for Passive Event Listener
+ *
+ * @see https://github.com/Microsoft/TypeScript/issues/9548#issuecomment-256793821
+ */
+interface WhatWGEventListenerArgs {
+	capture?: boolean;
+}
+interface WhatWGAddEventListenerArgs extends WhatWGEventListenerArgs {
+	passive?: boolean;
+	once?: boolean;
+}
+type WhatWGAddEventListener = (
+	type: string,
+	listener: (event:Event) => void,
+	options?: WhatWGAddEventListenerArgs
+) => void;
+
 export interface ScrollSpyHandler {
 	(y: number, viewportHeight: number): boolean;
 }
@@ -41,7 +59,6 @@ export default class ScrollSpy<R> {
 				const y = window.scrollY;
 				const viewportHeight = window.innerHeight;
 				if (handler(y, viewportHeight)) {
-					console.log('resolve!!!!');
 					resolve(this._returnValue);
 					return true;
 				}
@@ -52,13 +69,12 @@ export default class ScrollSpy<R> {
 	}
 
 }
-
 function _def () {
 	if (_isDefined) {
 		return;
 	}
 	_isDefined = true;
-	window.addEventListener('scroll', _onScroll);
+	(window.addEventListener as WhatWGAddEventListener)('scroll', _onScroll, { passive: true });
 }
 
 function _onScroll (e: UIEvent) {

@@ -49,6 +49,7 @@ baserJS
 	- [ ] Scroll spy for elements
 		- [x] Standard
 		- [x] High performance
+		- [x] Support Scroll Event on `Passive Event Listener`
 		- [ ] Support `IntersectionObserver`
 	- [ ] Converting units of length
 - [ ] DOM Helper
