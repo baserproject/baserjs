@@ -241,11 +241,7 @@ export default class BaserElement<E extends HTMLElement | SVGElement> extends Ev
 			if (!watch) {
 				return pResult;
 			}
-			return ScrollSpy.return(pResult).on((y, height) => {
-				const top = this.el.getBoundingClientRect().top;
-				const halfLine = height / 2;
-				return top < halfLine;
-			});
+			return ScrollSpy.return(pResult).by(this);
 		};
 	}
 

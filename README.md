@@ -26,7 +26,7 @@ baserJS
 			- [x] Multi pins
 			- [x] Fit bounds
 			- [x] Rendering on scroll spy
-			- [ ] Pinning on scroll spy
+			- [x] Pinning on scroll spy
 			- [ ] Animation pinning
 			- [ ] Info window
 	- [ ] Video
@@ -50,7 +50,7 @@ baserJS
 		- [x] Standard
 		- [x] High performance
 		- [x] Support Scroll Event on `Passive Event Listener`
-		- [ ] Support `IntersectionObserver`
+		- [x] Support `IntersectionObserver`
 	- [ ] Converting units of length
 - [ ] DOM Helper
 	- [ ] Node walker

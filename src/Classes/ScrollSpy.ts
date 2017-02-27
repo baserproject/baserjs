@@ -1,6 +1,8 @@
-let _isDefined = false;
-let _rqfId = 0;
-const handlers = new Set<() => boolean>();
+import BaserElement from './BaserElement';
+
+export interface ScrollSpyHandler {
+	(y: number, viewportHeight: number): boolean;
+}
 
 /**
  * for Passive Event Listener
@@ -16,13 +18,16 @@ interface WhatWGAddEventListenerArgs extends WhatWGEventListenerArgs {
 }
 type WhatWGAddEventListener = (
 	type: string,
-	listener: (event:Event) => void,
-	options?: WhatWGAddEventListenerArgs
+	listener: (event: Event) => void,
+	options?: WhatWGAddEventListenerArgs,
 ) => void;
 
-export interface ScrollSpyHandler {
-	(y: number, viewportHeight: number): boolean;
-}
+let _scrollHandlerIsDefined = false;
+let _rqfId = 0;
+const ratio = 0.5;
+const scrollHandlers = new Set<() => boolean>();
+const scrollSpyReturns = new WeakMap<Element, () => void>();
+let observer: IntersectionObserver | null = null;
 
 /**
  * DOM要素の抽象クラス
@@ -37,8 +42,8 @@ export default class ScrollSpy<R> {
 		return new ScrollSpy(returnValue);
 	}
 
-	public static on (handler: ScrollSpyHandler) {
-		return new ScrollSpy(undefined).on(handler);
+	public static by<E extends HTMLElement | SVGElement> (bEl: BaserElement<E>) {
+		return new ScrollSpy(undefined).by(bEl);
 	}
 
 	private _returnValue: R;
@@ -47,34 +52,62 @@ export default class ScrollSpy<R> {
 		this._returnValue = returnValue;
 	}
 
-	/**
-	 * - scrollEvent -> requestAnimationFrame の定義は一箇所で、呼び出しも1回
-	 * - リストに登録されたhandlerだけ実行される
-	 * - resolveしたものはリストから除外して実行しない
-	 */
-	public on (handler: ScrollSpyHandler) {
-		_def();
+	public by<E extends HTMLElement | SVGElement> (bEl: BaserElement<E>) {
+		_define();
 		return new Promise<R>((resolve, reject) => {
-			const handlerWrapper = () => {
-				const y = window.scrollY;
-				const viewportHeight = window.innerHeight;
-				if (handler(y, viewportHeight)) {
-					resolve(this._returnValue);
-					return true;
-				}
-				return false;
-			};
-			handlers.add(handlerWrapper);
+			if (observer) {
+				const resolver = () => resolve(this._returnValue);
+				scrollSpyReturns.set(bEl.el, resolver);
+				observer.observe(bEl.el);
+			} else {
+				/**
+				 * - scrollEvent -> requestAnimationFrame
+				 *   の定義は一箇所で、呼び出しも1回
+				 * - リストに登録されたhandlerだけ実行される
+				 * - resolveしたものはリストから除外して実行しない
+				 */
+				const handlerWrapper = () => {
+					const windowHeight = window.innerHeight;
+					const boundingRect = bEl.el.getBoundingClientRect();
+					const intersectionTouchTop = boundingRect.top - windowHeight;
+					const intersectionPoint = intersectionTouchTop + boundingRect.height * ratio;
+					if (intersectionPoint < 0) {
+						resolve(this._returnValue);
+						return true;
+					}
+					return false;
+				};
+				scrollHandlers.add(handlerWrapper);
+			}
 		});
 	}
 
 }
-function _def () {
-	if (_isDefined) {
-		return;
+function _define () {
+	if ('IntersectionObserver' in window && !observer) {
+		const threshold = [ratio];
+		observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of Array.from(entries)) {
+					if (observer) {
+						observer.unobserve(entry.target);
+					}
+					const resolver = scrollSpyReturns.get(entry.target);
+					if (resolver) {
+						scrollSpyReturns.delete(entry.target);
+						resolver();
+					}
+				}
+			},
+			{ threshold },
+		);
+	} else {
+		if (_scrollHandlerIsDefined) {
+			return;
+		}
+		_scrollHandlerIsDefined = true;
+		(window.addEventListener as WhatWGAddEventListener)('scroll', _onScroll, { passive: true });
 	}
-	_isDefined = true;
-	(window.addEventListener as WhatWGAddEventListener)('scroll', _onScroll, { passive: true });
 }
 
 function _onScroll (e: UIEvent) {
@@ -83,10 +116,10 @@ function _onScroll (e: UIEvent) {
 }
 
 function _onFrame () {
-	handlers.forEach((handler) => {
+	scrollHandlers.forEach((handler) => {
 		const resolved = handler();
 		if (resolved) {
-			handlers.delete(handler);
+			scrollHandlers.delete(handler);
 		}
 	});
 }
