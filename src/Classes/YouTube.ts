@@ -770,9 +770,9 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 	/**
 	 *
 	 */
-	private _onStateChange (e: YT.EventArgs) {
+	private _onStateChange (e: YT.OnStateChangeEvent) {
 		switch (e.data) {
-			case -1: {
+			case YT.PlayerState.UNSTARTED: {
 				this.changeState('unstarted');
 				this.trigger('unstarted', [this.player]);
 				const listIndex: number = this.player.getPlaylistIndex();

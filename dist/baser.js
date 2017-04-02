@@ -1,7 +1,7 @@
 /**!
 * baserjs - v1.0.0-beta
-* revision: 506465d27810ea670ea14c98b58c5a92fc91e1e2
-* update: 2017-03-13
+* revision: c8e8e1698bb191efc6ca58f9ca936563365f9b41
+* update: 2017-04-02
 * Author: baserCMS Users Community [https://github.com/baserproject/]
 * Github: https://github.com/baserproject/baserjs
 * License: Licensed under the MIT License
@@ -2761,7 +2761,7 @@
 	     */
 	    YouTube.prototype._onStateChange = function (e) {
 	        switch (e.data) {
-	            case -1:
+	            case YT.PlayerState.UNSTARTED:
 	                {
 	                    this.changeState('unstarted');
 	                    this.trigger('unstarted', [this.player]);
