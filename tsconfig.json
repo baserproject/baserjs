@@ -16,7 +16,8 @@
     ],
     "types": [
       "qs",
-      "youtube"
+      "youtube",
+      "google.analytics"
     ]
   },
   "exclude": [

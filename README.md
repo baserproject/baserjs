@@ -25,9 +25,9 @@ baserJS
 			- [x] Standard
 			- [x] Multi pins
 			- [x] Fit bounds
-			- [x] Rendering on scroll spy
-			- [x] Pinning on scroll spy
-			- [ ] Animation pinning
+			- [x] Rendering then inview
+			- [x] Pinning then inview
+			- [x] Animation pinning
 			- [ ] Info window
 			- [ ] iFrame Render
 	- [ ] Video
@@ -47,7 +47,7 @@ baserJS
 	- [ ] Detection when descendant image loaded
 	- [ ] Detection when element resized
 	- [ ] Promise sequencer
-	- [ ] Scroll spy for elements
+	- [ ] Scroll spy and Inview for elements
 		- [x] Standard
 		- [x] High performance
 		- [x] Support Scroll Event on `Passive Event Listener`

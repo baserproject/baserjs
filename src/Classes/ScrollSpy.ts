@@ -42,7 +42,7 @@ export default class ScrollSpy<R> {
 		return new ScrollSpy(returnValue);
 	}
 
-	public static by<E extends HTMLElement | SVGElement> (bEl: BaserElement<E>) {
+	public static by<E extends Element> (bEl: BaserElement<E>) {
 		return new ScrollSpy(undefined).by(bEl);
 	}
 
@@ -52,7 +52,7 @@ export default class ScrollSpy<R> {
 		this._returnValue = returnValue;
 	}
 
-	public by<E extends HTMLElement | SVGElement> (bEl: BaserElement<E>) {
+	public by<E extends Element> (bEl: BaserElement<E>) {
 		_define();
 		return new Promise<R>((resolve, reject) => {
 			if (observer) {

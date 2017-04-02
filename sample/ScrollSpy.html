@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test - Form</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+	<script src="../dist/baser.js"></script>
+	<script>
+	$(function() {
+
+		var $body = $('body');
+
+		var f = document.createDocumentFragment();
+		new Array(10000).fill(0).forEach(function () {
+			var el = document.createElement('span');
+			var b = new baser.BaserElement(el);
+			var w = Math.ceil(Math.random() * 500);
+			var h = Math.ceil(Math.random() * 1000);
+			var t = Math.ceil(Math.random() * 20000);
+			var l = Math.ceil(Math.random() * (document.documentElement.clientWidth - w));
+			el.style.width = `${w}px`;
+			el.style.height = `${h}px`;
+			el.style.top = `${t}px`;
+			el.style.left = `${l}px`;
+			el.style.zIndex = w * h;
+			f.appendChild(el);
+		});
+		$body.append(f);
+
+	});
+	</script>
+	<style>
+	span {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: block;
+		background: blue;
+		transition: background-color 500ms 0ms;
+	}
+	span[data-baser-element-inview="true"] {
+		background: red;
+	}
+	</style>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,8 +1,9 @@
 import BaserElement from './BaserElement';
+import Timer from './Timer';
 
 import linkTo from '../fn/linkTo';
 
-export type GoogleMapsScrollSpy = 'render' | 'pin';
+export type GoogleMapsInviewAction = 'render' | 'pin';
 
 /**
  * GoogleMapsクラスのオプションハッシュのインターフェイス
@@ -96,7 +97,7 @@ export interface GoogleMapsOption {
 	/**
 	 *
 	 */
-	scrollSpy?: GoogleMapsScrollSpy;
+	scrollSpy?: GoogleMapsInviewAction;
 
 }
 
@@ -108,26 +109,6 @@ export interface GoogleMapsOption {
  *
  */
 export default class GoogleMaps extends BaserElement<HTMLDivElement> {
-
-	/**
-	 * 初期設定用の緯度
-	 * 東京都庁
-	 *
-	 * @version 0.0.6
-	 * @since 0.0.6
-	 *
-	 */
-	public static defaultLat = 35.681382;
-
-	/**
-	 * 初期設定用の経度
-	 * 東京都庁
-	 *
-	 * @version 0.0.6
-	 * @since 0.0.6
-	 *
-	 */
-	public static defaultLng = 139.766084;
 
 	/**
 	 * 住所文字列から座標を非同期で取得
@@ -205,8 +186,10 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 		}
 
 		this._init(options)
-			.then(this.scrollSpy(this._config.scrollSpy === 'render'))
-			.then(this._render.bind(this));
+			.then(this.inViewportFirstTime(this._config.scrollSpy === 'render'))
+			.then(this._render.bind(this))
+			.then(this.inViewportFirstTime(this._config.scrollSpy === 'pin'))
+			.then(this._pin.bind(this));
 	}
 
 	/**
@@ -221,8 +204,8 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 
 		this._config = this.merge<GoogleMapsOption, GoogleMapsOption>(
 			{
-				lat: GoogleMaps.defaultLat,
-				lng: GoogleMaps.defaultLng,
+				lat: undefined,
+				lng: undefined,
 				address: undefined,
 				zoom: 14,
 				mapTypeControlOptions: {
@@ -273,6 +256,10 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 			disableDefaultUI: this._config.disableDefaultUI,
 		});
 
+		return Promise.resolve(center);
+	}
+
+	private async _pin (center: google.maps.LatLng) {
 		const pins = this.detachedChildrenMap((el: HTMLElement) => new Pin(el, this));
 
 		if (this._config.pin) {
@@ -284,13 +271,16 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 
 		const markerBounds = new google.maps.LatLngBounds();
 
-		pins.forEach(async (pin) => {
-			await pin.markTo(this._gmap);
-			if (this._config.fitBounds) {
-				markerBounds.extend(pin.position);
-				this._gmap.fitBounds(markerBounds);
-			}
-		});
+		let i = 1;
+		for (const pin of pins) {
+			await pin.markTo(this._gmap, i * 400);
+			markerBounds.extend(pin.position);
+			i++;
+		}
+
+		if (this._config.fitBounds) {
+			this._gmap.fitBounds(markerBounds);
+		}
 	}
 }
 
@@ -345,8 +335,10 @@ class Pin extends BaserElement<HTMLElement> {
 	 * @param callback 位置情報が取得できた後に実行するコールバック
 	 *
 	 */
-	public async markTo (map: google.maps.Map) {
-		return this._ready.then(this._markTo(map));
+	public async markTo (map: google.maps.Map, delayTime: number) {
+		return this._ready
+			.then(Timer.delay<void>(delayTime))
+			.then(this._markTo(map));
 	}
 
 	/**
@@ -384,6 +376,7 @@ class Pin extends BaserElement<HTMLElement> {
 			const markerOption: google.maps.MarkerOptions = {
 				position: this.position,
 				title,
+				animation: google.maps.Animation.DROP,
 			};
 			if (iconURL) {
 				markerOption.icon = {
@@ -405,7 +398,7 @@ class Pin extends BaserElement<HTMLElement> {
 
 			if (href) {
 				google.maps.event.addListener(marker, 'click', linkTo(href, target));
-			} else {
+			} else if (this.el !== this._map.el) {
 				google.maps.event.addListener(marker, 'click', this._openInfoWindow(map, marker));
 			}
 		};

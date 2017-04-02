@@ -1,5 +1,4 @@
 import EventDispatcher from './EventDispatcher';
-import ScrollSpy from './ScrollSpy';
 
 import createUID from '../fn/createUID';
 import hyphenize from '../fn/hyphenize';
@@ -7,17 +6,42 @@ import isDOMValue from '../fn/isDOMValue';
 import isFalsy from '../fn/isFalsy';
 import parse from '../fn/parse';
 
-const elements: WeakMap<BaserElement<HTMLElement | SVGElement>, Element> = new WeakMap();
-const detachedChildren: WeakMap<BaserElement<HTMLElement | SVGElement>, DocumentFragment> = new WeakMap();
+const elements: WeakMap<BaserElement<Element>, Element> = new WeakMap();
+const detachedChildren: WeakMap<BaserElement<Element>, DocumentFragment> = new WeakMap();
+
+const inViewportElementMap: WeakMap<Element, BaserElement<Element>> = new WeakMap();
+const inViewportChangeMethodMap: WeakMap<BaserElement<Element>, (isInViewport: boolean) => void> = new WeakMap();
+const masterIntersection = new IntersectionObserver(
+	(entries) => {
+		entries.forEach((entry) => {
+			const bel = inViewportElementMap.get(entry.target);
+			if (!bel) {
+				return;
+			}
+			const changeMethod = inViewportChangeMethodMap.get(bel);
+			if (!changeMethod) {
+				return;
+			}
+			changeMethod(!!entry.intersectionRatio);
+		});
+	},
+	{
+		threshold: [0, 1],
+	},
+);
 
 /**
  * DOM要素の抽象クラス
+ *
+ * ```
+ * const bel = new BaserElement(document.querySelector('selector'));
+ * ```
  *
  * @version 1.0.0
  * @since 0.0.1
  *
  */
-export default class BaserElement<E extends HTMLElement | SVGElement> extends EventDispatcher {
+export default class BaserElement<E extends Element> extends EventDispatcher {
 
 	/**
 	 * 管理するDOM要素のid属性値
@@ -32,6 +56,21 @@ export default class BaserElement<E extends HTMLElement | SVGElement> extends Ev
 	 * data-{*}-state属性のキー
 	 */
 	protected stateKeyName = 'baser-element';
+
+	/**
+	 *
+	 */
+	private _isInViewport: boolean;
+
+	/**
+	 *
+	 */
+	private _hasBeenInViewportOneTime = false;
+
+	/**
+	 *
+	 */
+	private _inViewportResolver: () => void | undefined;
 
 	/**
 	 * コンストラクタ
@@ -59,13 +98,19 @@ export default class BaserElement<E extends HTMLElement | SVGElement> extends Ev
 			this.id = createUID();
 			el.id = this.id;
 		}
+
+		if (window.document.contains(el)) {
+			this._onMount();
+		} else {
+			const mo = new MutationObserver(() => this._onMount());
+			mo.observe(this.el, { attributes: true });
+		}
 	}
 
 	/**
 	 * 管理するDOM要素
 	 *
 	 * @readonly
-	 * @type E extends Element
 	 */
 	public get el (): E {
 		return elements.get(this)! as E;
@@ -80,6 +125,18 @@ export default class BaserElement<E extends HTMLElement | SVGElement> extends Ev
 	 */
 	public addClass (className: string) {
 		this.el.classList.add(...className.split(/\s+/g));
+		return this;
+	}
+
+	/**
+	 * クラス名を付加する
+	 *
+	 * @version 1.0.0
+	 * @since 0.1.0
+	 *
+	 */
+	public removeClass (className: string) {
+		this.el.classList.remove(...className.split(/\s+/g));
 		return this;
 	}
 
@@ -187,15 +244,15 @@ export default class BaserElement<E extends HTMLElement | SVGElement> extends Ev
 	 * @version 1.0.0
 	 * @since 1.0.0
 	 */
-	public merge<T, U> (defaultData: T, optionalData: U = {} as U): U & T {
-		const result: U & T = {} as U & T;
+	public merge<T, U> (defaultData: T, optionalData: U = {} as U): T & U {
+		const result: T & U = {} as T & U;
 		const dataKey: (keyof T | keyof U)[] = defaultData ? Object.keys(defaultData) as (keyof T)[] : [];
 		const defaultDataKey: (keyof U)[] = optionalData ? Object.keys(optionalData) as (keyof U)[] : [];
 		const keys: (keyof T | keyof U)[] = dataKey.concat(defaultDataKey).filter((k, i, self) => self.indexOf(k) === i);
 		for (const key of keys) {
 			result[key] = this.pullProp<T | U>(key, optionalData, defaultData);
 		}
-		return result as U & T;
+		return result as T & U;
 	}
 
 	/**
@@ -235,14 +292,41 @@ export default class BaserElement<E extends HTMLElement | SVGElement> extends Ev
 		return this;
 	}
 
-	protected scrollSpy (watch: boolean = true) {
+	/**
+	 * スクロール位置を監視する
+	 *
+	 * 引数に`false`を渡すことで監視を回避できる。
+	 * Promiseのthenメソッドに渡す前提のAPI。
+	 */
+	protected inViewportFirstTime (watch: boolean = true) {
 		return (result) => {
-			const pResult = Promise.resolve(result);
-			if (!watch) {
-				return pResult;
+			if (!watch || this._hasBeenInViewportOneTime) {
+				return Promise.resolve(result);
 			}
-			return ScrollSpy.return(pResult).by(this);
+			return new Promise((resolve) => {
+				this._inViewportResolver = () => {
+					resolve(result);
+				};
+			});
 		};
 	}
 
+	protected inViewport (isInViewport: boolean) {
+		if (this._isInViewport !== isInViewport) {
+			this._isInViewport = isInViewport;
+			this.el.setAttribute(`data-${this.stateKeyName}-inview`, `${isInViewport}`);
+			if (!this._hasBeenInViewportOneTime) {
+				this._hasBeenInViewportOneTime = true;
+			}
+			if (this._inViewportResolver) {
+				this._inViewportResolver();
+			}
+		}
+	}
+
+	private _onMount () {
+		inViewportElementMap.set(this.el, this);
+		inViewportChangeMethodMap.set(this, this.inViewport.bind(this));
+		masterIntersection.observe(this.el);
+	}
 }
