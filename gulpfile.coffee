@@ -1,9 +1,8 @@
 gulp = require 'gulp'
-webpack = require 'webpack-stream'
+webpackGulp = require 'webpack-stream'
+webpack = require 'webpack'
 ts = require 'gulp-typescript'
 tsc = require 'typescript'
-uglify = require 'gulp-uglify'
-rename = require 'gulp-rename'
 header = require 'gulp-header'
 moment = require 'moment'
 runSequence = require 'run-sequence'
@@ -32,7 +31,13 @@ gulp.task 'ts', ->
 
 gulp.task 'pack', ->
   gulp.src './lib/browser.js'
-    .pipe webpack output: filename: 'baser.js'
+    .pipe webpackGulp({
+      plugins: [
+        new webpack.optimize.AggressiveMergingPlugin()
+        # new webpack.optimize.UglifyJsPlugin()
+      ]
+      output: filename: 'baser.js'
+    }, webpack)
     .pipe header banner, pkg: pkg, moment: moment, git: git
     .pipe gulp.dest './dist/'
     .pipe gulp.dest "./dist/v#{pkg.version}/"
