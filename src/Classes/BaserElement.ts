@@ -6,11 +6,11 @@ import isDOMValue from '../fn/isDOMValue';
 import isFalsy from '../fn/isFalsy';
 import parse from '../fn/parse';
 
-const elements: WeakMap<BaserElement<Element>, Element> = new WeakMap();
-const detachedChildren: WeakMap<BaserElement<Element>, DocumentFragment> = new WeakMap();
+const elements: WeakMap<BaserElement, Element> = new WeakMap();
+const detachedChildren: WeakMap<BaserElement, DocumentFragment> = new WeakMap();
 
-const inViewportElementMap: WeakMap<Element, BaserElement<Element>> = new WeakMap();
-const inViewportChangeMethodMap: WeakMap<BaserElement<Element>, (isInViewport: boolean) => void> = new WeakMap();
+const inViewportElementMap: WeakMap<Element, BaserElement> = new WeakMap();
+const inViewportChangeMethodMap: WeakMap<BaserElement, (isInViewport: boolean) => void> = new WeakMap();
 const masterIntersection = new IntersectionObserver(
 	(entries) => {
 		entries.forEach((entry) => {
@@ -41,7 +41,7 @@ const masterIntersection = new IntersectionObserver(
  * @since 0.0.1
  *
  */
-export default class BaserElement<E extends Element> extends EventDispatcher {
+export default class BaserElement<E extends Element = Element> extends EventDispatcher {
 
 	/**
 	 * 管理するDOM要素のid属性値
