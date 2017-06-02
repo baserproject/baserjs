@@ -1,6 +1,6 @@
 /**!
 * baserjs - v1.0.0-beta
-* revision: 0b97bc0cc51f05b5547488baf953e50b2c3e2eff
+* revision: c985706866c381b43aec7c9f2c8e87e3fd0e1d9d
 * update: 2017-06-02
 * Author: baserCMS Users Community [https://github.com/baserproject/]
 * Github: https://github.com/baserproject/baserjs
@@ -285,7 +285,7 @@ var BaserElement = (function (_super) {
         }
         else {
             // jsdomはElement::datasetをサポートしない
-            var dataVal = this.el.getAttribute('data-' + hyphenize_1.default(propName));
+            var dataVal = this.el.getAttribute("data-" + hyphenize_1.default(propName));
             if (dataVal !== null) {
                 value = parse_1.default(dataVal);
             }
@@ -1169,45 +1169,6 @@ var GoogleMaps = (function (_super) {
         return _this;
     }
     /**
-     * 住所文字列から座標を非同期で取得
-     *
-     * @version 1.0.0
-     * @since 0.2.0
-     *
-     */
-    GoogleMaps.getLatLngByAddress = function (address) {
-        return new Promise(function (resolve, reject) {
-            var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ address: address }, function (results, status) {
-                switch (status) {
-                    case google.maps.GeocoderStatus.OK: {
-                        var lat = results[0].geometry.location.lat();
-                        var lng = results[0].geometry.location.lng();
-                        resolve(new google.maps.LatLng(lat, lng));
-                        break;
-                    }
-                    case google.maps.GeocoderStatus.INVALID_REQUEST: {
-                        reject(new Error("\"" + address + "\u306F\u4E0D\u6B63\u306A\u4F4F\u6240\u3060\u3063\u305F\u305F\u3081\u7D50\u679C\u3092\u8FD4\u3059\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002"));
-                        break;
-                    }
-                    case google.maps.GeocoderStatus.ZERO_RESULTS: {
-                        reject(new Error("\"" + address + "\u306F\u7D50\u679C\u304C0\u4EF6\u3067\u3057\u305F\u3002\u3002"));
-                        break;
-                    }
-                    case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
-                        reject(new Error("\u30EA\u30AF\u30A8\u30B9\u30C8\u6570\u306E\u4E0A\u9650\u3092\u8D85\u3048\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
-                        break;
-                    }
-                    // case google.maps.GeocoderStatus.ERROR:
-                    // case google.maps.GeocoderStatus.UNKNOWN_ERROR:
-                    default: {
-                        reject(new Error("\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
-                    }
-                }
-            });
-        });
-    };
-    /**
      * 初期化
      *
      * @version 1.0.0
@@ -1454,6 +1415,45 @@ var Pin = (function (_super) {
             var newPosition = proj.fromPointToLatLng(newPoint);
             map.panTo(newPosition);
         };
+    };
+    /**
+     * 住所文字列から座標を非同期で取得
+     *
+     * @version 1.0.0
+     * @since 0.2.0
+     *
+     */
+    Pin.getLatLngByAddress = function (address) {
+        return new Promise(function (resolve, reject) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: address }, function (results, status) {
+                switch (status) {
+                    case google.maps.GeocoderStatus.OK: {
+                        var lat = results[0].geometry.location.lat();
+                        var lng = results[0].geometry.location.lng();
+                        resolve(new google.maps.LatLng(lat, lng));
+                        break;
+                    }
+                    case google.maps.GeocoderStatus.INVALID_REQUEST: {
+                        reject(new Error("\"" + address + "\u306F\u4E0D\u6B63\u306A\u4F4F\u6240\u3060\u3063\u305F\u305F\u3081\u7D50\u679C\u3092\u8FD4\u3059\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002"));
+                        break;
+                    }
+                    case google.maps.GeocoderStatus.ZERO_RESULTS: {
+                        reject(new Error("\"" + address + "\u306F\u7D50\u679C\u304C0\u4EF6\u3067\u3057\u305F\u3002\u3002"));
+                        break;
+                    }
+                    case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
+                        reject(new Error("\u30EA\u30AF\u30A8\u30B9\u30C8\u6570\u306E\u4E0A\u9650\u3092\u8D85\u3048\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
+                        break;
+                    }
+                    // case google.maps.GeocoderStatus.ERROR:
+                    // case google.maps.GeocoderStatus.UNKNOWN_ERROR:
+                    default: {
+                        reject(new Error("\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
+                    }
+                }
+            });
+        });
     };
     return Pin;
 }(BaserElement_1.default));
@@ -2143,59 +2143,59 @@ var YouTube = (function (_super) {
         this._isMuted = false;
         this.trigger('onunmute', [this.player]);
     };
-    /**
-     * ミュートのオンオフを要素にアサインする
-     *
-     * TODO: 別のクラスにする
-     *
-     * @version 0.9.0
-     * @since 0.5.0
-     * @param $el アサインするDOM要素のjQueryオブジェクト
-     * @param options オプション
-     *
-     */
-    YouTube.prototype.muteController = function (el, options /* YoutubeMuteControllerOptions */) {
-        // const $el: JQuery = $(el);
-        // const defaults: YoutubeMuteControllerOptions = {
-        // 	eventType: 'click',
-        // 	mutedClass: 'is-muted',
-        // 	unmutedClass: 'is-unmuted',
-        // 	baseClass: 'youtube-mute-ctrl',
-        // };
-        // const conf: YoutubeMuteControllerOptions = $.extend(defaults, options);
-        // BaserElement.addClassTo($el, conf.baseClass);
-        // const update: () => void = (): void => {
-        // 	if (this._isMuted) {
-        // 		BaserElement.addClassTo($el, conf.baseClass, '', conf.mutedClass);
-        // 		BaserElement.removeClassFrom($el, conf.baseClass, '', conf.unmutedClass);
-        // 	} else {
-        // 		BaserElement.addClassTo($el, conf.baseClass, '', conf.unmutedClass);
-        // 		BaserElement.removeClassFrom($el, conf.baseClass, '', conf.mutedClass);
-        // 	}
-        // };
-        // const bindCtrl: () => void = (): void => {
-        // 	$el.on(conf.eventType, (e: JQueryEventObject): any => {
-        // 		if (this._isMuted) {
-        // 			this.unMute();
-        // 		} else {
-        // 			this.mute();
-        // 		}
-        // 		update();
-        // 	});
-        // 	update();
-        // };
-        // this.on('onmute onunmute', (): void => {
-        // 	update();
-        // });
-        // if (this.isEmbeded) {
-        // 	bindCtrl();
-        // } else {
-        // 	this.on('embeded', (e: DispatchEvent, ytp: YT.Player): void => {
-        // 		this.off(e.type);
-        // 		bindCtrl();
-        // 	});
-        // }
-    };
+    // /**
+    //  * ミュートのオンオフを要素にアサインする
+    //  *
+    //  * TODO: 別のクラスにする
+    //  *
+    //  * @version 0.9.0
+    //  * @since 0.5.0
+    //  * @param $el アサインするDOM要素のjQueryオブジェクト
+    //  * @param options オプション
+    //  *
+    //  */
+    // public muteController (el: HTMLElement, options: {} /* YoutubeMuteControllerOptions */) {
+    // 	// const $el: JQuery = $(el);
+    // 	// const defaults: YoutubeMuteControllerOptions = {
+    // 	// 	eventType: 'click',
+    // 	// 	mutedClass: 'is-muted',
+    // 	// 	unmutedClass: 'is-unmuted',
+    // 	// 	baseClass: 'youtube-mute-ctrl',
+    // 	// };
+    // 	// const conf: YoutubeMuteControllerOptions = $.extend(defaults, options);
+    // 	// BaserElement.addClassTo($el, conf.baseClass);
+    // 	// const update: () => void = (): void => {
+    // 	// 	if (this._isMuted) {
+    // 	// 		BaserElement.addClassTo($el, conf.baseClass, '', conf.mutedClass);
+    // 	// 		BaserElement.removeClassFrom($el, conf.baseClass, '', conf.unmutedClass);
+    // 	// 	} else {
+    // 	// 		BaserElement.addClassTo($el, conf.baseClass, '', conf.unmutedClass);
+    // 	// 		BaserElement.removeClassFrom($el, conf.baseClass, '', conf.mutedClass);
+    // 	// 	}
+    // 	// };
+    // 	// const bindCtrl: () => void = (): void => {
+    // 	// 	$el.on(conf.eventType, (e: JQueryEventObject): any => {
+    // 	// 		if (this._isMuted) {
+    // 	// 			this.unMute();
+    // 	// 		} else {
+    // 	// 			this.mute();
+    // 	// 		}
+    // 	// 		update();
+    // 	// 	});
+    // 	// 	update();
+    // 	// };
+    // 	// this.on('onmute onunmute', (): void => {
+    // 	// 	update();
+    // 	// });
+    // 	// if (this.isEmbeded) {
+    // 	// 	bindCtrl();
+    // 	// } else {
+    // 	// 	this.on('embeded', (e: DispatchEvent, ytp: YT.Player): void => {
+    // 	// 		this.off(e.type);
+    // 	// 		bindCtrl();
+    // 	// 	});
+    // 	// }
+    // }
     /**
      * 初期化
      *

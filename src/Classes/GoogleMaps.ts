@@ -2,104 +2,9 @@ import BaserElement from './BaserElement';
 import Timer from './Timer';
 
 import linkTo from '../fn/linkTo';
+import { OptionalConfig } from '../types/OptionalConfig';
 
-export type GoogleMapsInviewAction = 'render' | 'pin';
 
-/**
- * GoogleMapsクラスのオプションハッシュのインターフェイス
- *
- * @version 0.6.0
- * @since 0.0.9
- *
- */
-export interface GoogleMapsOption {
-
-	/**
-	 * 緯度
-	 *
-	 * 数値でない場合は`TypeError`の例外を投げる。
-	 */
-	lat?: number;
-
-	/**
-	 * 経度
-	 *
-	 * 数値でない場合は`TypeError`の例外を投げる。
-	 */
-	lng?: number;
-
-	/**
-	 * 住所
-	 *
-	 * Geocoder APIを利用するので検索結果が失敗する可能性がある。
-	 * `lat`と`lng`がある場合は無視される。
-	 */
-	address?: string;
-
-	/**
-	 * ズーム率
-	 *
-	 * `fitBounds`が`true`の場合は無視されます。
-	 *
-	 * @version 0.0.9
-	 * @since 0.0.9
-	 *
-	 */
-	zoom?: number;
-
-	/**
-	 * マップのコントロールオプション
-	 *
-	 * @version 0.0.9
-	 * @since 0.0.9
-	 *
-	 */
-	mapTypeControlOptions?: google.maps.MapTypeControlOptions;
-
-	/**
-	 * スクロールホイールが有効かどうか
-	 *
-	 * @version 0.0.9
-	 * @since 0.0.9
-	 *
-	 */
-	scrollwheel?: boolean;
-
-	/**
-	 * 地図のスタイル
-	 *
-	 * @version 0.0.9
-	 * @since 0.0.9
-	 *
-	 */
-	styles?: google.maps.MapTypeStyle[];
-
-	/**
-	 *
-	 */
-	disableDefaultUI?: boolean;
-
-	/**
-	 * 複数ピンを置いたときに地図内に収まるように
-	 * ズームと中心を調整するかどうか
-	 *
-	 * @version 0.6.0
-	 * @since 0.6.0
-	 *
-	 */
-	fitBounds?: boolean;
-
-	/**
-	 * ピンを刺すかどうか
-	 */
-	pin?: boolean;
-
-	/**
-	 *
-	 */
-	scrollSpy?: GoogleMapsInviewAction;
-
-}
 
 /**
  * マップ要素
@@ -120,7 +25,7 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 	public static getLatLngByAddress (address: string) {
 		return new Promise<google.maps.LatLng>((resolve, reject) => {
 			const geocoder = new google.maps.Geocoder();
-			geocoder.geocode({ address }, (results, status): void => {
+			geocoder.geocode({ address }, (results, status) => {
 				switch (status) {
 					case google.maps.GeocoderStatus.OK: {
 						const lat = results[0].geometry.location.lat();
@@ -171,7 +76,7 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 	 * @since 0.0.9
 	 *
 	 */
-	private _config: GoogleMapsOption;
+	private _config: GoogleMapsConfig;
 
 	/**
 	 * コンストラクタ
@@ -182,7 +87,7 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 	 * @param options マップオプション
 	 *
 	 */
-	constructor (el: HTMLDivElement, options: GoogleMapsOption = {}) {
+	constructor (el: HTMLDivElement, options: OptionalConfig<GoogleMapsConfig>) {
 		super(el);
 
 		if (!('google' in window && google.maps)) {
@@ -203,10 +108,10 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 	 * @since 0.0.6
 	 *
 	 */
-	private async _init (options: GoogleMapsOption) {
+	private async _init (options: OptionalConfig<GoogleMapsConfig>) {
 		this.detachChildren();
 
-		this._config = this.merge<GoogleMapsOption, GoogleMapsOption>(
+		this._config = this.merge(
 			{
 				lat: undefined,
 				lng: undefined,
@@ -224,6 +129,7 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 				fitBounds: false,
 				pin: true,
 				scrollSpy: undefined,
+				pinningDelayTime: 400,
 			},
 			options,
 		);
@@ -277,7 +183,7 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 
 		let i = 1;
 		for (const pin of pins) {
-			await pin.markTo(this._gmap, i * 400);
+			await pin.markTo(this._gmap, i * this._config.pinningDelayTime);
 			markerBounds.extend(pin.position);
 			i++;
 		}
@@ -426,7 +332,7 @@ class Pin extends BaserElement<HTMLElement> {
 			const content = info.getContent();
 			const proj = map.getProjection();
 			const currentPoint = proj.fromLatLngToPoint(this.position);
-			const scale = Math.pow(2, map.getZoom());
+			const scale = Math.pow(2, map.getZoom()); // tslint:disable-line:no-magic-numbers
 			const height = typeof content === 'string' ? 0 : content.getBoundingClientRect().height;
 			const y = (currentPoint.y * scale - height) / scale;
 			const newPoint = new google.maps.Point(currentPoint.x, y);
@@ -434,4 +340,106 @@ class Pin extends BaserElement<HTMLElement> {
 			map.panTo(newPosition);
 		};
 	}
+}
+
+export type GoogleMapsInviewAction = 'render' | 'pin';
+
+/**
+ * GoogleMapsクラスのオプションハッシュのインターフェイス
+ *
+ * @version 0.6.0
+ * @since 0.0.9
+ *
+ */
+export interface GoogleMapsConfig {
+
+	/**
+	 * 緯度
+	 *
+	 * 数値でない場合は`TypeError`の例外を投げる。
+	 */
+	lat?: number;
+
+	/**
+	 * 経度
+	 *
+	 * 数値でない場合は`TypeError`の例外を投げる。
+	 */
+	lng?: number;
+
+	/**
+	 * 住所
+	 *
+	 * Geocoder APIを利用するので検索結果が失敗する可能性がある。
+	 * `lat`と`lng`がある場合は無視される。
+	 */
+	address?: string;
+
+	/**
+	 * ズーム率
+	 *
+	 * `fitBounds`が`true`の場合は無視されます。
+	 *
+	 * @version 0.0.9
+	 * @since 0.0.9
+	 *
+	 */
+	zoom: number;
+
+	/**
+	 * マップのコントロールオプション
+	 *
+	 * @version 0.0.9
+	 * @since 0.0.9
+	 *
+	 */
+	mapTypeControlOptions: google.maps.MapTypeControlOptions;
+
+	/**
+	 * スクロールホイールが有効かどうか
+	 *
+	 * @version 0.0.9
+	 * @since 0.0.9
+	 *
+	 */
+	scrollwheel: boolean;
+
+	/**
+	 * 地図のスタイル
+	 *
+	 * @version 0.0.9
+	 * @since 0.0.9
+	 *
+	 */
+	styles: google.maps.MapTypeStyle[];
+
+	/**
+	 *
+	 */
+	disableDefaultUI: boolean;
+
+	/**
+	 * 複数ピンを置いたときに地図内に収まるように
+	 * ズームと中心を調整するかどうか
+	 *
+	 * @version 0.6.0
+	 * @since 0.6.0
+	 *
+	 */
+	fitBounds: boolean;
+
+	/**
+	 * ピンを刺すかどうか
+	 */
+	pin: boolean;
+
+	/**
+	 *
+	 */
+	scrollSpy?: GoogleMapsInviewAction;
+
+	/**
+	 * ピンを指すタイミングの遅延時間
+	 */
+	pinningDelayTime: number;
 }
