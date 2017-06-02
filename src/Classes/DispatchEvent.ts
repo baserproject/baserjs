@@ -23,7 +23,7 @@ export default class DispatchEvent {
 	 * @since 0.0.10
 	 *
 	 */
-	private _isImmediatePropagationStopped: boolean = false;
+	private _isImmediatePropagationStopped = false;
 
 	/**
 	 * デフォルトのイベントの発火が止められているかどうか
@@ -32,7 +32,7 @@ export default class DispatchEvent {
 	 * @since 0.9.0
 	 *
 	 */
-	private _isDefaultPrevented: boolean = false;
+	private _isDefaultPrevented = false;
 
 	/**
 	 * コンストラクタ

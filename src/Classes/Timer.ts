@@ -39,7 +39,7 @@ export default class Timer {
 
 	private _reject: (reason: typeof CANCEL_REASON) => void;
 
-	private _timerId: number;
+	private _timerId: NodeJS.Timer;
 
 	constructor (time: number) {
 		if (!Number.isSafeInteger(time)) {
@@ -51,7 +51,7 @@ export default class Timer {
 	public wait<R> (returnValue: R) {
 		return new Promise<R>((resolve, reject) => {
 			this._reject = reject;
-			if (0 === this.time) {
+			if (this.time === 0) {
 				this._timerId = setImmediate(() => {
 					resolve(returnValue);
 				});

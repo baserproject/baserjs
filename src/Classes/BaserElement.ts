@@ -213,7 +213,7 @@ export default class BaserElement<E extends Element> extends EventDispatcher {
 			}
 		} else {
 			// jsdomはElement::datasetをサポートしない
-			const dataVal = this.el.getAttribute('data-' + hyphenize(propName));
+			const dataVal = this.el.getAttribute(`data-${hyphenize(propName)}`);
 			if (dataVal !== null) {
 				value = parse(dataVal);
 			}
@@ -244,8 +244,8 @@ export default class BaserElement<E extends Element> extends EventDispatcher {
 	 * @version 1.0.0
 	 * @since 1.0.0
 	 */
-	public merge<T, U> (defaultData: T, optionalData: U = {} as U): T & U {
-		const result: T & U = {} as T & U;
+	public merge<T, U> (defaultData: T, optionalData: U = {} as U): T & U { // tslint:disable-line:no-object-literal-type-assertion
+		const result: T & U = {} as T & U; // tslint:disable-line:no-object-literal-type-assertion
 		const dataKey: (keyof T | keyof U)[] = defaultData ? Object.keys(defaultData) as (keyof T)[] : [];
 		const defaultDataKey: (keyof U)[] = optionalData ? Object.keys(optionalData) as (keyof U)[] : [];
 		const keys: (keyof T | keyof U)[] = dataKey.concat(defaultDataKey).filter((k, i, self) => self.indexOf(k) === i);

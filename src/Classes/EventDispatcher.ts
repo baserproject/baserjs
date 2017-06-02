@@ -27,7 +27,7 @@ export default class EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	public static eventHandlers: { [id: string]: EventHandler } = {};
+	public static eventHandlers: { [id: string]: EventHandler<any> } = {}; // tslint:disable-line:no-any
 
 	/**
 	 * イベント駆動できるクラス
@@ -36,7 +36,7 @@ export default class EventDispatcher {
 	 * @since 0.7.0
 	 *
 	 */
-	public static types: { [type: string]: EventHandler[] } = {};
+	public static types: { [type: string]: EventHandler<any>[] } = {}; // tslint:disable-line:no-any
 
 	/**
 	 * コンストラクタ
@@ -59,15 +59,10 @@ export default class EventDispatcher {
 	 * @return インスタンス自身
 	 *
 	 */
-	public on (type: string | string[], handler: Function): EventDispatcher {
-		let types: string[];
-		if (typeof type === 'string') {
-			types = type.split(/\s+/g);
-		} else {
-			types = type;
-		}
-		for (const type of types) {
-			const eventHandler: EventHandler = new EventHandler(this, type, handler);
+	public on<T = {}> (types: string | string[], handler: (e: DispatchEvent, ...args: T[]) => boolean | void): EventDispatcher {
+		const typeList: string[] = typeof types === 'string' ? types.split(/\s+/g) : types;
+		for (const type of typeList) {
+			const eventHandler: EventHandler<T> = new EventHandler<T>(this, type, handler);
 			EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
 			if (!EventDispatcher.types[type]) {
 				EventDispatcher.types[type] = [];
@@ -86,14 +81,9 @@ export default class EventDispatcher {
 	 * @return インスタンス自身
 	 *
 	 */
-	public off (type: string | string[]): EventDispatcher {
-		let types: string[];
-		if (typeof type === 'string') {
-			types = type.split(/\s+/g);
-		} else {
-			types = type;
-		}
-		for (const type of types) {
+	public off (types: string | string[]): EventDispatcher {
+		const typeList: string[] = typeof types === 'string' ? types.split(/\s+/g) : types;
+		for (const type of typeList) {
 			delete EventDispatcher.types[type];
 		}
 		return this;
@@ -110,7 +100,7 @@ export default class EventDispatcher {
 	 * @return インスタンス自身
 	 *
 	 */
-	public trigger (type: string | DispatchEvent, args: any[] = [], context?: any): EventDispatcher {
+	public trigger<T = {}> (type: string | DispatchEvent, args: T[] = [], context?): EventDispatcher {
 		context = context || this;
 		let typeName: string;
 		let e: DispatchEvent;
@@ -123,9 +113,9 @@ export default class EventDispatcher {
 		}
 		if (EventDispatcher.types[typeName]) {
 			// sliceをつかってオブジェクトのコピーを渡し参照を切る
-			const handlers: EventHandler[] = EventDispatcher.types[typeName].slice();
+			const handlers: EventHandler<T>[] = EventDispatcher.types[typeName].slice();
 			while (handlers.length) {
-				const eventHandler: EventHandler | undefined = handlers.shift();
+				const eventHandler: EventHandler<T> | undefined = handlers.shift();
 				if (eventHandler && eventHandler.context === this) {
 					const isCancel: boolean = eventHandler.fire(context, e, args);
 					if (isCancel) {

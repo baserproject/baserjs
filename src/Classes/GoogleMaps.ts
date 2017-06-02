@@ -126,21 +126,25 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 						const lat = results[0].geometry.location.lat();
 						const lng = results[0].geometry.location.lng();
 						resolve(new google.maps.LatLng(lat, lng));
+						break;
 					}
-					break;
-					case google.maps.GeocoderStatus.INVALID_REQUEST:
+					case google.maps.GeocoderStatus.INVALID_REQUEST: {
 						reject(new Error(`"${address}は不正な住所だったため結果を返すことができませんでした。`));
-					break;
-					case google.maps.GeocoderStatus.ZERO_RESULTS:
+						break;
+					}
+					case google.maps.GeocoderStatus.ZERO_RESULTS: {
 						reject(new Error(`"${address}は結果が0件でした。。`));
-					break;
-					case google.maps.GeocoderStatus.OVER_QUERY_LIMIT:
+						break;
+					}
+					case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
 						reject(new Error(`リクエスト数の上限を超えました。${address}は処理されません。`));
-					break;
+						break;
+					}
 					// case google.maps.GeocoderStatus.ERROR:
 					// case google.maps.GeocoderStatus.UNKNOWN_ERROR:
-					default:
+					default: {
 						reject(new Error(`エラーが発生しました。${address}は処理されません。`));
+					}
 				}
 			});
 		});

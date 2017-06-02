@@ -81,11 +81,7 @@ export default class Sequencer<E> {
 	 */
 	constructor (elements: E[], stepDurationOrProgression: number | ISequenceProgression, init?: ISequencerEventPromisifyHandler<E>) {
 		targetElements.set(this, elements);
-		if (typeof stepDurationOrProgression === 'number') {
-			this._sequenceProgression = Sequencer.animationFrameProgression(stepDurationOrProgression);
-		} else {
-			this._sequenceProgression = stepDurationOrProgression;
-		}
+		this._sequenceProgression = typeof stepDurationOrProgression === 'number' ? Sequencer.animationFrameProgression(stepDurationOrProgression) : stepDurationOrProgression;
 		this._create(init);
 	}
 

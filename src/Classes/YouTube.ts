@@ -536,60 +536,60 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 		this.trigger('onunmute', [this.player]);
 	}
 
-	/**
-	 * ミュートのオンオフを要素にアサインする
-	 *
-	 * TODO: 別のクラスにする
-	 *
-	 * @version 0.9.0
-	 * @since 0.5.0
-	 * @param $el アサインするDOM要素のjQueryオブジェクト
-	 * @param options オプション
-	 *
-	 */
-	public muteController (el: HTMLElement, options: {} /* YoutubeMuteControllerOptions */) {
-		// const $el: JQuery = $(el);
-		// const defaults: YoutubeMuteControllerOptions = {
-		// 	eventType: 'click',
-		// 	mutedClass: 'is-muted',
-		// 	unmutedClass: 'is-unmuted',
-		// 	baseClass: 'youtube-mute-ctrl',
-		// };
-		// const conf: YoutubeMuteControllerOptions = $.extend(defaults, options);
-		// BaserElement.addClassTo($el, conf.baseClass);
-		// const update: () => void = (): void => {
-		// 	if (this._isMuted) {
-		// 		BaserElement.addClassTo($el, conf.baseClass, '', conf.mutedClass);
-		// 		BaserElement.removeClassFrom($el, conf.baseClass, '', conf.unmutedClass);
-		// 	} else {
-		// 		BaserElement.addClassTo($el, conf.baseClass, '', conf.unmutedClass);
-		// 		BaserElement.removeClassFrom($el, conf.baseClass, '', conf.mutedClass);
-		// 	}
-		// };
-		// const bindCtrl: () => void = (): void => {
-		// 	$el.on(conf.eventType, (e: JQueryEventObject): any => {
-		// 		if (this._isMuted) {
-		// 			this.unMute();
-		// 		} else {
-		// 			this.mute();
-		// 		}
-		// 		update();
-		// 	});
-		// 	update();
-		// };
-		// this.on('onmute onunmute', (): void => {
-		// 	update();
-		// });
-		// if (this.isEmbeded) {
-		// 	bindCtrl();
-		// } else {
-		// 	this.on('embeded', (e: DispatchEvent, ytp: YT.Player): void => {
-		// 		this.off(e.type);
-		// 		bindCtrl();
-		// 	});
-		// }
+	// /**
+	//  * ミュートのオンオフを要素にアサインする
+	//  *
+	//  * TODO: 別のクラスにする
+	//  *
+	//  * @version 0.9.0
+	//  * @since 0.5.0
+	//  * @param $el アサインするDOM要素のjQueryオブジェクト
+	//  * @param options オプション
+	//  *
+	//  */
+	// public muteController (el: HTMLElement, options: {} /* YoutubeMuteControllerOptions */) {
+	// 	// const $el: JQuery = $(el);
+	// 	// const defaults: YoutubeMuteControllerOptions = {
+	// 	// 	eventType: 'click',
+	// 	// 	mutedClass: 'is-muted',
+	// 	// 	unmutedClass: 'is-unmuted',
+	// 	// 	baseClass: 'youtube-mute-ctrl',
+	// 	// };
+	// 	// const conf: YoutubeMuteControllerOptions = $.extend(defaults, options);
+	// 	// BaserElement.addClassTo($el, conf.baseClass);
+	// 	// const update: () => void = (): void => {
+	// 	// 	if (this._isMuted) {
+	// 	// 		BaserElement.addClassTo($el, conf.baseClass, '', conf.mutedClass);
+	// 	// 		BaserElement.removeClassFrom($el, conf.baseClass, '', conf.unmutedClass);
+	// 	// 	} else {
+	// 	// 		BaserElement.addClassTo($el, conf.baseClass, '', conf.unmutedClass);
+	// 	// 		BaserElement.removeClassFrom($el, conf.baseClass, '', conf.mutedClass);
+	// 	// 	}
+	// 	// };
+	// 	// const bindCtrl: () => void = (): void => {
+	// 	// 	$el.on(conf.eventType, (e: JQueryEventObject): any => {
+	// 	// 		if (this._isMuted) {
+	// 	// 			this.unMute();
+	// 	// 		} else {
+	// 	// 			this.mute();
+	// 	// 		}
+	// 	// 		update();
+	// 	// 	});
+	// 	// 	update();
+	// 	// };
+	// 	// this.on('onmute onunmute', (): void => {
+	// 	// 	update();
+	// 	// });
+	// 	// if (this.isEmbeded) {
+	// 	// 	bindCtrl();
+	// 	// } else {
+	// 	// 	this.on('embeded', (e: DispatchEvent, ytp: YT.Player): void => {
+	// 	// 		this.off(e.type);
+	// 	// 		bindCtrl();
+	// 	// 	});
+	// 	// }
 
-	}
+	// }
 
 	/**
 	 * 初期化
@@ -780,18 +780,18 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 					this.trigger('changecue', [this.player]);
 				}
 				this.currentCueIndex = listIndex;
+				break;
 			}
-			break;
 			case YT.PlayerState.BUFFERING: {
 				this.changeState('buffering');
 				this.trigger('buffering', [this.player]);
+				break;
 			}
-			break;
 			case YT.PlayerState.CUED: {
 				this.changeState('cued');
 				this.trigger('cued', [this.player]);
+				break;
 			}
-			break;
 			case YT.PlayerState.ENDED: {
 				this.changeState('ended');
 				this.trigger('ended', [this.player]);
@@ -800,19 +800,19 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 				} else if (this._config.loop) {
 					this.player.playVideo();
 				}
+				break;
 			}
-			break;
 			case YT.PlayerState.PAUSED: {
 				this.changeState('paused');
 				this.trigger('paused', [this.player]);
+				break;
 			}
-			break;
 			case YT.PlayerState.PLAYING: {
 				this.changeState('playing');
 				this.trigger('playing', [this.player]);
 				this.currentCueIndex = this.player.getPlaylistIndex();
+				break;
 			}
-			break;
 			default: {
 				if ('console' in window) {
 					console.warn('YouTube Player state is unknown.');

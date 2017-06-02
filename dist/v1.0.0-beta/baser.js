@@ -1,7 +1,7 @@
 /**!
 * baserjs - v1.0.0-beta
-* revision: 71646aded63cf35b335dfb5cd696ccdebdb85ef3
-* update: 2017-05-11
+* revision: 0b97bc0cc51f05b5547488baf953e50b2c3e2eff
+* update: 2017-06-02
 * Author: baserCMS Users Community [https://github.com/baserproject/]
 * Github: https://github.com/baserproject/baserjs
 * License: Licensed under the MIT License
@@ -319,7 +319,7 @@ var BaserElement = (function (_super) {
      */
     BaserElement.prototype.merge = function (defaultData, optionalData) {
         if (optionalData === void 0) { optionalData = {}; }
-        var result = {};
+        var result = {}; // tslint:disable-line:no-object-literal-type-assertion
         var dataKey = defaultData ? Object.keys(defaultData) : [];
         var defaultDataKey = optionalData ? Object.keys(optionalData) : [];
         var keys = dataKey.concat(defaultDataKey).filter(function (k, i, self) { return self.indexOf(k) === i; });
@@ -930,22 +930,16 @@ var EventDispatcher = (function () {
      * @return インスタンス自身
      *
      */
-    EventDispatcher.prototype.on = function (type, handler) {
-        var types;
-        if (typeof type === 'string') {
-            types = type.split(/\s+/g);
-        }
-        else {
-            types = type;
-        }
-        for (var _i = 0, types_1 = types; _i < types_1.length; _i++) {
-            var type_1 = types_1[_i];
-            var eventHandler = new EventHandler_1.default(this, type_1, handler);
+    EventDispatcher.prototype.on = function (types, handler) {
+        var typeList = typeof types === 'string' ? types.split(/\s+/g) : types;
+        for (var _i = 0, typeList_1 = typeList; _i < typeList_1.length; _i++) {
+            var type = typeList_1[_i];
+            var eventHandler = new EventHandler_1.default(this, type, handler);
             EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
-            if (!EventDispatcher.types[type_1]) {
-                EventDispatcher.types[type_1] = [];
+            if (!EventDispatcher.types[type]) {
+                EventDispatcher.types[type] = [];
             }
-            EventDispatcher.types[type_1].push(eventHandler);
+            EventDispatcher.types[type].push(eventHandler);
         }
         return this;
     };
@@ -958,17 +952,11 @@ var EventDispatcher = (function () {
      * @return インスタンス自身
      *
      */
-    EventDispatcher.prototype.off = function (type) {
-        var types;
-        if (typeof type === 'string') {
-            types = type.split(/\s+/g);
-        }
-        else {
-            types = type;
-        }
-        for (var _i = 0, types_2 = types; _i < types_2.length; _i++) {
-            var type_2 = types_2[_i];
-            delete EventDispatcher.types[type_2];
+    EventDispatcher.prototype.off = function (types) {
+        var typeList = typeof types === 'string' ? types.split(/\s+/g) : types;
+        for (var _i = 0, typeList_2 = typeList; _i < typeList_2.length; _i++) {
+            var type = typeList_2[_i];
+            delete EventDispatcher.types[type];
         }
         return this;
     };
@@ -1025,7 +1013,7 @@ var EventDispatcher = (function () {
  * @since 0.7.0
  *
  */
-EventDispatcher.eventHandlers = {};
+EventDispatcher.eventHandlers = {}; // tslint:disable-line:no-any
 /**
  * イベント駆動できるクラス
  *
@@ -1033,7 +1021,7 @@ EventDispatcher.eventHandlers = {};
  * @since 0.7.0
  *
  */
-EventDispatcher.types = {};
+EventDispatcher.types = {}; // tslint:disable-line:no-any
 exports.default = EventDispatcher;
 
 
@@ -1056,7 +1044,7 @@ var EventHandler = (function () {
     /**
      * ハンドラ
      *
-     * @version 0.9.0
+     * @version 1.0.0
      * @since 0.0.10
      * @param context 紐づくディスパッチャーオブジェクト
      * @param type イベントのタイプ
@@ -1079,7 +1067,10 @@ var EventHandler = (function () {
      * @return イベントの伝達を止めるかどうか
      */
     EventHandler.prototype.fire = function (context, e, args) {
-        var handlerReturn = this._handler.apply(context, [e].concat(args));
+        var applyArgs = [];
+        applyArgs.push(e);
+        applyArgs = applyArgs.concat(args);
+        var handlerReturn = this._handler.apply(context, applyArgs);
         return handlerReturn !== undefined && !handlerReturn;
     };
     return EventHandler;
@@ -1189,26 +1180,29 @@ var GoogleMaps = (function (_super) {
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({ address: address }, function (results, status) {
                 switch (status) {
-                    case google.maps.GeocoderStatus.OK:
-                        {
-                            var lat = results[0].geometry.location.lat();
-                            var lng = results[0].geometry.location.lng();
-                            resolve(new google.maps.LatLng(lat, lng));
-                        }
+                    case google.maps.GeocoderStatus.OK: {
+                        var lat = results[0].geometry.location.lat();
+                        var lng = results[0].geometry.location.lng();
+                        resolve(new google.maps.LatLng(lat, lng));
                         break;
-                    case google.maps.GeocoderStatus.INVALID_REQUEST:
+                    }
+                    case google.maps.GeocoderStatus.INVALID_REQUEST: {
                         reject(new Error("\"" + address + "\u306F\u4E0D\u6B63\u306A\u4F4F\u6240\u3060\u3063\u305F\u305F\u3081\u7D50\u679C\u3092\u8FD4\u3059\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002"));
                         break;
-                    case google.maps.GeocoderStatus.ZERO_RESULTS:
+                    }
+                    case google.maps.GeocoderStatus.ZERO_RESULTS: {
                         reject(new Error("\"" + address + "\u306F\u7D50\u679C\u304C0\u4EF6\u3067\u3057\u305F\u3002\u3002"));
                         break;
-                    case google.maps.GeocoderStatus.OVER_QUERY_LIMIT:
+                    }
+                    case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
                         reject(new Error("\u30EA\u30AF\u30A8\u30B9\u30C8\u6570\u306E\u4E0A\u9650\u3092\u8D85\u3048\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
                         break;
+                    }
                     // case google.maps.GeocoderStatus.ERROR:
                     // case google.maps.GeocoderStatus.UNKNOWN_ERROR:
-                    default:
+                    default: {
                         reject(new Error("\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
+                    }
                 }
             });
         });
@@ -1528,12 +1522,7 @@ var Sequencer = (function () {
         this._available = false;
         this._stopper = Symbol('seaquence-stopper');
         targetElements.set(this, elements);
-        if (typeof stepDurationOrProgression === 'number') {
-            this._sequenceProgression = Sequencer.animationFrameProgression(stepDurationOrProgression);
-        }
-        else {
-            this._sequenceProgression = stepDurationOrProgression;
-        }
+        this._sequenceProgression = typeof stepDurationOrProgression === 'number' ? Sequencer.animationFrameProgression(stepDurationOrProgression) : stepDurationOrProgression;
         this._create(init);
     }
     Sequencer.delay = function (delayTime, context) {
@@ -1983,7 +1972,7 @@ var Timer = (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             _this._reject = reject;
-            if (0 === _this.time) {
+            if (_this.time === 0) {
                 _this._timerId = setImmediate(function () {
                     resolve(returnValue);
                 });
@@ -2389,54 +2378,48 @@ var YouTube = (function (_super) {
      */
     YouTube.prototype._onStateChange = function (e) {
         switch (e.data) {
-            case YT.PlayerState.UNSTARTED:
-                {
-                    this.changeState('unstarted');
-                    this.trigger('unstarted', [this.player]);
-                    var listIndex = this.player.getPlaylistIndex();
-                    if (this.currentCueIndex !== listIndex) {
-                        this.trigger('changecue', [this.player]);
-                    }
-                    this.currentCueIndex = listIndex;
+            case YT.PlayerState.UNSTARTED: {
+                this.changeState('unstarted');
+                this.trigger('unstarted', [this.player]);
+                var listIndex = this.player.getPlaylistIndex();
+                if (this.currentCueIndex !== listIndex) {
+                    this.trigger('changecue', [this.player]);
+                }
+                this.currentCueIndex = listIndex;
+                break;
+            }
+            case YT.PlayerState.BUFFERING: {
+                this.changeState('buffering');
+                this.trigger('buffering', [this.player]);
+                break;
+            }
+            case YT.PlayerState.CUED: {
+                this.changeState('cued');
+                this.trigger('cued', [this.player]);
+                break;
+            }
+            case YT.PlayerState.ENDED: {
+                this.changeState('ended');
+                this.trigger('ended', [this.player]);
+                if (this.movieId.length > 1 && this._config.loop && this.currentCueIndex === this.movieId.length - 1) {
+                    this.player.playVideoAt(0);
+                }
+                else if (this._config.loop) {
+                    this.player.playVideo();
                 }
                 break;
-            case YT.PlayerState.BUFFERING:
-                {
-                    this.changeState('buffering');
-                    this.trigger('buffering', [this.player]);
-                }
+            }
+            case YT.PlayerState.PAUSED: {
+                this.changeState('paused');
+                this.trigger('paused', [this.player]);
                 break;
-            case YT.PlayerState.CUED:
-                {
-                    this.changeState('cued');
-                    this.trigger('cued', [this.player]);
-                }
+            }
+            case YT.PlayerState.PLAYING: {
+                this.changeState('playing');
+                this.trigger('playing', [this.player]);
+                this.currentCueIndex = this.player.getPlaylistIndex();
                 break;
-            case YT.PlayerState.ENDED:
-                {
-                    this.changeState('ended');
-                    this.trigger('ended', [this.player]);
-                    if (this.movieId.length > 1 && this._config.loop && this.currentCueIndex === this.movieId.length - 1) {
-                        this.player.playVideoAt(0);
-                    }
-                    else if (this._config.loop) {
-                        this.player.playVideo();
-                    }
-                }
-                break;
-            case YT.PlayerState.PAUSED:
-                {
-                    this.changeState('paused');
-                    this.trigger('paused', [this.player]);
-                }
-                break;
-            case YT.PlayerState.PLAYING:
-                {
-                    this.changeState('playing');
-                    this.trigger('playing', [this.player]);
-                    this.currentCueIndex = this.player.getPlaylistIndex();
-                }
-                break;
+            }
             default: {
                 if ('console' in window) {
                     console.warn('YouTube Player state is unknown.');
