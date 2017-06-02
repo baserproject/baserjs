@@ -10,5 +10,5 @@ import parse from './parse';
  *
  */
 export default function isFalsy (str: string) {
-	return !parse(str, false);
+	return !parse(str);
 }

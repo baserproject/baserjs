@@ -1,6 +1,6 @@
 /**!
 * baserjs - v1.0.0-beta
-* revision: c985706866c381b43aec7c9f2c8e87e3fd0e1d9d
+* revision: e27cc7c8d3de1d643f9ce2c21497d269ecfeaa20
 * update: 2017-06-02
 * Author: baserCMS Users Community [https://github.com/baserproject/]
 * Github: https://github.com/baserproject/baserjs
@@ -71,7 +71,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 15);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -91,37 +91,20 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var EventDispatcher_1 = __webpack_require__(9);
+__webpack_require__(21);
+var EventDispatcher_1 = __webpack_require__(8);
 var createUID_1 = __webpack_require__(1);
-var hyphenize_1 = __webpack_require__(17);
-var isDOMValue_1 = __webpack_require__(18);
-var isFalsy_1 = __webpack_require__(19);
+var hyphenize_1 = __webpack_require__(16);
+var isDOMValue_1 = __webpack_require__(17);
+var isFalsy_1 = __webpack_require__(18);
 var parse_1 = __webpack_require__(2);
 var elements = new WeakMap();
 var detachedChildren = new WeakMap();
 var inViewportElementMap = new WeakMap();
 var inViewportChangeMethodMap = new WeakMap();
-var masterIntersection = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-        var bel = inViewportElementMap.get(entry.target);
-        if (!bel) {
-            return;
-        }
-        var changeMethod = inViewportChangeMethodMap.get(bel);
-        if (!changeMethod) {
-            return;
-        }
-        changeMethod(!!entry.intersectionRatio);
-    });
-}, {
-    threshold: [0, 1],
-});
+var masterIntersection;
 /**
  * DOM要素の抽象クラス
- *
- * ```
- * const bel = new BaserElement(document.querySelector('selector'));
- * ```
  *
  * @version 1.0.0
  * @since 0.0.1
@@ -137,7 +120,8 @@ var BaserElement = (function (_super) {
      * @param el 管理するDOM要素
      *
      */
-    function BaserElement(el) {
+    function BaserElement(el, options) {
+        if (options === void 0) { options = {}; }
         var _this = _super.call(this) || this;
         /**
          * data-{*}-state属性のキー
@@ -161,10 +145,12 @@ var BaserElement = (function (_super) {
             _this.id = createUID_1.default();
             el.id = _this.id;
         }
+        _this._options = options;
+        _this._create();
         if (window.document.contains(el)) {
             _this._onMount();
         }
-        else {
+        else if ('MutationObserver' in window) {
             var mo = new MutationObserver(function () { return _this._onMount(); });
             mo.observe(_this.el, { attributes: true });
         }
@@ -250,25 +236,27 @@ var BaserElement = (function (_super) {
      * @since 1.0.0
      *
      */
+    // tslint:disable-next-line:no-any
     BaserElement.prototype.pullProp = function (propName) {
         var options = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             options[_i - 1] = arguments[_i];
         }
+        var el = this.el;
         // 1. DOMインターフェイスの属性値
-        var domPropVal = this.el[propName];
+        if (propName in el) {
+            // tslint:disable-next-line:no-any
+            return el[propName];
+        }
         // 2. HTMLのタグに記述された属性値
-        var htmlAttrVal = this.el.getAttribute(propName);
+        var htmlAttrVal = el.getAttribute(propName);
         // 2-B. HTMLのタグに記述された属性値（小文字）
-        var htmlAttrValLower = this.el.getAttribute(propName.toLowerCase());
+        var htmlAttrValLower = el.getAttribute(propName.toLowerCase());
         // 2-C. HTMLのタグに記述された属性値（ハイフンケース）
-        var htmlAttrValHyphenized = this.el.getAttribute(hyphenize_1.default(propName));
+        var htmlAttrValHyphenized = el.getAttribute(hyphenize_1.default(propName));
         var value;
         // 判定
-        if (isDOMValue_1.default(domPropVal)) {
-            value = parse_1.default(domPropVal, false);
-        }
-        else if (htmlAttrVal !== null) {
+        if (htmlAttrVal !== null) {
             value = parse_1.default(htmlAttrVal);
         }
         else if (htmlAttrValLower !== null) {
@@ -277,15 +265,15 @@ var BaserElement = (function (_super) {
         else if (htmlAttrValHyphenized !== null) {
             value = parse_1.default(htmlAttrValHyphenized);
         }
-        else if (this.el instanceof HTMLElement && this.el.dataset) {
-            var dataVal = this.el.dataset[propName];
+        else if (el instanceof HTMLElement && el.dataset) {
+            var dataVal = el.dataset[propName];
             if (dataVal !== undefined) {
                 value = parse_1.default(dataVal);
             }
         }
         else {
             // jsdomはElement::datasetをサポートしない
-            var dataVal = this.el.getAttribute("data-" + hyphenize_1.default(propName));
+            var dataVal = el.getAttribute("data-" + hyphenize_1.default(propName));
             if (dataVal !== null) {
                 value = parse_1.default(dataVal);
             }
@@ -318,16 +306,13 @@ var BaserElement = (function (_super) {
      * @since 1.0.0
      */
     BaserElement.prototype.merge = function (defaultData, optionalData) {
-        if (optionalData === void 0) { optionalData = {}; }
-        var result = {}; // tslint:disable-line:no-object-literal-type-assertion
-        var dataKey = defaultData ? Object.keys(defaultData) : [];
-        var defaultDataKey = optionalData ? Object.keys(optionalData) : [];
-        var keys = dataKey.concat(defaultDataKey).filter(function (k, i, self) { return self.indexOf(k) === i; });
-        for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
-            var key = keys_1[_i];
-            result[key] = this.pullProp(key, optionalData, defaultData);
+        var map = Object.assign({}, optionalData, defaultData);
+        for (var key in map) {
+            if (map.hasOwnProperty(key)) {
+                map[key] = this.pullProp(key, optionalData, defaultData);
+            }
         }
-        return result;
+        return map;
     };
     /**
      * 子要素をDOMツリーから切り離す
@@ -364,6 +349,10 @@ var BaserElement = (function (_super) {
         this.el.setAttribute("data-" + this.stateKeyName + "-state", state);
         return this;
     };
+    BaserElement.prototype._create = function (defaults) {
+        // tslint:disable-next-line:no-object-literal-type-assertion
+        this._config = defaults ? this.merge(defaults, this._options) : {};
+    };
     /**
      * スクロール位置を監視する
      *
@@ -399,7 +388,24 @@ var BaserElement = (function (_super) {
     BaserElement.prototype._onMount = function () {
         inViewportElementMap.set(this.el, this);
         inViewportChangeMethodMap.set(this, this.inViewport.bind(this));
-        masterIntersection.observe(this.el);
+        if ('IntersectionObserver' in window) {
+            masterIntersection = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    var bel = inViewportElementMap.get(entry.target);
+                    if (!bel) {
+                        return;
+                    }
+                    var changeMethod = inViewportChangeMethodMap.get(bel);
+                    if (!changeMethod) {
+                        return;
+                    }
+                    changeMethod(!!entry.intersectionRatio);
+                });
+            }, {
+                threshold: [0, 1],
+            });
+            masterIntersection.observe(this.el);
+        }
     };
     return BaserElement;
 }(EventDispatcher_1.default));
@@ -416,20 +422,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * ユニークIDを発行する
  *
- * @version 0.9.0
+ * @version 1.0.0
  * @since 0.0.1
  * @param prefix 接頭辞
  * @return ユニークID
  *
  */
 function createUID(prefix) {
-    if (prefix === void 0) { prefix = 'uid'; }
+    if (prefix === void 0) { prefix = 'uid-'; }
     var random = Math.random() * 1e8;
     var seed = new Date().valueOf();
     var uniqueNumber = Math.abs(Math.floor(random + seed));
-    if (prefix) {
-        prefix += '-';
-    }
     return "" + prefix + uniqueNumber.toString(24);
 }
 exports.default = createUID;
@@ -442,7 +445,6 @@ exports.default = createUID;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var qs = __webpack_require__(4);
 /**
  * 文字列をJavaScriptで利用できる値に変換する
  *
@@ -453,8 +455,7 @@ var qs = __webpack_require__(4);
  * @return JavaScriptで利用できる値
  *
  */
-function parse(str, parseQuery) {
-    if (parseQuery === void 0) { parseQuery = true; }
+function parse(str) {
     if (/^\s*$/.test(str)) {
         return str;
     }
@@ -476,9 +477,6 @@ function parse(str, parseQuery) {
             return evaluatedVal;
         }
         catch (e2) {
-            if (parseQuery && ("" + str).match('=')) {
-                return qs.parse(str);
-            }
             return str;
         }
     }
@@ -513,24 +511,6 @@ module.exports = {
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var stringify = __webpack_require__(24);
-var parse = __webpack_require__(23);
-var formats = __webpack_require__(3);
-
-module.exports = {
-    formats: formats,
-    parse: parse,
-    stringify: stringify
-};
-
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -719,7 +699,7 @@ exports.isBuffer = function (obj) {
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -772,30 +752,56 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(25);
+__webpack_require__(26);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaserElement_1 = __webpack_require__(0);
-var GoogleMaps_1 = __webpack_require__(11);
-var Sequencer_1 = __webpack_require__(12);
-var YouTube_1 = __webpack_require__(14);
+var GoogleMaps_1 = __webpack_require__(10);
+var Sequencer_1 = __webpack_require__(11);
+var YouTube_1 = __webpack_require__(13);
 exports.BaserElement = BaserElement_1.default;
 exports.GoogleMaps = GoogleMaps_1.default;
 exports.Sequencer = Sequencer_1.default;
 exports.YouTube = YouTube_1.default;
+function auto() {
+    return new Promise(function (resolve) {
+        if (document.readyState !== 'loading') {
+            _auto();
+            resolve();
+            return;
+        }
+        addEventListener('DOMContentLoaded', function () {
+            _auto();
+            resolve();
+        });
+    });
+}
+exports.auto = auto;
+function _auto() {
+    var nodesGoogleMaps = document.querySelectorAll('[data-baser="google-maps"]');
+    for (var _i = 0, _a = Array.from(nodesGoogleMaps); _i < _a.length; _i++) {
+        var node = _a[_i];
+        var g = new exports.GoogleMaps(node);
+    }
+    var nodesYouTube = document.querySelectorAll('[data-baser="youtube"]');
+    for (var _b = 0, _c = Array.from(nodesYouTube); _b < _c.length; _b++) {
+        var node = _c[_b];
+        var g = new exports.YouTube(node);
+    }
+}
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -884,14 +890,14 @@ exports.default = DispatchEvent;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var DispatchEvent_1 = __webpack_require__(8);
-var EventHandler_1 = __webpack_require__(10);
+var DispatchEvent_1 = __webpack_require__(7);
+var EventHandler_1 = __webpack_require__(9);
 /**
  * イベントを検知してハンドラを発火させることができるクラス
  *
@@ -1026,7 +1032,7 @@ exports.default = EventDispatcher;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1059,7 +1065,7 @@ var EventHandler = (function () {
     /**
      * ハンドラを実行する
      *
-     * @version 0.9.0
+     * @version 1.0.0
      * @since 0.0.10
      * @param context 紐づくディスパッチャーオブジェクト
      * @param type イベントのタイプ
@@ -1079,7 +1085,7 @@ exports.default = EventHandler;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1131,8 +1137,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaserElement_1 = __webpack_require__(0);
-var Timer_1 = __webpack_require__(13);
-var linkTo_1 = __webpack_require__(20);
+var Timer_1 = __webpack_require__(12);
+var linkTo_1 = __webpack_require__(19);
 /**
  * マップ要素
  *
@@ -1142,49 +1148,63 @@ var linkTo_1 = __webpack_require__(20);
  */
 var GoogleMaps = (function (_super) {
     __extends(GoogleMaps, _super);
-    /**
-     * コンストラクタ
-     *
-     * @version 1.0.0
-     * @since 0.0.6
-     * @param el 管理するDOM要素
-     * @param options マップオプション
-     *
-     */
-    function GoogleMaps(el, options) {
-        if (options === void 0) { options = {}; }
-        var _this = _super.call(this, el) || this;
+    function GoogleMaps() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         /**
          * data-{*}-state属性のキー
          */
         _this.stateKeyName = 'google-maps';
-        if (!('google' in window && google.maps)) {
-            throw new ReferenceError("\"//maps.google.com/maps/api/js\" \u3092\u5148\u306B\u8AAD\u307F\u8FBC\u3080\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002");
-        }
-        _this._init(options)
-            .then(_this.inViewportFirstTime(_this._config.scrollSpy === 'render'))
-            .then(_this._render.bind(_this))
-            .then(_this.inViewportFirstTime(_this._config.scrollSpy === 'pin'))
-            .then(_this._pin.bind(_this));
         return _this;
     }
     /**
-     * 初期化
+     * 住所文字列から座標を非同期で取得
      *
      * @version 1.0.0
-     * @since 0.0.6
+     * @since 0.2.0
      *
      */
-    GoogleMaps.prototype._init = function (options) {
+    GoogleMaps.getLatLngByAddress = function (address) {
+        return new Promise(function (resolve, reject) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: address }, function (results, status) {
+                switch (status) {
+                    case google.maps.GeocoderStatus.OK: {
+                        var lat = results[0].geometry.location.lat();
+                        var lng = results[0].geometry.location.lng();
+                        resolve(new google.maps.LatLng(lat, lng));
+                        break;
+                    }
+                    case google.maps.GeocoderStatus.INVALID_REQUEST: {
+                        reject(new Error("\"" + address + "\u306F\u4E0D\u6B63\u306A\u4F4F\u6240\u3060\u3063\u305F\u305F\u3081\u7D50\u679C\u3092\u8FD4\u3059\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002"));
+                        break;
+                    }
+                    case google.maps.GeocoderStatus.ZERO_RESULTS: {
+                        reject(new Error("\"" + address + "\u306F\u7D50\u679C\u304C0\u4EF6\u3067\u3057\u305F\u3002\u3002"));
+                        break;
+                    }
+                    case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
+                        reject(new Error("\u30EA\u30AF\u30A8\u30B9\u30C8\u6570\u306E\u4E0A\u9650\u3092\u8D85\u3048\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
+                        break;
+                    }
+                    // case google.maps.GeocoderStatus.ERROR:
+                    // case google.maps.GeocoderStatus.UNKNOWN_ERROR:
+                    default: {
+                        reject(new Error("\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
+                    }
+                }
+            });
+        });
+    };
+    GoogleMaps.prototype._create = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var pos;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.detachChildren();
-                        this._config = this.merge({
-                            lat: undefined,
-                            lng: undefined,
-                            address: undefined,
+                        _super.prototype._create.call(this, {
+                            lat: null,
+                            lng: null,
+                            address: null,
                             zoom: 14,
                             mapTypeControlOptions: {
                                 mapTypeIds: [
@@ -1196,9 +1216,42 @@ var GoogleMaps = (function (_super) {
                             styles: [],
                             disableDefaultUI: false,
                             fitBounds: false,
+                            scrollSpy: null,
                             pin: true,
-                            scrollSpy: undefined,
-                        }, options);
+                            pinningDelayTime: 400,
+                        });
+                        if (!('google' in window && google.maps)) {
+                            throw new ReferenceError("\"//maps.google.com/maps/api/js\" \u3092\u5148\u306B\u8AAD\u307F\u8FBC\u3080\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002");
+                        }
+                        return [4 /*yield*/, this._init()];
+                    case 1:
+                        pos = _a.sent();
+                        return [4 /*yield*/, this.inViewportFirstTime(this._config.scrollSpy === 'render')()];
+                    case 2:
+                        _a.sent();
+                        this._render(pos);
+                        return [4 /*yield*/, this.inViewportFirstTime(this._config.scrollSpy === 'pin')()];
+                    case 3:
+                        _a.sent();
+                        this._pin(pos);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * 初期化
+     *
+     * @version 1.0.0
+     * @since 0.0.6
+     *
+     */
+    GoogleMaps.prototype._init = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.detachChildren();
                         if (!(typeof this._config.lat === 'number'
                             &&
                                 typeof this._config.lng === 'number')) return [3 /*break*/, 1];
@@ -1230,7 +1283,6 @@ var GoogleMaps = (function (_super) {
             styles: this._config.styles,
             disableDefaultUI: this._config.disableDefaultUI,
         });
-        return Promise.resolve(center);
     };
     GoogleMaps.prototype._pin = function (center) {
         return __awaiter(this, void 0, void 0, function () {
@@ -1253,7 +1305,7 @@ var GoogleMaps = (function (_super) {
                     case 1:
                         if (!(_i < pins_1.length)) return [3 /*break*/, 4];
                         pin = pins_1[_i];
-                        return [4 /*yield*/, pin.markTo(this._gmap, i * 400)];
+                        return [4 /*yield*/, pin.markTo(this._gmap, i * this._config.pinningDelayTime)];
                     case 2:
                         _a.sent();
                         markerBounds.extend(pin.position);
@@ -1408,7 +1460,7 @@ var Pin = (function (_super) {
             var content = info.getContent();
             var proj = map.getProjection();
             var currentPoint = proj.fromLatLngToPoint(_this.position);
-            var scale = Math.pow(2, map.getZoom());
+            var scale = Math.pow(2, map.getZoom()); // tslint:disable-line:no-magic-numbers
             var height = typeof content === 'string' ? 0 : content.getBoundingClientRect().height;
             var y = (currentPoint.y * scale - height) / scale;
             var newPoint = new google.maps.Point(currentPoint.x, y);
@@ -1416,51 +1468,12 @@ var Pin = (function (_super) {
             map.panTo(newPosition);
         };
     };
-    /**
-     * 住所文字列から座標を非同期で取得
-     *
-     * @version 1.0.0
-     * @since 0.2.0
-     *
-     */
-    Pin.getLatLngByAddress = function (address) {
-        return new Promise(function (resolve, reject) {
-            var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ address: address }, function (results, status) {
-                switch (status) {
-                    case google.maps.GeocoderStatus.OK: {
-                        var lat = results[0].geometry.location.lat();
-                        var lng = results[0].geometry.location.lng();
-                        resolve(new google.maps.LatLng(lat, lng));
-                        break;
-                    }
-                    case google.maps.GeocoderStatus.INVALID_REQUEST: {
-                        reject(new Error("\"" + address + "\u306F\u4E0D\u6B63\u306A\u4F4F\u6240\u3060\u3063\u305F\u305F\u3081\u7D50\u679C\u3092\u8FD4\u3059\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002"));
-                        break;
-                    }
-                    case google.maps.GeocoderStatus.ZERO_RESULTS: {
-                        reject(new Error("\"" + address + "\u306F\u7D50\u679C\u304C0\u4EF6\u3067\u3057\u305F\u3002\u3002"));
-                        break;
-                    }
-                    case google.maps.GeocoderStatus.OVER_QUERY_LIMIT: {
-                        reject(new Error("\u30EA\u30AF\u30A8\u30B9\u30C8\u6570\u306E\u4E0A\u9650\u3092\u8D85\u3048\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
-                        break;
-                    }
-                    // case google.maps.GeocoderStatus.ERROR:
-                    // case google.maps.GeocoderStatus.UNKNOWN_ERROR:
-                    default: {
-                        reject(new Error("\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002" + address + "\u306F\u51E6\u7406\u3055\u308C\u307E\u305B\u3093\u3002"));
-                    }
-                }
-            });
-        });
-    };
     return Pin;
 }(BaserElement_1.default));
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1924,7 +1937,7 @@ exports.default = Sequencer;
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1996,10 +2009,10 @@ var Timer = (function () {
 Timer.CANCEL_REASON = CANCEL_REASON;
 exports.default = Timer;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6).setImmediate, __webpack_require__(6).clearImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5).setImmediate, __webpack_require__(5).clearImmediate))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2050,10 +2063,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var qs = __webpack_require__(4);
+var qs = __webpack_require__(23);
 var BaserElement_1 = __webpack_require__(0);
-var arrayShuffle_1 = __webpack_require__(16);
-var scriptLoad_1 = __webpack_require__(21);
+var arrayShuffle_1 = __webpack_require__(15);
+var scriptLoad_1 = __webpack_require__(20);
 var PLAYER_URL = 'https://www.youtube.com/embed/';
 var API_URL = 'https://www.youtube.com/player_api';
 /**
@@ -2065,17 +2078,8 @@ var API_URL = 'https://www.youtube.com/player_api';
  */
 var YouTube = (function (_super) {
     __extends(YouTube, _super);
-    /**
-     * コンストラクタ
-     *
-     * @version 1.0.0
-     * @since 0.0.7
-     * @param el 管理するDOM要素
-     * @param options オプション
-     *
-     */
-    function YouTube(el, options) {
-        var _this = _super.call(this, el) || this;
+    function YouTube() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         /**
          * ムービーのID
          *
@@ -2092,7 +2096,6 @@ var YouTube = (function (_super) {
          * APIスクリプトがロード済みで YTオブジェクトが使用可能かどうか
          */
         _this._apiIsLoaded = false;
-        _this._init(options);
         return _this;
     }
     /**
@@ -2196,6 +2199,28 @@ var YouTube = (function (_super) {
     // 	// 	});
     // 	// }
     // }
+    YouTube.prototype._create = function () {
+        _super.prototype._create.call(this, {
+            videoId: '',
+            rel: false,
+            autoplay: true,
+            stopOnInactive: false,
+            controls: false,
+            loop: true,
+            showinfo: false,
+            mute: false,
+            width: 400,
+            height: 300,
+            index: 0,
+            poster: undefined,
+            posterHighQuality: false,
+            startSeconds: 0,
+            suggestedQuality: 'default',
+            shuffle: false,
+            preEmbed: true,
+        });
+        this._init();
+    };
     /**
      * 初期化
      *
@@ -2210,32 +2235,13 @@ var YouTube = (function (_super) {
      * @param options オプション
      *
      */
-    YouTube.prototype._init = function (options) {
+    YouTube.prototype._init = function () {
         return __awaiter(this, void 0, void 0, function () {
             var movieIdList, param;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         this._apiIsLoaded = 'YT' in window;
-                        this._config = this.merge({
-                            videoId: '',
-                            rel: false,
-                            autoplay: true,
-                            stopOnInactive: false,
-                            controls: false,
-                            loop: true,
-                            showinfo: false,
-                            mute: false,
-                            width: 400,
-                            height: 300,
-                            index: 0,
-                            poster: undefined,
-                            posterHighQuality: false,
-                            startSeconds: 0,
-                            suggestedQuality: 'default',
-                            shuffle: false,
-                            preEmbed: true,
-                        }, options);
                         if (!this._config.videoId) {
                             throw new TypeError("Invalid option \"videoId\".");
                         }
@@ -2362,10 +2368,8 @@ var YouTube = (function (_super) {
             var _this = this;
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        // tslint:disable-next-line no-string-literal
-                        window['onYouTubeIframeAPIReady'] = function () {
-                            // tslint:disable-next-line no-string-literal
-                            window['onYouTubeIframeAPIReady'] = undefined;
+                        window.onYouTubeIframeAPIReady = function () {
+                            window.onYouTubeIframeAPIReady = undefined;
                             _this._apiIsLoaded = true;
                             resolve();
                         };
@@ -2468,19 +2472,18 @@ exports.default = YouTube;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var baser = __webpack_require__(7);
-// tslint:disable-next-line no-string-literal
-window['baser'] = baser;
+var baser = __webpack_require__(6);
+window.baser = baser;
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2512,7 +2515,7 @@ exports.default = arraySuffle;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2534,7 +2537,7 @@ exports.default = hyphenize;
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2569,7 +2572,7 @@ exports.default = isDOMValue;
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2586,13 +2589,13 @@ var parse_1 = __webpack_require__(2);
  *
  */
 function isFalsy(str) {
-    return !parse_1.default(str, false);
+    return !parse_1.default(str);
 }
 exports.default = isFalsy;
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2622,7 +2625,7 @@ exports.default = linkTo;
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2691,6 +2694,673 @@ function scriptLoad(scriptFile) {
     });
 }
 exports.default = scriptLoad;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+/**
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+(function(window, document) {
+'use strict';
+
+
+// Exits early if all IntersectionObserver and IntersectionObserverEntry
+// features are natively supported.
+if ('IntersectionObserver' in window &&
+    'IntersectionObserverEntry' in window &&
+    'intersectionRatio' in window.IntersectionObserverEntry.prototype) {
+  return;
+}
+
+
+// Use :root element of the document for .contains() calls because older IEs
+// support Node.prototype.contains only on Element nodes.
+var docElement = document.documentElement;
+
+
+/**
+ * An IntersectionObserver registry. This registry exists to hold a strong
+ * reference to IntersectionObserver instances currently observering a target
+ * element. Without this registry, instances without another reference may be
+ * garbage collected.
+ */
+var registry = [];
+
+
+/**
+ * Creates the global IntersectionObserverEntry constructor.
+ * https://wicg.github.io/IntersectionObserver/#intersection-observer-entry
+ * @param {Object} entry A dictionary of instance properties.
+ * @constructor
+ */
+function IntersectionObserverEntry(entry) {
+  this.time = entry.time;
+  this.target = entry.target;
+  this.rootBounds = entry.rootBounds;
+  this.boundingClientRect = entry.boundingClientRect;
+  this.intersectionRect = entry.intersectionRect || getEmptyRect();
+  this.isIntersecting = !!entry.intersectionRect;
+
+  // Calculates the intersection ratio. Sets it to 0 if the target area is 0.
+  var targetRect = this.boundingClientRect;
+  var targetArea = targetRect.width * targetRect.height;
+  var intersectionRect = this.intersectionRect;
+  var intersectionArea = intersectionRect.width * intersectionRect.height;
+  this.intersectionRatio = targetArea ? (intersectionArea / targetArea) : 0;
+}
+
+
+/**
+ * Creates the global IntersectionObserver constructor.
+ * https://wicg.github.io/IntersectionObserver/#intersection-observer-interface
+ * @param {Function} callback The function to be invoked after intersection
+ *     changes have queued. The function is not invoked if the queue has
+ *     been emptied by calling the `takeRecords` method.
+ * @param {Object=} opt_options Optional configuration options.
+ * @constructor
+ */
+function IntersectionObserver(callback, opt_options) {
+
+  var options = opt_options || {};
+
+  if (typeof callback != 'function') {
+    throw new Error('callback must be a function');
+  }
+
+  if (options.root && options.root.nodeType != 1) {
+    throw new Error('root must be an Element');
+  }
+
+  // Binds and throttles `this._checkForIntersections`.
+  this._checkForIntersections = throttle(
+      this._checkForIntersections.bind(this), this.THROTTLE_TIMEOUT);
+
+  // Private properties.
+  this._callback = callback;
+  this._observationTargets = [];
+  this._queuedEntries = [];
+  this._rootMarginValues = this._parseRootMargin(options.rootMargin);
+
+  // Public properties.
+  this.thresholds = this._initThresholds(options.threshold);
+  this.root = options.root || null;
+  this.rootMargin = this._rootMarginValues.map(function(margin) {
+    return margin.value + margin.unit;
+  }).join(' ');
+}
+
+
+/**
+ * The minimum interval within which the document will be checked for
+ * intersection changes.
+ */
+IntersectionObserver.prototype.THROTTLE_TIMEOUT = 100;
+
+
+/**
+ * The frequency in which the polyfill polls for intersection changes.
+ * this can be updated on a per instance basis and must be set prior to
+ * calling `observe` on the first target.
+ */
+IntersectionObserver.prototype.POLL_INTERVAL = null;
+
+
+/**
+ * Starts observing a target element for intersection changes based on
+ * the thresholds values.
+ * @param {Element} target The DOM element to observe.
+ */
+IntersectionObserver.prototype.observe = function(target) {
+  // If the target is already being observed, do nothing.
+  if (this._observationTargets.some(function(item) {
+    return item.element == target;
+  })) {
+    return;
+  }
+
+  if (!(target && target.nodeType == 1)) {
+    throw new Error('target must be an Element');
+  }
+
+  this._registerInstance();
+  this._observationTargets.push({element: target, entry: null});
+  this._monitorIntersections();
+};
+
+
+/**
+ * Stops observing a target element for intersection changes.
+ * @param {Element} target The DOM element to observe.
+ */
+IntersectionObserver.prototype.unobserve = function(target) {
+  this._observationTargets =
+      this._observationTargets.filter(function(item) {
+
+    return item.element != target;
+  });
+  if (!this._observationTargets.length) {
+    this._unmonitorIntersections();
+    this._unregisterInstance();
+  }
+};
+
+
+/**
+ * Stops observing all target elements for intersection changes.
+ */
+IntersectionObserver.prototype.disconnect = function() {
+  this._observationTargets = [];
+  this._unmonitorIntersections();
+  this._unregisterInstance();
+};
+
+
+/**
+ * Returns any queue entries that have not yet been reported to the
+ * callback and clears the queue. This can be used in conjunction with the
+ * callback to obtain the absolute most up-to-date intersection information.
+ * @return {Array} The currently queued entries.
+ */
+IntersectionObserver.prototype.takeRecords = function() {
+  var records = this._queuedEntries.slice();
+  this._queuedEntries = [];
+  return records;
+};
+
+
+/**
+ * Accepts the threshold value from the user configuration object and
+ * returns a sorted array of unique threshold values. If a value is not
+ * between 0 and 1 and error is thrown.
+ * @private
+ * @param {Array|number=} opt_threshold An optional threshold value or
+ *     a list of threshold values, defaulting to [0].
+ * @return {Array} A sorted list of unique and valid threshold values.
+ */
+IntersectionObserver.prototype._initThresholds = function(opt_threshold) {
+  var threshold = opt_threshold || [0];
+  if (!Array.isArray(threshold)) threshold = [threshold];
+
+  return threshold.sort().filter(function(t, i, a) {
+    if (typeof t != 'number' || isNaN(t) || t < 0 || t > 1) {
+      throw new Error('threshold must be a number between 0 and 1 inclusively');
+    }
+    return t !== a[i - 1];
+  });
+};
+
+
+/**
+ * Accepts the rootMargin value from the user configuration object
+ * and returns an array of the four margin values as an object containing
+ * the value and unit properties. If any of the values are not properly
+ * formatted or use a unit other than px or %, and error is thrown.
+ * @private
+ * @param {string=} opt_rootMargin An optional rootMargin value,
+ *     defaulting to '0px'.
+ * @return {Array<Object>} An array of margin objects with the keys
+ *     value and unit.
+ */
+IntersectionObserver.prototype._parseRootMargin = function(opt_rootMargin) {
+  var marginString = opt_rootMargin || '0px';
+  var margins = marginString.split(/\s+/).map(function(margin) {
+    var parts = /^(-?\d*\.?\d+)(px|%)$/.exec(margin);
+    if (!parts) {
+      throw new Error('rootMargin must be specified in pixels or percent');
+    }
+    return {value: parseFloat(parts[1]), unit: parts[2]};
+  });
+
+  // Handles shorthand.
+  margins[1] = margins[1] || margins[0];
+  margins[2] = margins[2] || margins[0];
+  margins[3] = margins[3] || margins[1];
+
+  return margins;
+};
+
+
+/**
+ * Starts polling for intersection changes if the polling is not already
+ * happening, and if the page's visibilty state is visible.
+ * @private
+ */
+IntersectionObserver.prototype._monitorIntersections = function() {
+  if (!this._monitoringIntersections) {
+    this._monitoringIntersections = true;
+
+    this._checkForIntersections();
+
+    // If a poll interval is set, use polling instead of listening to
+    // resize and scroll events or DOM mutations.
+    if (this.POLL_INTERVAL) {
+      this._monitoringInterval = setInterval(
+          this._checkForIntersections, this.POLL_INTERVAL);
+    }
+    else {
+      addEvent(window, 'resize', this._checkForIntersections, true);
+      addEvent(document, 'scroll', this._checkForIntersections, true);
+
+      if ('MutationObserver' in window) {
+        this._domObserver = new MutationObserver(this._checkForIntersections);
+        this._domObserver.observe(document, {
+          attributes: true,
+          childList: true,
+          characterData: true,
+          subtree: true
+        });
+      }
+    }
+  }
+};
+
+
+/**
+ * Stops polling for intersection changes.
+ * @private
+ */
+IntersectionObserver.prototype._unmonitorIntersections = function() {
+  if (this._monitoringIntersections) {
+    this._monitoringIntersections = false;
+
+    clearInterval(this._monitoringInterval);
+    this._monitoringInterval = null;
+
+    removeEvent(window, 'resize', this._checkForIntersections, true);
+    removeEvent(document, 'scroll', this._checkForIntersections, true);
+
+    if (this._domObserver) {
+      this._domObserver.disconnect();
+      this._domObserver = null;
+    }
+  }
+};
+
+
+/**
+ * Scans each observation target for intersection changes and adds them
+ * to the internal entries queue. If new entries are found, it
+ * schedules the callback to be invoked.
+ * @private
+ */
+IntersectionObserver.prototype._checkForIntersections = function() {
+  var rootIsInDom = this._rootIsInDom();
+  var rootRect = rootIsInDom ? this._getRootRect() : getEmptyRect();
+
+  this._observationTargets.forEach(function(item) {
+    var target = item.element;
+    var targetRect = getBoundingClientRect(target);
+    var rootContainsTarget = this._rootContainsTarget(target);
+    var oldEntry = item.entry;
+    var intersectionRect = rootIsInDom && rootContainsTarget &&
+        this._computeTargetAndRootIntersection(target, rootRect);
+
+    var newEntry = item.entry = new IntersectionObserverEntry({
+      time: now(),
+      target: target,
+      boundingClientRect: targetRect,
+      rootBounds: rootRect,
+      intersectionRect: intersectionRect
+    });
+
+    if (rootIsInDom && rootContainsTarget) {
+      // If the new entry intersection ratio has crossed any of the
+      // thresholds, add a new entry.
+      if (this._hasCrossedThreshold(oldEntry, newEntry)) {
+        this._queuedEntries.push(newEntry);
+      }
+    } else {
+      // If the root is not in the DOM or target is not contained within
+      // root but the previous entry for this target had an intersection,
+      // add a new record indicating removal.
+      if (oldEntry && oldEntry.isIntersecting) {
+        this._queuedEntries.push(newEntry);
+      }
+    }
+  }, this);
+
+  if (this._queuedEntries.length) {
+    this._callback(this.takeRecords(), this);
+  }
+};
+
+
+/**
+ * Accepts a target and root rect computes the intersection between then
+ * following the algorithm in the spec.
+ * TODO(philipwalton): at this time clip-path is not considered.
+ * https://wicg.github.io/IntersectionObserver/#calculate-intersection-rect-algo
+ * @param {Element} target The target DOM element
+ * @param {Object} rootRect The bounding rect of the root after being
+ *     expanded by the rootMargin value.
+ * @return {?Object} The final intersection rect object or undefined if no
+ *     intersection is found.
+ * @private
+ */
+IntersectionObserver.prototype._computeTargetAndRootIntersection =
+    function(target, rootRect) {
+
+  // If the element isn't displayed, an intersection can't happen.
+  if (window.getComputedStyle(target).display == 'none') return;
+
+  var targetRect = getBoundingClientRect(target);
+  var intersectionRect = targetRect;
+  var parent = target.parentNode;
+  var atRoot = false;
+
+  while (!atRoot) {
+    var parentRect = null;
+
+    // If we're at the root element, set parentRect to the already
+    // calculated rootRect.
+    if (parent == this.root || parent.nodeType != 1) {
+      atRoot = true;
+      parentRect = rootRect;
+    }
+    // Otherwise check to see if the parent element hides overflow,
+    // and if so update parentRect.
+    else {
+      if (window.getComputedStyle(parent).overflow != 'visible') {
+        parentRect = getBoundingClientRect(parent);
+      }
+    }
+    // If either of the above conditionals set a new parentRect,
+    // calculate new intersection data.
+    if (parentRect) {
+      intersectionRect = computeRectIntersection(parentRect, intersectionRect);
+
+      if (!intersectionRect) break;
+    }
+    parent = parent.parentNode;
+  }
+  return intersectionRect;
+};
+
+
+/**
+ * Returns the root rect after being expanded by the rootMargin value.
+ * @return {Object} The expanded root rect.
+ * @private
+ */
+IntersectionObserver.prototype._getRootRect = function() {
+  var rootRect;
+  if (this.root) {
+    rootRect = getBoundingClientRect(this.root);
+  } else {
+    // Use <html>/<body> instead of window since scroll bars affect size.
+    var html = document.documentElement;
+    var body = document.body;
+    rootRect = {
+      top: 0,
+      left: 0,
+      right: html.clientWidth || body.clientWidth,
+      width: html.clientWidth || body.clientWidth,
+      bottom: html.clientHeight || body.clientHeight,
+      height: html.clientHeight || body.clientHeight
+    };
+  }
+  return this._expandRectByRootMargin(rootRect);
+};
+
+
+/**
+ * Accepts a rect and expands it by the rootMargin value.
+ * @param {Object} rect The rect object to expand.
+ * @return {Object} The expanded rect.
+ * @private
+ */
+IntersectionObserver.prototype._expandRectByRootMargin = function(rect) {
+  var margins = this._rootMarginValues.map(function(margin, i) {
+    return margin.unit == 'px' ? margin.value :
+        margin.value * (i % 2 ? rect.width : rect.height) / 100;
+  });
+  var newRect = {
+    top: rect.top - margins[0],
+    right: rect.right + margins[1],
+    bottom: rect.bottom + margins[2],
+    left: rect.left - margins[3]
+  };
+  newRect.width = newRect.right - newRect.left;
+  newRect.height = newRect.bottom - newRect.top;
+
+  return newRect;
+};
+
+
+/**
+ * Accepts an old and new entry and returns true if at least one of the
+ * threshold values has been crossed.
+ * @param {?IntersectionObserverEntry} oldEntry The previous entry for a
+ *    particular target element or null if no previous entry exists.
+ * @param {IntersectionObserverEntry} newEntry The current entry for a
+ *    particular target element.
+ * @return {boolean} Returns true if a any threshold has been crossed.
+ * @private
+ */
+IntersectionObserver.prototype._hasCrossedThreshold =
+    function(oldEntry, newEntry) {
+
+  // To make comparing easier, an entry that has a ratio of 0
+  // but does not actually intersect is given a value of -1
+  var oldRatio = oldEntry && oldEntry.isIntersecting ?
+      oldEntry.intersectionRatio || 0 : -1;
+  var newRatio = newEntry.isIntersecting ?
+      newEntry.intersectionRatio || 0 : -1;
+
+  // Ignore unchanged ratios
+  if (oldRatio === newRatio) return;
+
+  for (var i = 0; i < this.thresholds.length; i++) {
+    var threshold = this.thresholds[i];
+
+    // Return true if an entry matches a threshold or if the new ratio
+    // and the old ratio are on the opposite sides of a threshold.
+    if (threshold == oldRatio || threshold == newRatio ||
+        threshold < oldRatio !== threshold < newRatio) {
+      return true;
+    }
+  }
+};
+
+
+/**
+ * Returns whether or not the root element is an element and is in the DOM.
+ * @return {boolean} True if the root element is an element and is in the DOM.
+ * @private
+ */
+IntersectionObserver.prototype._rootIsInDom = function() {
+  return !this.root || docElement.contains(this.root);
+};
+
+
+/**
+ * Returns whether or not the target element is a child of root.
+ * @param {Element} target The target element to check.
+ * @return {boolean} True if the target element is a child of root.
+ * @private
+ */
+IntersectionObserver.prototype._rootContainsTarget = function(target) {
+  return (this.root || docElement).contains(target);
+};
+
+
+/**
+ * Adds the instance to the global IntersectionObserver registry if it isn't
+ * already present.
+ * @private
+ */
+IntersectionObserver.prototype._registerInstance = function() {
+  if (registry.indexOf(this) < 0) {
+    registry.push(this);
+  }
+};
+
+
+/**
+ * Removes the instance from the global IntersectionObserver registry.
+ * @private
+ */
+IntersectionObserver.prototype._unregisterInstance = function() {
+  var index = registry.indexOf(this);
+  if (index != -1) registry.splice(index, 1);
+};
+
+
+/**
+ * Returns the result of the performance.now() method or null in browsers
+ * that don't support the API.
+ * @return {number} The elapsed time since the page was requested.
+ */
+function now() {
+  return window.performance && performance.now && performance.now();
+}
+
+
+/**
+ * Throttles a function and delays its executiong, so it's only called at most
+ * once within a given time period.
+ * @param {Function} fn The function to throttle.
+ * @param {number} timeout The amount of time that must pass before the
+ *     function can be called again.
+ * @return {Function} The throttled function.
+ */
+function throttle(fn, timeout) {
+  var timer = null;
+  return function () {
+    if (!timer) {
+      timer = setTimeout(function() {
+        fn();
+        timer = null;
+      }, timeout);
+    }
+  };
+}
+
+
+/**
+ * Adds an event handler to a DOM node ensuring cross-browser compatibility.
+ * @param {Node} node The DOM node to add the event handler to.
+ * @param {string} event The event name.
+ * @param {Function} fn The event handler to add.
+ * @param {boolean} opt_useCapture Optionally adds the even to the capture
+ *     phase. Note: this only works in modern browsers.
+ */
+function addEvent(node, event, fn, opt_useCapture) {
+  if (typeof node.addEventListener == 'function') {
+    node.addEventListener(event, fn, opt_useCapture || false);
+  }
+  else if (typeof node.attachEvent == 'function') {
+    node.attachEvent('on' + event, fn);
+  }
+}
+
+
+/**
+ * Removes a previously added event handler from a DOM node.
+ * @param {Node} node The DOM node to remove the event handler from.
+ * @param {string} event The event name.
+ * @param {Function} fn The event handler to remove.
+ * @param {boolean} opt_useCapture If the event handler was added with this
+ *     flag set to true, it should be set to true here in order to remove it.
+ */
+function removeEvent(node, event, fn, opt_useCapture) {
+  if (typeof node.removeEventListener == 'function') {
+    node.removeEventListener(event, fn, opt_useCapture || false);
+  }
+  else if (typeof node.detatchEvent == 'function') {
+    node.detatchEvent('on' + event, fn);
+  }
+}
+
+
+/**
+ * Returns the intersection between two rect objects.
+ * @param {Object} rect1 The first rect.
+ * @param {Object} rect2 The second rect.
+ * @return {?Object} The intersection rect or undefined if no intersection
+ *     is found.
+ */
+function computeRectIntersection(rect1, rect2) {
+  var top = Math.max(rect1.top, rect2.top);
+  var bottom = Math.min(rect1.bottom, rect2.bottom);
+  var left = Math.max(rect1.left, rect2.left);
+  var right = Math.min(rect1.right, rect2.right);
+  var width = right - left;
+  var height = bottom - top;
+
+  return (width >= 0 && height >= 0) && {
+    top: top,
+    bottom: bottom,
+    left: left,
+    right: right,
+    width: width,
+    height: height
+  };
+}
+
+
+/**
+ * Shims the native getBoundingClientRect for compatibility with older IE.
+ * @param {Element} el The element whose bounding rect to get.
+ * @return {Object} The (possibly shimmed) rect of the element.
+ */
+function getBoundingClientRect(el) {
+  var rect = el.getBoundingClientRect();
+  if (!rect) return;
+
+  // Older IE
+  if (!rect.width || !rect.height) {
+    rect = {
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      left: rect.left,
+      width: rect.right - rect.left,
+      height: rect.bottom - rect.top
+    };
+  }
+  return rect;
+}
+
+
+/**
+ * Returns an empty rect object. An empty rect is returned when an element
+ * is not in the DOM.
+ * @return {Object} The empty rect.
+ */
+function getEmptyRect() {
+  return {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    width: 0,
+    height: 0
+  };
+}
+
+
+// Exposes the constructors globally.
+window.IntersectionObserver = IntersectionObserver;
+window.IntersectionObserverEntry = IntersectionObserverEntry;
+
+}(window, document));
 
 
 /***/ }),
@@ -2890,7 +3560,25 @@ process.umask = function() { return 0; };
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var stringify = __webpack_require__(25);
+var parse = __webpack_require__(24);
+var formats = __webpack_require__(3);
+
+module.exports = {
+    formats: formats,
+    parse: parse,
+    stringify: stringify
+};
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(4);
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -3058,13 +3746,13 @@ module.exports = function (str, opts) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(5);
+var utils = __webpack_require__(4);
 var formats = __webpack_require__(3);
 
 var arrayPrefixGenerators = {
@@ -3272,7 +3960,7 @@ module.exports = function (object, opts) {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -3462,10 +4150,10 @@ module.exports = function (object, opts) {
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26), __webpack_require__(22)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27), __webpack_require__(22)))
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports) {
 
 var g;

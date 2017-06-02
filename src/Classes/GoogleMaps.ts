@@ -2,9 +2,6 @@ import BaserElement from './BaserElement';
 import Timer from './Timer';
 
 import linkTo from '../fn/linkTo';
-import { OptionalConfig } from '../types/OptionalConfig';
-
-
 
 /**
  * マップ要素
@@ -13,7 +10,7 @@ import { OptionalConfig } from '../types/OptionalConfig';
  * @since 0.0.6
  *
  */
-export default class GoogleMaps extends BaserElement<HTMLDivElement> {
+export default class GoogleMaps extends BaserElement<HTMLDivElement, GoogleMapsConfig> {
 
 	/**
 	 * 住所文字列から座標を非同期で取得
@@ -69,36 +66,34 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 	 */
 	private _gmap: google.maps.Map;
 
-	/**
-	 * マップオプション
-	 *
-	 * @version 1.0.0
-	 * @since 0.0.9
-	 *
-	 */
-	private _config: GoogleMapsConfig;
-
-	/**
-	 * コンストラクタ
-	 *
-	 * @version 1.0.0
-	 * @since 0.0.6
-	 * @param el 管理するDOM要素
-	 * @param options マップオプション
-	 *
-	 */
-	constructor (el: HTMLDivElement, options: OptionalConfig<GoogleMapsConfig>) {
-		super(el);
-
+	protected async _create () {
+		super._create({
+			lat: null,
+			lng: null,
+			address: null,
+			zoom: 14,
+			mapTypeControlOptions: {
+				mapTypeIds: [
+					google.maps.MapTypeId.HYBRID,
+					google.maps.MapTypeId.ROADMAP,
+				],
+			},
+			scrollwheel: false,
+			styles: [],
+			disableDefaultUI: false,
+			fitBounds: false,
+			scrollSpy: null,
+			pin: true,
+			pinningDelayTime: 400,
+		});
 		if (!('google' in window && google.maps)) {
 			throw new ReferenceError(`"//maps.google.com/maps/api/js" を先に読み込む必要があります。`);
 		}
-
-		this._init(options)
-			.then(this.inViewportFirstTime(this._config.scrollSpy === 'render'))
-			.then(this._render.bind(this))
-			.then(this.inViewportFirstTime(this._config.scrollSpy === 'pin'))
-			.then(this._pin.bind(this));
+		const pos = await this._init();
+		await this.inViewportFirstTime(this._config.scrollSpy === 'render')();
+		this._render(pos);
+		await this.inViewportFirstTime(this._config.scrollSpy === 'pin')();
+		this._pin(pos);
 	}
 
 	/**
@@ -108,32 +103,8 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 	 * @since 0.0.6
 	 *
 	 */
-	private async _init (options: OptionalConfig<GoogleMapsConfig>) {
+	private async _init () {
 		this.detachChildren();
-
-		this._config = this.merge(
-			{
-				lat: undefined,
-				lng: undefined,
-				address: undefined,
-				zoom: 14,
-				mapTypeControlOptions: {
-					mapTypeIds: [
-						google.maps.MapTypeId.HYBRID,
-						google.maps.MapTypeId.ROADMAP,
-					],
-				},
-				scrollwheel: false,
-				styles: [],
-				disableDefaultUI: false,
-				fitBounds: false,
-				pin: true,
-				scrollSpy: undefined,
-				pinningDelayTime: 400,
-			},
-			options,
-		);
-
 		if (
 			typeof this._config.lat === 'number'
 			&&
@@ -165,8 +136,6 @@ export default class GoogleMaps extends BaserElement<HTMLDivElement> {
 			styles: this._config.styles,
 			disableDefaultUI: this._config.disableDefaultUI,
 		});
-
-		return Promise.resolve(center);
 	}
 
 	private async _pin (center: google.maps.LatLng) {
@@ -358,14 +327,14 @@ export interface GoogleMapsConfig {
 	 *
 	 * 数値でない場合は`TypeError`の例外を投げる。
 	 */
-	lat?: number;
+	lat: number | null;
 
 	/**
 	 * 経度
 	 *
 	 * 数値でない場合は`TypeError`の例外を投げる。
 	 */
-	lng?: number;
+	lng: number | null;
 
 	/**
 	 * 住所
@@ -373,7 +342,7 @@ export interface GoogleMapsConfig {
 	 * Geocoder APIを利用するので検索結果が失敗する可能性がある。
 	 * `lat`と`lng`がある場合は無視される。
 	 */
-	address?: string;
+	address: string | null;
 
 	/**
 	 * ズーム率
@@ -436,7 +405,7 @@ export interface GoogleMapsConfig {
 	/**
 	 *
 	 */
-	scrollSpy?: GoogleMapsInviewAction;
+	scrollSpy: GoogleMapsInviewAction | null;
 
 	/**
 	 * ピンを指すタイミングの遅延時間

@@ -67,14 +67,14 @@ export default class EventHandler<T> {
 	/**
 	 * ハンドラを実行する
 	 *
-	 * @version 0.9.0
+	 * @version 1.0.0
 	 * @since 0.0.10
 	 * @param context 紐づくディスパッチャーオブジェクト
 	 * @param type イベントのタイプ
 	 * @param handler ハンドラ
 	 * @return イベントの伝達を止めるかどうか
 	 */
-	public fire (context, e: DispatchEvent, args: T[]): boolean {
+	public fire (context: EventDispatcher, e: DispatchEvent, args: T[]): boolean {
 		let applyArgs: (DispatchEvent | T)[] = [];
 		applyArgs.push(e);
 		applyArgs = applyArgs.concat(args);

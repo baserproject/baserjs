@@ -17,7 +17,7 @@ type YouTubeState = 'unavailable' | 'unstarted' | 'buffering' | 'cued' | 'ended'
  * @since 0.0.16
  *
  */
-export interface YouTubeOption {
+export interface YouTubeConfig {
 
 	/**
 	 * YouTubeの動画ID
@@ -25,7 +25,7 @@ export interface YouTubeOption {
 	 * @since 1.0.0
 	 *
 	 */
-	videoId?: string;
+	videoId: string;
 
 	/**
 	 * 関連動画を再生後に表示させるかどうか
@@ -33,7 +33,7 @@ export interface YouTubeOption {
 	 * @since 0.0.16
 	 *
 	 */
-	rel?: boolean;
+	rel: boolean;
 
 	/**
 	 * 自動再生させるかどうか
@@ -41,7 +41,7 @@ export interface YouTubeOption {
 	 * @since 0.0.16
 	 *
 	 */
-	autoplay?: boolean;
+	autoplay: boolean;
 
 	/**
 	 * ウィンドウがアクティブでなくなった時に再生を停止するかどうか
@@ -49,7 +49,7 @@ export interface YouTubeOption {
 	 * @since 0.0.16
 	 *
 	 */
-	stopOnInactive?: boolean;
+	stopOnInactive: boolean;
 
 	/**
 	 * コントロールを表示させるかどうか
@@ -57,7 +57,7 @@ export interface YouTubeOption {
 	 * @since 0.0.16
 	 *
 	 */
-	controls?: boolean;
+	controls: boolean;
 
 	/**
 	 * ループ再生するかどうか
@@ -65,7 +65,7 @@ export interface YouTubeOption {
 	 * @since 0.0.16
 	 *
 	 */
-	loop?: boolean;
+	loop: boolean;
 
 	/**
 	 * 動画情報を表示させるかどうか
@@ -73,7 +73,7 @@ export interface YouTubeOption {
 	 * @since 0.0.16
 	 *
 	 */
-	showinfo?: boolean;
+	showinfo: boolean;
 
 	/**
 	 * 初期状態でミュートするかどうか
@@ -81,7 +81,7 @@ export interface YouTubeOption {
 	 * @since 0.5.0
 	 *
 	 */
-	mute?: boolean;
+	mute: boolean;
 
 	/**
 	 * 動画の幅
@@ -89,7 +89,7 @@ export interface YouTubeOption {
 	 * @since 0.8.0
 	 *
 	 */
-	width?: number;
+	width: number;
 
 	/**
 	 * 動画の高さ
@@ -97,7 +97,7 @@ export interface YouTubeOption {
 	 * @since 0.8.0
 	 *
 	 */
-	height?: number;
+	height: number;
 
 	/**
 	 * 再生リストの中から最初に再生する動画の番号
@@ -105,7 +105,7 @@ export interface YouTubeOption {
 	 * @since 0.8.0
 	 *
 	 */
-	index?: number;
+	index: number;
 
 	/**
 	 * サムネイル画像のパス
@@ -121,7 +121,7 @@ export interface YouTubeOption {
 	 * @version 0.10.0
 	 * @since 0.9.1
 	 */
-	posterHighQuality?: boolean;
+	posterHighQuality: boolean;
 
 	/**
 	 * 再生リストの中から最初に再生する動画の再生位置
@@ -131,7 +131,7 @@ export interface YouTubeOption {
 	 * @since 0.9.1
 	 *
 	 */
-	startSeconds?: number;
+	startSeconds: number;
 
 	/**
 	 * 動画の推奨再生画質を指定
@@ -147,7 +147,7 @@ export interface YouTubeOption {
 	 * @since 0.9.1
 	 *
 	 */
-	suggestedQuality?: string;
+	suggestedQuality: string;
 
 	/**
 	 * シャッフル再生するかどうか
@@ -155,14 +155,14 @@ export interface YouTubeOption {
 	 * @since 0.10.0
 	 *
 	 */
-	shuffle?: boolean;
+	shuffle: boolean;
 
 	/**
 	 * 自動再生でないとき、且つサムネイルの指定があるときに仮埋め込みを実行するかどうか
 	 *
 	 * @since 0.10.3
 	 */
-	preEmbed?: boolean;
+	preEmbed: boolean;
 }
 
 /**
@@ -212,7 +212,7 @@ interface IFramePlayerParameters {
 	 * 現在は、動画のタイトルのフォントサイズが異なるなど、2 つの値の間でプレーヤーの表示にまだ多少の相違があります。
 	 * ただし、両方の値の間の相違がユーザーにまったくわからなくなった場合は、パラメータのデフォルト値が 1 から 2 に変更される可能性があります。
 	 */
-	controls: 0 | 1 | 2;
+	controls: 0 | 1 | 2; // tslint:disable-line:no-magic-numbers
 
 	/**
 	 * disablekb
@@ -276,7 +276,7 @@ interface IFramePlayerParameters {
 	 * 1 に設定すると動画アノテーションがデフォルト表示されます。
 	 * 3 に設定すると、動画アノテーションはデフォルトで表示されなくなります。
 	 */
-	iv_load_policy: 1 | 3;
+	iv_load_policy: 1 | 3; // tslint:disable-line:no-magic-numbers
 
 	/**
 	 * list
@@ -388,7 +388,7 @@ interface IFramePlayerParameters {
  * @since 0.0.7
  *
  */
-export default class YouTube extends BaserElement<HTMLDivElement> {
+export default class YouTube extends BaserElement<HTMLDivElement, YouTubeConfig> {
 
 	public static STATE_KEY_NAME = 'youtube';
 
@@ -451,15 +451,6 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 	private _src: string;
 
 	/**
-	 * ムービーのオプション
-	 *
-	 * @version 1.0.0
-	 * @since 0.0.7
-	 *
-	 */
-	private _config: YouTubeOption;
-
-	/**
 	 * ミュートされているかどうか
 	 *
 	 * `this.player.isMuted()` を利用すれば判定はできるが
@@ -483,20 +474,6 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 	 *
 	 */
 	private _iframe: BaserElement<HTMLIFrameElement>;
-
-	/**
-	 * コンストラクタ
-	 *
-	 * @version 1.0.0
-	 * @since 0.0.7
-	 * @param el 管理するDOM要素
-	 * @param options オプション
-	 *
-	 */
-	constructor (el: HTMLDivElement, options?: YouTubeOption) {
-		super(el);
-		this._init(options);
-	}
 
 	// /**
 	//  * 再設定する
@@ -591,6 +568,29 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 
 	// }
 
+	protected _create () {
+		super._create({
+			videoId: '',
+			rel: false,
+			autoplay: true,
+			stopOnInactive: false,
+			controls: false,
+			loop: true,
+			showinfo: false,
+			mute: false,
+			width: 400,
+			height: 300,
+			index: 0,
+			poster: undefined,
+			posterHighQuality: false,
+			startSeconds: 0,
+			suggestedQuality: 'default',
+			shuffle: false,
+			preEmbed: true,
+		});
+		this._init();
+	}
+
 	/**
 	 * 初期化
 	 *
@@ -605,33 +605,8 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 	 * @param options オプション
 	 *
 	 */
-	private async _init (options?: YouTubeOption) {
-
+	private async _init () {
 		this._apiIsLoaded = 'YT' in window;
-
-		this._config = this.merge<YouTubeOption, YouTubeOption>(
-			{
-				videoId: '',
-				rel: false,
-				autoplay: true,
-				stopOnInactive: false,
-				controls: false,
-				loop: true,
-				showinfo: false,
-				mute: false,
-				width: 400,
-				height: 300,
-				index: 0,
-				poster: undefined,
-				posterHighQuality: false,
-				startSeconds: 0,
-				suggestedQuality: 'default',
-				shuffle: false,
-				preEmbed: true,
-			},
-			options,
-		);
-
 		if (!this._config.videoId) {
 			throw new TypeError(`Invalid option "videoId".`);
 		}
@@ -757,10 +732,8 @@ export default class YouTube extends BaserElement<HTMLDivElement> {
 	 */
 	private async _enableYTObject () {
 		return new Promise((resolve, reject) => {
-			// tslint:disable-next-line no-string-literal
-			window['onYouTubeIframeAPIReady'] = () => {
-				// tslint:disable-next-line no-string-literal
-				window['onYouTubeIframeAPIReady'] = undefined;
+			window.onYouTubeIframeAPIReady = () => {
+				window.onYouTubeIframeAPIReady = undefined;
 				this._apiIsLoaded = true;
 				resolve();
 			};

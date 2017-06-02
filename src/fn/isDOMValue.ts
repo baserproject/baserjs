@@ -14,7 +14,7 @@
  * @return `null` `boolean` `number` `string` いずれかであれば真
  *
  */
-export default function isDOMValue (obj: Object) {
+export default function isDOMValue<T> (obj: T) {
 	return (
 		obj === null
 		||

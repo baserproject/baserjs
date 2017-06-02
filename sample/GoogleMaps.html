@@ -8,11 +8,13 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
 	<script src="../dist/baser.js"></script>
 	<script>
+	baser.auto();
 	$(function() {
 
-		$('.map').each(function () {
-			var bGM = new baser.GoogleMaps(this);
-		});
+		// $('.map').each(function () {
+		// 	var bGM = new baser.GoogleMaps(this);
+		// });
+
 
 	});
 	</script>
@@ -37,7 +39,7 @@
 
 		<h2>sample1</h2>
 
-		<div class="map1 map" data-lat="33.606785" data-lng="130.418314" data-zoom="17" data-fit-bounds="false">
+		<div class="map1 map" data-baser="google-maps" data-lat="33.606785" data-lng="130.418314" data-zoom="17" data-fit-bounds="false">
 			<div class="pin" data-lat="33.606785" data-lng="130.418314">
 				<h1>座標1</h1>
 				<p>テキストテキスト</p>

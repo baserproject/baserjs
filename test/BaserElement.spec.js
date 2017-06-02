@@ -53,7 +53,6 @@ test('::pullProp', t => {
 			data-baser-role="test"
 			data-baser-num="0"
 			data-baser-json='{"a": 123, "b": {"c": 456}}'
-			data-baser-param="a=123&b=c=456"
 			>BaserElement</div>`);
 	const bDiv = new BaserElement(div);
 	t.is(bDiv.pullProp('hidden'), true);
@@ -80,7 +79,6 @@ test('::pullProp', t => {
 	t.deepEqual(bDiv.pullProp('baserJson', {baserJson: {z: 987, b: {d: 'DDD'}}}), {a: 123, b: {c: 456}, z: 987});
 	t.deepEqual(bDiv.pullProp('baserJson', {baserJson: {z: 987, x: 345 }}, { baserJson: { y: 'YYY' } }), {a: 123, b: {c: 456}, z: 987, x: 345, y: 'YYY'});
 	t.deepEqual(bDiv.pullProp('baserJson', {baserJson: {z: 987, x: 345 }}, { baserJson: { x: 'XXX' } }), {a: 123, b: {c: 456}, z: 987, x: 345});
-	t.deepEqual(bDiv.pullProp('baserParam'), {a: 123, b: { c: 456 }});
 
 	const img = $(`<img alt="">`);
 	const bImg = new BaserElement(img);

@@ -100,7 +100,7 @@ export default class EventDispatcher {
 	 * @return インスタンス自身
 	 *
 	 */
-	public trigger<T = {}> (type: string | DispatchEvent, args: T[] = [], context?): EventDispatcher {
+	public trigger<T = {}> (type: string | DispatchEvent, args: T[] = [], context?: EventDispatcher): EventDispatcher {
 		context = context || this;
 		let typeName: string;
 		let e: DispatchEvent;
@@ -117,7 +117,7 @@ export default class EventDispatcher {
 			while (handlers.length) {
 				const eventHandler: EventHandler<T> | undefined = handlers.shift();
 				if (eventHandler && eventHandler.context === this) {
-					const isCancel: boolean = eventHandler.fire(context, e, args);
+					const isCancel = eventHandler.fire(context, e, args);
 					if (isCancel) {
 						e.preventDefault();
 						e.stopImmediatePropagation();

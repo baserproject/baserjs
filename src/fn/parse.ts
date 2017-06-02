@@ -1,5 +1,3 @@
-import * as qs from 'qs';
-
 /**
  * 文字列をJavaScriptで利用できる値に変換する
  *
@@ -10,7 +8,7 @@ import * as qs from 'qs';
  * @return JavaScriptで利用できる値
  *
  */
-export default function parse (str: string, parseQuery: boolean = true) {
+export default function parse (str: string) {
 	if (/^\s*$/.test(str)) {
 		return str;
 	}
@@ -29,9 +27,6 @@ export default function parse (str: string, parseQuery: boolean = true) {
 			const evaluatedVal = eval(`${str}`.replace(/\(([^\(]*)\)/g, '$1')); // tslint:disable-line no-eval
 			return evaluatedVal;
 		} catch (e2) {
-			if (parseQuery && `${str}`.match('=')) {
-				return qs.parse(str);
-			}
 			return str;
 		}
 	}

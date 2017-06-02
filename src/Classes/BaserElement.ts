@@ -1,3 +1,5 @@
+import 'intersection-observer';
+
 import EventDispatcher from './EventDispatcher';
 
 import createUID from '../fn/createUID';
@@ -11,37 +13,23 @@ const detachedChildren: WeakMap<BaserElement, DocumentFragment> = new WeakMap();
 
 const inViewportElementMap: WeakMap<Element, BaserElement> = new WeakMap();
 const inViewportChangeMethodMap: WeakMap<BaserElement, (isInViewport: boolean) => void> = new WeakMap();
-const masterIntersection = new IntersectionObserver(
-	(entries) => {
-		entries.forEach((entry) => {
-			const bel = inViewportElementMap.get(entry.target);
-			if (!bel) {
-				return;
-			}
-			const changeMethod = inViewportChangeMethodMap.get(bel);
-			if (!changeMethod) {
-				return;
-			}
-			changeMethod(!!entry.intersectionRatio);
-		});
-	},
-	{
-		threshold: [0, 1],
-	},
-);
+let masterIntersection: IntersectionObserver;
+
+export interface BaserElementAttributes {
+	hidden: boolean;
+	disabled: boolean;
+	// tslint:disable-next-line:no-any
+	[attrName: string]: any;
+}
 
 /**
  * DOM要素の抽象クラス
- *
- * ```
- * const bel = new BaserElement(document.querySelector('selector'));
- * ```
  *
  * @version 1.0.0
  * @since 0.0.1
  *
  */
-export default class BaserElement<E extends Element = Element> extends EventDispatcher {
+export default class BaserElement<E extends Element = Element, C = {}> extends EventDispatcher {
 
 	/**
 	 * 管理するDOM要素のid属性値
@@ -56,6 +44,16 @@ export default class BaserElement<E extends Element = Element> extends EventDisp
 	 * data-{*}-state属性のキー
 	 */
 	protected stateKeyName = 'baser-element';
+
+	/**
+	 *
+	 */
+	protected _config: C;
+
+	/**
+	 *
+	 */
+	private _options: {[P in keyof C]?: C[P]};
 
 	/**
 	 *
@@ -80,7 +78,7 @@ export default class BaserElement<E extends Element = Element> extends EventDisp
 	 * @param el 管理するDOM要素
 	 *
 	 */
-	constructor (el: E) {
+	constructor (el: E, options: {[P in keyof C]?: C[P]} = {}) {
 		super();
 
 		if (!(el instanceof Element)) {
@@ -99,9 +97,13 @@ export default class BaserElement<E extends Element = Element> extends EventDisp
 			el.id = this.id;
 		}
 
+		this._options = options;
+
+		this._create();
+
 		if (window.document.contains(el)) {
 			this._onMount();
-		} else {
+		} else if ('MutationObserver' in window) {
 			const mo = new MutationObserver(() => this._onMount());
 			mo.observe(this.el, { attributes: true });
 		}
@@ -185,35 +187,40 @@ export default class BaserElement<E extends Element = Element> extends EventDisp
 	 * @since 1.0.0
 	 *
 	 */
-	public pullProp<T> (propName: string, ...options: T[]) {
-		// 1. DOMインターフェイスの属性値
-		const domPropVal = this.el[propName];
-		// 2. HTMLのタグに記述された属性値
-		const htmlAttrVal = this.el.getAttribute(propName);
-		// 2-B. HTMLのタグに記述された属性値（小文字）
-		const htmlAttrValLower = this.el.getAttribute(propName.toLowerCase());
-		// 2-C. HTMLのタグに記述された属性値（ハイフンケース）
-		const htmlAttrValHyphenized = this.el.getAttribute(hyphenize(propName));
+	// tslint:disable-next-line:no-any
+	public pullProp<P extends keyof BaserElementAttributes> (propName: P, ...options: { [x: string]: any }[]): BaserElementAttributes[P] {
+		const el = this.el;
 
-		let value;
+		// 1. DOMインターフェイスの属性値
+		if (propName in el) {
+			// tslint:disable-next-line:no-any
+			return (el as any)[propName];
+		}
+
+		// 2. HTMLのタグに記述された属性値
+		const htmlAttrVal = el.getAttribute(propName);
+		// 2-B. HTMLのタグに記述された属性値（小文字）
+		const htmlAttrValLower = el.getAttribute(propName.toLowerCase());
+		// 2-C. HTMLのタグに記述された属性値（ハイフンケース）
+		const htmlAttrValHyphenized = el.getAttribute(hyphenize(propName));
+
+		let value: BaserElementAttributes[P];
 
 		// 判定
-		if (isDOMValue(domPropVal)) {
-			value = parse(domPropVal, false);
-		} else if (htmlAttrVal !== null) {
+		if (htmlAttrVal !== null) {
 			value = parse(htmlAttrVal);
 		} else if (htmlAttrValLower !== null) {
 			value = parse(htmlAttrValLower);
 		} else if (htmlAttrValHyphenized !== null) {
 			value = parse(htmlAttrValHyphenized);
-		} else if (this.el instanceof HTMLElement && this.el.dataset) {
-			const dataVal = this.el.dataset[propName];
+		} else if (el instanceof HTMLElement && el.dataset) {
+			const dataVal = el.dataset[propName as string];
 			if (dataVal !== undefined) {
 				value = parse(dataVal);
 			}
 		} else {
 			// jsdomはElement::datasetをサポートしない
-			const dataVal = this.el.getAttribute(`data-${hyphenize(propName)}`);
+			const dataVal = el.getAttribute(`data-${hyphenize(propName)}`);
 			if (dataVal !== null) {
 				value = parse(dataVal);
 			}
@@ -244,15 +251,14 @@ export default class BaserElement<E extends Element = Element> extends EventDisp
 	 * @version 1.0.0
 	 * @since 1.0.0
 	 */
-	public merge<T, U> (defaultData: T, optionalData: U = {} as U): T & U { // tslint:disable-line:no-object-literal-type-assertion
-		const result: T & U = {} as T & U; // tslint:disable-line:no-object-literal-type-assertion
-		const dataKey: (keyof T | keyof U)[] = defaultData ? Object.keys(defaultData) as (keyof T)[] : [];
-		const defaultDataKey: (keyof U)[] = optionalData ? Object.keys(optionalData) as (keyof U)[] : [];
-		const keys: (keyof T | keyof U)[] = dataKey.concat(defaultDataKey).filter((k, i, self) => self.indexOf(k) === i);
-		for (const key of keys) {
-			result[key] = this.pullProp<T | U>(key, optionalData, defaultData);
+	public merge<T extends {[P in keyof BaserElementAttributes]?: BaserElementAttributes[P]}, U extends {[P in keyof T]?: T[P]}> (defaultData: T, optionalData: U): T & U {
+		const map = Object.assign({}, optionalData, defaultData);
+		for (const key in map) {
+			if (map.hasOwnProperty(key)) {
+				map[key] = this.pullProp(key, optionalData, defaultData);
+			}
 		}
-		return result as T & U;
+		return map;
 	}
 
 	/**
@@ -292,18 +298,23 @@ export default class BaserElement<E extends Element = Element> extends EventDisp
 		return this;
 	}
 
+	protected _create (defaults?: C) {
+		// tslint:disable-next-line:no-object-literal-type-assertion
+		this._config = defaults ? this.merge(defaults, this._options) : {} as C;
+	}
+
 	/**
 	 * スクロール位置を監視する
 	 *
 	 * 引数に`false`を渡すことで監視を回避できる。
 	 * Promiseのthenメソッドに渡す前提のAPI。
 	 */
-	protected inViewportFirstTime (watch: boolean = true) {
-		return (result) => {
+	protected inViewportFirstTime<T> (watch: boolean = true) {
+		return (result?: T) => {
 			if (!watch || this._hasBeenInViewportOneTime) {
 				return Promise.resolve(result);
 			}
-			return new Promise((resolve) => {
+			return new Promise<T | void>((resolve) => {
 				this._inViewportResolver = () => {
 					resolve(result);
 				};
@@ -327,6 +338,26 @@ export default class BaserElement<E extends Element = Element> extends EventDisp
 	private _onMount () {
 		inViewportElementMap.set(this.el, this);
 		inViewportChangeMethodMap.set(this, this.inViewport.bind(this));
-		masterIntersection.observe(this.el);
+		if ('IntersectionObserver' in window) {
+			masterIntersection = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						const bel = inViewportElementMap.get(entry.target);
+						if (!bel) {
+							return;
+						}
+						const changeMethod = inViewportChangeMethodMap.get(bel);
+						if (!changeMethod) {
+							return;
+						}
+						changeMethod(!!entry.intersectionRatio);
+					});
+				},
+				{
+					threshold: [0, 1],
+				},
+			);
+			masterIntersection.observe(this.el);
+		}
 	}
 }

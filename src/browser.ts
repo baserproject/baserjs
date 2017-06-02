@@ -1,4 +1,8 @@
 import * as baser from './';
 
-// tslint:disable-next-line no-string-literal
-window['baser'] = baser;
+interface WindowWithBaser extends Window {
+	baser: typeof baser;
+}
+
+(window as WindowWithBaser).baser = baser;
+
