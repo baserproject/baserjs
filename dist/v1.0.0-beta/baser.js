@@ -1,6 +1,6 @@
 /**!
 * baserjs - v1.0.0-beta
-* revision: b5ef1228c6c0061cabc79f3db1d999e19b508e5d
+* revision: 324a0b8daafc06d112c023a7a1c5d183320c13be
 * update: 2017-06-07
 * Author: baserCMS Users Community [https://github.com/baserproject/]
 * Github: https://github.com/baserproject/baserjs
@@ -71,7 +71,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 15);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -91,13 +91,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(23);
+__webpack_require__(25);
 var EventDispatcher_1 = __webpack_require__(1);
-var createUID_1 = __webpack_require__(3);
-var hyphenize_1 = __webpack_require__(18);
-var isDOMValue_1 = __webpack_require__(19);
-var isFalsy_1 = __webpack_require__(20);
-var parse_1 = __webpack_require__(4);
+var createUID_1 = __webpack_require__(4);
+var hyphenize_1 = __webpack_require__(19);
+var isDOMValue_1 = __webpack_require__(20);
+var isFalsy_1 = __webpack_require__(21);
+var parse_1 = __webpack_require__(5);
 var elements = new WeakMap();
 var detachedChildren = new WeakMap();
 var inViewportElementMap = new WeakMap();
@@ -419,8 +419,8 @@ exports.default = BaserElement;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var DispatchEvent_1 = __webpack_require__(9);
-var EventHandler_1 = __webpack_require__(10);
+var DispatchEvent_1 = __webpack_require__(10);
+var EventHandler_1 = __webpack_require__(11);
 /**
  * イベントを検知してハンドラを発火させることができるクラス
  *
@@ -559,6 +559,115 @@ exports.default = EventDispatcher;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var STOP = Symbol('Progressive.stop');
+var Progressive = (function () {
+    function Progressive(handler) {
+        this._rate = 0;
+        this._handler = handler;
+    }
+    Progressive.prototype.start = function (duration) {
+        return __awaiter(this, void 0, void 0, function () {
+            var initRate, _a, e_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        this._startTimestamp = Date.now();
+                        initRate = this._rate;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 5, , 6]);
+                        _b.label = 2;
+                    case 2:
+                        if (!(this._rate < 1)) return [3 /*break*/, 4];
+                        _a = this;
+                        return [4 /*yield*/, this._progress(initRate, duration)];
+                    case 3:
+                        _a._rate = _b.sent();
+                        return [3 /*break*/, 2];
+                    case 4: return [2 /*return*/, Promise.resolve()];
+                    case 5:
+                        e_1 = _b.sent();
+                        if (e_1 === STOP) {
+                            return [2 /*return*/, Promise.resolve()];
+                        }
+                        throw e_1;
+                    case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Progressive.prototype.pause = function () {
+        if (this._pause) {
+            cancelAnimationFrame(this._rafId);
+            this._pause();
+        }
+    };
+    Progressive.prototype.stop = function () {
+        if (this._pause) {
+            this.pause();
+            this._rate = 0;
+            this._handler(0);
+        }
+    };
+    Progressive.prototype._progress = function (initRate, duration) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this._pause = function () { return reject(STOP); };
+            _this._rafId = requestAnimationFrame(function () {
+                var period = Date.now() - _this._startTimestamp;
+                var rate = Math.min(period / duration + initRate, 1);
+                _this._handler(rate);
+                resolve(rate);
+            });
+        });
+    };
+    return Progressive;
+}());
+exports.default = Progressive;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var CANCEL_REASON = '__baser_timer_reject__';
@@ -627,10 +736,10 @@ var Timer = (function () {
 Timer.CANCEL_REASON = CANCEL_REASON;
 exports.default = Timer;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7).setImmediate, __webpack_require__(7).clearImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8).setImmediate, __webpack_require__(8).clearImmediate))
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -656,7 +765,7 @@ exports.default = createUID;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -702,7 +811,7 @@ exports.default = parse;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -727,7 +836,7 @@ module.exports = {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -916,7 +1025,7 @@ exports.isBuffer = function (obj) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -969,25 +1078,27 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(28);
+__webpack_require__(30);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaserElement_1 = __webpack_require__(0);
-var GoogleMaps_1 = __webpack_require__(11);
-var Scroll_1 = __webpack_require__(12);
-var Sequencer_1 = __webpack_require__(13);
-var YouTube_1 = __webpack_require__(14);
+var GoogleMaps_1 = __webpack_require__(12);
+var Progressive_1 = __webpack_require__(2);
+var Scroll_1 = __webpack_require__(13);
+var Sequencer_1 = __webpack_require__(14);
+var YouTube_1 = __webpack_require__(15);
 exports.BaserElement = BaserElement_1.default;
 exports.GoogleMaps = GoogleMaps_1.default;
+exports.Progressive = Progressive_1.default;
 exports.Scroll = Scroll_1.default;
 exports.Sequencer = Sequencer_1.default;
 exports.YouTube = YouTube_1.default;
@@ -1020,7 +1131,7 @@ function _auto() {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1109,13 +1220,13 @@ exports.default = DispatchEvent;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var createUID_1 = __webpack_require__(3);
+var createUID_1 = __webpack_require__(4);
 /**
  * イベントハンドラのラッパークラス
  *
@@ -1162,7 +1273,7 @@ exports.default = EventHandler;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1214,8 +1325,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaserElement_1 = __webpack_require__(0);
-var Timer_1 = __webpack_require__(2);
-var linkTo_1 = __webpack_require__(21);
+var Timer_1 = __webpack_require__(3);
+var linkTo_1 = __webpack_require__(22);
 /**
  * マップ要素
  *
@@ -1550,7 +1661,7 @@ var Pin = (function (_super) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1601,9 +1712,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var BezierEasing = __webpack_require__(24);
 var EventDispatcher_1 = __webpack_require__(1);
-var Timer_1 = __webpack_require__(2);
-var addEventListenerWithOptions_1 = __webpack_require__(16);
+var Progressive_1 = __webpack_require__(2);
+var Timer_1 = __webpack_require__(3);
+var addEventListenerWithOptions_1 = __webpack_require__(17);
+var singleton = null;
 /**
  * スクロールを管理するクラス
  *
@@ -1614,11 +1728,16 @@ var addEventListenerWithOptions_1 = __webpack_require__(16);
 var Scroll = (function (_super) {
     __extends(Scroll, _super);
     function Scroll() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super.call(this) || this;
+        _this._progressive = new Progressive_1.default(_this._progress.bind(_this));
+        return _this;
     }
     Scroll.to = function (selector, options) {
         if (options === void 0) { options = {}; }
-        return new Scroll().to(selector, options);
+        if (!singleton) {
+            singleton = new Scroll();
+        }
+        return singleton.to(selector, options);
     };
     /**
      * 対象の要素もしくは位置にスクロールを移動させる
@@ -1662,25 +1781,31 @@ var Scroll = (function (_super) {
     };
     Scroll.prototype._to = function (selector) {
         return __awaiter(this, void 0, void 0, function () {
-            var el, rect;
+            var currentY, el, rect;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        currentY = this.y;
                         // 第一引数が数値だった場合はその値のy軸へスクロール
                         if (typeof selector === 'number') {
                             this.offset += selector || 0;
-                            this.targetY = this.offset;
+                            this._dest = this.offset;
                         }
                         else if (selector) {
                             el = (selector instanceof Element) ? selector : document.querySelector(selector);
                             if (el) {
                                 rect = el.getBoundingClientRect();
-                                this.targetY = rect.top + this.y + this.offset + Scroll.offset;
+                                this._dest = rect.top + currentY + this.offset + Scroll.offset;
                             }
                             else {
-                                this.targetY = this.offset + Scroll.offset;
+                                this._dest = this.offset + Scroll.offset;
                             }
                         }
+                        if (this._dest === currentY) {
+                            return [2 /*return*/];
+                        }
+                        this._start = currentY;
+                        this._dist = this._dest - currentY;
                         return [4 /*yield*/, this._scrollStart()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -1707,17 +1832,23 @@ var Scroll = (function (_super) {
         });
     };
     Scroll.prototype._scrollStart = function () {
-        var _this = this;
-        return new Promise(function (resolve) {
-            // スクロール停止中ならスクロール開始
-            if (!_this.isScroll) {
-                _this.isScroll = true;
-                _this._progress();
-                _this.on('scrollend', resolve);
-            }
-            else {
-                resolve();
-            }
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // スクロール停止中ならスクロール開始
+                        if (this.isScroll) {
+                            return [2 /*return*/, Promise.resolve()];
+                        }
+                        this.isScroll = true;
+                        this._progressive.stop();
+                        return [4 /*yield*/, this._progressive.start(Scroll.duration)];
+                    case 1:
+                        _a.sent();
+                        this._finish();
+                        return [2 /*return*/];
+                }
+            });
         });
     };
     /**
@@ -1727,26 +1858,12 @@ var Scroll = (function (_super) {
      * @since 0.0.8
      *
      */
-    Scroll.prototype._progress = function () {
-        var _this = this;
-        var currentY = this.y;
-        var vy = (this.targetY - currentY) / Scroll.speed;
-        var nextY = currentY + vy;
-        var dest = Math.abs(nextY - this.targetY);
-        console.log(dest);
-        if (dest === 0) {
-            // 目標座標付近に到達していたら終了
-            window.scrollTo(0, this.targetY);
-            this._finish();
-            return;
-        }
-        window.scrollTo(0, nextY);
-        this.prevY = currentY;
+    Scroll.prototype._progress = function (rate) {
+        var progress = this._start + this._dist * Scroll.easing(rate);
+        window.scrollTo(0, progress);
         this.trigger('scrollprogress', [{
-                y: this.y,
+                y: progress,
             }]);
-        // 繰り返し
-        this._rafId = requestAnimationFrame(function () { return _this._progress(); });
     };
     Object.defineProperty(Scroll.prototype, "y", {
         /**
@@ -1771,9 +1888,7 @@ var Scroll = (function (_super) {
      *
      */
     Scroll.prototype._finish = function () {
-        cancelAnimationFrame(this._rafId);
         this.isScroll = false;
-        this.prevY = null;
         this.trigger('scrollend', [{
                 y: this.y,
             }]);
@@ -1793,10 +1908,8 @@ var Scroll = (function (_super) {
     };
     return Scroll;
 }(EventDispatcher_1.default));
-/**
- * 速度 単位: `px/frame`
- */
-Scroll.speed = 40;
+Scroll.duration = 300;
+Scroll.easing = BezierEasing(0, 0, 0.58, 1); // tslint:disable-line:no-magic-numbers
 Scroll.delayWhenURLHashTarget = 30;
 /**
  * Default global offset
@@ -1806,7 +1919,7 @@ exports.default = Scroll;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2270,7 +2383,7 @@ exports.default = Sequencer;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2321,10 +2434,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var qs = __webpack_require__(25);
+var qs = __webpack_require__(27);
 var BaserElement_1 = __webpack_require__(0);
-var arrayShuffle_1 = __webpack_require__(17);
-var scriptLoad_1 = __webpack_require__(22);
+var arrayShuffle_1 = __webpack_require__(18);
+var scriptLoad_1 = __webpack_require__(23);
 var PLAYER_URL = 'https://www.youtube.com/embed/';
 var API_URL = 'https://www.youtube.com/player_api';
 /**
@@ -2730,18 +2843,18 @@ exports.default = YouTube;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var baser = __webpack_require__(8);
+var baser = __webpack_require__(9);
 window.baser = baser;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2782,7 +2895,7 @@ exports.default = addEventListenerWithOptions;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2814,7 +2927,7 @@ exports.default = arraySuffle;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2836,7 +2949,7 @@ exports.default = hyphenize;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2871,13 +2984,13 @@ exports.default = isDOMValue;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var parse_1 = __webpack_require__(4);
+var parse_1 = __webpack_require__(5);
 /**
  * 文字列が論理値の偽相等であるかどうか
  *
@@ -2894,7 +3007,7 @@ exports.default = isFalsy;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2924,7 +3037,7 @@ exports.default = linkTo;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2996,7 +3109,117 @@ exports.default = scriptLoad;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
+/***/ (function(module, exports) {
+
+/**
+ * https://github.com/gre/bezier-easing
+ * BezierEasing - use bezier curve for transition easing function
+ * by Gaëtan Renaudeau 2014 - 2015 – MIT License
+ */
+
+// These values are established by empiricism with tests (tradeoff: performance VS precision)
+var NEWTON_ITERATIONS = 4;
+var NEWTON_MIN_SLOPE = 0.001;
+var SUBDIVISION_PRECISION = 0.0000001;
+var SUBDIVISION_MAX_ITERATIONS = 10;
+
+var kSplineTableSize = 11;
+var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
+
+var float32ArraySupported = typeof Float32Array === 'function';
+
+function A (aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
+function B (aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
+function C (aA1)      { return 3.0 * aA1; }
+
+// Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
+function calcBezier (aT, aA1, aA2) { return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT; }
+
+// Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
+function getSlope (aT, aA1, aA2) { return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1); }
+
+function binarySubdivide (aX, aA, aB, mX1, mX2) {
+  var currentX, currentT, i = 0;
+  do {
+    currentT = aA + (aB - aA) / 2.0;
+    currentX = calcBezier(currentT, mX1, mX2) - aX;
+    if (currentX > 0.0) {
+      aB = currentT;
+    } else {
+      aA = currentT;
+    }
+  } while (Math.abs(currentX) > SUBDIVISION_PRECISION && ++i < SUBDIVISION_MAX_ITERATIONS);
+  return currentT;
+}
+
+function newtonRaphsonIterate (aX, aGuessT, mX1, mX2) {
+ for (var i = 0; i < NEWTON_ITERATIONS; ++i) {
+   var currentSlope = getSlope(aGuessT, mX1, mX2);
+   if (currentSlope === 0.0) {
+     return aGuessT;
+   }
+   var currentX = calcBezier(aGuessT, mX1, mX2) - aX;
+   aGuessT -= currentX / currentSlope;
+ }
+ return aGuessT;
+}
+
+module.exports = function bezier (mX1, mY1, mX2, mY2) {
+  if (!(0 <= mX1 && mX1 <= 1 && 0 <= mX2 && mX2 <= 1)) {
+    throw new Error('bezier x values must be in [0, 1] range');
+  }
+
+  // Precompute samples table
+  var sampleValues = float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize);
+  if (mX1 !== mY1 || mX2 !== mY2) {
+    for (var i = 0; i < kSplineTableSize; ++i) {
+      sampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
+    }
+  }
+
+  function getTForX (aX) {
+    var intervalStart = 0.0;
+    var currentSample = 1;
+    var lastSample = kSplineTableSize - 1;
+
+    for (; currentSample !== lastSample && sampleValues[currentSample] <= aX; ++currentSample) {
+      intervalStart += kSampleStepSize;
+    }
+    --currentSample;
+
+    // Interpolate to provide an initial guess for t
+    var dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
+    var guessForT = intervalStart + dist * kSampleStepSize;
+
+    var initialSlope = getSlope(guessForT, mX1, mX2);
+    if (initialSlope >= NEWTON_MIN_SLOPE) {
+      return newtonRaphsonIterate(aX, guessForT, mX1, mX2);
+    } else if (initialSlope === 0.0) {
+      return guessForT;
+    } else {
+      return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize, mX1, mX2);
+    }
+  }
+
+  return function BezierEasing (x) {
+    if (mX1 === mY1 && mX2 === mY2) {
+      return x; // linear
+    }
+    // Because JavaScript number are imprecise, we should guarantee the extremes are right.
+    if (x === 0) {
+      return 0;
+    }
+    if (x === 1) {
+      return 1;
+    }
+    return calcBezier(getTForX(x), mY1, mY2);
+  };
+};
+
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports) {
 
 /**
@@ -3663,7 +3886,7 @@ window.IntersectionObserverEntry = IntersectionObserverEntry;
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -3853,15 +4076,15 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stringify = __webpack_require__(27);
-var parse = __webpack_require__(26);
-var formats = __webpack_require__(5);
+var stringify = __webpack_require__(29);
+var parse = __webpack_require__(28);
+var formats = __webpack_require__(6);
 
 module.exports = {
     formats: formats,
@@ -3871,13 +4094,13 @@ module.exports = {
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(6);
+var utils = __webpack_require__(7);
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -4045,14 +4268,14 @@ module.exports = function (str, opts) {
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(6);
-var formats = __webpack_require__(5);
+var utils = __webpack_require__(7);
+var formats = __webpack_require__(6);
 
 var arrayPrefixGenerators = {
     brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
@@ -4259,7 +4482,7 @@ module.exports = function (object, opts) {
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -4449,10 +4672,10 @@ module.exports = function (object, opts) {
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29), __webpack_require__(24)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31), __webpack_require__(26)))
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports) {
 
 var g;

@@ -1,5 +1,8 @@
+import * as BezierEasing from 'bezier-easing';
+
 import DispatchEvent from './DispatchEvent';
 import EventDispatcher from './EventDispatcher';
+import Progressive from './Progressive';
 import Timer from './Timer';
 
 import addEventListenerWithOptions from '../fn/addEventListenerWithOptions';
@@ -8,6 +11,8 @@ export interface ScrollOptions {
 	offset?: number;
 	wheelCancel?: boolean;
 }
+
+let singleton: Scroll | null = null;
 
 /**
  * スクロールを管理するクラス
@@ -18,10 +23,10 @@ export interface ScrollOptions {
  */
 export default class Scroll extends EventDispatcher {
 
-	/**
-	 * 速度 単位: `px/frame`
-	 */
-	public static speed = 40;
+	public static duration = 300;
+
+	public static easing: BezierEasing.Easing = BezierEasing(0, 0, 0.58, 1); // tslint:disable-line:no-magic-numbers
+
 	public static delayWhenURLHashTarget = 30;
 
 	/**
@@ -30,16 +35,25 @@ export default class Scroll extends EventDispatcher {
 	public static offset = 0;
 
 	public static to (selector?: string | Element | number, options: ScrollOptions = {}) {
-		return new Scroll().to(selector, options);
+		if (!singleton) {
+			singleton = new Scroll();
+		}
+		return singleton.to(selector, options);
 	}
 
-	public targetY: number;
-	public prevY: number | null;
 	public offset: number;
 	public isScroll: boolean;
 	public options: ScrollOptions;
 
-	private _rafId: number;
+	private _dest: number;
+	private _dist: number;
+	private _start: number;
+	private _progressive: Progressive;
+
+	constructor () {
+		super();
+		this._progressive = new Progressive(this._progress.bind(this));
+	}
 
 	/**
 	 * 対象の要素もしくは位置にスクロールを移動させる
@@ -79,19 +93,25 @@ export default class Scroll extends EventDispatcher {
 	}
 
 	private async _to (selector: string | Element | number) {
+		const currentY = this.y;
 		// 第一引数が数値だった場合はその値のy軸へスクロール
 		if (typeof selector === 'number') {
 			this.offset += selector || 0;
-			this.targetY = this.offset;
+			this._dest = this.offset;
 		} else if (selector) {
 			const el = (selector instanceof Element) ? selector : document.querySelector(selector);
 			if (el) {
 				const rect = el.getBoundingClientRect();
-				this.targetY = rect.top + this.y + this.offset + Scroll.offset;
+				this._dest = rect.top + currentY + this.offset + Scroll.offset;
 			} else {
-				this.targetY = this.offset + Scroll.offset;
+				this._dest = this.offset + Scroll.offset;
 			}
 		}
+		if (this._dest === currentY) {
+			return;
+		}
+		this._start = currentY;
+		this._dist = this._dest - currentY;
 		return await this._scrollStart();
 	}
 
@@ -104,17 +124,15 @@ export default class Scroll extends EventDispatcher {
 		}
 	}
 
-	private _scrollStart () {
-		return new Promise<DispatchEvent>((resolve) => {
-			// スクロール停止中ならスクロール開始
-			if (!this.isScroll) {
-				this.isScroll = true;
-				this._progress();
-				this.on('scrollend', resolve);
-			} else {
-				resolve();
-			}
-		});
+	private async _scrollStart () {
+		// スクロール停止中ならスクロール開始
+		if (this.isScroll) {
+			return Promise.resolve();
+		}
+		this.isScroll = true;
+		this._progressive.stop();
+		await this._progressive.start(Scroll.duration);
+		this._finish();
 	}
 
 	/**
@@ -124,31 +142,12 @@ export default class Scroll extends EventDispatcher {
 	 * @since 0.0.8
 	 *
 	 */
-	private _progress () {
-		const currentY = this.y;
-		const vy = (this.targetY - currentY) / Scroll.speed;
-		const nextY = currentY + vy;
-
-		const dest = Math.abs(nextY - this.targetY);
-
-		console.log(dest);
-
-		if (dest === 0) {
-			// 目標座標付近に到達していたら終了
-			window.scrollTo(0, this.targetY);
-			this._finish();
-			return;
-		}
-
-		window.scrollTo(0, nextY);
-		this.prevY = currentY;
-
+	private _progress (rate: number) {
+		const progress = this._start + this._dist * Scroll.easing(rate);
+		window.scrollTo(0, progress);
 		this.trigger('scrollprogress', [{
-			y: this.y,
+			y: progress,
 		}]);
-
-		// 繰り返し
-		this._rafId = requestAnimationFrame(() => this._progress());
 	}
 
 	/**
@@ -171,9 +170,7 @@ export default class Scroll extends EventDispatcher {
 	 *
 	 */
 	private _finish (): void {
-		cancelAnimationFrame(this._rafId);
 		this.isScroll = false;
-		this.prevY = null;
 		this.trigger('scrollend', [{
 			y: this.y,
 		}]);

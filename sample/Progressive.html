@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test - Form</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+	<script src="../dist/baser.js"></script>
+	<script>
+	$(function() {
+
+		var $p = document.getElementById('target');
+
+		var p = new baser.Progressive(function (rate) {
+			$p.value = rate;
+		});
+
+		document.getElementById('start').addEventListener('click', function () {
+			p.start(4000).then(function () { console.log('🎉') });
+		});
+		document.getElementById('pause').addEventListener('click', function () {
+			p.pause();
+		});
+		document.getElementById('stop').addEventListener('click', function () {
+			p.stop();
+		});
+
+	});
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+
+	<progress id="target" value="0"></progress>
+	<button type="button" id="start">START</button>
+	<button type="button" id="pause">PAUSE</button>
+	<button type="button" id="stop">STOP</button>
+
+</body>
+</html>
