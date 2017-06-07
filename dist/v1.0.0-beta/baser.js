@@ -1,7 +1,7 @@
 /**!
 * baserjs - v1.0.0-beta
-* revision: e27cc7c8d3de1d643f9ce2c21497d269ecfeaa20
-* update: 2017-06-02
+* revision: b5ef1228c6c0061cabc79f3db1d999e19b508e5d
+* update: 2017-06-07
 * Author: baserCMS Users Community [https://github.com/baserproject/]
 * Github: https://github.com/baserproject/baserjs
 * License: Licensed under the MIT License
@@ -71,7 +71,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -91,13 +91,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(21);
-var EventDispatcher_1 = __webpack_require__(8);
-var createUID_1 = __webpack_require__(1);
-var hyphenize_1 = __webpack_require__(16);
-var isDOMValue_1 = __webpack_require__(17);
-var isFalsy_1 = __webpack_require__(18);
-var parse_1 = __webpack_require__(2);
+__webpack_require__(23);
+var EventDispatcher_1 = __webpack_require__(1);
+var createUID_1 = __webpack_require__(3);
+var hyphenize_1 = __webpack_require__(18);
+var isDOMValue_1 = __webpack_require__(19);
+var isFalsy_1 = __webpack_require__(20);
+var parse_1 = __webpack_require__(4);
 var elements = new WeakMap();
 var detachedChildren = new WeakMap();
 var inViewportElementMap = new WeakMap();
@@ -419,6 +419,223 @@ exports.default = BaserElement;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var DispatchEvent_1 = __webpack_require__(9);
+var EventHandler_1 = __webpack_require__(10);
+/**
+ * イベントを検知してハンドラを発火させることができるクラス
+ *
+ * @version 0.9.0
+ * @since 0.0.10
+ *
+ * ```
+ * let dispatcher = new EventDispatcher();
+ *
+ * dispatcher.on('event', (e) -> {
+ * 	// handler
+ * });
+ *
+ * dispatcher.trigger('event');
+ * ```
+ *
+ */
+var EventDispatcher = (function () {
+    /**
+     * コンストラクタ
+     *
+     * @version 0.0.10
+     * @since 0.0.10
+     *
+     */
+    function EventDispatcher() {
+        // void
+    }
+    /**
+     * イベントハンドラを登録する
+     *
+     * @version 0.9.0
+     * @since 0.0.10
+     * @param type イベントのタイプ（複数可）
+     * @param handler
+     * @return インスタンス自身
+     *
+     */
+    EventDispatcher.prototype.on = function (types, handler) {
+        var typeList = typeof types === 'string' ? types.split(/\s+/g) : types;
+        for (var _i = 0, typeList_1 = typeList; _i < typeList_1.length; _i++) {
+            var type = typeList_1[_i];
+            var eventHandler = new EventHandler_1.default(this, type, handler);
+            EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
+            if (!EventDispatcher.types[type]) {
+                EventDispatcher.types[type] = [];
+            }
+            EventDispatcher.types[type].push(eventHandler);
+        }
+        return this;
+    };
+    /**
+     * イベントハンドラを削除する
+     *
+     * @version 1.0.0
+     * @since 0.0.10
+     * @param type イベントのタイプ（複数可）
+     * @return インスタンス自身
+     *
+     */
+    EventDispatcher.prototype.off = function (types) {
+        var typeList = typeof types === 'string' ? types.split(/\s+/g) : types;
+        for (var _i = 0, typeList_2 = typeList; _i < typeList_2.length; _i++) {
+            var type = typeList_2[_i];
+            delete EventDispatcher.types[type];
+        }
+        return this;
+    };
+    /**
+     * イベントハンドラを発火させる
+     *
+     * @version 1.0.0
+     * @since 0.0.10
+     * @param type イベントのタイプ
+     * @param args イベントハンドラに渡す引数
+     * @param context イベントハンドラのコンテキスト
+     * @return インスタンス自身
+     *
+     */
+    EventDispatcher.prototype.trigger = function (type, args, context) {
+        if (args === void 0) { args = []; }
+        context = context || this;
+        var typeName;
+        var e;
+        if (typeof type === 'string') {
+            typeName = type;
+            e = new DispatchEvent_1.default(type);
+        }
+        else {
+            e = type;
+            typeName = e.type;
+        }
+        if (EventDispatcher.types[typeName]) {
+            // sliceをつかってオブジェクトのコピーを渡し参照を切る
+            var handlers = EventDispatcher.types[typeName].slice();
+            while (handlers.length) {
+                var eventHandler = handlers.shift();
+                if (eventHandler && eventHandler.context === this) {
+                    var isCancel = eventHandler.fire(context, e, args);
+                    if (isCancel) {
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+                    }
+                    // イベントの伝達抑制状態であればループ抜けて以降の処理を行わない
+                    if (e.isImmediatePropagationStopped()) {
+                        break;
+                    }
+                }
+            }
+        }
+        return this;
+    };
+    return EventDispatcher;
+}());
+/**
+ * イベント駆動できるクラス
+ *
+ * @version 0.7.0
+ * @since 0.7.0
+ *
+ */
+EventDispatcher.eventHandlers = {}; // tslint:disable-line:no-any
+/**
+ * イベント駆動できるクラス
+ *
+ * @version 0.7.0
+ * @since 0.7.0
+ *
+ */
+EventDispatcher.types = {}; // tslint:disable-line:no-any
+exports.default = EventDispatcher;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {
+Object.defineProperty(exports, "__esModule", { value: true });
+var CANCEL_REASON = '__baser_timer_reject__';
+/**
+ * タイマークラス
+ *
+ * @version 1.0.0
+ * @since 1.0.0
+ *
+ */
+var Timer = (function () {
+    function Timer(time) {
+        if (!Number.isSafeInteger(time)) {
+            throw new RangeError("An argument is invalid number. 0 < time <= MAX_SAFE_INTEGER");
+        }
+        this.time = time;
+    }
+    /**
+     * 指定ミリ秒待機するPromiseを返す
+     *
+     * キャンセル不可
+     *
+     * ex.) then
+     * ```
+     * Promise.resolve(result1)
+     * .then(Timer.delay(500))
+     * .then((result2) => {
+     * 	result1 === result2; // true
+     * });
+     * ```
+     *
+     * ex.2) await
+     * ```
+     * const result2 = await Timer.delay(500)(result1);
+     * result1 === result2; // true
+     * ```
+     */
+    Timer.delay = function (time) {
+        return function (returnValue) { return new Timer(time).wait(returnValue); };
+    };
+    Timer.prototype.wait = function (returnValue) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this._reject = reject;
+            if (_this.time === 0) {
+                _this._timerId = setImmediate(function () {
+                    resolve(returnValue);
+                });
+            }
+            else {
+                _this._timerId = setTimeout(function () {
+                    resolve(returnValue);
+                }, _this.time);
+            }
+        });
+    };
+    Timer.prototype.cancel = function () {
+        clearImmediate(this._timerId);
+        clearTimeout(this._timerId);
+        if (this._reject) {
+            this._reject(CANCEL_REASON);
+        }
+    };
+    return Timer;
+}());
+Timer.CANCEL_REASON = CANCEL_REASON;
+exports.default = Timer;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7).setImmediate, __webpack_require__(7).clearImmediate))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * ユニークIDを発行する
  *
@@ -439,7 +656,7 @@ exports.default = createUID;
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -485,7 +702,7 @@ exports.default = parse;
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -510,7 +727,7 @@ module.exports = {
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -699,7 +916,7 @@ exports.isBuffer = function (obj) {
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -752,24 +969,26 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(26);
+__webpack_require__(28);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaserElement_1 = __webpack_require__(0);
-var GoogleMaps_1 = __webpack_require__(10);
-var Sequencer_1 = __webpack_require__(11);
-var YouTube_1 = __webpack_require__(13);
+var GoogleMaps_1 = __webpack_require__(11);
+var Scroll_1 = __webpack_require__(12);
+var Sequencer_1 = __webpack_require__(13);
+var YouTube_1 = __webpack_require__(14);
 exports.BaserElement = BaserElement_1.default;
 exports.GoogleMaps = GoogleMaps_1.default;
+exports.Scroll = Scroll_1.default;
 exports.Sequencer = Sequencer_1.default;
 exports.YouTube = YouTube_1.default;
 function auto() {
@@ -801,7 +1020,7 @@ function _auto() {
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -890,155 +1109,13 @@ exports.default = DispatchEvent;
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var DispatchEvent_1 = __webpack_require__(7);
-var EventHandler_1 = __webpack_require__(9);
-/**
- * イベントを検知してハンドラを発火させることができるクラス
- *
- * @version 0.9.0
- * @since 0.0.10
- *
- * ```
- * let dispatcher = new EventDispatcher();
- *
- * dispatcher.on('event', (e) -> {
- * 	// handler
- * });
- *
- * dispatcher.trigger('event');
- * ```
- *
- */
-var EventDispatcher = (function () {
-    /**
-     * コンストラクタ
-     *
-     * @version 0.0.10
-     * @since 0.0.10
-     *
-     */
-    function EventDispatcher() {
-        // void
-    }
-    /**
-     * イベントハンドラを登録する
-     *
-     * @version 0.9.0
-     * @since 0.0.10
-     * @param type イベントのタイプ（複数可）
-     * @param handler
-     * @return インスタンス自身
-     *
-     */
-    EventDispatcher.prototype.on = function (types, handler) {
-        var typeList = typeof types === 'string' ? types.split(/\s+/g) : types;
-        for (var _i = 0, typeList_1 = typeList; _i < typeList_1.length; _i++) {
-            var type = typeList_1[_i];
-            var eventHandler = new EventHandler_1.default(this, type, handler);
-            EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
-            if (!EventDispatcher.types[type]) {
-                EventDispatcher.types[type] = [];
-            }
-            EventDispatcher.types[type].push(eventHandler);
-        }
-        return this;
-    };
-    /**
-     * イベントハンドラを削除する
-     *
-     * @version 1.0.0
-     * @since 0.0.10
-     * @param type イベントのタイプ（複数可）
-     * @return インスタンス自身
-     *
-     */
-    EventDispatcher.prototype.off = function (types) {
-        var typeList = typeof types === 'string' ? types.split(/\s+/g) : types;
-        for (var _i = 0, typeList_2 = typeList; _i < typeList_2.length; _i++) {
-            var type = typeList_2[_i];
-            delete EventDispatcher.types[type];
-        }
-        return this;
-    };
-    /**
-     * イベントハンドラを発火させる
-     *
-     * @version 1.0.0
-     * @since 0.0.10
-     * @param type イベントのタイプ
-     * @param args イベントハンドラに渡す引数
-     * @param context イベントハンドラのコンテキスト
-     * @return インスタンス自身
-     *
-     */
-    EventDispatcher.prototype.trigger = function (type, args, context) {
-        if (args === void 0) { args = []; }
-        context = context || this;
-        var typeName;
-        var e;
-        if (typeof type === 'string') {
-            typeName = type;
-            e = new DispatchEvent_1.default(type);
-        }
-        else {
-            e = type;
-            typeName = e.type;
-        }
-        if (EventDispatcher.types[typeName]) {
-            // sliceをつかってオブジェクトのコピーを渡し参照を切る
-            var handlers = EventDispatcher.types[typeName].slice();
-            while (handlers.length) {
-                var eventHandler = handlers.shift();
-                if (eventHandler && eventHandler.context === this) {
-                    var isCancel = eventHandler.fire(context, e, args);
-                    if (isCancel) {
-                        e.preventDefault();
-                        e.stopImmediatePropagation();
-                    }
-                    // イベントの伝達抑制状態であればループ抜けて以降の処理を行わない
-                    if (e.isImmediatePropagationStopped()) {
-                        break;
-                    }
-                }
-            }
-        }
-        return this;
-    };
-    return EventDispatcher;
-}());
-/**
- * イベント駆動できるクラス
- *
- * @version 0.7.0
- * @since 0.7.0
- *
- */
-EventDispatcher.eventHandlers = {}; // tslint:disable-line:no-any
-/**
- * イベント駆動できるクラス
- *
- * @version 0.7.0
- * @since 0.7.0
- *
- */
-EventDispatcher.types = {}; // tslint:disable-line:no-any
-exports.default = EventDispatcher;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var createUID_1 = __webpack_require__(1);
+var createUID_1 = __webpack_require__(3);
 /**
  * イベントハンドラのラッパークラス
  *
@@ -1085,7 +1162,7 @@ exports.default = EventHandler;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1137,8 +1214,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaserElement_1 = __webpack_require__(0);
-var Timer_1 = __webpack_require__(12);
-var linkTo_1 = __webpack_require__(19);
+var Timer_1 = __webpack_require__(2);
+var linkTo_1 = __webpack_require__(21);
 /**
  * マップ要素
  *
@@ -1473,7 +1550,263 @@ var Pin = (function (_super) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var EventDispatcher_1 = __webpack_require__(1);
+var Timer_1 = __webpack_require__(2);
+var addEventListenerWithOptions_1 = __webpack_require__(16);
+/**
+ * スクロールを管理するクラス
+ *
+ * @version 0.9.0
+ * @since 0.0.8
+ *
+ */
+var Scroll = (function (_super) {
+    __extends(Scroll, _super);
+    function Scroll() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Scroll.to = function (selector, options) {
+        if (options === void 0) { options = {}; }
+        return new Scroll().to(selector, options);
+    };
+    /**
+     * 対象の要素もしくは位置にスクロールを移動させる
+     *
+     * @version 1.0.0
+     * @since 0.0.8
+     * @param selector 対象の要素のセレクタ・DOMもしくはスクロール位置
+     * @param options オプション
+     * @return インスタンス自信
+     *
+     */
+    Scroll.prototype.to = function (selector, options) {
+        if (options === void 0) { options = {}; }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.options = options;
+                        this.offset = this.options.offset || 0;
+                        if (this.options.wheelCancel !== false) {
+                            addEventListenerWithOptions_1.default(window, 'wheel', function () {
+                                if (_this.isScroll) {
+                                    _this._cancel();
+                                }
+                            }, {
+                                passive: true,
+                                once: true,
+                            });
+                        }
+                        if (!(selector == null)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this._toHash()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2: return [4 /*yield*/, this._to(selector)];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Scroll.prototype._to = function (selector) {
+        return __awaiter(this, void 0, void 0, function () {
+            var el, rect;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // 第一引数が数値だった場合はその値のy軸へスクロール
+                        if (typeof selector === 'number') {
+                            this.offset += selector || 0;
+                            this.targetY = this.offset;
+                        }
+                        else if (selector) {
+                            el = (selector instanceof Element) ? selector : document.querySelector(selector);
+                            if (el) {
+                                rect = el.getBoundingClientRect();
+                                this.targetY = rect.top + this.y + this.offset + Scroll.offset;
+                            }
+                            else {
+                                this.targetY = this.offset + Scroll.offset;
+                            }
+                        }
+                        return [4 /*yield*/, this._scrollStart()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Scroll.prototype._toHash = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var target;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        target = document.querySelector(window.location.hash);
+                        if (!target) return [3 /*break*/, 3];
+                        return [4 /*yield*/, Timer_1.default.delay(Scroll.delayWhenURLHashTarget)()];
+                    case 1:
+                        _a.sent();
+                        window.scrollTo(0, 0);
+                        return [4 /*yield*/, this._to(target)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Scroll.prototype._scrollStart = function () {
+        var _this = this;
+        return new Promise(function (resolve) {
+            // スクロール停止中ならスクロール開始
+            if (!_this.isScroll) {
+                _this.isScroll = true;
+                _this._progress();
+                _this.on('scrollend', resolve);
+            }
+            else {
+                resolve();
+            }
+        });
+    };
+    /**
+     * スクロール
+     *
+     * @version 1.0.0
+     * @since 0.0.8
+     *
+     */
+    Scroll.prototype._progress = function () {
+        var _this = this;
+        var currentY = this.y;
+        var vy = (this.targetY - currentY) / Scroll.speed;
+        var nextY = currentY + vy;
+        var dest = Math.abs(nextY - this.targetY);
+        console.log(dest);
+        if (dest === 0) {
+            // 目標座標付近に到達していたら終了
+            window.scrollTo(0, this.targetY);
+            this._finish();
+            return;
+        }
+        window.scrollTo(0, nextY);
+        this.prevY = currentY;
+        this.trigger('scrollprogress', [{
+                y: this.y,
+            }]);
+        // 繰り返し
+        this._rafId = requestAnimationFrame(function () { return _this._progress(); });
+    };
+    Object.defineProperty(Scroll.prototype, "y", {
+        /**
+         * y位置の取得
+         *
+         * @version 1.0.0
+         * @since 0.0.8
+         * @return y位置
+         *
+         */
+        get: function () {
+            return window.scrollY || window.pageYOffset;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * スクロールの終了
+     *
+     * @version 1.0.0
+     * @since 0.0.8
+     *
+     */
+    Scroll.prototype._finish = function () {
+        cancelAnimationFrame(this._rafId);
+        this.isScroll = false;
+        this.prevY = null;
+        this.trigger('scrollend', [{
+                y: this.y,
+            }]);
+    };
+    /**
+     * スクロールの終了
+     *
+     * @version 1.0.0
+     * @since 1.0.0
+     *
+     */
+    Scroll.prototype._cancel = function () {
+        this.trigger('scrollcancel', [{
+                y: this.y,
+            }]);
+        this._finish();
+    };
+    return Scroll;
+}(EventDispatcher_1.default));
+/**
+ * 速度 単位: `px/frame`
+ */
+Scroll.speed = 40;
+Scroll.delayWhenURLHashTarget = 30;
+/**
+ * Default global offset
+ */
+Scroll.offset = 0;
+exports.default = Scroll;
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1937,82 +2270,7 @@ exports.default = Sequencer;
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {
-Object.defineProperty(exports, "__esModule", { value: true });
-var CANCEL_REASON = '__baser_timer_reject__';
-/**
- * タイマークラス
- *
- * @version 1.0.0
- * @since 1.0.0
- *
- */
-var Timer = (function () {
-    function Timer(time) {
-        if (!Number.isSafeInteger(time)) {
-            throw new RangeError("An argument is invalid number. 0 < time <= MAX_SAFE_INTEGER");
-        }
-        this.time = time;
-    }
-    /**
-     * 指定ミリ秒待機するPromiseを返す
-     *
-     * キャンセル不可
-     *
-     * ex.) then
-     * ```
-     * Promise.resolve(result1)
-     * .then(Timer.delay(500))
-     * .then((result2) => {
-     * 	result1 === result2; // true
-     * });
-     * ```
-     *
-     * ex.2) await
-     * ```
-     * const result2 = await Timer.delay(500)(result1);
-     * result1 === result2; // true
-     * ```
-     */
-    Timer.delay = function (time) {
-        return function (returnValue) { return new Timer(time).wait(returnValue); };
-    };
-    Timer.prototype.wait = function (returnValue) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this._reject = reject;
-            if (_this.time === 0) {
-                _this._timerId = setImmediate(function () {
-                    resolve(returnValue);
-                });
-            }
-            else {
-                _this._timerId = setTimeout(function () {
-                    resolve(returnValue);
-                }, _this.time);
-            }
-        });
-    };
-    Timer.prototype.cancel = function () {
-        clearImmediate(this._timerId);
-        clearTimeout(this._timerId);
-        if (this._reject) {
-            this._reject(CANCEL_REASON);
-        }
-    };
-    return Timer;
-}());
-Timer.CANCEL_REASON = CANCEL_REASON;
-exports.default = Timer;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5).setImmediate, __webpack_require__(5).clearImmediate))
-
-/***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2063,10 +2321,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var qs = __webpack_require__(23);
+var qs = __webpack_require__(25);
 var BaserElement_1 = __webpack_require__(0);
-var arrayShuffle_1 = __webpack_require__(15);
-var scriptLoad_1 = __webpack_require__(20);
+var arrayShuffle_1 = __webpack_require__(17);
+var scriptLoad_1 = __webpack_require__(22);
 var PLAYER_URL = 'https://www.youtube.com/embed/';
 var API_URL = 'https://www.youtube.com/player_api';
 /**
@@ -2472,18 +2730,59 @@ exports.default = YouTube;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var baser = __webpack_require__(6);
+var baser = __webpack_require__(8);
 window.baser = baser;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var supportsPassive = false;
+try {
+    // getter として opts.passive を定義して、 addEventListener 内で呼ばれたことがわかるようにする
+    var opts = Object.defineProperty({}, 'passive', {
+        get: function () {
+            // 内部で opts.passive が呼ばれたら対応ブラウザ
+            // 用意しておいたフラグを有効にする
+            supportsPassive = true;
+        },
+    });
+    // 試しに適当なイベントを補足し、 opts.passive が呼ばれるか試す
+    window.addEventListener('test', function (_) { return _; }, opts);
+}
+catch (e) {
+    // void
+}
+/**
+ *
+ * @param target
+ * @param type
+ * @param listener
+ * @param options
+ */
+// tslint:disable-next-line:no-any
+function addEventListenerWithOptions(target, type, listener, options) {
+    var optionsOrCapture = options;
+    if (!supportsPassive) {
+        optionsOrCapture = options.capture || false;
+    }
+    target.addEventListener(type, listener, optionsOrCapture); // ⚠️ type hack
+}
+exports.default = addEventListenerWithOptions;
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2515,7 +2814,7 @@ exports.default = arraySuffle;
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2537,7 +2836,7 @@ exports.default = hyphenize;
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2572,13 +2871,13 @@ exports.default = isDOMValue;
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var parse_1 = __webpack_require__(2);
+var parse_1 = __webpack_require__(4);
 /**
  * 文字列が論理値の偽相等であるかどうか
  *
@@ -2595,7 +2894,7 @@ exports.default = isFalsy;
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2625,7 +2924,7 @@ exports.default = linkTo;
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2697,7 +2996,7 @@ exports.default = scriptLoad;
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /**
@@ -3364,7 +3663,7 @@ window.IntersectionObserverEntry = IntersectionObserverEntry;
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -3554,15 +3853,15 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var stringify = __webpack_require__(25);
-var parse = __webpack_require__(24);
-var formats = __webpack_require__(3);
+var stringify = __webpack_require__(27);
+var parse = __webpack_require__(26);
+var formats = __webpack_require__(5);
 
 module.exports = {
     formats: formats,
@@ -3572,13 +3871,13 @@ module.exports = {
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(4);
+var utils = __webpack_require__(6);
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -3746,14 +4045,14 @@ module.exports = function (str, opts) {
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var utils = __webpack_require__(4);
-var formats = __webpack_require__(3);
+var utils = __webpack_require__(6);
+var formats = __webpack_require__(5);
 
 var arrayPrefixGenerators = {
     brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
@@ -3960,7 +4259,7 @@ module.exports = function (object, opts) {
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -4150,10 +4449,10 @@ module.exports = function (object, opts) {
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27), __webpack_require__(22)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(29), __webpack_require__(24)))
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports) {
 
 var g;

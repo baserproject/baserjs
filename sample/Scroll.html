@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test - Form</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
+	<script src="../dist/baser.js"></script>
+	<script>
+	$(function() {
+
+		baser.Scroll.offset = 0;
+
+		document.addEventListener('click', function () {
+			baser.Scroll.to('#target').then(function () {
+				console.log('🎉');
+			});
+		});
+
+	});
+	</script>
+	<style>
+	#target {
+		position: absolute;
+		top: 800vh;
+		width: 10px;
+		height: 10px;
+		background: red;
+	}
+	#target2 {
+		position: absolute;
+		top: 2000vh;
+		width: 10px;
+		height: 10px;
+		background: blue;
+	}
+	</style>
+</head>
+<body>
+
+	<div id="target"></div>
+	<div id="target2"></div>
+
+</body>
+</html>

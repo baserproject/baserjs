@@ -173,8 +173,7 @@
       1000
     ],
     "max-line-length": [
-      true,
-      180
+      false
     ],
     "no-default-export": false,
     "no-mergeable-namespace": true,
