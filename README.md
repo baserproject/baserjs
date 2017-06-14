@@ -46,7 +46,9 @@ baserJS
 	- [ ] Hyperlink delegation
 	- [ ] Detection when descendant image loaded
 	- [ ] Detection when element resized
-	- [ ] Promise sequencer
+	- [x] Progressive Helper
+	- [x] Smooth Scrolling
+	- [x] Promise sequencer
 	- [ ] Scroll spy and Inview for elements
 		- [x] Standard
 		- [x] High performance

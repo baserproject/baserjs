@@ -26,6 +26,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/google.analytics": "^0.0.33",
+    "@types/jquery": "^2.0.46",
     "@types/qs": "^6.2.31",
     "@types/youtube": "^0.0.29",
     "ava": "^0.19.1",
