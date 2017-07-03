@@ -1,0 +1,13 @@
+import _BaserElement from './Classes/BaserElement';
+import _GoogleMaps from './Classes/GoogleMaps';
+import _Progressive from './Classes/Progressive';
+import _Scroll from './Classes/Scroll';
+import _Sequencer from './Classes/Sequencer';
+import _YouTube from './Classes/YouTube';
+export declare const BaserElement: typeof _BaserElement;
+export declare const GoogleMaps: typeof _GoogleMaps;
+export declare const Progressive: typeof _Progressive;
+export declare const Scroll: typeof _Scroll;
+export declare const Sequencer: typeof _Sequencer;
+export declare const YouTube: typeof _YouTube;
+export declare function auto(): Promise<void>;

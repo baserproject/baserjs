@@ -26,7 +26,6 @@ project = ts.createProject './tsconfig.json',
 gulp.task 'ts', ->
   result = project.src()
     .pipe project()
-  result.js
     .pipe gulp.dest './lib/'
 
 gulp.task 'pack', ->
