@@ -1,7 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var DispatchEvent_1 = require("./DispatchEvent");
-var EventHandler_1 = require("./EventHandler");
+var DispatchEvent = require('./DispatchEvent');
+var EventHandler = require('./EventHandler');
 /**
  * イベントを検知してハンドラを発火させることができるクラス
  *
@@ -40,40 +39,52 @@ var EventDispatcher = (function () {
      * @return インスタンス自身
      *
      */
-    EventDispatcher.prototype.on = function (types, handler) {
-        var typeList = typeof types === 'string' ? types.split(/\s+/g) : types;
-        for (var _i = 0, typeList_1 = typeList; _i < typeList_1.length; _i++) {
-            var type = typeList_1[_i];
-            var eventHandler = new EventHandler_1.default(this, type, handler);
+    EventDispatcher.prototype.on = function (type, handler) {
+        var types;
+        if (typeof type === 'string') {
+            types = type.split(/\s+/g);
+        }
+        else {
+            types = type;
+        }
+        for (var _i = 0, types_1 = types; _i < types_1.length; _i++) {
+            var type_1 = types_1[_i];
+            var eventHandler = new EventHandler(this, type_1, handler);
             EventDispatcher.eventHandlers[eventHandler.id] = eventHandler;
-            if (!EventDispatcher.types[type]) {
-                EventDispatcher.types[type] = [];
+            if (!EventDispatcher.types[type_1]) {
+                EventDispatcher.types[type_1] = [];
             }
-            EventDispatcher.types[type].push(eventHandler);
+            EventDispatcher.types[type_1].push(eventHandler);
         }
         return this;
     };
     /**
      * イベントハンドラを削除する
      *
-     * @version 1.0.0
+     * @version 0.9.0
      * @since 0.0.10
      * @param type イベントのタイプ（複数可）
      * @return インスタンス自身
      *
      */
-    EventDispatcher.prototype.off = function (types) {
-        var typeList = typeof types === 'string' ? types.split(/\s+/g) : types;
-        for (var _i = 0, typeList_2 = typeList; _i < typeList_2.length; _i++) {
-            var type = typeList_2[_i];
-            delete EventDispatcher.types[type];
+    EventDispatcher.prototype.off = function (type) {
+        var types;
+        if (typeof type === 'string') {
+            types = type.split(/\s+/g);
+        }
+        else {
+            types = type;
+        }
+        for (var _i = 0, types_2 = types; _i < types_2.length; _i++) {
+            var type_2 = types_2[_i];
+            delete EventDispatcher.types[type_2];
         }
         return this;
     };
     /**
      * イベントハンドラを発火させる
      *
-     * @version 1.0.0
+     * @version 0.9.0
      * @since 0.0.10
      * @param type イベントのタイプ
      * @param args イベントハンドラに渡す引数
@@ -88,7 +99,7 @@ var EventDispatcher = (function () {
         var e;
         if (typeof type === 'string') {
             typeName = type;
-            e = new DispatchEvent_1.default(type);
+            e = new DispatchEvent(type);
         }
         else {
             e = type;
@@ -99,7 +110,7 @@ var EventDispatcher = (function () {
             var handlers = EventDispatcher.types[typeName].slice();
             while (handlers.length) {
                 var eventHandler = handlers.shift();
-                if (eventHandler && eventHandler.context === this) {
+                if (eventHandler.context === this) {
                     var isCancel = eventHandler.fire(context, e, args);
                     if (isCancel) {
                         e.preventDefault();
@@ -121,7 +132,7 @@ var EventDispatcher = (function () {
      * @since 0.7.0
      *
      */
-    EventDispatcher.eventHandlers = {}; // tslint:disable-line:no-any
+    EventDispatcher.eventHandlers = {};
     /**
      * イベント駆動できるクラス
      *
@@ -129,7 +140,7 @@ var EventDispatcher = (function () {
      * @since 0.7.0
      *
      */
-    EventDispatcher.types = {}; // tslint:disable-line:no-any
+    EventDispatcher.types = {};
     return EventDispatcher;
 }());
-exports.default = EventDispatcher;
+module.exports = EventDispatcher;

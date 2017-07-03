@@ -26,11 +26,11 @@
   "license": "MIT",
   "devDependencies": {
     "@types/google.analytics": "^0.0.33",
-    "@types/jquery": "^2.0.46",
-    "@types/qs": "^6.2.31",
-    "@types/youtube": "^0.0.29",
-    "ava": "^0.19.1",
-    "browser-env": "^2.0.31",
+    "@types/jquery": "^3.2.5",
+    "@types/qs": "^6.4.0",
+    "@types/youtube": "^0.0.30",
+    "ava": "^0.20.0",
+    "browser-env": "^3.0.2",
     "coffee-script": "^1.12.6",
     "git-rev-sync": "^1.9.1",
     "gulp": "^3.9.1",
@@ -38,16 +38,16 @@
     "gulp-typescript": "^3.1.7",
     "moment": "^2.18.1",
     "nightmare": "^2.10.0",
-    "run-sequence": "^1.2.2",
-    "tslint": "^5.4.2",
-    "typescript": "^2.3.4",
+    "run-sequence": "^2.0.0",
+    "tslint": "^5.4.3",
+    "typescript": "^2.4.1",
     "typings": "^2.1.1",
-    "webpack": "2.6.1",
+    "webpack": "3.0.0",
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
     "bezier-easing": "^2.0.3",
-    "intersection-observer": "^0.2.1",
-    "qs": "^6.4.0"
+    "intersection-observer": "^0.3.2",
+    "qs": "^6.5.0"
   }
 }
