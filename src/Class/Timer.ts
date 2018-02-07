@@ -37,7 +37,7 @@ class Timer extends EventDispatcher {
 	 * @since 0.0.8
 	 *
 	 */
-	private _timerId: number = null;
+	private _timerId: NodeJS.Timer = null;
 
 	/**
 	 * コンストラクタ

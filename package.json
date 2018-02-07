@@ -1,9 +1,10 @@
 {
   "name": "baserjs",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Client side JavaScript libraries for baserCMS",
   "main": "baser.js",
   "scripts": {
+    "build": "gulp",
     "test": "gulp test"
   },
   "repository": {
@@ -27,21 +28,21 @@
   "website": "https://github.com/baserproject/",
   "license": "MIT",
   "devDependencies": {
-    "coffee-script": "^1.10.0",
-    "git-rev-sync": "^1.6.0",
+    "coffee-script": "^1.12.7",
+    "git-rev-sync": "^1.9.1",
     "gulp": "^3.9.1",
-    "gulp-header": "^1.8.8",
-    "gulp-qunit": "^1.4.0",
+    "gulp-header": "^2.0.1",
+    "gulp-qunit": "^1",
     "gulp-rename": "^1.2.2",
-    "gulp-typedoc": "^2.0.0",
-    "gulp-typescript": "^2.13.6",
-    "gulp-uglify": "^2.0.0",
-    "moment": "^2.14.1",
-    "qunitjs": "^1.23.1",
-    "run-sequence": "^1.2.2",
-    "tslint": "^3.15.1",
-    "typedoc": "^0.4.5",
-    "typescript": "^1.8.10",
-    "webpack-stream": "^3.2.0"
+    "gulp-typedoc": "^2.2.0",
+    "gulp-typescript": "^3.2.4",
+    "gulp-uglify": "^3.0.0",
+    "moment": "^2.20.1",
+    "qunitjs": "^1",
+    "run-sequence": "^2.2.1",
+    "tslint": "^5.9.1",
+    "typedoc": "^0.10.0",
+    "typescript": "^2.7.1",
+    "webpack-stream": "^4.0.0"
   }
 }

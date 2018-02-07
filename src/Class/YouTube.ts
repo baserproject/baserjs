@@ -508,7 +508,7 @@ class YouTube extends BaserElement {
 		if (!('YT' in window && YT.Player)) {
 			$.getScript(`${Browser.apiScheme}${YouTube.API_URL}`);
 		}
-		const intervalTimer: number = setInterval(
+		const intervalTimer: number = window.setInterval(
 			() => {
 				if (!this.player && 'YT' in window && YT.Player) {
 					this._createPlayer(this.playerDomId);

@@ -108,13 +108,13 @@ class AnimationFrames extends EventDispatcher {
 				const timestamp: number = new Date().getTime();
 				const e: DispatchEvent = this._enterFrame(context, timestamp, START_TIMESTAMP);
 				if (!e.isDefaultPrevented() && !this._isStop) {
-					this._requestId = setTimeout(onEnterFrame, interval);
+					this._requestId = window.setTimeout(onEnterFrame, interval);
 				} else {
 					const e: DispatchEvent = new DispatchEvent('stop');
 					this.trigger(e, [timestamp, START_TIMESTAMP, context], context);
 				}
 			};
-			this._requestId = setTimeout(onEnterFrame, interval);
+			this._requestId = window.setTimeout(onEnterFrame, interval);
 		}
 		return this;
 	}

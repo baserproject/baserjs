@@ -2,7 +2,11 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "declaration": true
+        "declaration": true,
+        "lib": [
+            "es2015",
+            "dom",
+        ]
     },
     "exclude": [
         "node_modules"

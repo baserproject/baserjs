@@ -267,7 +267,7 @@ class AlignedBoxes extends EventDispatcher {
 			AlignedBoxes.isBooted = true;
 			AlignedBoxes.createChar();
 			// TODO: タイマーによる監視をオプションでオフにできるようにする
-			AlignedBoxes.watchTimer = setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
+			AlignedBoxes.watchTimer = window.setInterval(AlignedBoxes.observerForFontSize, AlignedBoxes.watchInterval);
 		}
 	}
 
