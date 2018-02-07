@@ -242,7 +242,6 @@ class JQueryAdapter {
 			const manifest: JQueryPromise<any>[] = [];
 			const $imgs: JQuery = $elem.filter('img').add($elem.find('img'));
 			if ($imgs.length) {
-				$imgs.hide();
 				$imgs.each(function (): void {
 					const loaded: JQueryDeferred<any> = $.Deferred();
 					let img: HTMLImageElement = new Image();
@@ -260,7 +259,6 @@ class JQueryAdapter {
 					manifest.push(loaded.promise());
 				});
 				$.when.apply($, manifest).done( (): void => {
-					$imgs.show();
 					success.call(elem);
 				}).fail( (e: Event): void => {
 					if (error) {
