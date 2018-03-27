@@ -1,7 +1,7 @@
 /**
  * YouTubeクラスのコンストラクタのオプション
  *
- * @version 0.0.16
+ * @version 0.15.0
  * @since 0.0.16
  *
  */
@@ -152,6 +152,10 @@ interface YouTubeOption {
 	 */
 	preEmbed?: boolean;
 
+	/**
+	 * モバイル端末などでインライン再生をする
+	 */
+	playsinline?: boolean;
 }
 
 export = YouTubeOption;

@@ -86,8 +86,8 @@ class JQueryAdapter {
 				case 'destroy': {
 					const boxes: AlignedBoxes = <AlignedBoxes> self.data(AlignedBoxes.DATA_KEY);
 					boxes.destroy();
+					break;
 				}
-				break;
 				default: {
 					// void
 				}
@@ -206,8 +206,8 @@ class JQueryAdapter {
 					case 'update': {
 						const select: Select = <Select> $elem.data('bc-element');
 						select.update();
+						break;
 					}
-					break;
 					default: {
 						// void
 					}
@@ -400,7 +400,7 @@ class JQueryAdapter {
 				dataKey: '-bc-split-list-index',
 				splitChildren: true,
 			},
-			options
+			options,
 		);
 		self.each( (index: number, elem: HTMLElement): void => {
 
@@ -460,7 +460,7 @@ class JQueryAdapter {
 				target: null,
 				stopOnTouch: true,
 			},
-			options
+			options,
 		);
 		self.each( (i: number, elem: HTMLElement): void => {
 
@@ -601,7 +601,7 @@ class JQueryAdapter {
 				filter: null,
 				stopOnTouch: true,
 			},
-			options
+			options,
 		);
 
 		const dataKeyOff: string = config.dataPrefix + 'off';
@@ -686,7 +686,7 @@ class JQueryAdapter {
 				target: null,
 				stopOnTouch: true,
 			},
-			options
+			options,
 		);
 		self.each( (i: number, elem: HTMLElement): void => {
 
@@ -729,7 +729,7 @@ class JQueryAdapter {
 
 		});
 		return self;
-	};
+	}
 
 }
 

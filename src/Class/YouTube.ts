@@ -327,8 +327,9 @@ class YouTube extends BaserElement {
 				suggestedQuality: 'default',
 				shuffle: false,
 				preEmbed: true,
+				playsinline: false,
 			},
-			options
+			options,
 		);
 
 		if (Browser.spec.ua.iOS) {
@@ -356,6 +357,7 @@ class YouTube extends BaserElement {
 			showinfo: this.movieOption.showinfo ? 1 : 0,
 			wmode: 'transparent',
 			enablejsapi: 1,
+			playsinline: this.movieOption.playsinline ? 1 : 0,
 		};
 
 		this.src = YouTube.getURI(movieId, param);
@@ -518,7 +520,7 @@ class YouTube extends BaserElement {
 					this._onEmbeded();
 				}
 			},
-			300
+			300,
 		);
 	}
 
@@ -544,19 +546,19 @@ class YouTube extends BaserElement {
 								this.trigger('changecue', [this.player]);
 							}
 							this.currentCueIndex = listIndex;
+							break;
 						}
-						break;
 						case YT.PlayerState.BUFFERING: {
 							if (this._$posterContainer) {
 								this._$posterContainer.addClass('-bc-youtube-pseudo-poster-element--loading');
 							}
 							this.trigger('buffering', [this.player]);
+							break;
 						}
-						break;
 						case YT.PlayerState.CUED: {
 							this.trigger('cued', [this.player]);
+							break;
 						}
-						break;
 						case YT.PlayerState.ENDED: {
 							this.trigger('ended', [this.player]);
 							if (this.movieId.length > 1 && this.movieOption.loop && this.currentCueIndex === this.movieId.length - 1) {
@@ -564,18 +566,18 @@ class YouTube extends BaserElement {
 							} else if (this.movieOption.loop) {
 								this.player.playVideo();
 							}
+							break;
 						}
-						break;
 						case YT.PlayerState.PAUSED: {
 							this.trigger('paused', [this.player]);
+							break;
 						}
-						break;
 						case YT.PlayerState.PLAYING: {
 							this._hidePoster();
 							this.trigger('playing', [this.player]);
 							this.currentCueIndex = this.player.getPlaylistIndex();
+							break;
 						}
-						break;
 						default: {
 							if ('console' in window) {
 								console.warn('YouTube Player state is unknown.');
